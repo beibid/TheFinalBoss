@@ -1,4 +1,4 @@
-package logica.objetos.dao;
+package logica.dao.objetos;
 
 public class PracticanteDao {
 }
