@@ -1,5 +1,7 @@
 package logica.dao.interfaces;
 import logica.Coordinador;
+import logica.dao.excepciones.DaoExcepcion;
+
 public interface CoordinadorDaoInterfaz {
-    void insertarCoordinador(Coordinador coordinador);
+    void insertarCoordinador(Coordinador coordinador) throws DaoExcepcion;
 }

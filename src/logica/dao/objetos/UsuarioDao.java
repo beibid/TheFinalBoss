@@ -1,13 +1,14 @@
 package logica.dao.objetos;
 import acceso.bd.ConectarBaseDeDatos;
 import logica.Usuario;
+import logica.dao.excepciones.DaoExcepcion;
 import logica.dao.interfaces.UsuarioDaoInterfaz;
 import java.sql.SQLException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 public class UsuarioDao implements UsuarioDaoInterfaz{
     @Override
-    public void insertarUsuario (Usuario usuario) {
+    public void insertarUsuario (Usuario usuario) throws DaoExcepcion {
         String queryUsuario = "insert into Usuario (nombre, apellidoPaterno, apellidoMaterno, contrasena, estado) values (?, ?, ?, ?, ?)";
         try {
             Connection conectarConBaseDeDatos = ConectarBaseDeDatos.conectar();
@@ -23,8 +24,7 @@ public class UsuarioDao implements UsuarioDaoInterfaz{
 
             }
         } catch (SQLException e) {
-            System.out.println("No fue posible añadir los datos");
-            e.printStackTrace();
+            throw new DaoExcepcion("Error al insertar usuario", e);
         }
     }
 }

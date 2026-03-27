@@ -1,6 +1,7 @@
 package logica.dao.objetos;
 import acceso.bd.ConectarBaseDeDatos;
 import logica.Coordinador;
+import logica.dao.excepciones.DaoExcepcion;
 import logica.dao.interfaces.CoordinadorDaoInterfaz;
 import java.sql.SQLException;
 import java.sql.Connection;
@@ -8,7 +9,7 @@ import java.sql.PreparedStatement;
 
 public class CoordinadorDao implements CoordinadorDaoInterfaz {
     @Override
-    public void insertarCoordinador (Coordinador coordinador) {
+    public void insertarCoordinador (Coordinador coordinador) throws DaoExcepcion {
         String queryCoordinador = "insert into Coordinador (numPersonalCoordinador) values (?)";
         try {
             Connection conectarConBaseDeDatos = ConectarBaseDeDatos.conectar();
@@ -20,8 +21,7 @@ public class CoordinadorDao implements CoordinadorDaoInterfaz {
 
             }
         } catch (SQLException e) {
-            System.out.println("No fue posible añadir los datos");
-            e.printStackTrace();
+            throw new DaoExcepcion("Error al insertar coordinador", e);
         }
     }
 }

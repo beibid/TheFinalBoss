@@ -1,11 +1,59 @@
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 import acceso.bd.ConectarBaseDeDatos;
+import logica.Estado;
+import logica.Genero;
+import logica.Turno;
+import logica.Coordinador;
+import logica.Practicante;
+import logica.Profesor;
+import logica.Usuario;
+import logica.dao.excepciones.DaoExcepcion;
+import logica.dao.objetos.CoordinadorDao;
+import logica.dao.objetos.PracticanteDao;
+import logica.dao.objetos.ProfesorDao;
+import logica.dao.objetos.UsuarioDao;
 public class Main {
     public static void main(String[] args) {
         ConectarBaseDeDatos conexion = new ConectarBaseDeDatos();
-
         conexion.conectar();
+
+        try {
+            Usuario usuario = new Usuario("Juan", "Pérez", "García", "1234", Estado.Activo);
+
+            UsuarioDao usuarioDao = new UsuarioDao();
+            usuarioDao.insertarUsuario(usuario);
+            System.out.println("UsuarioDao se dio de alta");
+        } catch (DaoExcepcion e) {
+            System.out.println("UsuarioDao no logro darse de alta por: " + e.getMessage());
+        }
+        try {
+            Coordinador coordinador = new Coordinador("C001", 1, "María", "López", "Sánchez", "abcd", Estado.Activo);
+
+            CoordinadorDao coordinadorDao = new CoordinadorDao();
+            coordinadorDao.insertarCoordinador(coordinador);
+            System.out.println("CoordinadorDao se dio de alta");
+        } catch (DaoExcepcion e) {
+            System.out.println("CoordinadorDao no logro darse de alta por: " + e.getMessage());
+        }
+        try {
+            Profesor profesor = new Profesor("P001", Turno.Matutino, 1, "Carlos", "Ramírez", "Torres", "5678", Estado.Activo);
+
+            ProfesorDao profesorDao = new ProfesorDao();
+            profesorDao.insertarProfesor(profesor);
+            System.out.println("ProfesorDao se dio de alta");
+        } catch (DaoExcepcion e) {
+            System.out.println("ProfesorDao no logro darse de alta: " + e.getMessage());
+        }
+        try {
+            Practicante practicante = new Practicante("S20013456", "Ninguna", Genero.Masculino, 1, "Luis", "Hernández", "Flores", "9012", Estado.Activo);
+
+            PracticanteDao practicanteDao = new PracticanteDao();
+            practicanteDao.insertarPracticante(practicante);
+            System.out.println("PracticanteDao se dio de alta");
+        } catch (DaoExcepcion e) {
+            System.out.println("PracticanteDao no logro darse de alta: " + e.getMessage());
+        }
 
 
     }
