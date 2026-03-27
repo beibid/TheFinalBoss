@@ -3,16 +3,10 @@
 import acceso.bd.ConectarBaseDeDatos;
 import logica.Estado;
 import logica.Genero;
-import logica.Turno;
-import logica.Coordinador;
 import logica.Practicante;
-import logica.Profesor;
-import logica.Usuario;
-import logica.dao.excepciones.DaoExcepcion;
-import logica.dao.objetos.CoordinadorDao;
+import logica.dao.excepciones.InserccionUsuarioExcepcion;
 import logica.dao.objetos.PracticanteDao;
-import logica.dao.objetos.ProfesorDao;
-import logica.dao.objetos.UsuarioDao;
+
 public class Main {
     public static void main(String[] args) {
         ConectarBaseDeDatos conexion = new ConectarBaseDeDatos();
@@ -53,7 +47,7 @@ public class Main {
             PracticanteDao practicanteDao = new PracticanteDao();
             practicanteDao.insertarPracticante(practicante);
             System.out.println("PracticanteDao se dio de alta");
-        } catch (DaoExcepcion e) {
+        } catch (InserccionUsuarioExcepcion e) {
             System.out.println("PracticanteDao no logro darse de alta: " + e.getMessage());
         }
 

@@ -11,10 +11,12 @@ public class Profesor extends Usuario {
     }
 
     public String getNumeroDePersonalProfesor() {
+
         return numeroDePersonalProfesor;
     }
 
     public Turno getTurno() {
+
         return turno;
     }
 

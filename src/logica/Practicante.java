@@ -15,34 +15,42 @@ public class Practicante extends Usuario {
     }
 
     public String getMatricula() {
+
         return matricula;
     }
 
     public String getLenguaIndigena() {
+
         return lenguaIndigena;
     }
 
     public Genero getGenero() {
+
         return genero;
     }
 
     public int getIdUsuarioPracticante() {
+
         return idUsuarioPracticante;
     }
 
     public void setMatricula(String matricula) {
+
         this.matricula = matricula;
     }
 
     public void setLenguaIndigena(String lenguaIndigena) {
+
         this.lenguaIndigena = lenguaIndigena;
     }
 
     public void setGenero(Genero genero) {
+
         this.genero = genero;
     }
 
     public void setIdUsuarioPracticante(int idUsuarioPracticante) {
+
         this.idUsuarioPracticante = idUsuarioPracticante;
     }
 }

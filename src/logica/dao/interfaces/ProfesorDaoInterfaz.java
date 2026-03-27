@@ -1,7 +1,7 @@
 package logica.dao.interfaces;
 import logica.Profesor;
-import logica.dao.excepciones.DaoExcepcion;
+import logica.dao.excepciones.InserccionUsuarioExcepcion;
 
 public interface ProfesorDaoInterfaz {
-    void insertarProfesor(Profesor profesor) throws DaoExcepcion;
+    void insertarProfesor(Profesor profesor) throws InserccionUsuarioExcepcion;
 }
