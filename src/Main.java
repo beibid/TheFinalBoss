@@ -17,36 +17,38 @@ public class Main {
     public static void main(String[] args) {
         ConectarBaseDeDatos conexion = new ConectarBaseDeDatos();
         conexion.conectar();
-
+      /**
         try {
-            Usuario usuario = new Usuario("Juan", "Pérez", "García", "1234", Estado.Activo);
+            Usuario usuario = new Usuario("Luisa", "Pérez", "García", "3456", Estado.Activo);
 
             UsuarioDao usuarioDao = new UsuarioDao();
             usuarioDao.insertarUsuario(usuario);
             System.out.println("UsuarioDao se dio de alta");
         } catch (DaoExcepcion e) {
             System.out.println("UsuarioDao no logro darse de alta por: " + e.getMessage());
-        }
+        }*/
+/**
         try {
-            Coordinador coordinador = new Coordinador("C001", 1, "María", "López", "Sánchez", "abcd", Estado.Activo);
+            Coordinador coordinador = new Coordinador("C001", "María", "López", "Sánchez", "abcd", Estado.Activo);
 
             CoordinadorDao coordinadorDao = new CoordinadorDao();
             coordinadorDao.insertarCoordinador(coordinador);
             System.out.println("CoordinadorDao se dio de alta");
         } catch (DaoExcepcion e) {
             System.out.println("CoordinadorDao no logro darse de alta por: " + e.getMessage());
-        }
+        }*/
+/**
         try {
-            Profesor profesor = new Profesor("P001", Turno.Matutino, 1, "Carlos", "Ramírez", "Torres", "5678", Estado.Activo);
+            Profesor profesor = new Profesor("P001", Turno.Matutino, "Carlos", "Ramírez", "Torres", "5678", Estado.Activo);
 
             ProfesorDao profesorDao = new ProfesorDao();
             profesorDao.insertarProfesor(profesor);
             System.out.println("ProfesorDao se dio de alta");
         } catch (DaoExcepcion e) {
             System.out.println("ProfesorDao no logro darse de alta: " + e.getMessage());
-        }
-        try {
-            Practicante practicante = new Practicante("S20013456", "Ninguna", Genero.Masculino, 1, "Luis", "Hernández", "Flores", "9012", Estado.Activo);
+        }*/
+       try {
+            Practicante practicante = new Practicante("S20013456", "Ninguna", Genero.Femenino, 2,"Luis", "Hernández", "Flores", "9012", Estado.Activo);
 
             PracticanteDao practicanteDao = new PracticanteDao();
             practicanteDao.insertarPracticante(practicante);

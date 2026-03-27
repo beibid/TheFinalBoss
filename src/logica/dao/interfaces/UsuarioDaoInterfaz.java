@@ -4,5 +4,5 @@ import logica.dao.excepciones.DaoExcepcion;
 
 
 public interface UsuarioDaoInterfaz {
-    void insertarUsuario(Usuario usuario)throws DaoExcepcion;
+    int insertarUsuario(Usuario usuario)throws DaoExcepcion;
 }

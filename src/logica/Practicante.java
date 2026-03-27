@@ -6,11 +6,12 @@ public class Practicante extends Usuario {
     private Genero genero;
     private int idUsuarioPracticante;
 
-    public Practicante(String matricula, String lenguaIndigena, Genero genero, int idUsuarioPracticante, String nombre, String apellidoPaterno, String apellidoMaterno, String contrasena, Estado estado){
+    public Practicante(String matricula, String lenguaIndigena, Genero genero, int idUsuarioPracticante,String nombre, String apellidoPaterno, String apellidoMaterno, String contrasena, Estado estado){
         super(nombre, apellidoPaterno, apellidoMaterno, contrasena, estado);
         this.matricula = matricula;
         this.lenguaIndigena = lenguaIndigena;
         this.genero = genero;
+        this.idUsuarioPracticante = idUsuarioPracticante;
     }
 
     public String getMatricula() {

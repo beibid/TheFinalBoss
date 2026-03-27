@@ -10,13 +10,14 @@ import java.sql.PreparedStatement;
 public class PracticanteDao implements PracticanteDaoInterfaz{
     @Override
     public void insertarPracticante (Practicante practicante) throws DaoExcepcion {
-        String queryPracticante = "insert into Practicante (matricula, genero, lenguaIndigena) values (?, ?, ?)";
+        String queryPracticante = "insert into Practicante (matricula, genero, lenguaIndigena, idUsuario) values (?, ?, ?,?)";
         try {
             Connection conectarConBaseDeDatos = ConectarBaseDeDatos.conectar();
             PreparedStatement insertarEnBaseDeDatos = conectarConBaseDeDatos.prepareStatement(queryPracticante); {
                 insertarEnBaseDeDatos.setString(1, practicante.getMatricula());
                 insertarEnBaseDeDatos.setString(2, practicante.getGenero().toString());
                 insertarEnBaseDeDatos.setString(3, practicante.getLenguaIndigena());
+                insertarEnBaseDeDatos.setInt(4, practicante.getIdUsuarioPracticante());
                 insertarEnBaseDeDatos.executeUpdate();
 
                 System.out.println("Los datos han sido añadidos correctamente");
