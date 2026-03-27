@@ -36,6 +36,4 @@ public class Profesor extends Usuario {
         this.idUsuarioPersonal = idUsuarioPersonal;
     }
 }
-enum Turno{
-    Matutino, Vespertino, Mixto
-}
+

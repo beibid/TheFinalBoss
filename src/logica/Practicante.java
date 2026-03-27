@@ -45,7 +45,3 @@ public class Practicante extends Usuario {
         this.idUsuarioPracticante = idUsuarioPracticante;
     }
 }
-
-enum Genero{
-    Masculino, Femenino;
-}
