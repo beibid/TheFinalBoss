@@ -1,18 +1,7 @@
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 import acceso.bd.ConectarBaseDeDatos;
-import logica.Estado;
-import logica.Genero;
-import logica.Turno;
-import logica.Coordinador;
-import logica.Practicante;
-import logica.Profesor;
-import logica.Usuario;
-import logica.dao.excepciones.DaoExcepcion;
-import logica.dao.objetos.CoordinadorDao;
-import logica.dao.objetos.PracticanteDao;
-import logica.dao.objetos.ProfesorDao;
-import logica.dao.objetos.UsuarioDao;
+
 public class Main {
     public static void main(String[] args) {
         ConectarBaseDeDatos conexion = new ConectarBaseDeDatos();

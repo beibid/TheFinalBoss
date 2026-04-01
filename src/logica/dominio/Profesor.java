@@ -1,4 +1,7 @@
-package logica;
+package logica.dominio;
+
+import logica.dominio.enums.Estado;
+import logica.dominio.enums.Turno;
 
 public class Profesor extends Usuario {
     private String numeroDePersonalProfesor;

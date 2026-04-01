@@ -1,5 +1,5 @@
 package logica.dao.interfaces;
-import logica.Coordinador;
+import logica.dominio.Coordinador;
 import logica.dao.excepciones.DaoExcepcion;
 
 public interface CoordinadorDaoInterfaz {

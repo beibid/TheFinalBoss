@@ -1,5 +1,5 @@
 package logica.dao.interfaces;
-import logica.Practicante;
+import logica.dominio.Practicante;
 import logica.dao.excepciones.DaoExcepcion;
 
 public interface PracticanteDaoInterfaz {

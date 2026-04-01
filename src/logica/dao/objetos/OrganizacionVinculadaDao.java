@@ -1,6 +1,6 @@
 package logica.dao.objetos;
 import acceso.bd.ConectarBaseDeDatos;
-import logica.OrganizacionVinculada;
+import logica.dominio.OrganizacionVinculada;
 import logica.dao.excepciones.DaoExcepcion;
 import logica.dao.interfaces.OrganizacionVinculadaDaoInterfaz;
 import java.sql.SQLException;
