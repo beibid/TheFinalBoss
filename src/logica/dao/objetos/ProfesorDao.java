@@ -1,7 +1,7 @@
 package logica.dao.objetos;
 import acceso.bd.ConectarBaseDeDatos;
 import logica.dominio.Profesor;
-import logica.dao.excepciones.DaoExcepcion;
+import logica.dao.excepciones.InserccionUsuarioExcepcion;
 import logica.dao.interfaces.ProfesorDaoInterfaz;
 import java.sql.SQLException;
 import java.sql.Connection;
@@ -9,7 +9,7 @@ import java.sql.PreparedStatement;
 
 public class ProfesorDao implements ProfesorDaoInterfaz{
     @Override
-    public void insertarProfesor (Profesor profesor) throws DaoExcepcion {
+    public void insertarProfesor (Profesor profesor) throws InserccionUsuarioExcepcion {
         String queryProfesor = "insert into Profesor (numPersonalProfesor, turno) values (?, ?)";
         try {
             Connection conectarConBaseDeDatos = ConectarBaseDeDatos.conectar();
@@ -22,7 +22,7 @@ public class ProfesorDao implements ProfesorDaoInterfaz{
 
             }
         } catch (SQLException e) {
-            throw new DaoExcepcion("Error al insertar profesor", e);
+            throw new InserccionUsuarioExcepcion("Error al insertar profesor", e);
         }
     }
 }

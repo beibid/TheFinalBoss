@@ -1,8 +1,8 @@
 package logica.dao.interfaces;
 import logica.dominio.Usuario;
-import logica.dao.excepciones.DaoExcepcion;
+import logica.dao.excepciones.InserccionUsuarioExcepcion;
 
 
 public interface UsuarioDaoInterfaz {
-    int insertarUsuario(Usuario usuario)throws DaoExcepcion;
+    int insertarUsuario(Usuario usuario)throws InserccionUsuarioExcepcion;
 }

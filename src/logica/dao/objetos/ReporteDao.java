@@ -1,7 +1,7 @@
 package logica.dao.objetos;
 import acceso.bd.ConectarBaseDeDatos;
 import logica.dominio.Reporte;
-import logica.dao.excepciones.DaoExcepcion;
+import logica.dao.excepciones.InserccionUsuarioExcepcion;
 import logica.dao.interfaces.ReporteDaoInterfaz;
 import java.sql.SQLException;
 import java.sql.Connection;
@@ -9,7 +9,7 @@ import java.sql.PreparedStatement;
 
 public class ReporteDao implements ReporteDaoInterfaz{
     @Override
-    public void agregarReporte (Reporte reporte) throws DaoExcepcion {
+    public void agregarReporte (Reporte reporte) throws InserccionUsuarioExcepcion {
         String queryPracticante = "insert into reporte (tipoReporte, descripcion, fechaGeneracion, calificacion, observacionesProf, estado, matricula, numPersonalProfesor) values (?, ?, ?, ?, ?, ?, ?, ?)";
         try {
             Connection conectarConBaseDeDatos = ConectarBaseDeDatos.conectar();
@@ -28,7 +28,7 @@ public class ReporteDao implements ReporteDaoInterfaz{
 
             }
         } catch (SQLException e) {
-            throw new DaoExcepcion("Error al agregar el reporte");
+            throw new InserccionUsuarioExcepcion("Error al agregar el reporte");
         }
     }
 }
