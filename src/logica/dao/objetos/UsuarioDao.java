@@ -11,16 +11,16 @@ public class UsuarioDao implements UsuarioDaoInterfaz{
     public int insertarUsuario (Usuario usuario) throws InserccionUsuarioExcepcion {
         String queryUsuario = "insert into Usuario (nombre, apellidoPaterno, apellidoMaterno, contrasena, estado) values (?, ?, ?, ?, ?)";
         try {
-            Connection conectarConBaseDeDatos = ConectarBaseDeDatos.conectar();
-            PreparedStatement insertarEnBaseDeDatos = conectarConBaseDeDatos.prepareStatement(queryUsuario, Statement.RETURN_GENERATED_KEYS); {
-                insertarEnBaseDeDatos.setString(1, usuario.getNombre());
-                insertarEnBaseDeDatos.setString(2, usuario.getApellidoPaterno());
-                insertarEnBaseDeDatos.setString(3, usuario.getApellidoMaterno());
-                insertarEnBaseDeDatos.setString(4, usuario.getContrasena());
-                insertarEnBaseDeDatos.setString(5, usuario.getEstado().toString());
-                insertarEnBaseDeDatos.executeUpdate();
+            Connection conexionBaseDeDatos = ConectarBaseDeDatos.conectar();
+            PreparedStatement insercionBaseDeDatos = conexionBaseDeDatos.prepareStatement(queryUsuario, Statement.RETURN_GENERATED_KEYS); {
+                insercionBaseDeDatos.setString(1, usuario.getNombre());
+                insercionBaseDeDatos.setString(2, usuario.getApellidoPaterno());
+                insercionBaseDeDatos.setString(3, usuario.getApellidoMaterno());
+                insercionBaseDeDatos.setString(4, usuario.getContrasena());
+                insercionBaseDeDatos.setString(5, usuario.getEstado().toString());
+                insercionBaseDeDatos.executeUpdate();
 
-                ResultSet tomarLlave = insertarEnBaseDeDatos.getGeneratedKeys();
+                ResultSet tomarLlave = insercionBaseDeDatos.getGeneratedKeys();
                 if (tomarLlave.next()) return tomarLlave.getInt(1);
 
 

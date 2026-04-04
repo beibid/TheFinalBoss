@@ -12,13 +12,13 @@ public class PracticanteDao implements PracticanteDaoInterfaz{
     public void insertarPracticante (Practicante practicante) throws InserccionUsuarioExcepcion {
         String queryPracticante = "insert into Practicante (matricula, genero, lenguaIndigena, idUsuario) values (?, ?, ?,?)";
         try {
-            Connection conectarConBaseDeDatos = ConectarBaseDeDatos.conectar();
-            PreparedStatement insertarEnBaseDeDatos = conectarConBaseDeDatos.prepareStatement(queryPracticante); {
-                insertarEnBaseDeDatos.setString(1, practicante.getMatricula());
-                insertarEnBaseDeDatos.setString(2, practicante.getGenero().toString());
-                insertarEnBaseDeDatos.setString(3, practicante.getLenguaIndigena());
-                insertarEnBaseDeDatos.setInt(4, practicante.getIdUsuarioPracticante());
-                insertarEnBaseDeDatos.executeUpdate();
+            Connection conexionBaseDeDatos = ConectarBaseDeDatos.conectar();
+            PreparedStatement insercionBaseDeDatos = conexionBaseDeDatos.prepareStatement(queryPracticante); {
+                insercionBaseDeDatos.setString(1, practicante.getMatricula());
+                insercionBaseDeDatos.setString(2, practicante.getGenero().toString());
+                insercionBaseDeDatos.setString(3, practicante.getLenguaIndigena());
+                insercionBaseDeDatos.setInt(4, practicante.getIdUsuarioPracticante());
+                insercionBaseDeDatos.executeUpdate();
 
                 System.out.println("Los datos han sido añadidos correctamente");
 

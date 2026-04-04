@@ -42,7 +42,7 @@ public class Main {
             PracticanteDao practicanteDao = new PracticanteDao();
             practicanteDao.insertarPracticante(practicante);
             System.out.println("PracticanteDao se dio de alta");
-        } catch (DaoExcepcion e) {
+        } catch (InserccionUsuarioExcepcion e) {
             System.out.println("PracticanteDao no logro darse de alta: " + e.getMessage());
         }*/
 

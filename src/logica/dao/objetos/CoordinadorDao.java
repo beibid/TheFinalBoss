@@ -12,10 +12,10 @@ public class CoordinadorDao implements CoordinadorDaoInterfaz {
     public void insertarCoordinador (Coordinador coordinador) throws InserccionUsuarioExcepcion {
         String queryCoordinador = "insert into Coordinador (numPersonalCoordinador) values (?)";
         try {
-            Connection conectarConBaseDeDatos = ConectarBaseDeDatos.conectar();
-            PreparedStatement insertarEnBaseDeDatos = conectarConBaseDeDatos.prepareStatement(queryCoordinador); {
-                insertarEnBaseDeDatos.setString(1, coordinador.getNumeroDePersonalCoordinador());
-                insertarEnBaseDeDatos.executeUpdate();
+            Connection conexionBaseDeDatos = ConectarBaseDeDatos.conectar();
+            PreparedStatement insercionBaseDeDatos = conexionBaseDeDatos.prepareStatement(queryCoordinador); {
+                insercionBaseDeDatos.setString(1, coordinador.getNumeroDePersonalCoordinador());
+                insercionBaseDeDatos.executeUpdate();
 
                 System.out.println("Los datos han sido añadidos correctamente");
 

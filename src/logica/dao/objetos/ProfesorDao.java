@@ -12,11 +12,11 @@ public class ProfesorDao implements ProfesorDaoInterfaz{
     public void insertarProfesor (Profesor profesor) throws InserccionUsuarioExcepcion {
         String queryProfesor = "insert into Profesor (numPersonalProfesor, turno) values (?, ?)";
         try {
-            Connection conectarConBaseDeDatos = ConectarBaseDeDatos.conectar();
-            PreparedStatement insertarEnBaseDeDatos = conectarConBaseDeDatos.prepareStatement(queryProfesor); {
-                insertarEnBaseDeDatos.setString(1, profesor.getNumeroDePersonalProfesor());
-                insertarEnBaseDeDatos.setString(2, profesor.getTurno().toString());
-                insertarEnBaseDeDatos.executeUpdate();
+            Connection conexionBaseDeDatos = ConectarBaseDeDatos.conectar();
+            PreparedStatement insercionBaseDeDatos = conexionBaseDeDatos.prepareStatement(queryProfesor); {
+                insercionBaseDeDatos.setString(1, profesor.getNumeroDePersonalProfesor());
+                insercionBaseDeDatos.setString(2, profesor.getTurno().toString());
+                insercionBaseDeDatos.executeUpdate();
 
                 System.out.println("Los datos han sido añadidos correctamente");
 

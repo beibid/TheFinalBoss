@@ -22,7 +22,7 @@ public class OrganizacionVinculadaDao implements OrganizacionVinculadaDaoInterfa
 
             }
         } catch (SQLException e) {
-            throw new InserccionUsuarioExcepcion("Error al insertar la organizacion", e);
+            throw new InserccionUsuarioExcepcion("Error al insertar la organizacion");
         }
     }
 }
