@@ -41,7 +41,7 @@ public class Main {
         } catch (DaoExcepcion e) {
             System.out.println("ProfesorDao no logro darse de alta: " + e.getMessage());
         }*/
-       try {
+       /**try {
             Practicante practicante = new Practicante("S20013456", "Ninguna", Genero.Femenino, 2,"Luis", "Hernández", "Flores", "9012", Estado.Activo);
 
             PracticanteDao practicanteDao = new PracticanteDao();
@@ -49,7 +49,7 @@ public class Main {
             System.out.println("PracticanteDao se dio de alta");
         } catch (InserccionUsuarioExcepcion e) {
             System.out.println("PracticanteDao no logro darse de alta: " + e.getMessage());
-        }
+        }*/
 
 
     }
