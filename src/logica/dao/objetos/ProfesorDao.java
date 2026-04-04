@@ -1,6 +1,6 @@
 package logica.dao.objetos;
 import acceso.bd.ConectarBaseDeDatos;
-import logica.Profesor;
+import logica.dominio.Profesor;
 import logica.dao.excepciones.InserccionUsuarioExcepcion;
 import logica.dao.interfaces.ProfesorDaoInterfaz;
 import java.sql.SQLException;

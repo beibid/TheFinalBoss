@@ -1,6 +1,6 @@
 package logica.dao.objetos;
 import acceso.bd.ConectarBaseDeDatos;
-import logica.Usuario;
+import logica.dominio.Usuario;
 import logica.dao.excepciones.InserccionUsuarioExcepcion;
 import logica.dao.interfaces.UsuarioDaoInterfaz;
 

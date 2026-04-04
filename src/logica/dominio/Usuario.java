@@ -1,5 +1,7 @@
-package logica;
+package logica.dominio;
 
+
+import logica.dominio.enums.Estado;
 
 public class Usuario {
     protected String nombre;

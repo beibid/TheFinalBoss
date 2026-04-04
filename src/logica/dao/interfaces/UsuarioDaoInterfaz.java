@@ -1,5 +1,5 @@
 package logica.dao.interfaces;
-import logica.Usuario;
+import logica.dominio.Usuario;
 import logica.dao.excepciones.InserccionUsuarioExcepcion;
 
 
