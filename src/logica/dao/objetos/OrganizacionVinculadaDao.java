@@ -1,7 +1,7 @@
 package logica.dao.objetos;
 import acceso.bd.ConexionBaseDeDatos;
 import logica.dominio.OrganizacionVinculada;
-import logica.dao.excepciones.InserccionUsuarioExcepcion;
+import logica.dao.excepciones.InserccionBaseDeDatosExcepcion;
 import logica.dao.interfaces.OrganizacionVinculadaDaoInterfaz;
 import java.sql.SQLException;
 import java.sql.Connection;
@@ -9,7 +9,7 @@ import java.sql.PreparedStatement;
 
 public class OrganizacionVinculadaDao implements OrganizacionVinculadaDaoInterfaz{
     @Override
-    public void insertarOrganizacionVinculada (OrganizacionVinculada organizacionVinculada) throws InserccionUsuarioExcepcion {
+    public void insertarOrganizacionVinculada (OrganizacionVinculada organizacionVinculada) throws InserccionBaseDeDatosExcepcion {
         String queryPracticante = "insert into organizacion_vinculada (nombre, direccion) values (?, ?)";
         try {
             Connection conectarConBaseDeDatos = ConexionBaseDeDatos.conectar();
@@ -22,7 +22,7 @@ public class OrganizacionVinculadaDao implements OrganizacionVinculadaDaoInterfa
 
             }
         } catch (SQLException e) {
-            throw new InserccionUsuarioExcepcion("Error al insertar la organizacion");
+            throw new InserccionBaseDeDatosExcepcion("Error al insertar la organizacion");
         }
     }
 }

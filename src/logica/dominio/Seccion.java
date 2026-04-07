@@ -9,9 +9,17 @@ public class Seccion {
         this.periodo = periodo;
     }
 
-    public String getNoSeccion() { return noSeccion; }
-    public String getPeriodo() { return periodo; }
+    public String getNoSeccion() {
+        return noSeccion;
+    }
+    public String getPeriodo() {
+        return periodo;
+    }
 
-    public void setNoSeccion(String noSeccion) { this.noSeccion = noSeccion; }
-    public void setPeriodo(String periodo) { this.periodo = periodo; }
+    public void setNoSeccion(String noSeccion) {
+        this.noSeccion = noSeccion;
+    }
+    public void setPeriodo(String periodo) {
+        this.periodo = periodo;
+    }
 }

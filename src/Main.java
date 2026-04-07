@@ -7,15 +7,7 @@ public class Main {
         ConexionBaseDeDatos conexion = new ConexionBaseDeDatos();
         conexion.conectar();
       /**
-        try {
-            Usuario usuario = new Usuario("Luisa", "Pérez", "García", "3456", Estado.Activo);
 
-            UsuarioDao usuarioDao = new UsuarioDao();
-            usuarioDao.insertarUsuario(usuario);
-            System.out.println("UsuarioDao se dio de alta");
-        } catch (DaoExcepcion e) {
-            System.out.println("UsuarioDao no logro darse de alta por: " + e.getMessage());
-        }*/
 /**
         try {
             Coordinador coordinador = new Coordinador("C001", "María", "López", "Sánchez", "abcd", Estado.Activo);

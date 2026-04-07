@@ -1,27 +1,45 @@
 package logica.dao.objetos;
 import acceso.bd.ConexionBaseDeDatos;
 import logica.dominio.Coordinador;
-import logica.dao.excepciones.InserccionUsuarioExcepcion;
+import logica.dao.excepciones.InserccionBaseDeDatosExcepcion;
 import logica.dao.interfaces.CoordinadorDaoInterfaz;
-import java.sql.SQLException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 
 public class CoordinadorDao implements CoordinadorDaoInterfaz {
     @Override
-    public void insertarCoordinador (Coordinador coordinador) throws InserccionUsuarioExcepcion {
-        String queryCoordinador = "insert into Coordinador (numPersonalCoordinador) values (?)";
+    public void insertarCoordinador(Coordinador coordinador) throws InserccionBaseDeDatosExcepcion {
+        String queryUsuario = "insert into Usuario (nombre, apellidoPaterno, apellidoMaterno, contrasena, estado) values (?, ?, ?, ?, ?)";
+        String queryCoordinador = "insert into Coordinador (numPersonalCoordinador, idUsuario) values (?, ?)";
         try {
             Connection conexionBaseDeDatos = ConexionBaseDeDatos.conectar();
-            PreparedStatement insercionBaseDeDatos = conexionBaseDeDatos.prepareStatement(queryCoordinador); {
-                insercionBaseDeDatos.setString(1, coordinador.getNumeroDePersonalCoordinador());
-                insercionBaseDeDatos.executeUpdate();
 
-                System.out.println("Los datos han sido añadidos correctamente");
+            PreparedStatement insercionUsuario = conexionBaseDeDatos.prepareStatement(queryUsuario, Statement.RETURN_GENERATED_KEYS);
+            insercionUsuario.setString(1, coordinador.getNombre());
+            insercionUsuario.setString(2, coordinador.getApellidoPaterno());
+            insercionUsuario.setString(3, coordinador.getApellidoMaterno());
+            insercionUsuario.setString(4, coordinador.getContrasena());
+            insercionUsuario.setString(5, coordinador.getEstado().toString());
+            insercionUsuario.executeUpdate();
 
+            ResultSet tomarLlave = insercionUsuario.getGeneratedKeys();
+            if (!tomarLlave.next()){
+                throw new InserccionBaseDeDatosExcepcion("No se obtuvo el ID del usuario insertado");
             }
+            int idUsuarioGenerado = tomarLlave.getInt(1);
+
+            PreparedStatement insercionCoordinador = conexionBaseDeDatos.prepareStatement(queryCoordinador);
+            insercionCoordinador.setString(1, coordinador.getNumeroDePersonalCoordinador());
+            insercionCoordinador.setInt(2, idUsuarioGenerado);
+            insercionCoordinador.executeUpdate();
+
+            System.out.println("Los datos han sido añadidos correctamente");
+
         } catch (SQLException e) {
-            throw new InserccionUsuarioExcepcion("Error al insertar coordinador");
+            throw new InserccionBaseDeDatosExcepcion("Error al insertar coordinador");
         }
     }
 }

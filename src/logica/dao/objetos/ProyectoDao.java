@@ -2,7 +2,7 @@ package logica.dao.objetos;
 
 import acceso.bd.ConexionBaseDeDatos;
 import logica.dominio.Proyecto;
-import logica.dao.excepciones.InserccionUsuarioExcepcion;
+import logica.dao.excepciones.InserccionBaseDeDatosExcepcion;
 import logica.dao.interfaces.ProyectoDaoInterfaz;
 import java.sql.SQLException;
 import java.sql.Connection;
@@ -10,7 +10,7 @@ import java.sql.PreparedStatement;
 
 public class ProyectoDao implements ProyectoDaoInterfaz {
     @Override
-    public void agregarProyecto(Proyecto proyecto) throws InserccionUsuarioExcepcion {
+    public void agregarProyecto(Proyecto proyecto) throws InserccionBaseDeDatosExcepcion {
         String query = "INSERT INTO proyecto (nombreProyecto, descripcion, responsableDelProyecto, estado, nombreEmpresa, sectorEmpresa, direccionEmpresa, idOrganizacion, matricula, numPersonalCoordinador, fechaRegistro) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try {
             Connection conectarConBaseDeDatos = ConexionBaseDeDatos.conectar();
@@ -31,7 +31,7 @@ public class ProyectoDao implements ProyectoDaoInterfaz {
                 System.out.println("Los datos han sido añadidos correctamente");
             }
         } catch (SQLException e) {
-            throw new InserccionUsuarioExcepcion("Error al agregar el proyecto");
+            throw new InserccionBaseDeDatosExcepcion("Error al agregar el proyecto");
         }
     }
 }
