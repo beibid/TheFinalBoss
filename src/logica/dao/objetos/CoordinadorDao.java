@@ -1,5 +1,5 @@
 package logica.dao.objetos;
-import acceso.bd.ConectarBaseDeDatos;
+import acceso.bd.ConexionBaseDeDatos;
 import logica.dominio.Coordinador;
 import logica.dao.excepciones.InserccionUsuarioExcepcion;
 import logica.dao.interfaces.CoordinadorDaoInterfaz;
@@ -12,7 +12,7 @@ public class CoordinadorDao implements CoordinadorDaoInterfaz {
     public void insertarCoordinador (Coordinador coordinador) throws InserccionUsuarioExcepcion {
         String queryCoordinador = "insert into Coordinador (numPersonalCoordinador) values (?)";
         try {
-            Connection conexionBaseDeDatos = ConectarBaseDeDatos.conectar();
+            Connection conexionBaseDeDatos = ConexionBaseDeDatos.conectar();
             PreparedStatement insercionBaseDeDatos = conexionBaseDeDatos.prepareStatement(queryCoordinador); {
                 insercionBaseDeDatos.setString(1, coordinador.getNumeroDePersonalCoordinador());
                 insercionBaseDeDatos.executeUpdate();

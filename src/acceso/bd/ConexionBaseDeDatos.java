@@ -9,14 +9,14 @@ import java.sql.SQLException;
 import java.util.Properties;
 
 
-public class ConectarBaseDeDatos {
+public class ConexionBaseDeDatos {
 
     private static String ENLACE;
     private static String USUARIO_INGRESADO;
     private static String CONTRASENA;
 
     static {
-        try (InputStream input = ConectarBaseDeDatos.class
+        try (InputStream input = ConexionBaseDeDatos.class
                 .getClassLoader()
                 .getResourceAsStream("basededatos.properties")) {
 

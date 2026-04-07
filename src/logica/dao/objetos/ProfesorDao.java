@@ -1,5 +1,5 @@
 package logica.dao.objetos;
-import acceso.bd.ConectarBaseDeDatos;
+import acceso.bd.ConexionBaseDeDatos;
 import logica.dominio.Profesor;
 import logica.dao.excepciones.InserccionUsuarioExcepcion;
 import logica.dao.interfaces.ProfesorDaoInterfaz;
@@ -12,7 +12,7 @@ public class ProfesorDao implements ProfesorDaoInterfaz{
     public void insertarProfesor (Profesor profesor) throws InserccionUsuarioExcepcion {
         String queryProfesor = "insert into Profesor (numPersonalProfesor, turno) values (?, ?)";
         try {
-            Connection conexionBaseDeDatos = ConectarBaseDeDatos.conectar();
+            Connection conexionBaseDeDatos = ConexionBaseDeDatos.conectar();
             PreparedStatement insercionBaseDeDatos = conexionBaseDeDatos.prepareStatement(queryProfesor); {
                 insercionBaseDeDatos.setString(1, profesor.getNumeroDePersonalProfesor());
                 insercionBaseDeDatos.setString(2, profesor.getTurno().toString());

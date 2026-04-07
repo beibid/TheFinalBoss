@@ -1,5 +1,5 @@
 package logica.dao.objetos;
-import acceso.bd.ConectarBaseDeDatos;
+import acceso.bd.ConexionBaseDeDatos;
 import logica.dominio.OrganizacionVinculada;
 import logica.dao.excepciones.InserccionUsuarioExcepcion;
 import logica.dao.interfaces.OrganizacionVinculadaDaoInterfaz;
@@ -12,7 +12,7 @@ public class OrganizacionVinculadaDao implements OrganizacionVinculadaDaoInterfa
     public void insertarOrganizacionVinculada (OrganizacionVinculada organizacionVinculada) throws InserccionUsuarioExcepcion {
         String queryPracticante = "insert into organizacion_vinculada (nombre, direccion) values (?, ?)";
         try {
-            Connection conectarConBaseDeDatos = ConectarBaseDeDatos.conectar();
+            Connection conectarConBaseDeDatos = ConexionBaseDeDatos.conectar();
             PreparedStatement insertarEnBaseDeDatos = conectarConBaseDeDatos.prepareStatement(queryPracticante); {
                 insertarEnBaseDeDatos.setString(1, organizacionVinculada.getNombre());
                 insertarEnBaseDeDatos.setString(2, organizacionVinculada.getDireccion());

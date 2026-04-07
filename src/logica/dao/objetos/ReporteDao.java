@@ -1,5 +1,5 @@
 package logica.dao.objetos;
-import acceso.bd.ConectarBaseDeDatos;
+import acceso.bd.ConexionBaseDeDatos;
 import logica.dominio.Reporte;
 import logica.dao.excepciones.InserccionUsuarioExcepcion;
 import logica.dao.interfaces.ReporteDaoInterfaz;
@@ -12,7 +12,7 @@ public class ReporteDao implements ReporteDaoInterfaz{
     public void agregarReporte (Reporte reporte) throws InserccionUsuarioExcepcion {
         String queryPracticante = "insert into reporte (tipoReporte, descripcion, fechaGeneracion, calificacion, observacionesProf, estado, matricula, numPersonalProfesor) values (?, ?, ?, ?, ?, ?, ?, ?)";
         try {
-            Connection conectarConBaseDeDatos = ConectarBaseDeDatos.conectar();
+            Connection conectarConBaseDeDatos = ConexionBaseDeDatos.conectar();
             PreparedStatement insertarEnBaseDeDatos = conectarConBaseDeDatos.prepareStatement(queryPracticante); {
                 insertarEnBaseDeDatos.setString(1, reporte.getTipoReporte().toString());
                 insertarEnBaseDeDatos.setString(2, reporte.getDescripcion());

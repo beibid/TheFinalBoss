@@ -1,6 +1,6 @@
 package logica.dao.objetos;
 
-import acceso.bd.ConectarBaseDeDatos;
+import acceso.bd.ConexionBaseDeDatos;
 import logica.dominio.Proyecto;
 import logica.dao.excepciones.InserccionUsuarioExcepcion;
 import logica.dao.interfaces.ProyectoDaoInterfaz;
@@ -13,7 +13,7 @@ public class ProyectoDao implements ProyectoDaoInterfaz {
     public void agregarProyecto(Proyecto proyecto) throws InserccionUsuarioExcepcion {
         String query = "INSERT INTO proyecto (nombreProyecto, descripcion, responsableDelProyecto, estado, nombreEmpresa, sectorEmpresa, direccionEmpresa, idOrganizacion, matricula, numPersonalCoordinador, fechaRegistro) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try {
-            Connection conectarConBaseDeDatos = ConectarBaseDeDatos.conectar();
+            Connection conectarConBaseDeDatos = ConexionBaseDeDatos.conectar();
             PreparedStatement insertarEnBaseDeDatos = conectarConBaseDeDatos.prepareStatement(query); {
                 insertarEnBaseDeDatos.setString(1, proyecto.getNombreProyecto());
                 insertarEnBaseDeDatos.setString(2, proyecto.getDescripcion());

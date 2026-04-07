@@ -1,5 +1,5 @@
 package logica.dao.objetos;
-import acceso.bd.ConectarBaseDeDatos;
+import acceso.bd.ConexionBaseDeDatos;
 import logica.dominio.Practicante;
 import logica.dao.excepciones.InserccionUsuarioExcepcion;
 import logica.dao.interfaces.PracticanteDaoInterfaz;
@@ -12,7 +12,7 @@ public class PracticanteDao implements PracticanteDaoInterfaz{
     public void insertarPracticante (Practicante practicante) throws InserccionUsuarioExcepcion {
         String queryPracticante = "insert into Practicante (matricula, genero, lenguaIndigena, idUsuario) values (?, ?, ?,?)";
         try {
-            Connection conexionBaseDeDatos = ConectarBaseDeDatos.conectar();
+            Connection conexionBaseDeDatos = ConexionBaseDeDatos.conectar();
             PreparedStatement insercionBaseDeDatos = conexionBaseDeDatos.prepareStatement(queryPracticante); {
                 insercionBaseDeDatos.setString(1, practicante.getMatricula());
                 insercionBaseDeDatos.setString(2, practicante.getGenero().toString());

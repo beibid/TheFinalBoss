@@ -1,5 +1,5 @@
 package logica.dao.objetos;
-import acceso.bd.ConectarBaseDeDatos;
+import acceso.bd.ConexionBaseDeDatos;
 import logica.dominio.Usuario;
 import logica.dao.excepciones.InserccionUsuarioExcepcion;
 import logica.dao.interfaces.UsuarioDaoInterfaz;
@@ -11,7 +11,7 @@ public class UsuarioDao implements UsuarioDaoInterfaz{
     public int insertarUsuario (Usuario usuario) throws InserccionUsuarioExcepcion {
         String queryUsuario = "insert into Usuario (nombre, apellidoPaterno, apellidoMaterno, contrasena, estado) values (?, ?, ?, ?, ?)";
         try {
-            Connection conexionBaseDeDatos = ConectarBaseDeDatos.conectar();
+            Connection conexionBaseDeDatos = ConexionBaseDeDatos.conectar();
             PreparedStatement insercionBaseDeDatos = conexionBaseDeDatos.prepareStatement(queryUsuario, Statement.RETURN_GENERATED_KEYS); {
                 insercionBaseDeDatos.setString(1, usuario.getNombre());
                 insercionBaseDeDatos.setString(2, usuario.getApellidoPaterno());

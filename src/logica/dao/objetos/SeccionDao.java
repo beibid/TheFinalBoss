@@ -1,6 +1,6 @@
 package logica.dao.objetos;
 
-import acceso.bd.ConectarBaseDeDatos;
+import acceso.bd.ConexionBaseDeDatos;
 import logica.dominio.Seccion;
 import logica.dao.excepciones.InserccionUsuarioExcepcion;
 import logica.dao.interfaces.SeccionDaoInterfaz;
@@ -13,7 +13,7 @@ public class SeccionDao implements SeccionDaoInterfaz {
     public void agregarSeccion(Seccion seccion) throws InserccionUsuarioExcepcion {
         String query = "INSERT INTO seccion (noSeccion, periodo) VALUES (?, ?)";
         try {
-            Connection conectarConBaseDeDatos = ConectarBaseDeDatos.conectar();
+            Connection conectarConBaseDeDatos = ConexionBaseDeDatos.conectar();
             PreparedStatement insertarEnBaseDeDatos = conectarConBaseDeDatos.prepareStatement(query); {
                 insertarEnBaseDeDatos.setString(1, seccion.getNoSeccion());
                 insertarEnBaseDeDatos.setString(2, seccion.getPeriodo());
