@@ -1,5 +1,6 @@
 package acceso.bd;
 
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Connection;
@@ -7,11 +8,12 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Properties;
 
+
 public class ConectarBaseDeDatos {
 
-    private static String enlace;
-    private static String usuarioIngresado;
-    private static String contrasena;
+    private static String ENLACE;
+    private static String USUARIO_INGRESADO;
+    private static String CONTRASENA;
 
     static {
         try (InputStream input = ConectarBaseDeDatos.class
@@ -22,12 +24,12 @@ public class ConectarBaseDeDatos {
                 throw new RuntimeException("No se encontró ");
             }
 
-            Properties props = new Properties();
-            props.load(input);
+            Properties propiedadesBaseDatos = new Properties();
+            propiedadesBaseDatos.load(input);
 
-            enlace        = props.getProperty("db.url");
-            usuarioIngresado = props.getProperty("db.user");
-            contrasena = props.getProperty("db.password");
+            ENLACE = propiedadesBaseDatos.getProperty("db.url");
+            USUARIO_INGRESADO = propiedadesBaseDatos.getProperty("db.user");
+            CONTRASENA = propiedadesBaseDatos.getProperty("db.password");
 
         } catch (IOException e) {
             throw new RuntimeException("Error cargando ", e);
@@ -37,7 +39,7 @@ public class ConectarBaseDeDatos {
     public static Connection conectar() {
         Connection conexion = null;
         try {
-            conexion = DriverManager.getConnection(enlace, usuarioIngresado, contrasena);
+            conexion = DriverManager.getConnection(ENLACE, USUARIO_INGRESADO, CONTRASENA);
             System.out.println("Conexion a base de datos realizada");
         } catch (SQLException e) {
             System.out.println("Conexion fallida");

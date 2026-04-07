@@ -29,7 +29,7 @@ public class UsuarioDao implements UsuarioDaoInterfaz{
 
             }
         } catch (SQLException e) {
-            throw new InserccionUsuarioExcepcion("Error al insertar usuario", e);
+            throw new InserccionUsuarioExcepcion("Error al insertar usuario");
         }
         return -1;
     }

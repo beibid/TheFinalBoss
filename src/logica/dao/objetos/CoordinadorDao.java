@@ -21,7 +21,7 @@ public class CoordinadorDao implements CoordinadorDaoInterfaz {
 
             }
         } catch (SQLException e) {
-            throw new InserccionUsuarioExcepcion("Error al insertar coordinador", e);
+            throw new InserccionUsuarioExcepcion("Error al insertar coordinador");
         }
     }
 }

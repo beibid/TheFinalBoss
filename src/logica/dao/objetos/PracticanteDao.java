@@ -24,7 +24,7 @@ public class PracticanteDao implements PracticanteDaoInterfaz{
 
             }
         } catch (SQLException e) {
-            throw new InserccionUsuarioExcepcion("Error al insertar practicante", e);
+            throw new InserccionUsuarioExcepcion("Error al insertar practicante");
         }
     }
 

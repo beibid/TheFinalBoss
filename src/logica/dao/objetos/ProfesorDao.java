@@ -22,7 +22,7 @@ public class ProfesorDao implements ProfesorDaoInterfaz{
 
             }
         } catch (SQLException e) {
-            throw new InserccionUsuarioExcepcion("Error al insertar profesor", e);
+            throw new InserccionUsuarioExcepcion("Error al insertar profesor");
         }
     }
 }
