@@ -1,4 +1,4 @@
-package logica.dto;
+package logica.dominio;
 
 public class OrganizacionVinculada {
     protected String nombre;

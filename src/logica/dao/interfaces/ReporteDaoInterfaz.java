@@ -1,5 +1,5 @@
 package logica.dao.interfaces;
-import logica.dto.Reporte;
+import logica.dominio.Reporte;
 import logica.dao.excepciones.InserccionBaseDeDatosExcepcion;
 
 public interface ReporteDaoInterfaz {

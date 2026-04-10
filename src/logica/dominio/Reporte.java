@@ -1,6 +1,6 @@
-package logica.dto;
-import logica.dto.enums.TipoReporte;
-import logica.dto.enums.EstadoDeCalificacion;
+package logica.dominio;
+import logica.dominio.enums.TipoReporte;
+import logica.dominio.enums.EstadoDeCalificacion;
 
 import java.sql.Date;
 

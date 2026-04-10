@@ -1,4 +1,4 @@
-package logica.dto;
+package logica.dominio;
 
 public class PracticanteSeccion {
     private String matricula;

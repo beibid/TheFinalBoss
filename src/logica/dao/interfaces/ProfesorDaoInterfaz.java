@@ -1,5 +1,5 @@
 package logica.dao.interfaces;
-import logica.dto.Profesor;
+import logica.dominio.Profesor;
 import logica.dao.excepciones.InserccionBaseDeDatosExcepcion;
 
 public interface ProfesorDaoInterfaz {

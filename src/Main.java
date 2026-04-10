@@ -1,7 +1,7 @@
 import acceso.bd.ConexionBaseDeDatos;
 import logica.dao.excepciones.InserccionBaseDeDatosExcepcion;
 import logica.dao.objetos.*;
-import logica.dto.*;
+import logica.dominio.*;
 
 public class Main {
     public static void main(String[] args) {
