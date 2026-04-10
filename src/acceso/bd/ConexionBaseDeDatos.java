@@ -24,7 +24,7 @@ public class ConexionBaseDeDatos {
         cargarConfiguracionLogging();
 
         try (InputStream input = ConexionBaseDeDatos.class
-                .getResourceAsStream("basededatos.properties")) {
+                .getResourceAsStream("propiedades/basededatos.properties")) {
 
             if (input == null) {
                 LOGGER.severe("No se encontró el archivo basededatos.properties");
@@ -47,7 +47,7 @@ public class ConexionBaseDeDatos {
     }
     private static void cargarConfiguracionLogging() {
         try (InputStream input = ConexionBaseDeDatos.class
-                .getResourceAsStream("/logging.properties")) {
+                .getResourceAsStream("propiedades/logging.properties")) {
 
             if (input != null) {
                 LogManager.getLogManager().readConfiguration(input);
