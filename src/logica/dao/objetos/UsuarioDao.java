@@ -6,9 +6,12 @@ import logica.dominio.Usuario;
 import logica.dao.excepciones.InserccionBaseDeDatosExcepcion;
 import logica.dao.interfaces.UsuarioDaoInterfaz;
 import java.sql.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
 public class UsuarioDao implements UsuarioDaoInterfaz{
+    private static final Logger LOGGER = Logger.getLogger(UsuarioDao.class.getName());
     @Override
     public int insertarUsuario (Usuario usuario) throws InserccionBaseDeDatosExcepcion {
         String consultaUsuario = "insert into Usuario (nombre, apellidoPaterno, apellidoMaterno, contrasena, estado) values (?, ?, ?, ?, ?)";
@@ -23,14 +26,16 @@ public class UsuarioDao implements UsuarioDaoInterfaz{
                 insercionBaseDeDatos.executeUpdate();
 
                 ResultSet tomarLlave = insercionBaseDeDatos.getGeneratedKeys();
-                if (tomarLlave.next()) return tomarLlave.getInt(1);
+                if (tomarLlave.next()) {
+                    return tomarLlave.getInt(1);
+                }
 
 
-
-                System.out.println("Los datos han sido añadidos correctamente");
+                LOGGER.info("Usuario insertado correctamente");
 
             }
         } catch (SQLException e) {
+            LOGGER.log(Level.SEVERE, "Error al insertar el usuario", e);
             throw new InserccionBaseDeDatosExcepcion("Error al insertar usuario");
         }
         return -1;

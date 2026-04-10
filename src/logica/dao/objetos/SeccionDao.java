@@ -8,9 +8,12 @@ import logica.dao.interfaces.SeccionDaoInterfaz;
 import java.sql.SQLException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
 public class SeccionDao implements SeccionDaoInterfaz {
+    private static final Logger LOGGER = Logger.getLogger(SeccionDao.class.getName());
     @Override
     public void agregarSeccion(Seccion seccion) throws InserccionBaseDeDatosExcepcion {
         String consultaSeccion = "INSERT INTO seccion (noSeccion, periodo) VALUES (?, ?)";
@@ -21,9 +24,10 @@ public class SeccionDao implements SeccionDaoInterfaz {
                 insertarEnBaseDeDatos.setString(2, seccion.getPeriodo());
                 insertarEnBaseDeDatos.executeUpdate();
 
-                System.out.println("Los datos han sido añadidos correctamente");
+                LOGGER.info("Seccion insertada correctamente ");
             }
         } catch (SQLException e) {
+            LOGGER.log(Level.SEVERE, "Error al insertar la seccion", e);
             throw new InserccionBaseDeDatosExcepcion("Error al agregar la sección");
         }
     }

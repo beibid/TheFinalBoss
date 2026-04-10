@@ -1,0 +1,460 @@
+abr 10, 2026 2:21:44 P.M. acceso.bd.ConexionBaseDeDatos <clinit>
+INFO: Configuración de base de datos cargada correctamente
+abr 10, 2026 2:21:44 P.M. acceso.bd.ConexionBaseDeDatos <clinit>
+CONFIG: URL de conexión: jdbc:mysql://localhost:3306/practicas_profesionales
+abr 10, 2026 2:21:44 P.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexión a la base de datos...
+abr 10, 2026 2:21:44 P.M. acceso.bd.ConexionBaseDeDatos conectar
+SEVERE: Conexión fallida después de 1 ms - URL: jdbc:mysql://localhost:3306/practicas_profesionales
+java.sql.SQLException: No suitable driver found for jdbc:mysql://localhost:3306/practicas_profesionales
+	at java.sql/java.sql.DriverManager.getConnection(DriverManager.java:638)
+	at java.sql/java.sql.DriverManager.getConnection(DriverManager.java:199)
+	at acceso.bd.ConexionBaseDeDatos.conectar(ConexionBaseDeDatos.java:69)
+	at Main.main(Main.java:8)
+
+abr 10, 2026 2:21:54 P.M. acceso.bd.ConexionBaseDeDatos <clinit>
+INFO: Configuración de base de datos cargada correctamente
+abr 10, 2026 2:21:54 P.M. acceso.bd.ConexionBaseDeDatos <clinit>
+CONFIG: URL de conexión: jdbc:mysql://localhost:3306/practicas_profesionales
+abr 10, 2026 2:21:54 P.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexión a la base de datos...
+abr 10, 2026 2:21:54 P.M. acceso.bd.ConexionBaseDeDatos conectar
+SEVERE: Conexión fallida después de 1 ms - URL: jdbc:mysql://localhost:3306/practicas_profesionales
+java.sql.SQLException: No suitable driver found for jdbc:mysql://localhost:3306/practicas_profesionales
+	at java.sql/java.sql.DriverManager.getConnection(DriverManager.java:638)
+	at java.sql/java.sql.DriverManager.getConnection(DriverManager.java:199)
+	at acceso.bd.ConexionBaseDeDatos.conectar(ConexionBaseDeDatos.java:69)
+	at Main.main(Main.java:8)
+
+abr 10, 2026 2:23:07 P.M. acceso.bd.ConexionBaseDeDatos <clinit>
+INFO: Configuración de base de datos cargada correctamente
+abr 10, 2026 2:23:07 P.M. acceso.bd.ConexionBaseDeDatos <clinit>
+CONFIG: URL de conexión: jdbc:mysql://localhost:3306/practicas_profesionales
+abr 10, 2026 2:23:07 P.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexión a la base de datos...
+abr 10, 2026 2:23:07 P.M. acceso.bd.ConexionBaseDeDatos conectar
+SEVERE: Conexión fallida después de 2 ms - URL: jdbc:mysql://localhost:3306/practicas_profesionales
+java.sql.SQLException: No suitable driver found for jdbc:mysql://localhost:3306/practicas_profesionales
+	at java.sql/java.sql.DriverManager.getConnection(DriverManager.java:638)
+	at java.sql/java.sql.DriverManager.getConnection(DriverManager.java:199)
+	at acceso.bd.ConexionBaseDeDatos.conectar(ConexionBaseDeDatos.java:69)
+	at Main.main(Main.java:8)
+
+abr 10, 2026 2:27:13 P.M. acceso.bd.ConexionBaseDeDatos <clinit>
+INFO: Configuración de base de datos cargada correctamente
+abr 10, 2026 2:27:13 P.M. acceso.bd.ConexionBaseDeDatos <clinit>
+CONFIG: URL de conexión: jdbc:mysql://localhost:3306/practicas_profesionales
+abr 10, 2026 2:27:13 P.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexión a la base de datos...
+abr 10, 2026 2:27:14 P.M. acceso.bd.ConexionBaseDeDatos conectar
+SEVERE: Conexión fallida después de 598 ms - URL: jdbc:mysql://localhost:3306/practicas_profesionales
+java.sql.SQLException: Access denied for user 'usuario_practicas'@'localhost' (using password: YES)
+	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:121)
+	at com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:114)
+	at com.mysql.cj.jdbc.ConnectionImpl.createNewIO(ConnectionImpl.java:840)
+	at com.mysql.cj.jdbc.ConnectionImpl.<init>(ConnectionImpl.java:416)
+	at com.mysql.cj.jdbc.ConnectionImpl.getInstance(ConnectionImpl.java:237)
+	at com.mysql.cj.jdbc.NonRegisteringDriver.connect(NonRegisteringDriver.java:180)
+	at java.sql/java.sql.DriverManager.getConnection(DriverManager.java:613)
+	at java.sql/java.sql.DriverManager.getConnection(DriverManager.java:199)
+	at acceso.bd.ConexionBaseDeDatos.conectar(ConexionBaseDeDatos.java:69)
+	at Main.main(Main.java:8)
+
+abr 10, 2026 2:31:13 P.M. acceso.bd.ConexionBaseDeDatos <clinit>
+INFO: Configuración de base de datos cargada correctamente
+abr 10, 2026 2:31:13 P.M. acceso.bd.ConexionBaseDeDatos <clinit>
+CONFIG: URL de conexión: jdbc:mysql://localhost:3306/practicas_profesionales
+abr 10, 2026 2:31:13 P.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexión a la base de datos...
+abr 10, 2026 2:31:13 P.M. acceso.bd.ConexionBaseDeDatos conectar
+SEVERE: Conexión fallida después de 606 ms - URL: jdbc:mysql://localhost:3306/practicas_profesionales
+java.sql.SQLException: Access denied for user 'usuario_practicas'@'localhost' (using password: YES)
+	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:121)
+	at com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:114)
+	at com.mysql.cj.jdbc.ConnectionImpl.createNewIO(ConnectionImpl.java:840)
+	at com.mysql.cj.jdbc.ConnectionImpl.<init>(ConnectionImpl.java:416)
+	at com.mysql.cj.jdbc.ConnectionImpl.getInstance(ConnectionImpl.java:237)
+	at com.mysql.cj.jdbc.NonRegisteringDriver.connect(NonRegisteringDriver.java:180)
+	at java.sql/java.sql.DriverManager.getConnection(DriverManager.java:613)
+	at java.sql/java.sql.DriverManager.getConnection(DriverManager.java:199)
+	at acceso.bd.ConexionBaseDeDatos.conectar(ConexionBaseDeDatos.java:69)
+	at Main.main(Main.java:8)
+
+abr 10, 2026 2:33:02 P.M. acceso.bd.ConexionBaseDeDatos <clinit>
+INFO: Configuración de base de datos cargada correctamente
+abr 10, 2026 2:33:02 P.M. acceso.bd.ConexionBaseDeDatos <clinit>
+CONFIG: URL de conexión: jdbc:mysql://localhost:3306/practicas_profesionales
+abr 10, 2026 2:33:02 P.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexión a la base de datos...
+abr 10, 2026 2:33:02 P.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexión a base de datos realizada exitosamente en 387 ms
+abr 10, 2026 2:34:44 P.M. acceso.bd.ConexionBaseDeDatos <clinit>
+INFO: Configuración de base de datos cargada correctamente
+abr 10, 2026 2:34:44 P.M. acceso.bd.ConexionBaseDeDatos <clinit>
+CONFIG: URL de conexión: jdbc:mysql://localhost:3306/practicas_profesionales
+abr 10, 2026 2:34:44 P.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexión a la base de datos...
+abr 10, 2026 2:34:44 P.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexión a base de datos realizada exitosamente en 368 ms
+abr 10, 2026 2:34:44 P.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexión a la base de datos...
+abr 10, 2026 2:34:44 P.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexión a base de datos realizada exitosamente en 14 ms
+abr 10, 2026 2:34:44 P.M. logica.dao.objetos.CoordinadorDao insertarCoordinador
+INFO: Coordinador insertado correctamente con ID de usuario: 1
+abr 10, 2026 2:45:36 P.M. acceso.bd.ConexionBaseDeDatos <clinit>
+INFO: Configuración de base de datos cargada correctamente
+abr 10, 2026 2:45:36 P.M. acceso.bd.ConexionBaseDeDatos <clinit>
+CONFIG: URL de conexión: jdbc:mysql://localhost:3306/practicas_profesionales
+abr 10, 2026 2:45:36 P.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexión a la base de datos...
+abr 10, 2026 2:45:37 P.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexión a base de datos realizada exitosamente en 564 ms
+abr 10, 2026 2:45:37 P.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexión a la base de datos...
+abr 10, 2026 2:45:37 P.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexión a base de datos realizada exitosamente en 13 ms
+abr 10, 2026 2:45:37 P.M. logica.dao.objetos.OrganizacionVinculadaDao insertarOrganizacionVinculada
+INFO: Organización vinculada insertada correctamente
+abr 10, 2026 2:45:37 P.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexión a la base de datos...
+abr 10, 2026 2:45:37 P.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexión a base de datos realizada exitosamente en 13 ms
+abr 10, 2026 2:45:37 P.M. logica.dao.objetos.CoordinadorDao insertarCoordinador
+SEVERE: Error al insertar Coordinador
+java.sql.SQLIntegrityConstraintViolationException: Duplicate entry 'C001' for key 'coordinador.PRIMARY'
+	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:109)
+	at com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:114)
+	at com.mysql.cj.jdbc.ClientPreparedStatement.executeInternal(ClientPreparedStatement.java:988)
+	at com.mysql.cj.jdbc.ClientPreparedStatement.executeUpdateInternal(ClientPreparedStatement.java:1166)
+	at com.mysql.cj.jdbc.ClientPreparedStatement.executeUpdateInternal(ClientPreparedStatement.java:1101)
+	at com.mysql.cj.jdbc.ClientPreparedStatement.executeLargeUpdate(ClientPreparedStatement.java:1448)
+	at com.mysql.cj.jdbc.ClientPreparedStatement.executeUpdate(ClientPreparedStatement.java:1084)
+	at logica.dao.objetos.CoordinadorDao.insertarCoordinador(CoordinadorDao.java:41)
+	at Main.main(Main.java:26)
+
+abr 10, 2026 2:45:37 P.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexión a la base de datos...
+abr 10, 2026 2:45:37 P.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexión a base de datos realizada exitosamente en 13 ms
+abr 10, 2026 2:45:37 P.M. logica.dao.objetos.ProfesorDao insertarProfesor
+INFO: Profesor insertado correctamente con ID de usuario: + idUsuarioGenerado
+abr 10, 2026 2:45:37 P.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexión a la base de datos...
+abr 10, 2026 2:45:37 P.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexión a base de datos realizada exitosamente en 11 ms
+abr 10, 2026 2:45:37 P.M. logica.dao.objetos.PracticanteDao insertarPracticante
+SEVERE: Error al insertar practicante
+java.sql.SQLException: No value specified for parameter 4
+	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:121)
+	at com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:114)
+	at com.mysql.cj.jdbc.ClientPreparedStatement.executeUpdateInternal(ClientPreparedStatement.java:1197)
+	at com.mysql.cj.jdbc.ClientPreparedStatement.executeUpdateInternal(ClientPreparedStatement.java:1101)
+	at com.mysql.cj.jdbc.ClientPreparedStatement.executeLargeUpdate(ClientPreparedStatement.java:1448)
+	at com.mysql.cj.jdbc.ClientPreparedStatement.executeUpdate(ClientPreparedStatement.java:1084)
+	at logica.dao.objetos.PracticanteDao.insertarPracticante(PracticanteDao.java:42)
+	at Main.main(Main.java:42)
+
+abr 10, 2026 2:45:37 P.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexión a la base de datos...
+abr 10, 2026 2:45:37 P.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexión a base de datos realizada exitosamente en 11 ms
+abr 10, 2026 2:45:37 P.M. logica.dao.objetos.SeccionDao agregarSeccion
+INFO: Seccion insertada correctamente 
+abr 10, 2026 2:45:37 P.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexión a la base de datos...
+abr 10, 2026 2:45:37 P.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexión a base de datos realizada exitosamente en 10 ms
+abr 10, 2026 2:45:37 P.M. logica.dao.objetos.ProyectoDao agregarProyecto
+SEVERE: Error al insertar proyecto
+java.sql.SQLException: Data truncated for column 'estado' at row 1
+	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:121)
+	at com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:114)
+	at com.mysql.cj.jdbc.ClientPreparedStatement.executeInternal(ClientPreparedStatement.java:988)
+	at com.mysql.cj.jdbc.ClientPreparedStatement.executeUpdateInternal(ClientPreparedStatement.java:1166)
+	at com.mysql.cj.jdbc.ClientPreparedStatement.executeUpdateInternal(ClientPreparedStatement.java:1101)
+	at com.mysql.cj.jdbc.ClientPreparedStatement.executeLargeUpdate(ClientPreparedStatement.java:1448)
+	at com.mysql.cj.jdbc.ClientPreparedStatement.executeUpdate(ClientPreparedStatement.java:1084)
+	at logica.dao.objetos.ProyectoDao.agregarProyecto(ProyectoDao.java:33)
+	at Main.main(Main.java:60)
+
+abr 10, 2026 2:45:37 P.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexión a la base de datos...
+abr 10, 2026 2:45:37 P.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexión a base de datos realizada exitosamente en 10 ms
+abr 10, 2026 2:45:37 P.M. logica.dao.objetos.ReporteDao agregarReporte
+SEVERE: Error al insertar el reporte
+java.sql.SQLIntegrityConstraintViolationException: Cannot add or update a child row: a foreign key constraint fails (`practicas_profesionales`.`reporte`, CONSTRAINT `reporte_ibfk_1` FOREIGN KEY (`matricula`) REFERENCES `practicante` (`matricula`) ON DELETE RESTRICT ON UPDATE CASCADE)
+	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:109)
+	at com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:114)
+	at com.mysql.cj.jdbc.ClientPreparedStatement.executeInternal(ClientPreparedStatement.java:988)
+	at com.mysql.cj.jdbc.ClientPreparedStatement.executeUpdateInternal(ClientPreparedStatement.java:1166)
+	at com.mysql.cj.jdbc.ClientPreparedStatement.executeUpdateInternal(ClientPreparedStatement.java:1101)
+	at com.mysql.cj.jdbc.ClientPreparedStatement.executeLargeUpdate(ClientPreparedStatement.java:1448)
+	at com.mysql.cj.jdbc.ClientPreparedStatement.executeUpdate(ClientPreparedStatement.java:1084)
+	at logica.dao.objetos.ReporteDao.agregarReporte(ReporteDao.java:29)
+	at Main.main(Main.java:70)
+
+abr 10, 2026 2:53:15 P.M. acceso.bd.ConexionBaseDeDatos <clinit>
+INFO: Configuración de base de datos cargada correctamente
+abr 10, 2026 2:53:15 P.M. acceso.bd.ConexionBaseDeDatos <clinit>
+CONFIG: URL de conexión: jdbc:mysql://localhost:3306/practicas_profesionales
+abr 10, 2026 2:53:15 P.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexión a la base de datos...
+abr 10, 2026 2:53:16 P.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexión a base de datos realizada exitosamente en 522 ms
+abr 10, 2026 2:53:16 P.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexión a la base de datos...
+abr 10, 2026 2:53:16 P.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexión a base de datos realizada exitosamente en 15 ms
+abr 10, 2026 2:53:16 P.M. logica.dao.objetos.OrganizacionVinculadaDao insertarOrganizacionVinculada
+INFO: Organización vinculada insertada correctamente
+abr 10, 2026 2:53:16 P.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexión a la base de datos...
+abr 10, 2026 2:53:16 P.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexión a base de datos realizada exitosamente en 14 ms
+abr 10, 2026 2:53:16 P.M. logica.dao.objetos.CoordinadorDao insertarCoordinador
+SEVERE: Error al insertar Coordinador
+java.sql.SQLIntegrityConstraintViolationException: Duplicate entry 'C001' for key 'coordinador.PRIMARY'
+	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:109)
+	at com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:114)
+	at com.mysql.cj.jdbc.ClientPreparedStatement.executeInternal(ClientPreparedStatement.java:988)
+	at com.mysql.cj.jdbc.ClientPreparedStatement.executeUpdateInternal(ClientPreparedStatement.java:1166)
+	at com.mysql.cj.jdbc.ClientPreparedStatement.executeUpdateInternal(ClientPreparedStatement.java:1101)
+	at com.mysql.cj.jdbc.ClientPreparedStatement.executeLargeUpdate(ClientPreparedStatement.java:1448)
+	at com.mysql.cj.jdbc.ClientPreparedStatement.executeUpdate(ClientPreparedStatement.java:1084)
+	at logica.dao.objetos.CoordinadorDao.insertarCoordinador(CoordinadorDao.java:41)
+	at Main.main(Main.java:26)
+
+abr 10, 2026 2:53:16 P.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexión a la base de datos...
+abr 10, 2026 2:53:16 P.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexión a base de datos realizada exitosamente en 13 ms
+abr 10, 2026 2:53:16 P.M. logica.dao.objetos.ProfesorDao insertarProfesor
+SEVERE: Error al insertar profesor
+java.sql.SQLIntegrityConstraintViolationException: Duplicate entry 'P001' for key 'profesor.PRIMARY'
+	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:109)
+	at com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:114)
+	at com.mysql.cj.jdbc.ClientPreparedStatement.executeInternal(ClientPreparedStatement.java:988)
+	at com.mysql.cj.jdbc.ClientPreparedStatement.executeUpdateInternal(ClientPreparedStatement.java:1166)
+	at com.mysql.cj.jdbc.ClientPreparedStatement.executeUpdateInternal(ClientPreparedStatement.java:1101)
+	at com.mysql.cj.jdbc.ClientPreparedStatement.executeLargeUpdate(ClientPreparedStatement.java:1448)
+	at com.mysql.cj.jdbc.ClientPreparedStatement.executeUpdate(ClientPreparedStatement.java:1084)
+	at logica.dao.objetos.ProfesorDao.insertarProfesor(ProfesorDao.java:42)
+	at Main.main(Main.java:34)
+
+abr 10, 2026 2:53:16 P.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexión a la base de datos...
+abr 10, 2026 2:53:16 P.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexión a base de datos realizada exitosamente en 10 ms
+abr 10, 2026 2:53:16 P.M. logica.dao.objetos.PracticanteDao insertarPracticante
+INFO: Practicante insertado correctamente con ID de usuario: + idUsuarioGenerado
+abr 10, 2026 2:53:16 P.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexión a la base de datos...
+abr 10, 2026 2:53:16 P.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexión a base de datos realizada exitosamente en 13 ms
+abr 10, 2026 2:53:16 P.M. logica.dao.objetos.SeccionDao agregarSeccion
+SEVERE: Error al insertar la seccion
+java.sql.SQLIntegrityConstraintViolationException: Duplicate entry 'S01' for key 'seccion.PRIMARY'
+	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:109)
+	at com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:114)
+	at com.mysql.cj.jdbc.ClientPreparedStatement.executeInternal(ClientPreparedStatement.java:988)
+	at com.mysql.cj.jdbc.ClientPreparedStatement.executeUpdateInternal(ClientPreparedStatement.java:1166)
+	at com.mysql.cj.jdbc.ClientPreparedStatement.executeUpdateInternal(ClientPreparedStatement.java:1101)
+	at com.mysql.cj.jdbc.ClientPreparedStatement.executeLargeUpdate(ClientPreparedStatement.java:1448)
+	at com.mysql.cj.jdbc.ClientPreparedStatement.executeUpdate(ClientPreparedStatement.java:1084)
+	at logica.dao.objetos.SeccionDao.agregarSeccion(SeccionDao.java:23)
+	at Main.main(Main.java:50)
+
+abr 10, 2026 2:53:16 P.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexión a la base de datos...
+abr 10, 2026 2:53:16 P.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexión a base de datos realizada exitosamente en 13 ms
+abr 10, 2026 2:53:16 P.M. logica.dao.objetos.ProyectoDao agregarProyecto
+SEVERE: Error al insertar proyecto
+java.sql.SQLException: Data truncated for column 'estado' at row 1
+	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:121)
+	at com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:114)
+	at com.mysql.cj.jdbc.ClientPreparedStatement.executeInternal(ClientPreparedStatement.java:988)
+	at com.mysql.cj.jdbc.ClientPreparedStatement.executeUpdateInternal(ClientPreparedStatement.java:1166)
+	at com.mysql.cj.jdbc.ClientPreparedStatement.executeUpdateInternal(ClientPreparedStatement.java:1101)
+	at com.mysql.cj.jdbc.ClientPreparedStatement.executeLargeUpdate(ClientPreparedStatement.java:1448)
+	at com.mysql.cj.jdbc.ClientPreparedStatement.executeUpdate(ClientPreparedStatement.java:1084)
+	at logica.dao.objetos.ProyectoDao.agregarProyecto(ProyectoDao.java:33)
+	at Main.main(Main.java:60)
+
+abr 10, 2026 2:53:16 P.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexión a la base de datos...
+abr 10, 2026 2:53:16 P.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexión a base de datos realizada exitosamente en 11 ms
+abr 10, 2026 2:53:16 P.M. logica.dao.objetos.ReporteDao agregarReporte
+INFO: Reporte insertado correctamente 
+abr 10, 2026 2:57:10 P.M. acceso.bd.ConexionBaseDeDatos <clinit>
+INFO: Configuración de base de datos cargada correctamente
+abr 10, 2026 2:57:10 P.M. acceso.bd.ConexionBaseDeDatos <clinit>
+CONFIG: URL de conexión: jdbc:mysql://localhost:3306/practicas_profesionales
+abr 10, 2026 2:57:10 P.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexión a la base de datos...
+abr 10, 2026 2:57:10 P.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexión a base de datos realizada exitosamente en 575 ms
+abr 10, 2026 2:57:10 P.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexión a la base de datos...
+abr 10, 2026 2:57:10 P.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexión a base de datos realizada exitosamente en 15 ms
+abr 10, 2026 2:57:10 P.M. logica.dao.objetos.OrganizacionVinculadaDao insertarOrganizacionVinculada
+INFO: Organización vinculada insertada correctamente
+abr 10, 2026 2:57:10 P.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexión a la base de datos...
+abr 10, 2026 2:57:10 P.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexión a base de datos realizada exitosamente en 13 ms
+abr 10, 2026 2:57:10 P.M. logica.dao.objetos.CoordinadorDao insertarCoordinador
+SEVERE: Error al insertar Coordinador
+java.sql.SQLIntegrityConstraintViolationException: Duplicate entry 'C001' for key 'coordinador.PRIMARY'
+	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:109)
+	at com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:114)
+	at com.mysql.cj.jdbc.ClientPreparedStatement.executeInternal(ClientPreparedStatement.java:988)
+	at com.mysql.cj.jdbc.ClientPreparedStatement.executeUpdateInternal(ClientPreparedStatement.java:1166)
+	at com.mysql.cj.jdbc.ClientPreparedStatement.executeUpdateInternal(ClientPreparedStatement.java:1101)
+	at com.mysql.cj.jdbc.ClientPreparedStatement.executeLargeUpdate(ClientPreparedStatement.java:1448)
+	at com.mysql.cj.jdbc.ClientPreparedStatement.executeUpdate(ClientPreparedStatement.java:1084)
+	at logica.dao.objetos.CoordinadorDao.insertarCoordinador(CoordinadorDao.java:41)
+	at Main.main(Main.java:26)
+
+abr 10, 2026 2:57:10 P.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexión a la base de datos...
+abr 10, 2026 2:57:11 P.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexión a base de datos realizada exitosamente en 12 ms
+abr 10, 2026 2:57:11 P.M. logica.dao.objetos.ProfesorDao insertarProfesor
+SEVERE: Error al insertar profesor
+java.sql.SQLIntegrityConstraintViolationException: Duplicate entry 'P001' for key 'profesor.PRIMARY'
+	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:109)
+	at com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:114)
+	at com.mysql.cj.jdbc.ClientPreparedStatement.executeInternal(ClientPreparedStatement.java:988)
+	at com.mysql.cj.jdbc.ClientPreparedStatement.executeUpdateInternal(ClientPreparedStatement.java:1166)
+	at com.mysql.cj.jdbc.ClientPreparedStatement.executeUpdateInternal(ClientPreparedStatement.java:1101)
+	at com.mysql.cj.jdbc.ClientPreparedStatement.executeLargeUpdate(ClientPreparedStatement.java:1448)
+	at com.mysql.cj.jdbc.ClientPreparedStatement.executeUpdate(ClientPreparedStatement.java:1084)
+	at logica.dao.objetos.ProfesorDao.insertarProfesor(ProfesorDao.java:41)
+	at Main.main(Main.java:34)
+
+abr 10, 2026 2:57:11 P.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexión a la base de datos...
+abr 10, 2026 2:57:11 P.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexión a base de datos realizada exitosamente en 10 ms
+abr 10, 2026 2:57:11 P.M. logica.dao.objetos.PracticanteDao insertarPracticante
+SEVERE: Error al insertar practicante
+java.sql.SQLIntegrityConstraintViolationException: Duplicate entry 'S20013456' for key 'practicante.PRIMARY'
+	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:109)
+	at com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:114)
+	at com.mysql.cj.jdbc.ClientPreparedStatement.executeInternal(ClientPreparedStatement.java:988)
+	at com.mysql.cj.jdbc.ClientPreparedStatement.executeUpdateInternal(ClientPreparedStatement.java:1166)
+	at com.mysql.cj.jdbc.ClientPreparedStatement.executeUpdateInternal(ClientPreparedStatement.java:1101)
+	at com.mysql.cj.jdbc.ClientPreparedStatement.executeLargeUpdate(ClientPreparedStatement.java:1448)
+	at com.mysql.cj.jdbc.ClientPreparedStatement.executeUpdate(ClientPreparedStatement.java:1084)
+	at logica.dao.objetos.PracticanteDao.insertarPracticante(PracticanteDao.java:42)
+	at Main.main(Main.java:42)
+
+abr 10, 2026 2:57:11 P.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexión a la base de datos...
+abr 10, 2026 2:57:11 P.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexión a base de datos realizada exitosamente en 11 ms
+abr 10, 2026 2:57:11 P.M. logica.dao.objetos.SeccionDao agregarSeccion
+SEVERE: Error al insertar la seccion
+java.sql.SQLIntegrityConstraintViolationException: Duplicate entry 'S01' for key 'seccion.PRIMARY'
+	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:109)
+	at com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:114)
+	at com.mysql.cj.jdbc.ClientPreparedStatement.executeInternal(ClientPreparedStatement.java:988)
+	at com.mysql.cj.jdbc.ClientPreparedStatement.executeUpdateInternal(ClientPreparedStatement.java:1166)
+	at com.mysql.cj.jdbc.ClientPreparedStatement.executeUpdateInternal(ClientPreparedStatement.java:1101)
+	at com.mysql.cj.jdbc.ClientPreparedStatement.executeLargeUpdate(ClientPreparedStatement.java:1448)
+	at com.mysql.cj.jdbc.ClientPreparedStatement.executeUpdate(ClientPreparedStatement.java:1084)
+	at logica.dao.objetos.SeccionDao.agregarSeccion(SeccionDao.java:23)
+	at Main.main(Main.java:50)
+
+abr 10, 2026 2:57:11 P.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexión a la base de datos...
+abr 10, 2026 2:57:11 P.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexión a base de datos realizada exitosamente en 11 ms
+abr 10, 2026 2:57:11 P.M. logica.dao.objetos.ProyectoDao agregarProyecto
+SEVERE: Error al insertar proyecto
+java.sql.SQLException: Data truncated for column 'estado' at row 1
+	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:121)
+	at com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:114)
+	at com.mysql.cj.jdbc.ClientPreparedStatement.executeInternal(ClientPreparedStatement.java:988)
+	at com.mysql.cj.jdbc.ClientPreparedStatement.executeUpdateInternal(ClientPreparedStatement.java:1166)
+	at com.mysql.cj.jdbc.ClientPreparedStatement.executeUpdateInternal(ClientPreparedStatement.java:1101)
+	at com.mysql.cj.jdbc.ClientPreparedStatement.executeLargeUpdate(ClientPreparedStatement.java:1448)
+	at com.mysql.cj.jdbc.ClientPreparedStatement.executeUpdate(ClientPreparedStatement.java:1084)
+	at logica.dao.objetos.ProyectoDao.agregarProyecto(ProyectoDao.java:33)
+	at Main.main(Main.java:60)
+
+abr 10, 2026 2:57:11 P.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexión a la base de datos...
+abr 10, 2026 2:57:11 P.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexión a base de datos realizada exitosamente en 10 ms
+abr 10, 2026 2:57:11 P.M. logica.dao.objetos.ReporteDao agregarReporte
+INFO: Reporte insertado correctamente 
+abr 10, 2026 2:59:40 P.M. acceso.bd.ConexionBaseDeDatos <clinit>
+INFO: Configuración de base de datos cargada correctamente
+abr 10, 2026 2:59:40 P.M. acceso.bd.ConexionBaseDeDatos <clinit>
+CONFIG: URL de conexión: jdbc:mysql://localhost:3306/practicas_profesionales
+abr 10, 2026 2:59:40 P.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexión a la base de datos...
+abr 10, 2026 2:59:40 P.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexión a base de datos realizada exitosamente en 391 ms
+abr 10, 2026 2:59:40 P.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexión a la base de datos...
+abr 10, 2026 2:59:40 P.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexión a base de datos realizada exitosamente en 14 ms
+abr 10, 2026 2:59:40 P.M. logica.dao.objetos.OrganizacionVinculadaDao insertarOrganizacionVinculada
+INFO: Organización vinculada insertada correctamente
+abr 10, 2026 2:59:40 P.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexión a la base de datos...
+abr 10, 2026 2:59:40 P.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexión a base de datos realizada exitosamente en 13 ms
+abr 10, 2026 2:59:40 P.M. logica.dao.objetos.CoordinadorDao insertarCoordinador
+INFO: Coordinador insertado correctamente con ID de usuario: 11
+abr 10, 2026 2:59:40 P.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexión a la base de datos...
+abr 10, 2026 2:59:40 P.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexión a base de datos realizada exitosamente en 13 ms
+abr 10, 2026 2:59:40 P.M. logica.dao.objetos.ProfesorDao insertarProfesor
+INFO: Profesor insertado correctamente con ID de usuario: + idUsuarioGenerado
+abr 10, 2026 2:59:40 P.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexión a la base de datos...
+abr 10, 2026 2:59:40 P.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexión a base de datos realizada exitosamente en 11 ms
+abr 10, 2026 2:59:40 P.M. logica.dao.objetos.PracticanteDao insertarPracticante
+INFO: Practicante insertado correctamente con ID de usuario: + idUsuarioGenerado
+abr 10, 2026 2:59:40 P.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexión a la base de datos...
+abr 10, 2026 2:59:40 P.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexión a base de datos realizada exitosamente en 12 ms
+abr 10, 2026 2:59:40 P.M. logica.dao.objetos.SeccionDao agregarSeccion
+INFO: Seccion insertada correctamente 
+abr 10, 2026 2:59:40 P.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexión a la base de datos...
+abr 10, 2026 2:59:40 P.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexión a base de datos realizada exitosamente en 12 ms
+abr 10, 2026 2:59:40 P.M. logica.dao.objetos.ProyectoDao agregarProyecto
+INFO: Proyecto insertado correctamente 
+abr 10, 2026 2:59:40 P.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexión a la base de datos...
+abr 10, 2026 2:59:40 P.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexión a base de datos realizada exitosamente en 12 ms
+abr 10, 2026 2:59:40 P.M. logica.dao.objetos.ReporteDao agregarReporte
+INFO: Reporte insertado correctamente 
+abr 10, 2026 3:14:45 P.M. acceso.bd.ConexionBaseDeDatos <clinit>
+INFO: Configuración de base de datos cargada correctamente
+abr 10, 2026 3:14:45 P.M. acceso.bd.ConexionBaseDeDatos <clinit>
+CONFIG: URL de conexión: jdbc:mysql://localhost:3306/practicas_profesionales
+abr 10, 2026 3:14:45 P.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexión a la base de datos...
+abr 10, 2026 3:14:46 P.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexión a base de datos realizada exitosamente en 659 ms
+abr 10, 2026 3:14:46 P.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexión a la base de datos...
+abr 10, 2026 3:14:46 P.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexión a base de datos realizada exitosamente en 14 ms
+abr 10, 2026 3:14:46 P.M. logica.dao.objetos.PracticanteSeccionDao agregarPracticanteSeccion
+INFO: PracticanteSeccion insertada correctamente

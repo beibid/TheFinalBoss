@@ -10,10 +10,13 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 
 
 public class CoordinadorDao implements CoordinadorDaoInterfaz {
-
+    private static final Logger LOGGER = Logger.getLogger(CoordinadorDao.class.getName());
     @Override
 
     public void insertarCoordinador(Coordinador coordinador) throws InserccionBaseDeDatosExcepcion {
@@ -44,9 +47,9 @@ public class CoordinadorDao implements CoordinadorDaoInterfaz {
             insercionCoordinador.setInt(2, idUsuarioGenerado);
             insercionCoordinador.executeUpdate();
 
-            System.out.println("Los datos han sido añadidos correctamente");
-
-        } catch ( SQLException e ) {
+            LOGGER.info("Coordinador insertado correctamente con ID de usuario: " + idUsuarioGenerado);
+        } catch (SQLException e) {
+            LOGGER.log(Level.SEVERE, "Error al insertar Coordinador", e);
             throw new InserccionBaseDeDatosExcepcion("Error al insertar coordinador");
         }
     }

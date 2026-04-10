@@ -2,7 +2,7 @@ package logica.dominio;
 
 
 import java.sql.Date;
-import logica.dominio.enums.Estado;
+import logica.dominio.enums.EstadoProyecto;
 
 
 public class Proyecto {
@@ -10,7 +10,7 @@ public class Proyecto {
     private String nombreProyecto;
     private String descripcion;
     private String responsableDelProyecto;
-    private Estado estado;
+    private EstadoProyecto estado;
     private String nombreEmpresa;
     private String sectorEmpresa;
     private String direccionEmpresa;
@@ -20,7 +20,7 @@ public class Proyecto {
     private Date fechaRegistro;
 
     public Proyecto(int idProyecto, String nombreProyecto, String descripcion, String responsableDelProyecto,
-                    Estado estado, String nombreEmpresa, String sectorEmpresa, String direccionEmpresa,
+                    EstadoProyecto estado, String nombreEmpresa, String sectorEmpresa, String direccionEmpresa,
                     int idOrganizacion, String matricula, String numPersonalCoordinador, Date fechaRegistro) {
         this.idProyecto = idProyecto;
         this.nombreProyecto = nombreProyecto;
@@ -36,77 +36,29 @@ public class Proyecto {
         this.fechaRegistro = fechaRegistro;
     }
 
-    public int getIdProyecto() {
+    public int getIdProyecto() { return idProyecto; }
+    public String getNombreProyecto() { return nombreProyecto; }
+    public String getDescripcion() { return descripcion; }
+    public String getResponsableDelProyecto() { return responsableDelProyecto; }
+    public EstadoProyecto getEstado() { return estado; }
+    public String getNombreEmpresa() { return nombreEmpresa; }
+    public String getSectorEmpresa() { return sectorEmpresa; }
+    public String getDireccionEmpresa() { return direccionEmpresa; }
+    public int getIdOrganizacion() { return idOrganizacion; }
+    public String getMatricula() { return matricula; }
+    public String getNumPersonalCoordinador() { return numPersonalCoordinador; }
+    public Date getFechaRegistro() { return fechaRegistro; }
 
-        return idProyecto;
-    }
-    public String getNombreProyecto() {
-        return nombreProyecto;
-    }
-    public String getDescripcion() {
-        return descripcion;
-    }
-    public String getResponsableDelProyecto() {
-        return responsableDelProyecto;
-    }
-    public Estado getEstado() {
-        return estado;
-    }
-    public String getNombreEmpresa() {
-        return nombreEmpresa;
-    }
-    public String getSectorEmpresa() {
-        return sectorEmpresa;
-    }
-    public String getDireccionEmpresa() {
-        return direccionEmpresa;
-    }
-    public int getIdOrganizacion() {
-        return idOrganizacion;
-    }
-    public String getMatricula() {
-        return matricula;
-    }
-    public String getNumPersonalCoordinador() {
-        return numPersonalCoordinador;
-    }
-    public Date getFechaRegistro() {
-        return fechaRegistro;
-    }
-
-    public void setIdProyecto(int idProyecto) {
-        this.idProyecto = idProyecto;
-    }
-    public void setNombreProyecto(String nombreProyecto) {
-        this.nombreProyecto = nombreProyecto;
-    }
-    public void setDescripcion(String descripcion) {
-        this.descripcion = descripcion;
-    }
-    public void setResponsableDelProyecto(String responsableDelProyecto) {
-        this.responsableDelProyecto = responsableDelProyecto; }
-    public void setEstado(Estado estado) {
-        this.estado = estado;
-    }
-    public void setNombreEmpresa(String nombreEmpresa) {
-        this.nombreEmpresa = nombreEmpresa;
-    }
-    public void setSectorEmpresa(String sectorEmpresa) {
-        this.sectorEmpresa = sectorEmpresa;
-    }
-    public void setDireccionEmpresa(String direccionEmpresa) {
-        this.direccionEmpresa = direccionEmpresa;
-    }
-    public void setIdOrganizacion(int idOrganizacion) {
-        this.idOrganizacion = idOrganizacion;
-    }
-    public void setMatricula(String matricula) {
-        this.matricula = matricula;
-    }
-    public void setNumPersonalCoordinador(String numPersonalCoordinador) {
-        this.numPersonalCoordinador = numPersonalCoordinador;
-    }
-    public void setFechaRegistro(Date fechaRegistro) {
-        this.fechaRegistro = fechaRegistro;
-    }
+    public void setIdProyecto(int idProyecto) { this.idProyecto = idProyecto; }
+    public void setNombreProyecto(String nombreProyecto) { this.nombreProyecto = nombreProyecto; }
+    public void setDescripcion(String descripcion) { this.descripcion = descripcion; }
+    public void setResponsableDelProyecto(String responsableDelProyecto) { this.responsableDelProyecto = responsableDelProyecto; }
+    public void setEstado(EstadoProyecto estado) { this.estado = estado; }
+    public void setNombreEmpresa(String nombreEmpresa) { this.nombreEmpresa = nombreEmpresa; }
+    public void setSectorEmpresa(String sectorEmpresa) { this.sectorEmpresa = sectorEmpresa; }
+    public void setDireccionEmpresa(String direccionEmpresa) { this.direccionEmpresa = direccionEmpresa; }
+    public void setIdOrganizacion(int idOrganizacion) { this.idOrganizacion = idOrganizacion; }
+    public void setMatricula(String matricula) { this.matricula = matricula; }
+    public void setNumPersonalCoordinador(String numPersonalCoordinador) { this.numPersonalCoordinador = numPersonalCoordinador; }
+    public void setFechaRegistro(Date fechaRegistro) { this.fechaRegistro = fechaRegistro; }
 }
