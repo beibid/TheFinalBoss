@@ -1,6 +1,6 @@
 package logica.dao.interfaces;
 
-import logica.dominio.Proyecto;
+import logica.dto.Proyecto;
 import logica.dao.excepciones.InserccionBaseDeDatosExcepcion;
 
 public interface ProyectoDaoInterfaz {

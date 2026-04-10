@@ -1,7 +1,7 @@
-package logica.dominio;
+package logica.dto;
 
-import logica.dominio.enums.Estado;
-import logica.dominio.enums.Genero;
+import logica.dto.enums.Estado;
+import logica.dto.enums.Genero;
 
 public class Practicante extends Usuario {
     private String matricula;

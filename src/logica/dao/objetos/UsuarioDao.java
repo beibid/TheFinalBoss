@@ -1,6 +1,6 @@
 package logica.dao.objetos;
 import acceso.bd.ConexionBaseDeDatos;
-import logica.dominio.Usuario;
+import logica.dto.Usuario;
 import logica.dao.excepciones.InserccionBaseDeDatosExcepcion;
 import logica.dao.interfaces.UsuarioDaoInterfaz;
 
@@ -9,7 +9,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class UsuarioDao implements UsuarioDaoInterfaz{
-    private static final Logger LOGGER = Logger.getLogger(CoordinadorDao.class.getName());
+    private static final Logger LOGGER = Logger.getLogger(UsuarioDao.class.getName());
     @Override
     public int insertarUsuario (Usuario usuario) throws InserccionBaseDeDatosExcepcion {
         String queryUsuario = "insert into Usuario (nombre, apellidoPaterno, apellidoMaterno, contrasena, estado) values (?, ?, ?, ?, ?)";

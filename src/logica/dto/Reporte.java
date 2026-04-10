@@ -1,8 +1,7 @@
-package logica.dominio;
-import logica.dominio.enums.TipoReporte;
-import logica.dominio.enums.EstadoDeCalificacion;
+package logica.dto;
+import logica.dto.enums.TipoReporte;
+import logica.dto.enums.EstadoDeCalificacion;
 
-import javax.swing.plaf.InsetsUIResource;
 import java.sql.Date;
 
 public class Reporte {

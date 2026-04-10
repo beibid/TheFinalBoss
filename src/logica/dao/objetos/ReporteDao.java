@@ -1,6 +1,6 @@
 package logica.dao.objetos;
 import acceso.bd.ConexionBaseDeDatos;
-import logica.dominio.Reporte;
+import logica.dto.Reporte;
 import logica.dao.excepciones.InserccionBaseDeDatosExcepcion;
 import logica.dao.interfaces.ReporteDaoInterfaz;
 import java.sql.SQLException;
@@ -10,8 +10,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class ReporteDao implements ReporteDaoInterfaz{
-    private static final Logger LOGGER = Logger.getLogger(CoordinadorDao.class.getName());
-
+    private static final Logger LOGGER = Logger.getLogger(ReporteDao.class.getName());
     @Override
     public void agregarReporte (Reporte reporte) throws InserccionBaseDeDatosExcepcion {
         String queryPracticante = "insert into reporte (tipoReporte, descripcion, fechaGeneracion, calificacion, observacionesProf, estado, matricula, numPersonalProfesor) values (?, ?, ?, ?, ?, ?, ?, ?)";

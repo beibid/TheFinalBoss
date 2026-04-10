@@ -1,4 +1,4 @@
-package logica.dominio.enums;
+package logica.dto.enums;
 
 public enum EstadoDeCalificacion {
     Pendiente, Evaluado;

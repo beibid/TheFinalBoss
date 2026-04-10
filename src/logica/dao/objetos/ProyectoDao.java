@@ -1,7 +1,7 @@
 package logica.dao.objetos;
 
 import acceso.bd.ConexionBaseDeDatos;
-import logica.dominio.Proyecto;
+import logica.dto.Proyecto;
 import logica.dao.excepciones.InserccionBaseDeDatosExcepcion;
 import logica.dao.interfaces.ProyectoDaoInterfaz;
 import java.sql.SQLException;
@@ -11,7 +11,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class ProyectoDao implements ProyectoDaoInterfaz {
-    private static final Logger LOGGER = Logger.getLogger(CoordinadorDao.class.getName());
+    private static final Logger LOGGER = Logger.getLogger(ProyectoDao.class.getName());
 
     @Override
     public void agregarProyecto(Proyecto proyecto) throws InserccionBaseDeDatosExcepcion {
@@ -22,7 +22,7 @@ public class ProyectoDao implements ProyectoDaoInterfaz {
                 insertarEnBaseDeDatos.setString(1, proyecto.getNombreProyecto());
                 insertarEnBaseDeDatos.setString(2, proyecto.getDescripcion());
                 insertarEnBaseDeDatos.setString(3, proyecto.getResponsableDelProyecto());
-                insertarEnBaseDeDatos.setString(4, proyecto.getEstado().toString());
+                insertarEnBaseDeDatos.setString(4, proyecto.getEstado().toString().replace("_", " "));
                 insertarEnBaseDeDatos.setString(5, proyecto.getNombreEmpresa());
                 insertarEnBaseDeDatos.setString(6, proyecto.getSectorEmpresa());
                 insertarEnBaseDeDatos.setString(7, proyecto.getDireccionEmpresa());

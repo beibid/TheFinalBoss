@@ -1,6 +1,6 @@
-package logica.dominio;
+package logica.dto;
 
-import logica.dominio.enums.Estado;
+import logica.dto.enums.Estado;
 
 public class Coordinador extends Usuario {
     private String numeroDePersonalCoordinador;

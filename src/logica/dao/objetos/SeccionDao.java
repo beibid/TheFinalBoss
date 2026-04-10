@@ -1,7 +1,7 @@
 package logica.dao.objetos;
 
 import acceso.bd.ConexionBaseDeDatos;
-import logica.dominio.Seccion;
+import logica.dto.Seccion;
 import logica.dao.excepciones.InserccionBaseDeDatosExcepcion;
 import logica.dao.interfaces.SeccionDaoInterfaz;
 import java.sql.SQLException;
@@ -11,7 +11,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class SeccionDao implements SeccionDaoInterfaz {
-    private static final Logger LOGGER = Logger.getLogger(CoordinadorDao.class.getName());
+    private static final Logger LOGGER = Logger.getLogger(SeccionDao.class.getName());
     @Override
     public void agregarSeccion(Seccion seccion) throws InserccionBaseDeDatosExcepcion {
         String query = "INSERT INTO seccion (noSeccion, periodo) VALUES (?, ?)";

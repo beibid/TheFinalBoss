@@ -1,6 +1,6 @@
 package logica.dao.objetos;
 import acceso.bd.ConexionBaseDeDatos;
-import logica.dominio.Profesor;
+import logica.dto.Profesor;
 import logica.dao.excepciones.InserccionBaseDeDatosExcepcion;
 import logica.dao.interfaces.ProfesorDaoInterfaz;
 import java.sql.Connection;
@@ -12,8 +12,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class ProfesorDao implements ProfesorDaoInterfaz {
-    private static final Logger LOGGER = Logger.getLogger(CoordinadorDao.class.getName());
-
+    private static final Logger LOGGER = Logger.getLogger(ProfesorDao.class.getName());
     @Override
     public void insertarProfesor(Profesor profesor) throws InserccionBaseDeDatosExcepcion {
         String queryUsuario = "insert into Usuario (nombre, apellidoPaterno, apellidoMaterno, contrasena, estado) values (?, ?, ?, ?, ?)";
