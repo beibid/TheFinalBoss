@@ -1,4 +1,6 @@
 package logica.dao.objetos;
+
+
 import acceso.bd.ConexionBaseDeDatos;
 import logica.dominio.Practicante;
 import logica.dao.excepciones.InserccionBaseDeDatosExcepcion;
@@ -11,6 +13,7 @@ import java.sql.Statement;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+
 public class PracticanteDao implements PracticanteDaoInterfaz {
     private static final Logger LOGGER = Logger.getLogger(PracticanteDao.class.getName());
     @Override
@@ -20,7 +23,7 @@ public class PracticanteDao implements PracticanteDaoInterfaz {
         try {
             Connection conexionBaseDeDatos = ConexionBaseDeDatos.conectar();
 
-            PreparedStatement insercionUsuario = conexionBaseDeDatos.prepareStatement(queryUsuario, Statement.RETURN_GENERATED_KEYS);
+            PreparedStatement insercionUsuario = conexionBaseDeDatos.prepareStatement(consultaUsuario, Statement.RETURN_GENERATED_KEYS);
             insercionUsuario.setString(1, practicante.getNombre());
             insercionUsuario.setString(2, practicante.getApellidoPaterno());
             insercionUsuario.setString(3, practicante.getApellidoMaterno());
@@ -34,7 +37,7 @@ public class PracticanteDao implements PracticanteDaoInterfaz {
             }
             int idUsuarioGenerado = tomarLlave.getInt(1);
 
-            PreparedStatement insercionPracticante = conexionBaseDeDatos.prepareStatement(queryPracticante);
+            PreparedStatement insercionPracticante = conexionBaseDeDatos.prepareStatement(consultaPracticante);
             insercionPracticante.setString(1, practicante.getMatricula());
             insercionPracticante.setString(2, practicante.getLenguaIndigena());
             insercionPracticante.setString(3, practicante.getGenero().toString());

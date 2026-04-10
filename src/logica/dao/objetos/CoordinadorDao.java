@@ -1,4 +1,6 @@
 package logica.dao.objetos;
+
+
 import acceso.bd.ConexionBaseDeDatos;
 import logica.dominio.Coordinador;
 import logica.dao.excepciones.InserccionBaseDeDatosExcepcion;
@@ -12,16 +14,21 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 
+
 public class CoordinadorDao implements CoordinadorDaoInterfaz {
     private static final Logger LOGGER = Logger.getLogger(CoordinadorDao.class.getName());
     @Override
+
     public void insertarCoordinador(Coordinador coordinador) throws InserccionBaseDeDatosExcepcion {
-        String queryUsuario = "insert into Usuario (nombre, apellidoPaterno, apellidoMaterno, contrasena, estado) values (?, ?, ?, ?, ?)";
-        String queryCoordinador = "insert into Coordinador (numPersonalCoordinador, idUsuario) values (?, ?)";
+
+        String consultaUsuario = "insert into Usuario (nombre, apellidoPaterno, apellidoMaterno, contrasena, estado) values (?, ?, ?, ?, ?)";
+        String consultaCoordinador = "insert into Coordinador (numPersonalCoordinador, idUsuario) values (?, ?)";
+
         try {
+
             Connection conexionBaseDeDatos = ConexionBaseDeDatos.conectar();
 
-            PreparedStatement insercionUsuario = conexionBaseDeDatos.prepareStatement(queryUsuario, Statement.RETURN_GENERATED_KEYS);
+            PreparedStatement insercionUsuario = conexionBaseDeDatos.prepareStatement(consultaUsuario, Statement.RETURN_GENERATED_KEYS);
             insercionUsuario.setString(1, coordinador.getNombre());
             insercionUsuario.setString(2, coordinador.getApellidoPaterno());
             insercionUsuario.setString(3, coordinador.getApellidoMaterno());
@@ -30,12 +37,12 @@ public class CoordinadorDao implements CoordinadorDaoInterfaz {
             insercionUsuario.executeUpdate();
 
             ResultSet tomarLlave = insercionUsuario.getGeneratedKeys();
-            if (!tomarLlave.next()){
+            if ( !tomarLlave.next() ){
                 throw new InserccionBaseDeDatosExcepcion("No se obtuvo el ID del usuario insertado");
             }
             int idUsuarioGenerado = tomarLlave.getInt(1);
 
-            PreparedStatement insercionCoordinador = conexionBaseDeDatos.prepareStatement(queryCoordinador);
+            PreparedStatement insercionCoordinador = conexionBaseDeDatos.prepareStatement(consultaCoordinador);
             insercionCoordinador.setString(1, coordinador.getNumeroDePersonalCoordinador());
             insercionCoordinador.setInt(2, idUsuarioGenerado);
             insercionCoordinador.executeUpdate();

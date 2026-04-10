@@ -1,5 +1,6 @@
 package logica.dominio;
 
+
 public class Seccion {
     private String noSeccion;
     private String periodo;

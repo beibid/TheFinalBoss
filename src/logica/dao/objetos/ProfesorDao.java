@@ -15,12 +15,12 @@ public class ProfesorDao implements ProfesorDaoInterfaz {
     private static final Logger LOGGER = Logger.getLogger(ProfesorDao.class.getName());
     @Override
     public void insertarProfesor(Profesor profesor) throws InserccionBaseDeDatosExcepcion {
-        String queryUsuario = "insert into Usuario (nombre, apellidoPaterno, apellidoMaterno, contrasena, estado) values (?, ?, ?, ?, ?)";
-        String queryProfesor = "insert into Profesor (numPersonalProfesor, turno, idUsuario) values (?, ?, ?)";
+        String consultaUsuario = "insert into Usuario (nombre, apellidoPaterno, apellidoMaterno, contrasena, estado) values (?, ?, ?, ?, ?)";
+        String consultaProfesor = "insert into Profeso (numPersonalProfesor, turno, idUsuario) values (?, ?, ?)";
         try {
             Connection conexionBaseDeDatos = ConexionBaseDeDatos.conectar();
 
-            PreparedStatement insercionUsuario = conexionBaseDeDatos.prepareStatement(queryUsuario, Statement.RETURN_GENERATED_KEYS);
+            PreparedStatement insercionUsuario = conexionBaseDeDatos.prepareStatement(consultaUsuario, Statement.RETURN_GENERATED_KEYS);
             insercionUsuario.setString(1, profesor.getNombre());
             insercionUsuario.setString(2, profesor.getApellidoPaterno());
             insercionUsuario.setString(3, profesor.getApellidoMaterno());
@@ -34,7 +34,7 @@ public class ProfesorDao implements ProfesorDaoInterfaz {
             }
             int idUsuarioGenerado = tomarLlave.getInt(1);
 
-            PreparedStatement insercionProfesor = conexionBaseDeDatos.prepareStatement(queryProfesor);
+            PreparedStatement insercionProfesor = conexionBaseDeDatos.prepareStatement(consultaProfesor);
             insercionProfesor.setString(1, profesor.getNumeroDePersonalProfesor());
             insercionProfesor.setString(2, profesor.getTurno().toString());
             insercionProfesor.setInt(3, idUsuarioGenerado);

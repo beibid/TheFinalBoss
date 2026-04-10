@@ -1,4 +1,6 @@
 package logica.dao.interfaces;
+
+
 import logica.dominio.Usuario;
 import logica.dao.excepciones.InserccionBaseDeDatosExcepcion;
 

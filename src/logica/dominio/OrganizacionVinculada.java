@@ -1,5 +1,6 @@
 package logica.dominio;
 
+
 public class OrganizacionVinculada {
     protected String nombre;
     protected String direccion;
