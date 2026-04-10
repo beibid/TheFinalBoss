@@ -1,7 +1,9 @@
 package logica.dominio;
 
+
 import java.sql.Date;
 import logica.dominio.enums.Estado;
+
 
 public class Proyecto {
     private int idProyecto;

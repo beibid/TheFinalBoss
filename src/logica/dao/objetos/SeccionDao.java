@@ -1,5 +1,6 @@
 package logica.dao.objetos;
 
+
 import acceso.bd.ConexionBaseDeDatos;
 import logica.dominio.Seccion;
 import logica.dao.excepciones.InserccionBaseDeDatosExcepcion;
@@ -8,13 +9,14 @@ import java.sql.SQLException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 
+
 public class SeccionDao implements SeccionDaoInterfaz {
     @Override
     public void agregarSeccion(Seccion seccion) throws InserccionBaseDeDatosExcepcion {
-        String query = "INSERT INTO seccion (noSeccion, periodo) VALUES (?, ?)";
+        String consultaSeccion = "INSERT INTO seccion (noSeccion, periodo) VALUES (?, ?)";
         try {
-            Connection conectarConBaseDeDatos = ConexionBaseDeDatos.conectar();
-            PreparedStatement insertarEnBaseDeDatos = conectarConBaseDeDatos.prepareStatement(query); {
+            Connection conexionBaseDeDatos = ConexionBaseDeDatos.conectar();
+            PreparedStatement insertarEnBaseDeDatos = conexionBaseDeDatos.prepareStatement(consultaSeccion); {
                 insertarEnBaseDeDatos.setString(1, seccion.getNoSeccion());
                 insertarEnBaseDeDatos.setString(2, seccion.getPeriodo());
                 insertarEnBaseDeDatos.executeUpdate();

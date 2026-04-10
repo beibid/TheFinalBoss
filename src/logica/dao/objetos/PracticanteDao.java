@@ -1,4 +1,6 @@
 package logica.dao.objetos;
+
+
 import acceso.bd.ConexionBaseDeDatos;
 import logica.dominio.Practicante;
 import logica.dao.excepciones.InserccionBaseDeDatosExcepcion;
@@ -9,15 +11,16 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+
 public class PracticanteDao implements PracticanteDaoInterfaz {
     @Override
     public void insertarPracticante(Practicante practicante) throws InserccionBaseDeDatosExcepcion {
-        String queryUsuario = "insert into Usuario (nombre, apellidoPaterno, apellidoMaterno, contrasena, estado) values (?, ?, ?, ?, ?)";
-        String queryPracticante = "insert into Practicante (matricula, lenguaIndigena, genero, semestre, idUsuario) values (?, ?, ?, ?, ?)";
+        String consultaUsuario = "insert into Usuario (nombre, apellidoPaterno, apellidoMaterno, contrasena, estado) values (?, ?, ?, ?, ?)";
+        String consultaPracticante = "insert into Practicante (matricula, lenguaIndigena, genero, semestre, idUsuario) values (?, ?, ?, ?, ?)";
         try {
             Connection conexionBaseDeDatos = ConexionBaseDeDatos.conectar();
 
-            PreparedStatement insercionUsuario = conexionBaseDeDatos.prepareStatement(queryUsuario, Statement.RETURN_GENERATED_KEYS);
+            PreparedStatement insercionUsuario = conexionBaseDeDatos.prepareStatement(consultaUsuario, Statement.RETURN_GENERATED_KEYS);
             insercionUsuario.setString(1, practicante.getNombre());
             insercionUsuario.setString(2, practicante.getApellidoPaterno());
             insercionUsuario.setString(3, practicante.getApellidoMaterno());
@@ -31,7 +34,7 @@ public class PracticanteDao implements PracticanteDaoInterfaz {
             }
             int idUsuarioGenerado = tomarLlave.getInt(1);
 
-            PreparedStatement insercionPracticante = conexionBaseDeDatos.prepareStatement(queryPracticante);
+            PreparedStatement insercionPracticante = conexionBaseDeDatos.prepareStatement(consultaPracticante);
             insercionPracticante.setString(1, practicante.getMatricula());
             insercionPracticante.setString(2, practicante.getLenguaIndigena());
             insercionPracticante.setString(3, practicante.getGenero().toString());

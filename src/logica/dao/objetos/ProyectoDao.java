@@ -1,5 +1,6 @@
 package logica.dao.objetos;
 
+
 import acceso.bd.ConexionBaseDeDatos;
 import logica.dominio.Proyecto;
 import logica.dao.excepciones.InserccionBaseDeDatosExcepcion;
@@ -8,13 +9,14 @@ import java.sql.SQLException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 
+
 public class ProyectoDao implements ProyectoDaoInterfaz {
     @Override
     public void agregarProyecto(Proyecto proyecto) throws InserccionBaseDeDatosExcepcion {
-        String query = "INSERT INTO proyecto (nombreProyecto, descripcion, responsableDelProyecto, estado, nombreEmpresa, sectorEmpresa, direccionEmpresa, idOrganizacion, matricula, numPersonalCoordinador, fechaRegistro) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String consultaProyecto = "INSERT INTO proyecto (nombreProyecto, descripcion, responsableDelProyecto, estado, nombreEmpresa, sectorEmpresa, direccionEmpresa, idOrganizacion, matricula, numPersonalCoordinador, fechaRegistro) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try {
-            Connection conectarConBaseDeDatos = ConexionBaseDeDatos.conectar();
-            PreparedStatement insertarEnBaseDeDatos = conectarConBaseDeDatos.prepareStatement(query); {
+            Connection conexionBaseDeDatos = ConexionBaseDeDatos.conectar();
+            PreparedStatement insertarEnBaseDeDatos = conexionBaseDeDatos.prepareStatement(consultaProyecto); {
                 insertarEnBaseDeDatos.setString(1, proyecto.getNombreProyecto());
                 insertarEnBaseDeDatos.setString(2, proyecto.getDescripcion());
                 insertarEnBaseDeDatos.setString(3, proyecto.getResponsableDelProyecto());

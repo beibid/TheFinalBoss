@@ -1,4 +1,6 @@
 package logica.dao.objetos;
+
+
 import acceso.bd.ConexionBaseDeDatos;
 import logica.dominio.Reporte;
 import logica.dao.excepciones.InserccionBaseDeDatosExcepcion;
@@ -7,13 +9,14 @@ import java.sql.SQLException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 
+
 public class ReporteDao implements ReporteDaoInterfaz{
     @Override
     public void agregarReporte (Reporte reporte) throws InserccionBaseDeDatosExcepcion {
-        String queryPracticante = "insert into reporte (tipoReporte, descripcion, fechaGeneracion, calificacion, observacionesProf, estado, matricula, numPersonalProfesor) values (?, ?, ?, ?, ?, ?, ?, ?)";
+        String consultaPracticante = "insert into reporte (tipoReporte, descripcion, fechaGeneracion, calificacion, observacionesProf, estado, matricula, numPersonalProfesor) values (?, ?, ?, ?, ?, ?, ?, ?)";
         try {
-            Connection conectarConBaseDeDatos = ConexionBaseDeDatos.conectar();
-            PreparedStatement insertarEnBaseDeDatos = conectarConBaseDeDatos.prepareStatement(queryPracticante); {
+            Connection conexionBaseDeDatos = ConexionBaseDeDatos.conectar();
+            PreparedStatement insertarEnBaseDeDatos = conexionBaseDeDatos.prepareStatement(consultaPracticante); {
                 insertarEnBaseDeDatos.setString(1, reporte.getTipoReporte().toString());
                 insertarEnBaseDeDatos.setString(2, reporte.getDescripcion());
                 insertarEnBaseDeDatos.setDate(3, reporte.getFechaGeneracion());

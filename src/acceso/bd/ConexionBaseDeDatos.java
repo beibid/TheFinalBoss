@@ -14,9 +14,9 @@ import java.util.logging.Logger;
 
 public class ConexionBaseDeDatos {
 
-    private static String ENLACE;
-    private static String USUARIO_INGRESADO;
-    private static String CONTRASENA;
+    private static final String ENLACE;
+    private static final String USUARIO_INGRESADO;
+    private static final String CONTRASENA;
     private static final Logger LOGGER = Logger.getLogger(ConexionBaseDeDatos.class.getName());
 
     static {

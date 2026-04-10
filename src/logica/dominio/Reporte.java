@@ -1,9 +1,10 @@
 package logica.dominio;
+
+
 import logica.dominio.enums.TipoReporte;
 import logica.dominio.enums.EstadoDeCalificacion;
-
-import javax.swing.plaf.InsetsUIResource;
 import java.sql.Date;
+
 
 public class Reporte {
     private TipoReporte tipoReporte;
