@@ -8,8 +8,12 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class ProfesorDao implements ProfesorDaoInterfaz {
+    private static final Logger LOGGER = Logger.getLogger(CoordinadorDao.class.getName());
+
     @Override
     public void insertarProfesor(Profesor profesor) throws InserccionBaseDeDatosExcepcion {
         String queryUsuario = "insert into Usuario (nombre, apellidoPaterno, apellidoMaterno, contrasena, estado) values (?, ?, ?, ?, ?)";
@@ -37,9 +41,10 @@ public class ProfesorDao implements ProfesorDaoInterfaz {
             insercionProfesor.setInt(3, idUsuarioGenerado);
             insercionProfesor.executeUpdate();
 
-            System.out.println("Los datos han sido añadidos correctamente");
+            LOGGER.info("Profesor insertado correctamente con ID de usuario: + idUsuarioGenerado");
 
         } catch (SQLException e) {
+            LOGGER.log(Level.SEVERE, "Error al insertar profesor", e);
             throw new InserccionBaseDeDatosExcepcion("Error al insertar profesor");
         }
     }

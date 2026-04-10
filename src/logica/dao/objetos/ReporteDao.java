@@ -6,8 +6,12 @@ import logica.dao.interfaces.ReporteDaoInterfaz;
 import java.sql.SQLException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class ReporteDao implements ReporteDaoInterfaz{
+    private static final Logger LOGGER = Logger.getLogger(CoordinadorDao.class.getName());
+
     @Override
     public void agregarReporte (Reporte reporte) throws InserccionBaseDeDatosExcepcion {
         String queryPracticante = "insert into reporte (tipoReporte, descripcion, fechaGeneracion, calificacion, observacionesProf, estado, matricula, numPersonalProfesor) values (?, ?, ?, ?, ?, ?, ?, ?)";
@@ -24,10 +28,11 @@ public class ReporteDao implements ReporteDaoInterfaz{
                 insertarEnBaseDeDatos.setString(8, reporte.getNumPersonalProfesor());
                 insertarEnBaseDeDatos.executeUpdate();
 
-                System.out.println("Los datos han sido añadidos correctamente");
+                LOGGER.info("Reporte insertado correctamente ");
 
             }
         } catch (SQLException e) {
+            LOGGER.log(Level.SEVERE, "Error al insertar el reporte", e);
             throw new InserccionBaseDeDatosExcepcion("Error al agregar el reporte");
         }
     }
