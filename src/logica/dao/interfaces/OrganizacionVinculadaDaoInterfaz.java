@@ -1,10 +1,10 @@
 package logica.dao.interfaces;
 
 
+import logica.dao.excepciones.UsuariosExcepcion;
 import logica.dominio.OrganizacionVinculada;
-import logica.dao.excepciones.InserccionBaseDeDatosExcepcion;
 
 
 public interface OrganizacionVinculadaDaoInterfaz {
-    void insertarOrganizacionVinculada(OrganizacionVinculada organizacionVinculada) throws InserccionBaseDeDatosExcepcion;
+    void insertarOrganizacionVinculada(OrganizacionVinculada organizacionVinculada) throws UsuariosExcepcion;
 }

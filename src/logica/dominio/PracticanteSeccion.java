@@ -9,8 +9,16 @@ public class PracticanteSeccion {
         this.noSeccion = noSeccion;
     }
 
-    public String getMatricula() { return matricula; }
-    public String getNoSeccion() { return noSeccion; }
-    public void setMatricula(String matricula) { this.matricula = matricula; }
-    public void setNoSeccion(String noSeccion) { this.noSeccion = noSeccion; }
+    public String getMatricula() {
+        return matricula;
+    }
+    public String getNoSeccion() {
+        return noSeccion;
+    }
+    public void setMatricula(String matricula) {
+        this.matricula = matricula;
+    }
+    public void setNoSeccion(String noSeccion) {
+        this.noSeccion = noSeccion;
+    }
 }

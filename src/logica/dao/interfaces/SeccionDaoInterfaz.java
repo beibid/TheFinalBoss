@@ -1,10 +1,10 @@
 package logica.dao.interfaces;
 
 
+import logica.dao.excepciones.UsuariosExcepcion;
 import logica.dominio.Seccion;
-import logica.dao.excepciones.InserccionBaseDeDatosExcepcion;
 
 
 public interface SeccionDaoInterfaz {
-    void agregarSeccion(Seccion seccion) throws InserccionBaseDeDatosExcepcion;
+    void agregarSeccion(Seccion seccion) throws UsuariosExcepcion;
 }

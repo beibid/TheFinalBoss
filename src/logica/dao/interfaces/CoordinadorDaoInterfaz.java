@@ -1,10 +1,10 @@
 package logica.dao.interfaces;
 
 
+import logica.dao.excepciones.UsuariosExcepcion;
 import logica.dominio.Coordinador;
-import logica.dao.excepciones.InserccionBaseDeDatosExcepcion;
 
 
 public interface CoordinadorDaoInterfaz {
-    void insertarCoordinador(Coordinador coordinador) throws InserccionBaseDeDatosExcepcion;
+    void insertarCoordinador(Coordinador coordinador) throws UsuariosExcepcion;
 }

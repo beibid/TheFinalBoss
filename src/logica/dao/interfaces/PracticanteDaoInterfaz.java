@@ -1,11 +1,12 @@
 package logica.dao.interfaces;
 
 
+import logica.dao.excepciones.UsuariosExcepcion;
 import logica.dominio.Practicante;
-import logica.dao.excepciones.InserccionBaseDeDatosExcepcion;
+
 
 
 public interface PracticanteDaoInterfaz {
-    void insertarPracticante(Practicante practicante) throws InserccionBaseDeDatosExcepcion;
+    void insertarPracticante(Practicante practicante) throws UsuariosExcepcion;
 
 }

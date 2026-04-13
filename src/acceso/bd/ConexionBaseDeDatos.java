@@ -13,42 +13,46 @@ import java.util.logging.Logger;
 
 
 public class ConexionBaseDeDatos {
-
-    private static final String ENLACE;
-    private static final String USUARIO_INGRESADO;
-    private static final String CONTRASENA;
+    private static ConexionBaseDeDatos instancia;
+    private String enlace;
+    private String usuarioIngresado;
+    private String contrasena;
     private static final Logger LOGGER = Logger.getLogger(ConexionBaseDeDatos.class.getName());
 
-    static {
-
+    private ConexionBaseDeDatos() {
         cargarConfiguracionLogging();
+        cargarConfiguracion();
+    }
 
-        try (InputStream input = ConexionBaseDeDatos.class
+    public static  ConexionBaseDeDatos getInstance() {
+        if (instancia == null) {
+            instancia = new ConexionBaseDeDatos();
+        }
+        return instancia;
+    }
+
+    private void cargarConfiguracion() {
+        try (InputStream input = getClass()
                 .getResourceAsStream("propiedades/basededatos.properties")) {
-
             if (input == null) {
                 LOGGER.severe("No se encontró el archivo basededatos.properties");
-                throw new RuntimeException("No se encontró ");
+                return;
             }
-
             Properties propiedadesBaseDatos = new Properties();
             propiedadesBaseDatos.load(input);
-
-            ENLACE = propiedadesBaseDatos.getProperty("db.url");
-            USUARIO_INGRESADO = propiedadesBaseDatos.getProperty("db.user");
-            CONTRASENA = propiedadesBaseDatos.getProperty("db.password");
+            enlace = propiedadesBaseDatos.getProperty("db.url");
+            usuarioIngresado = propiedadesBaseDatos.getProperty("db.user");
+            contrasena = propiedadesBaseDatos.getProperty("db.password");
             LOGGER.info("Configuración de base de datos cargada correctamente");
-            LOGGER.config("URL de conexión: " + ENLACE);
-
+            LOGGER.config("URL de conexión: " + enlace);
         } catch (IOException e) {
             LOGGER.log(Level.SEVERE, "Error cargando configuración de base de datos", e);
-            throw new RuntimeException("Error cargando ", e);
         }
     }
-    private static void cargarConfiguracionLogging() {
-        try (InputStream input = ConexionBaseDeDatos.class
-                .getResourceAsStream("propiedades/logging.properties")) {
 
+    private void cargarConfiguracionLogging() {
+        try (InputStream input = getClass()
+                .getResourceAsStream("propiedades/logging.properties")) {
             if (input != null) {
                 LogManager.getLogManager().readConfiguration(input);
                 System.out.println("Configuración de logging cargada desde archivo");
@@ -61,17 +65,18 @@ public class ConexionBaseDeDatos {
         }
     }
 
-    public static Connection conectar() {
+    public Connection conectar() {
         Connection conexion = null;
         long tiempoInicio = System.currentTimeMillis();
         try {
             LOGGER.fine("Intentando establecer conexión a la base de datos...");
-            conexion = DriverManager.getConnection(ENLACE, USUARIO_INGRESADO, CONTRASENA);
+            conexion = DriverManager.getConnection(enlace, usuarioIngresado, contrasena);
             long tiempoTotal = System.currentTimeMillis() - tiempoInicio;
             LOGGER.log(Level.INFO, "Conexión a base de datos realizada exitosamente en {0} ms", tiempoTotal);
         } catch (SQLException e) {
             long tiempoTotal = System.currentTimeMillis() - tiempoInicio;
-            LOGGER.log(Level.SEVERE, String.format("Conexión fallida después de %d ms - URL: %s", tiempoTotal, ENLACE),e);
+            LOGGER.log(Level.SEVERE, String.format("Conexión fallida después de %d ms - URL: %s",
+                    tiempoTotal, enlace), e);
         }
         return conexion;
     }

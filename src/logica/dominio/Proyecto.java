@@ -49,16 +49,40 @@ public class Proyecto {
     public String getNumPersonalCoordinador() { return numPersonalCoordinador; }
     public Date getFechaRegistro() { return fechaRegistro; }
 
-    public void setIdProyecto(int idProyecto) { this.idProyecto = idProyecto; }
-    public void setNombreProyecto(String nombreProyecto) { this.nombreProyecto = nombreProyecto; }
-    public void setDescripcion(String descripcion) { this.descripcion = descripcion; }
-    public void setResponsableDelProyecto(String responsableDelProyecto) { this.responsableDelProyecto = responsableDelProyecto; }
-    public void setEstado(EstadoProyecto estado) { this.estado = estado; }
-    public void setNombreEmpresa(String nombreEmpresa) { this.nombreEmpresa = nombreEmpresa; }
-    public void setSectorEmpresa(String sectorEmpresa) { this.sectorEmpresa = sectorEmpresa; }
-    public void setDireccionEmpresa(String direccionEmpresa) { this.direccionEmpresa = direccionEmpresa; }
-    public void setIdOrganizacion(int idOrganizacion) { this.idOrganizacion = idOrganizacion; }
-    public void setMatricula(String matricula) { this.matricula = matricula; }
-    public void setNumPersonalCoordinador(String numPersonalCoordinador) { this.numPersonalCoordinador = numPersonalCoordinador; }
-    public void setFechaRegistro(Date fechaRegistro) { this.fechaRegistro = fechaRegistro; }
+    public void setIdProyecto(int idProyecto) {
+        this.idProyecto = idProyecto;
+    }
+    public void setNombreProyecto(String nombreProyecto) {
+        this.nombreProyecto = nombreProyecto;
+    }
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
+    }
+    public void setResponsableDelProyecto(String responsableDelProyecto) {
+        this.responsableDelProyecto = responsableDelProyecto;
+    }
+    public void setEstado(EstadoProyecto estado) {
+        this.estado = estado;
+    }
+    public void setNombreEmpresa(String nombreEmpresa) {
+        this.nombreEmpresa = nombreEmpresa;
+    }
+    public void setSectorEmpresa(String sectorEmpresa) {
+        this.sectorEmpresa = sectorEmpresa;
+    }
+    public void setDireccionEmpresa(String direccionEmpresa) {
+        this.direccionEmpresa = direccionEmpresa;
+    }
+    public void setIdOrganizacion(int idOrganizacion) {
+        this.idOrganizacion = idOrganizacion;
+    }
+    public void setMatricula(String matricula) {
+        this.matricula = matricula;
+    }
+    public void setNumPersonalCoordinador(String numPersonalCoordinador) {
+        this.numPersonalCoordinador = numPersonalCoordinador;
+    }
+    public void setFechaRegistro(Date fechaRegistro) {
+        this.fechaRegistro = fechaRegistro;
+    }
 }
