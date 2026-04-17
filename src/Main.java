@@ -36,7 +36,7 @@ public class Main {
         }
 
         try {
-            Practicante practicante = new Practicante("S20013461", "Ninguna", Genero.Masculino, 8, "Miguel", "Castro", "Lara", "pass9", Estado.Activo);
+            Practicante practicante = new Practicante("S20013461", "Ninguna", Genero.Masculino,  "Miguel", "Castro", "Lara", "pass9", Estado.Activo);
             PracticanteDao practicanteDao = new PracticanteDao();
             practicanteDao.insertarPracticante(practicante);
             System.out.println("Practicante insertado correctamente");

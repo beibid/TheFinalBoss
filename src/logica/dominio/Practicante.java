@@ -11,7 +11,7 @@ public class Practicante extends Usuario {
     private Genero genero;
     private int idUsuarioPracticante;
 
-    public Practicante(String matricula, String lenguaIndigena, Genero genero, int idUsuarioPracticante,String nombre, String apellidoPaterno, String apellidoMaterno, String contrasena, Estado estado){
+    public Practicante(String matricula, String lenguaIndigena, Genero genero,String nombre, String apellidoPaterno, String apellidoMaterno, String contrasena, Estado estado){
         super(nombre, apellidoPaterno, apellidoMaterno, contrasena, estado);
         this.matricula = matricula;
         this.lenguaIndigena = lenguaIndigena;
@@ -34,11 +34,6 @@ public class Practicante extends Usuario {
         return genero;
     }
 
-    public int getIdUsuarioPracticante() {
-
-        return idUsuarioPracticante;
-    }
-
     public void setMatricula(String matricula) {
 
         this.matricula = matricula;
@@ -54,8 +49,4 @@ public class Practicante extends Usuario {
         this.genero = genero;
     }
 
-    public void setIdUsuarioPracticante(int idUsuarioPracticante) {
-
-        this.idUsuarioPracticante = idUsuarioPracticante;
-    }
 }

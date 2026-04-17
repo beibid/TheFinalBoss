@@ -1,4 +1,6 @@
 package logica.dao.objetos;
+
+
 import acceso.bd.ConexionBaseDeDatos;
 import logica.dao.excepciones.UsuariosExcepcion;
 import logica.dominio.Profesor;
@@ -10,6 +12,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 
 public class ProfesorDao implements ProfesorDaoInterfaz {
     private static final Logger LOGGER = Logger.getLogger(ProfesorDao.class.getName());

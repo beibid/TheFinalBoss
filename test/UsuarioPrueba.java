@@ -12,7 +12,7 @@ public class UsuarioPrueba {
         UsuarioDao usuario = new UsuarioDao();
 
         int resultado = usuario.insertarUsuario(nuevoUsuario);
-        Assertions.assertEquals(1, resultado,  "Usuario ingresado con exito dentro de la base de datos");
+        Assertions.assertEquals(1, resultado);
 
 
     }
