@@ -14,4 +14,12 @@ public class OrganizacionVinculadaPrueba {
 
         assertDoesNotThrow(() -> organizacionVinculada.insertarOrganizacionVinculada(nuevaOrganizacion));
     }
+
+    @Test
+    public void modificarOrgnaizacionVinculada(){
+        OrganizacionVinculada organizacionVinculadaModificada = new OrganizacionVinculada("Oracle", "Monterrey");
+        OrganizacionVinculadaDao organizacionVinculada = new OrganizacionVinculadaDao();
+
+        assertDoesNotThrow(() -> organizacionVinculada.modificarOrganizacionVinculada(1, organizacionVinculadaModificada));
+    }
 }

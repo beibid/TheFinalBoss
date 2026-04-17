@@ -14,4 +14,12 @@ public class PracticanteSeccionPrueba {
 
         assertDoesNotThrow(() -> practicanteSeccion.agregarPracticanteSeccion(nuevoPracticanteSeccion));
     }
+
+    @Test
+    public void cambiarPracticanteSeccion(){
+        PracticanteSeccion practicanteSeccionModificada = new PracticanteSeccion("S20013460", "S05");
+        PracticanteSeccionDao practicanteSeccion = new PracticanteSeccionDao();
+
+        assertDoesNotThrow(() -> practicanteSeccion.modificarPracticanteSeccion("S20013460", "S04", practicanteSeccionModificada));
+    }
 }
