@@ -41,4 +41,33 @@ public class PracticanteSeccionDao implements PracticanteSeccionDaoInterfaz {
             }
         }
     }
+    public void modificarPracticanteSeccion(String matricula, String noSeccion, PracticanteSeccion practicanteSeccion) throws UsuariosExcepcion {
+        String consulta = "UPDATE practicante_seccion SET matricula = ?, noSeccion = ? WHERE matricula = ? AND noSeccion = ?";
+        Connection conexionBaseDeDatos = null;
+        PreparedStatement actualizacion = null;
+        try {
+            conexionBaseDeDatos = ConexionBaseDeDatos.getInstance().conectar();
+            actualizacion = conexionBaseDeDatos.prepareStatement(consulta);
+            actualizacion.setString(1, practicanteSeccion.getMatricula());
+            actualizacion.setString(2, practicanteSeccion.getNoSeccion());
+            actualizacion.setString(3, matricula);
+            actualizacion.setString(4, noSeccion);
+            actualizacion.executeUpdate();
+            LOGGER.info("PracticanteSeccion modificada correctamente: " + matricula + " - " + noSeccion);
+        } catch (SQLException e) {
+            LOGGER.log(Level.SEVERE, "Error al modificar practicante_seccion", e);
+            throw new UsuariosExcepcion("Error al modificar practicante seccion", e);
+        } finally {
+            try {
+                if (actualizacion != null) {
+                    actualizacion.close();
+                }
+                if (conexionBaseDeDatos != null) {
+                    conexionBaseDeDatos.close();
+                }
+            } catch (SQLException e) {
+                LOGGER.log(Level.SEVERE, "Error al cerrar la conexión", e);
+            }
+        }
+    }
 }

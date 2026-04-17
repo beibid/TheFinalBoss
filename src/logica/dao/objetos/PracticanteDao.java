@@ -5,6 +5,8 @@ import acceso.bd.ConexionBaseDeDatos;
 import logica.dao.excepciones.UsuariosExcepcion;
 import logica.dominio.Practicante;
 import logica.dao.interfaces.PracticanteDaoInterfaz;
+import logica.dominio.enums.Estado;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -62,6 +64,74 @@ public class PracticanteDao implements PracticanteDaoInterfaz {
                     insercionUsuario.close();
                 }
                 if (conexionBaseDeDatos != null){
+                    conexionBaseDeDatos.close();
+                }
+            } catch (SQLException e) {
+                LOGGER.log(Level.SEVERE, "Error al cerrar la conexión", e);
+            }
+        }
+    }
+    public void inactivarPracticante(String matricula) throws UsuariosExcepcion {
+        String consulta = "UPDATE Usuario SET estado = ? WHERE idUsuario = (SELECT idUsuario FROM Practicante WHERE matricula = ?)";
+        Connection conexionBaseDeDatos = null;
+        PreparedStatement actualizacion = null;
+        try {
+            conexionBaseDeDatos = ConexionBaseDeDatos.getInstance().conectar();
+            actualizacion = conexionBaseDeDatos.prepareStatement(consulta);
+            actualizacion.setString(1, Estado.Inactivo.toString());
+            actualizacion.setString(2, matricula);
+            actualizacion.executeUpdate();
+            LOGGER.info("Practicante inactivado correctamente: " + matricula);
+        } catch (SQLException e) {
+            LOGGER.log(Level.SEVERE, "Error al inactivar practicante", e);
+            throw new UsuariosExcepcion("Error al inactivar practicante", e);
+        } finally {
+            try {
+                if (actualizacion != null) {
+                    actualizacion.close();
+                }
+                if (conexionBaseDeDatos != null) {
+                    conexionBaseDeDatos.close();
+                }
+            } catch (SQLException e) {
+                LOGGER.log(Level.SEVERE, "Error al cerrar la conexión", e);
+            }
+        }
+    }
+    public void modificarPracticante(String matricula, Practicante practicante) throws UsuariosExcepcion {
+        String consultaUsuario = "UPDATE Usuario SET nombre = ?, apellidoPaterno = ?, apellidoMaterno = ?, contrasena = ?, estado = ? WHERE idUsuario = (SELECT idUsuario FROM Practicante WHERE matricula = ?)";
+        String consultaPracticante = "UPDATE Practicante SET lenguaIndigena = ?, genero = ? WHERE matricula = ?";
+        Connection conexionBaseDeDatos = null;
+        PreparedStatement actualizacionUsuario = null;
+        PreparedStatement actualizacionPracticante = null;
+        try {
+            conexionBaseDeDatos = ConexionBaseDeDatos.getInstance().conectar();
+            actualizacionUsuario = conexionBaseDeDatos.prepareStatement(consultaUsuario);
+            actualizacionUsuario.setString(1, practicante.getNombre());
+            actualizacionUsuario.setString(2, practicante.getApellidoPaterno());
+            actualizacionUsuario.setString(3, practicante.getApellidoMaterno());
+            actualizacionUsuario.setString(4, practicante.getContrasena());
+            actualizacionUsuario.setString(5, practicante.getEstado().toString());
+            actualizacionUsuario.setString(6, practicante.getMatricula());
+            actualizacionUsuario.executeUpdate();
+            actualizacionPracticante = conexionBaseDeDatos.prepareStatement(consultaPracticante);
+            actualizacionPracticante.setString(1, practicante.getLenguaIndigena());
+            actualizacionPracticante.setString(2, practicante.getGenero().toString());
+            actualizacionPracticante.setString(3, practicante.getMatricula());
+            actualizacionPracticante.executeUpdate();
+            LOGGER.info("Practicante modificado correctamente: " + practicante.getMatricula());
+        } catch (SQLException e) {
+            LOGGER.log(Level.SEVERE, "Error al modificar practicante", e);
+            throw new UsuariosExcepcion("Error al modificar practicante", e);
+        } finally {
+            try {
+                if (actualizacionPracticante != null) {
+                    actualizacionPracticante.close();
+                }
+                if (actualizacionUsuario != null) {
+                    actualizacionUsuario.close();
+                }
+                if (conexionBaseDeDatos != null) {
                     conexionBaseDeDatos.close();
                 }
             } catch (SQLException e) {

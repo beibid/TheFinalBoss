@@ -43,4 +43,32 @@ public class OrganizacionVinculadaDao implements OrganizacionVinculadaDaoInterfa
             }
         }
     }
+    public void modificarOrganizacionVinculada(int idOrganizacion, OrganizacionVinculada organizacionVinculada) throws UsuariosExcepcion {
+        String consulta = "UPDATE organizacion_vinculada SET nombre = ?, direccion = ? WHERE idOrganizacion = ?";
+        Connection conexionBaseDeDatos = null;
+        PreparedStatement actualizacion = null;
+        try {
+            conexionBaseDeDatos = ConexionBaseDeDatos.getInstance().conectar();
+            actualizacion = conexionBaseDeDatos.prepareStatement(consulta);
+            actualizacion.setString(1, organizacionVinculada.getNombre());
+            actualizacion.setString(2, organizacionVinculada.getDireccion());
+            actualizacion.setInt(3, idOrganizacion);
+            actualizacion.executeUpdate();
+            LOGGER.info("OrganizacionVinculada modificada correctamente: " + idOrganizacion);
+        } catch (SQLException e) {
+            LOGGER.log(Level.SEVERE, "Error al modificar organizacion vinculada", e);
+            throw new UsuariosExcepcion("Error al modificar organizacion vinculada", e);
+        } finally {
+            try {
+                if (actualizacion != null) {
+                    actualizacion.close();
+                }
+                if (conexionBaseDeDatos != null) {
+                    conexionBaseDeDatos.close();
+                }
+            } catch (SQLException e) {
+                LOGGER.log(Level.SEVERE, "Error al cerrar la conexión", e);
+            }
+        }
+    }
 }

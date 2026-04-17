@@ -15,4 +15,19 @@ public class CoordinadorPrueba {
 
         assertDoesNotThrow(() -> coordinador.insertarCoordinador(nuevoCoordinador));
     }
+
+    @Test
+    public void inactivarCoordinador(){
+        CoordinadorDao cordinador = new CoordinadorDao();
+
+        assertDoesNotThrow(() -> cordinador.inactivarCoordinador("C001"));
+    }
+
+    @Test
+    public void modificarCoordinador(){
+        Coordinador coordinadorModificado = new Coordinador("C001", "Maria", "Flores", "Martinez", "abcd", Estado.Inactivo);
+        CoordinadorDao coordinador = new CoordinadorDao();
+
+        assertDoesNotThrow(() -> coordinador.modificarCoordinador("C001", coordinadorModificado));
+    }
 }

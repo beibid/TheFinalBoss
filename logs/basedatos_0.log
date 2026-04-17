@@ -281,3 +281,185 @@ abr 15, 2026 11:47:02 P.M. acceso.bd.ConexionBaseDeDatos conectar
 INFO: Conexión a base de datos realizada exitosamente en 287 ms
 abr 15, 2026 11:47:02 P.M. logica.dao.objetos.BuzonDao agregarBuzon
 INFO: Buzon insertado correctamente
+abr 17, 2026 12:26:19 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
+INFO: Configuración de base de datos cargada correctamente
+abr 17, 2026 12:26:19 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
+CONFIG: URL de conexión: jdbc:mysql://localhost:3306/practicas_profesionales
+abr 17, 2026 12:26:19 P.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexión a la base de datos...
+abr 17, 2026 12:26:19 P.M. acceso.bd.ConexionBaseDeDatos conectar
+SEVERE: Conexión fallida después de 818 ms - URL: jdbc:mysql://localhost:3306/practicas_profesionales
+java.sql.SQLSyntaxErrorException: Unknown database 'practicas_profesionales'
+	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:112)
+	at com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:114)
+	at com.mysql.cj.jdbc.ConnectionImpl.createNewIO(ConnectionImpl.java:840)
+	at com.mysql.cj.jdbc.ConnectionImpl.<init>(ConnectionImpl.java:416)
+	at com.mysql.cj.jdbc.ConnectionImpl.getInstance(ConnectionImpl.java:237)
+	at com.mysql.cj.jdbc.NonRegisteringDriver.connect(NonRegisteringDriver.java:180)
+	at java.sql/java.sql.DriverManager.getConnection(DriverManager.java:613)
+	at java.sql/java.sql.DriverManager.getConnection(DriverManager.java:199)
+	at acceso.bd.ConexionBaseDeDatos.conectar(ConexionBaseDeDatos.java:73)
+	at logica.dao.objetos.DocumentacionPracticanteDao.agregarDocumentacion(DocumentacionPracticanteDao.java:22)
+	at DocumentacionPracticantePrueba.lambda$insertarDocumentacionPracticante$0(DocumentacionPracticantePrueba.java:16)
+	at org.junit.jupiter.api.AssertDoesNotThrow.assertDoesNotThrow(AssertDoesNotThrow.java:50)
+	at org.junit.jupiter.api.AssertDoesNotThrow.assertDoesNotThrow(AssertDoesNotThrow.java:37)
+	at org.junit.jupiter.api.Assertions.assertDoesNotThrow(Assertions.java:3135)
+	at DocumentacionPracticantePrueba.insertarDocumentacionPracticante(DocumentacionPracticantePrueba.java:16)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:104)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:565)
+	at org.junit.platform.commons.util.ReflectionUtils.invokeMethod(ReflectionUtils.java:725)
+	at org.junit.jupiter.engine.execution.MethodInvocation.proceed(MethodInvocation.java:60)
+	at org.junit.jupiter.engine.execution.InvocationInterceptorChain$ValidatingInvocation.proceed(InvocationInterceptorChain.java:131)
+	at org.junit.jupiter.engine.extension.TimeoutExtension.intercept(TimeoutExtension.java:149)
+	at org.junit.jupiter.engine.extension.TimeoutExtension.interceptTestableMethod(TimeoutExtension.java:140)
+	at org.junit.jupiter.engine.extension.TimeoutExtension.interceptTestMethod(TimeoutExtension.java:84)
+	at org.junit.jupiter.engine.execution.ExecutableInvoker$ReflectiveInterceptorCall.lambda$ofVoidMethod$0(ExecutableInvoker.java:115)
+	at org.junit.jupiter.engine.execution.ExecutableInvoker.lambda$invoke$0(ExecutableInvoker.java:105)
+	at org.junit.jupiter.engine.execution.InvocationInterceptorChain$InterceptedInvocation.proceed(InvocationInterceptorChain.java:106)
+	at org.junit.jupiter.engine.execution.InvocationInterceptorChain.proceed(InvocationInterceptorChain.java:64)
+	at org.junit.jupiter.engine.execution.InvocationInterceptorChain.chainAndInvoke(InvocationInterceptorChain.java:45)
+	at org.junit.jupiter.engine.execution.InvocationInterceptorChain.invoke(InvocationInterceptorChain.java:37)
+	at org.junit.jupiter.engine.execution.ExecutableInvoker.invoke(ExecutableInvoker.java:104)
+	at org.junit.jupiter.engine.execution.ExecutableInvoker.invoke(ExecutableInvoker.java:98)
+	at org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.lambda$invokeTestMethod$7(TestMethodTestDescriptor.java:214)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.invokeTestMethod(TestMethodTestDescriptor.java:210)
+	at org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.execute(TestMethodTestDescriptor.java:135)
+	at org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.execute(TestMethodTestDescriptor.java:66)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$6(NodeTestTask.java:151)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$8(NodeTestTask.java:141)
+	at org.junit.platform.engine.support.hierarchical.Node.around(Node.java:137)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$9(NodeTestTask.java:139)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.executeRecursively(NodeTestTask.java:138)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.execute(NodeTestTask.java:95)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1604)
+	at org.junit.platform.engine.support.hierarchical.SameThreadHierarchicalTestExecutorService.invokeAll(SameThreadHierarchicalTestExecutorService.java:41)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$6(NodeTestTask.java:155)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$8(NodeTestTask.java:141)
+	at org.junit.platform.engine.support.hierarchical.Node.around(Node.java:137)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$9(NodeTestTask.java:139)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.executeRecursively(NodeTestTask.java:138)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.execute(NodeTestTask.java:95)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1604)
+	at org.junit.platform.engine.support.hierarchical.SameThreadHierarchicalTestExecutorService.invokeAll(SameThreadHierarchicalTestExecutorService.java:41)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$6(NodeTestTask.java:155)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$8(NodeTestTask.java:141)
+	at org.junit.platform.engine.support.hierarchical.Node.around(Node.java:137)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$9(NodeTestTask.java:139)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.executeRecursively(NodeTestTask.java:138)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.execute(NodeTestTask.java:95)
+	at org.junit.platform.engine.support.hierarchical.SameThreadHierarchicalTestExecutorService.submit(SameThreadHierarchicalTestExecutorService.java:35)
+	at org.junit.platform.engine.support.hierarchical.HierarchicalTestExecutor.execute(HierarchicalTestExecutor.java:57)
+	at org.junit.platform.engine.support.hierarchical.HierarchicalTestEngine.execute(HierarchicalTestEngine.java:54)
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.execute(EngineExecutionOrchestrator.java:107)
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.execute(EngineExecutionOrchestrator.java:88)
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.lambda$execute$0(EngineExecutionOrchestrator.java:54)
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.withInterceptedStreams(EngineExecutionOrchestrator.java:67)
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.execute(EngineExecutionOrchestrator.java:52)
+	at org.junit.platform.launcher.core.DefaultLauncher.execute(DefaultLauncher.java:114)
+	at org.junit.platform.launcher.core.DefaultLauncher.execute(DefaultLauncher.java:86)
+	at org.junit.platform.launcher.core.DefaultLauncherSession$DelegatingLauncher.execute(DefaultLauncherSession.java:86)
+	at org.junit.platform.launcher.core.SessionPerRequestLauncher.execute(SessionPerRequestLauncher.java:53)
+	at com.intellij.junit5.JUnit5IdeaTestRunner.startRunnerWithArgs(JUnit5IdeaTestRunner.java:66)
+	at com.intellij.rt.junit.IdeaTestRunner$Repeater$1.execute(IdeaTestRunner.java:38)
+	at com.intellij.rt.execution.junit.TestsRepeater.repeat(TestsRepeater.java:11)
+	at com.intellij.rt.junit.IdeaTestRunner$Repeater.startRunnerWithArgs(IdeaTestRunner.java:35)
+	at com.intellij.rt.junit.JUnitStarter.prepareStreamsAndStart(JUnitStarter.java:231)
+	at com.intellij.rt.junit.JUnitStarter.main(JUnitStarter.java:55)
+
+abr 17, 2026 12:28:51 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
+INFO: Configuración de base de datos cargada correctamente
+abr 17, 2026 12:28:51 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
+CONFIG: URL de conexión: jdbc:mysql://localhost:3306/practicas_profesionales
+abr 17, 2026 12:28:51 P.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexión a la base de datos...
+abr 17, 2026 12:28:52 P.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexión a base de datos realizada exitosamente en 703 ms
+abr 17, 2026 12:28:52 P.M. logica.dao.objetos.DocumentacionPracticanteDao agregarDocumentacion
+INFO: DocumentacionPracticante insertada correctamente
+abr 17, 2026 12:49:46 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
+INFO: Configuración de base de datos cargada correctamente
+abr 17, 2026 12:49:46 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
+CONFIG: URL de conexión: jdbc:mysql://localhost:3306/practicas_profesionales
+abr 17, 2026 12:49:46 P.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexión a la base de datos...
+abr 17, 2026 12:49:47 P.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexión a base de datos realizada exitosamente en 640 ms
+abr 17, 2026 12:49:47 P.M. logica.dao.objetos.EntregaDocumentacionDao agregarEntrega
+INFO: EntregaDocumentacion insertada correctamente
+abr 17, 2026 1:07:19 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
+INFO: Configuración de base de datos cargada correctamente
+abr 17, 2026 1:07:19 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
+CONFIG: URL de conexión: jdbc:mysql://localhost:3306/practicas_profesionales
+abr 17, 2026 1:07:19 P.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexión a la base de datos...
+abr 17, 2026 1:07:20 P.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexión a base de datos realizada exitosamente en 649 ms
+abr 17, 2026 1:07:20 P.M. logica.dao.objetos.PracticanteDao inactivarPracticante
+INFO: Practicante inactivado correctamente: S20013458
+abr 17, 2026 1:35:56 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
+INFO: Configuración de base de datos cargada correctamente
+abr 17, 2026 1:35:56 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
+CONFIG: URL de conexión: jdbc:mysql://localhost:3306/practicas_profesionales
+abr 17, 2026 1:35:56 P.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexión a la base de datos...
+abr 17, 2026 1:35:57 P.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexión a base de datos realizada exitosamente en 668 ms
+abr 17, 2026 1:35:57 P.M. logica.dao.objetos.PracticanteDao modificarPracticante
+INFO: Practicante modificado correctamente: S20013460
+abr 17, 2026 1:38:10 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
+INFO: Configuración de base de datos cargada correctamente
+abr 17, 2026 1:38:11 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
+CONFIG: URL de conexión: jdbc:mysql://localhost:3306/practicas_profesionales
+abr 17, 2026 1:38:11 P.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexión a la base de datos...
+abr 17, 2026 1:38:11 P.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexión a base de datos realizada exitosamente en 674 ms
+abr 17, 2026 1:38:11 P.M. logica.dao.objetos.ProfesorDao inactivarProfesor
+INFO: Profesor inactivado correctamente: P001
+abr 17, 2026 1:41:17 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
+INFO: Configuración de base de datos cargada correctamente
+abr 17, 2026 1:41:17 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
+CONFIG: URL de conexión: jdbc:mysql://localhost:3306/practicas_profesionales
+abr 17, 2026 1:41:17 P.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexión a la base de datos...
+abr 17, 2026 1:41:18 P.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexión a base de datos realizada exitosamente en 626 ms
+abr 17, 2026 1:41:18 P.M. logica.dao.objetos.ProfesorDao modificarProfesor
+INFO: Profesor modificado correctamente: P001
+abr 17, 2026 1:44:39 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
+INFO: Configuración de base de datos cargada correctamente
+abr 17, 2026 1:44:39 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
+CONFIG: URL de conexión: jdbc:mysql://localhost:3306/practicas_profesionales
+abr 17, 2026 1:44:39 P.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexión a la base de datos...
+abr 17, 2026 1:44:40 P.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexión a base de datos realizada exitosamente en 682 ms
+abr 17, 2026 1:44:40 P.M. logica.dao.objetos.CoordinadorDao inactivarCoordinador
+INFO: Coordinador inactivado correctamente: C001
+abr 17, 2026 1:47:02 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
+INFO: Configuración de base de datos cargada correctamente
+abr 17, 2026 1:47:03 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
+CONFIG: URL de conexión: jdbc:mysql://localhost:3306/practicas_profesionales
+abr 17, 2026 1:47:03 P.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexión a la base de datos...
+abr 17, 2026 1:47:03 P.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexión a base de datos realizada exitosamente en 646 ms
+abr 17, 2026 1:47:03 P.M. logica.dao.objetos.CoordinadorDao modificarCoordinador
+INFO: Coordinador modificado correctamente: C001
+abr 17, 2026 1:53:10 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
+INFO: Configuración de base de datos cargada correctamente
+abr 17, 2026 1:53:10 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
+CONFIG: URL de conexión: jdbc:mysql://localhost:3306/practicas_profesionales
+abr 17, 2026 1:53:10 P.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexión a la base de datos...
+abr 17, 2026 1:53:11 P.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexión a base de datos realizada exitosamente en 661 ms
+abr 17, 2026 1:53:11 P.M. logica.dao.objetos.ProyectoDao modificarProyecto
+INFO: Proyecto modificado correctamente: 1

@@ -17,4 +17,21 @@ public class PracticantePrueba {
 
         assertDoesNotThrow(() -> practicante.insertarPracticante(nuevoPracticante)) ;
     }
+
+    @Test
+    public void inactivarPracticante() {
+        PracticanteDao practicante = new PracticanteDao();
+        assertDoesNotThrow(() -> practicante.inactivarPracticante("S20013458"));
+
+
+    }
+
+    @Test
+    public void modificarPracticante(){
+        Practicante practicanteModificado = new Practicante("S20013460", "Ninguna", Genero.Femenino, "Laura", "Rojas", "Medina", "pass6", Estado.Activo);
+        PracticanteDao practicante = new PracticanteDao();
+
+        assertDoesNotThrow(() -> practicante.modificarPracticante("S20013460", practicanteModificado));
+
+    }
 }

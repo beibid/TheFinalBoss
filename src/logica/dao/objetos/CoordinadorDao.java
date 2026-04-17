@@ -5,6 +5,8 @@ import acceso.bd.ConexionBaseDeDatos;
 import logica.dao.excepciones.UsuariosExcepcion;
 import logica.dominio.Coordinador;
 import logica.dao.interfaces.CoordinadorDaoInterfaz;
+import logica.dominio.enums.Estado;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -56,6 +58,64 @@ public class CoordinadorDao implements CoordinadorDaoInterfaz {
                     insercionUsuario.close();
                 }
                 if (conexionBaseDeDatos != null){
+                    conexionBaseDeDatos.close();
+                }
+            } catch (SQLException e) {
+                LOGGER.log(Level.SEVERE, "Error al cerrar la conexión", e);
+            }
+        }
+    }
+    public void inactivarCoordinador(String numPersonalCoordinador) throws UsuariosExcepcion {
+        String consulta = "UPDATE Usuario SET estado = ? WHERE idUsuario = (SELECT idUsuario FROM Coordinador WHERE numPersonalCoordinador = ?)";
+        Connection conexionBaseDeDatos = null;
+        PreparedStatement actualizacion = null;
+        try {
+            conexionBaseDeDatos = ConexionBaseDeDatos.getInstance().conectar();
+            actualizacion = conexionBaseDeDatos.prepareStatement(consulta);
+            actualizacion.setString(1, Estado.Inactivo.toString());
+            actualizacion.setString(2, numPersonalCoordinador);
+            actualizacion.executeUpdate();
+            LOGGER.info("Coordinador inactivado correctamente: " + numPersonalCoordinador);
+        } catch (SQLException e) {
+            LOGGER.log(Level.SEVERE, "Error al inactivar coordinador", e);
+            throw new UsuariosExcepcion("Error al inactivar coordinador", e);
+        } finally {
+            try {
+                if (actualizacion != null) {
+                    actualizacion.close();
+                }
+                if (conexionBaseDeDatos != null) {
+                    conexionBaseDeDatos.close();
+                }
+            } catch (SQLException e) {
+                LOGGER.log(Level.SEVERE, "Error al cerrar la conexión", e);
+            }
+        }
+    }
+    public void modificarCoordinador(String numPersonalCoordinador, Coordinador coordinador) throws UsuariosExcepcion {
+        String consultaUsuario = "UPDATE Usuario SET nombre = ?, apellidoPaterno = ?, apellidoMaterno = ?, contrasena = ?, estado = ? WHERE idUsuario = (SELECT idUsuario FROM Coordinador WHERE numPersonalCoordinador = ?)";
+        Connection conexionBaseDeDatos = null;
+        PreparedStatement actualizacion = null;
+        try {
+            conexionBaseDeDatos = ConexionBaseDeDatos.getInstance().conectar();
+            actualizacion = conexionBaseDeDatos.prepareStatement(consultaUsuario);
+            actualizacion.setString(1, coordinador.getNombre());
+            actualizacion.setString(2, coordinador.getApellidoPaterno());
+            actualizacion.setString(3, coordinador.getApellidoMaterno());
+            actualizacion.setString(4, coordinador.getContrasena());
+            actualizacion.setString(5, coordinador.getEstado().toString());
+            actualizacion.setString(6, numPersonalCoordinador);
+            actualizacion.executeUpdate();
+            LOGGER.info("Coordinador modificado correctamente: " + numPersonalCoordinador);
+        } catch (SQLException e) {
+            LOGGER.log(Level.SEVERE, "Error al modificar coordinador", e);
+            throw new UsuariosExcepcion("Error al modificar coordinador", e);
+        } finally {
+            try {
+                if (actualizacion != null) {
+                    actualizacion.close();
+                }
+                if (conexionBaseDeDatos != null) {
                     conexionBaseDeDatos.close();
                 }
             } catch (SQLException e) {

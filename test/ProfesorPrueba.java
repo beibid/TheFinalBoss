@@ -17,4 +17,19 @@ public class ProfesorPrueba {
 
         assertDoesNotThrow(() -> profesor.insertarProfesor(nuevoProfesor));
     }
+
+    @Test
+    public void inactivarProfesor(){
+        ProfesorDao professor = new ProfesorDao();
+
+        assertDoesNotThrow(()-> professor.inactivarProfesor("P001"));
+    }
+
+    @Test
+    public void modificarProfesor(){
+        Profesor profesorModificado = new Profesor("P001", Turno.Mixto, "Carlos", "Ramirez", "Torres", "5678", Estado.Inactivo);
+        ProfesorDao profesor = new ProfesorDao();
+
+        assertDoesNotThrow(() -> profesor.modificarProfesor("P001", profesorModificado));
+    }
 }
