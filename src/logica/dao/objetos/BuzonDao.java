@@ -14,32 +14,34 @@ public class BuzonDao implements BuzonDaoInterfaz {
     private static final Logger LOGGER = Logger.getLogger(BuzonDao.class.getName());
 
     @Override
-    public void agregarBuzon(Buzon buzon) throws MensajeriaExcepcion {
+    public int agregarBuzon(Buzon buzon) throws MensajeriaExcepcion {
         String consultaBuzon = "INSERT INTO buzon (rolMensaje, idMensaje, idUsuario) VALUES (?, ?, ?)";
         Connection conexionBaseDeDatos = null;
         PreparedStatement insercion = null;
+        int filasAfectadas = 0;
         try {
             conexionBaseDeDatos = ConexionBaseDeDatos.getInstance().conectar();
             insercion = conexionBaseDeDatos.prepareStatement(consultaBuzon);
             insercion.setString(1, buzon.getRolMensaje().toString());
             insercion.setInt(2, buzon.getIdMensaje());
             insercion.setInt(3, buzon.getIdUsuario());
-            insercion.executeUpdate();
+            filasAfectadas = insercion.executeUpdate();
             LOGGER.info("Buzon insertado correctamente");
         } catch (SQLException e) {
             LOGGER.log(Level.SEVERE, "Error al insertar buzon", e);
-            throw new MensajeriaExcepcion("Error al agregar buzon",e);
+            throw new MensajeriaExcepcion("Error al agregar buzon", e);
         } finally {
             try {
-                if (insercion != null){
+                if (insercion != null) {
                     insercion.close();
                 }
-                if (conexionBaseDeDatos != null){
+                if (conexionBaseDeDatos != null) {
                     conexionBaseDeDatos.close();
                 }
             } catch (SQLException e) {
                 LOGGER.log(Level.SEVERE, "Error al cerrar la conexión", e);
             }
         }
+        return filasAfectadas;
     }
 }

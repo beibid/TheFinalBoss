@@ -14,16 +14,23 @@ public class DocumentacionPracticanteDao implements DocumentacionPracticanteDaoI
     private static final Logger LOGGER = Logger.getLogger(DocumentacionPracticanteDao.class.getName());
 
     @Override
-    public void agregarDocumentacion(DocumentacionPracticante documentacion) throws UsuariosExcepcion {
+    public int agregarDocumentacion(DocumentacionPracticante documentacion) throws UsuariosExcepcion {
+        if (documentacion.getEstadoRevision() == null) {
+            throw new UsuariosExcepcion("El estado de revision no puede ser nulo");
+        }
+        if (documentacion.getRutaDeArchivo() == null) {
+            throw new UsuariosExcepcion("La ruta del archivo no puede ser nula");
+        }
         String consulta = "INSERT INTO DocumentacionPracticante (rutaDeArchivo, estadoRevision) VALUES (?, ?)";
         Connection conexion = null;
         PreparedStatement insercion = null;
+        int filasAfectadas = 0;
         try {
             conexion = ConexionBaseDeDatos.getInstance().conectar();
             insercion = conexion.prepareStatement(consulta);
             insercion.setString(1, documentacion.getRutaDeArchivo());
             insercion.setString(2, documentacion.getEstadoRevision().toString());
-            insercion.executeUpdate();
+            filasAfectadas = insercion.executeUpdate();
             LOGGER.info("DocumentacionPracticante insertada correctamente");
         } catch (SQLException e) {
             LOGGER.log(Level.SEVERE, "Error al insertar documentacion", e);
@@ -40,5 +47,6 @@ public class DocumentacionPracticanteDao implements DocumentacionPracticanteDaoI
                 LOGGER.log(Level.SEVERE, "Error al cerrar la conexión", e);
             }
         }
+        return filasAfectadas;
     }
 }

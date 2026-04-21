@@ -1,6 +1,5 @@
 package logica.dao.objetos;
 
-
 import acceso.bd.ConexionBaseDeDatos;
 import logica.dao.excepciones.UsuariosExcepcion;
 import logica.dominio.Seccion;
@@ -11,47 +10,54 @@ import java.sql.PreparedStatement;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-
 public class SeccionDao implements SeccionDaoInterfaz {
     private static final Logger LOGGER = Logger.getLogger(SeccionDao.class.getName());
+
     @Override
-    public void agregarSeccion(Seccion seccion) throws UsuariosExcepcion {
+    public int agregarSeccion(Seccion seccion) throws UsuariosExcepcion {
         String consultaSeccion = "INSERT INTO seccion (noSeccion, periodo) VALUES (?, ?)";
         Connection conexionBaseDeDatos = null;
         PreparedStatement insertarEnBaseDeDatos = null;
+        int filasAfectadas = 0;
         try {
             conexionBaseDeDatos = ConexionBaseDeDatos.getInstance().conectar();
             insertarEnBaseDeDatos = conexionBaseDeDatos.prepareStatement(consultaSeccion);
             insertarEnBaseDeDatos.setString(1, seccion.getNoSeccion());
             insertarEnBaseDeDatos.setString(2, seccion.getPeriodo());
-            insertarEnBaseDeDatos.executeUpdate();
+            filasAfectadas = insertarEnBaseDeDatos.executeUpdate();
             LOGGER.info("Seccion insertada correctamente");
         } catch (SQLException e) {
             LOGGER.log(Level.SEVERE, "Error al insertar la seccion", e);
-            throw new UsuariosExcepcion("Error al agregar la sección",e);
+            throw new UsuariosExcepcion("Error al agregar la sección", e);
         } finally {
             try {
-                if (insertarEnBaseDeDatos != null){
+                if (insertarEnBaseDeDatos != null) {
                     insertarEnBaseDeDatos.close();
                 }
-                if (conexionBaseDeDatos != null){
+                if (conexionBaseDeDatos != null) {
                     conexionBaseDeDatos.close();
                 }
             } catch (SQLException e) {
                 LOGGER.log(Level.SEVERE, "Error al cerrar la conexión", e);
             }
         }
+        return filasAfectadas;
     }
-    public void modificarSeccion(String noSeccion, Seccion seccion) throws UsuariosExcepcion {
+
+    public int modificarSeccion(String noSeccion, Seccion seccion) throws UsuariosExcepcion {
+        if (seccion.getPeriodo() == null) {
+            throw new UsuariosExcepcion("El periodo no puede ser nulo");
+        }
         String consultaSeccion = "UPDATE seccion SET periodo = ? WHERE noSeccion = ?";
         Connection conexionBaseDeDatos = null;
         PreparedStatement actualizacion = null;
+        int filasAfectadas = 0;
         try {
             conexionBaseDeDatos = ConexionBaseDeDatos.getInstance().conectar();
             actualizacion = conexionBaseDeDatos.prepareStatement(consultaSeccion);
             actualizacion.setString(1, seccion.getPeriodo());
             actualizacion.setString(2, noSeccion);
-            actualizacion.executeUpdate();
+            filasAfectadas = actualizacion.executeUpdate();
             LOGGER.info("Seccion modificada correctamente: " + noSeccion);
         } catch (SQLException e) {
             LOGGER.log(Level.SEVERE, "Error al modificar la seccion", e);
@@ -68,5 +74,6 @@ public class SeccionDao implements SeccionDaoInterfaz {
                 LOGGER.log(Level.SEVERE, "Error al cerrar la conexión", e);
             }
         }
+        return filasAfectadas;
     }
 }

@@ -14,17 +14,24 @@ public class EntregaDocumentacionDao implements EntregaDocumentacionDaoInterfaz 
     private static final Logger LOGGER = Logger.getLogger(EntregaDocumentacionDao.class.getName());
 
     @Override
-    public void agregarEntrega(EntregaDocumentacion entrega) throws UsuariosExcepcion {
+    public int agregarEntrega(EntregaDocumentacion entrega) throws UsuariosExcepcion {
+        if (entrega.getFechaEntrega() == null) {
+            throw new UsuariosExcepcion("La fecha de entrega no puede ser nula");
+        }
+        if (entrega.getEntregaMatricula() == null) {
+            throw new UsuariosExcepcion("La matricula no puede ser nula");
+        }
         String consulta = "INSERT INTO EntregaDocumentacion (fechaEntrega, entregaMatricula, entregaDocumentacion) VALUES (?, ?, ?)";
         Connection conexion = null;
         PreparedStatement insercion = null;
+        int filasAfectadas = 0;
         try {
             conexion = ConexionBaseDeDatos.getInstance().conectar();
             insercion = conexion.prepareStatement(consulta);
             insercion.setDate(1, entrega.getFechaEntrega());
             insercion.setString(2, entrega.getEntregaMatricula());
             insercion.setInt(3, entrega.getEntregaDocumentacion());
-            insercion.executeUpdate();
+            filasAfectadas = insercion.executeUpdate();
             LOGGER.info("EntregaDocumentacion insertada correctamente");
         } catch (SQLException e) {
             LOGGER.log(Level.SEVERE, "Error al insertar entrega documentacion", e);
@@ -41,5 +48,6 @@ public class EntregaDocumentacionDao implements EntregaDocumentacionDaoInterfaz 
                 LOGGER.log(Level.SEVERE, "Error al cerrar la conexión", e);
             }
         }
+        return filasAfectadas;
     }
 }

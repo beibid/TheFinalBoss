@@ -12,31 +12,34 @@ import java.util.logging.Logger;
 
 public class MensajeDao implements MensajeDaoInterfaz {
     private static final Logger LOGGER = Logger.getLogger(MensajeDao.class.getName());
+
     @Override
-    public void agregarMensaje(Mensaje mensaje) throws MensajeriaExcepcion {
+    public int agregarMensaje(Mensaje mensaje) throws MensajeriaExcepcion {
         String consultaMensaje = "INSERT INTO mensaje (contenido) VALUES (?)";
         Connection conexionBaseDeDatos = null;
         PreparedStatement insercion = null;
+        int filasAfectadas = 0;
         try {
             conexionBaseDeDatos = ConexionBaseDeDatos.getInstance().conectar();
             insercion = conexionBaseDeDatos.prepareStatement(consultaMensaje);
             insercion.setString(1, mensaje.getContenido());
-            insercion.executeUpdate();
+            filasAfectadas = insercion.executeUpdate();
             LOGGER.info("Mensaje insertado correctamente");
         } catch (SQLException e) {
             LOGGER.log(Level.SEVERE, "Error al insertar mensaje", e);
-            throw new MensajeriaExcepcion("Error al agregar mensaje",e);
+            throw new MensajeriaExcepcion("Error al agregar mensaje", e);
         } finally {
             try {
-                if (insercion != null){
+                if (insercion != null) {
                     insercion.close();
                 }
-                if (conexionBaseDeDatos != null){
+                if (conexionBaseDeDatos != null) {
                     conexionBaseDeDatos.close();
                 }
             } catch (SQLException e) {
                 LOGGER.log(Level.SEVERE, "Error al cerrar la conexión", e);
             }
         }
+        return filasAfectadas;
     }
 }

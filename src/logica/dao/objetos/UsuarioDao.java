@@ -1,6 +1,5 @@
 package logica.dao.objetos;
 
-
 import acceso.bd.ConexionBaseDeDatos;
 import logica.dao.excepciones.UsuariosExcepcion;
 import logica.dominio.Usuario;
@@ -13,13 +12,15 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.sql.SQLException;
 
-public class UsuarioDao implements UsuarioDaoInterfaz{
+public class UsuarioDao implements UsuarioDaoInterfaz {
     private static final Logger LOGGER = Logger.getLogger(UsuarioDao.class.getName());
+
     @Override
     public int insertarUsuario(Usuario usuario) throws UsuariosExcepcion {
         String consultaUsuario = "insert into Usuario (nombre, apellidoPaterno, apellidoMaterno, contrasena, estado) values (?, ?, ?, ?, ?)";
         Connection conexionBaseDeDatos = null;
         PreparedStatement insercionBaseDeDatos = null;
+        int idGenerado = -1;
         try {
             conexionBaseDeDatos = ConexionBaseDeDatos.getInstance().conectar();
             insercionBaseDeDatos = conexionBaseDeDatos.prepareStatement(consultaUsuario, Statement.RETURN_GENERATED_KEYS);
@@ -31,24 +32,24 @@ public class UsuarioDao implements UsuarioDaoInterfaz{
             insercionBaseDeDatos.executeUpdate();
             ResultSet tomarLlave = insercionBaseDeDatos.getGeneratedKeys();
             if (tomarLlave.next()) {
-                return tomarLlave.getInt(1);
+                idGenerado = tomarLlave.getInt(1);
+                LOGGER.info("Usuario insertado correctamente con ID: " + idGenerado);
             }
-            LOGGER.info("Usuario insertado correctamente");
         } catch (SQLException e) {
             LOGGER.log(Level.SEVERE, "Error al insertar el usuario", e);
-            throw new UsuariosExcepcion("Error al insertar usuario",e);
+            throw new UsuariosExcepcion("Error al insertar usuario", e);
         } finally {
             try {
-                if (insercionBaseDeDatos != null){
+                if (insercionBaseDeDatos != null) {
                     insercionBaseDeDatos.close();
                 }
-                if (conexionBaseDeDatos != null){
+                if (conexionBaseDeDatos != null) {
                     conexionBaseDeDatos.close();
                 }
             } catch (SQLException e) {
                 LOGGER.log(Level.SEVERE, "Error al cerrar la conexión", e);
             }
         }
-        return -1;
+        return idGenerado;
     }
 }

@@ -6,7 +6,7 @@ import logica.dominio.Profesor;
 
 
 public interface ProfesorDaoInterfaz {
-    void insertarProfesor(Profesor profesor) throws UsuariosExcepcion;
-    void inactivarProfesor(String numPersonalProfesor) throws UsuariosExcepcion;
-    void modificarProfesor(String numPersonalProfesor, Profesor profesor) throws UsuariosExcepcion;
+    int insertarProfesor(Profesor profesor) throws UsuariosExcepcion;
+    int inactivarProfesor(String numPersonalProfesor) throws UsuariosExcepcion;
+    int modificarProfesor(String numPersonalProfesor, Profesor profesor) throws UsuariosExcepcion;
 }
