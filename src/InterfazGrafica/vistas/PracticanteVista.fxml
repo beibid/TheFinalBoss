@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="InterfazGrafica.PracticanteControlGUI">
+   <children>
+      <Label layoutX="245.0" layoutY="42.0" text="RegistrarPracticante" textAlignment="CENTER" />
+      <Label layoutX="164.0" layoutY="116.0" text="Ingrese nombre(s) del estudiante" />
+      <Label layoutX="161.0" layoutY="162.0" text="Ingrese apellido paterno" />
+      <Label layoutX="159.0" layoutY="208.0" text="Ingrese apellido materno" />
+      <Label layoutX="162.0" layoutY="70.0" text="Ingrese matricula del estudiante" />
+      <Label layoutX="159.0" layoutY="261.0" text="Ingrese gennero del estudiante " />
+      <TextField fx:id="txtMatricula"
+                 layoutX="162.0"
+                 layoutY="88.0"
+                 prefHeight="27.0"
+                 prefWidth="268.0" />
+      <TextField fx:id="txtNombres"
+                 layoutX="162.0"
+                 layoutY="134.0"
+                 prefHeight="27.0"
+                 prefWidth="269.0" />
+      <TextField fx:id="txtApellidoPaterno"
+                 layoutX="161.0"
+                 layoutY="180.0"
+                 prefHeight="27.0"
+                 prefWidth="269.0" />
+      <TextField fx:id="txtApellidoMaterno"
+                 layoutX="160.0"
+                 layoutY="226.0"
+                 prefHeight="28.0"
+                 prefWidth="270.0" />
+      <RadioButton fx:id="rdiobtnFemenino"
+                   layoutX="159.0"
+                   layoutY="295.0"
+                   mnemonicParsing="false"
+                   text="Femenino" />
+      <RadioButton fx:id="rdiobtnMasculino"
+                   layoutX="262.0"
+                   layoutY="295.0"
+                   mnemonicParsing="false"
+                   text="Masculino" />
+      <Button fx:id="btnRegistrar"
+              layoutX="159.0"
+              layoutY="345.0"
+              mnemonicParsing="false"
+              text="Registrar" />
+      <Button fx:id="btnCancelarRegistro"
+              layoutX="372.0"
+              layoutY="345.0"
+              mnemonicParsing="false"
+              text="Cancelar" />
+      <Button fx:id="btnRegresar"
+              onAction="#botonRegresar"
+              layoutX="487.0"
+              layoutY="14.0"
+              mnemonicParsing="false"
+              prefHeight="27.0"
+              prefWidth="88.0"
+              text="Regresar" />
+   </children>
+</AnchorPane>

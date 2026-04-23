@@ -12,6 +12,10 @@ public class Coordinador extends Usuario {
         this.numeroDePersonalCoordinador = numeroDePersonalCoordinador;
     }
 
+    public Coordinador() {
+        super("", "", "", "", null);
+    }
+
     public String getNumeroDePersonalCoordinador() {
         return numeroDePersonalCoordinador;
     }

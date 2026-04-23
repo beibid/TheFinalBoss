@@ -2,6 +2,7 @@ package logica.dao.objetos;
 
 import acceso.bd.ConexionBaseDeDatos;
 import logica.dao.excepciones.UsuariosExcepcion;
+import logica.dao.excepciones.RegistroDuplicadoExcepcion;
 import logica.dominio.Coordinador;
 import logica.dao.interfaces.CoordinadorDaoInterfaz;
 import logica.dominio.enums.Estado;
@@ -45,6 +46,9 @@ public class CoordinadorDao implements CoordinadorDaoInterfaz {
             LOGGER.info("Coordinador insertado correctamente con ID de usuario: " + idUsuarioGenerado);
         } catch (SQLException e) {
             LOGGER.log(Level.SEVERE, "Error al insertar Coordinador", e);
+            if (e.getMessage().contains("Duplicate entry")){
+                throw new RegistroDuplicadoExcepcion("El numero del personal ya existe", e);
+            }
             throw new UsuariosExcepcion("Error al insertar coordinador", e);
         } finally {
             try {

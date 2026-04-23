@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="InterfazGrafica.SeccionCoordinadorControlGUI">
+   <children>
+      <Label layoutX="246.0" layoutY="41.0" text="Seccion Coordinador" textAlignment="CENTER" />
+      <Button fx:id="btnRegistrarCoordinador"
+              onAction="#botonVentanaRegistrarCoordinador"
+              layoutX="269.0"
+              layoutY="130.0"
+              mnemonicParsing="false"
+              text="Registrar" />
+      <Button fx:id="btnInactivarCoordinador"
+              layoutX="270.0"
+              layoutY="246.0"
+              mnemonicParsing="false"
+              text="Inactivar" />
+      <Button fx:id="btnRegresar"
+              layoutX="519.0"
+              layoutY="14.0"
+              mnemonicParsing="false"
+              text="Regresar" />
+   </children>
+</AnchorPane>

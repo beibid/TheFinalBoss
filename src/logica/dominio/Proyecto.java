@@ -36,7 +36,9 @@ public class Proyecto {
         this.fechaRegistro = fechaRegistro;
     }
 
-    public int getIdProyecto() { return idProyecto; }
+    public int getIdProyecto() {
+        return idProyecto;
+    }
     public String getNombreProyecto() { return nombreProyecto; }
     public String getDescripcion() { return descripcion; }
     public String getResponsableDelProyecto() { return responsableDelProyecto; }

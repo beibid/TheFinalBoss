@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="450.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="InterfazGrafica.CoordinadorControlGUI">
+    <children>
+        <Label layoutX="204.0" layoutY="22.0" prefHeight="52.0" prefWidth="169.0" text="Registro de Coordinador" textAlignment="CENTER"/>
+
+        <!-- Panel de error (oculto por defecto) -->
+        <VBox fx:id="panelError"
+              layoutX="100.0" layoutY="60.0"
+              prefWidth="400.0"
+              spacing="4.0"
+              visible="false"
+              managed="false"
+              style="-fx-border-color: #8B0000; -fx-border-width: 2; -fx-background-color: #f5f5dc; -fx-padding: 10;">
+            <HBox spacing="8" alignment="CENTER_LEFT">
+                <Label text="✖" style="-fx-text-fill: #8B0000; -fx-font-size: 16; -fx-font-weight: bold;"/>
+                <Label fx:id="lblTituloError" style="-fx-font-weight: bold; -fx-text-fill: #8B0000;" text=""/>
+            </HBox>
+            <Label fx:id="lblMensajeError" style="-fx-text-fill: #8B0000; -fx-font-size: 11;" text=""/>
+        </VBox>
+
+        <!-- Panel de éxito (oculto por defecto) -->
+        <VBox fx:id="panelExito"
+              layoutX="100.0" layoutY="60.0"
+              prefWidth="400.0"
+              spacing="4.0"
+              visible="false"
+              managed="false"
+              style="-fx-border-color: #2d6a2d; -fx-border-width: 2; -fx-background-color: #f0f7f0; -fx-padding: 10;">
+            <HBox spacing="8" alignment="CENTER_LEFT">
+                <Label text="✔" style="-fx-text-fill: #2d6a2d; -fx-font-size: 16; -fx-font-weight: bold;"/>
+                <Label fx:id="lblTituloExito" style="-fx-font-weight: bold; -fx-text-fill: #2d6a2d;" text=""/>
+            </HBox>
+            <Label fx:id="lblMensajeExito" style="-fx-text-fill: #2d6a2d; -fx-font-size: 11;" text=""/>
+        </VBox>
+
+        <Label layoutX="153.0" layoutY="96.0" text="Ingrese nombre(s) del Coordinador"/>
+        <TextField fx:id="txtNombres" layoutX="153.0" layoutY="120.0" prefHeight="27.0" prefWidth="247.0" promptText="Ej. Juan Carlos"/>
+
+        <Label layoutX="153.0" layoutY="160.0" text="Ingrese apellido paterno"/>
+        <TextField fx:id="txtApellidoPaterno" layoutX="153.0" layoutY="180.0" prefHeight="27.0" prefWidth="247.0" promptText="Ej. Bonilla"/>
+
+        <Label layoutX="153.0" layoutY="220.0" text="Ingrese apellido materno"/>
+        <TextField fx:id="txtApellidoMaterno" layoutX="153.0" layoutY="240.0" prefHeight="27.0" prefWidth="247.0" promptText="Ej. Pérez"/>
+
+        <Label layoutX="153.0" layoutY="280.0" text="Ingrese numero de personal"/>
+        <TextField fx:id="txtNumeroPersonal" layoutX="153.0" layoutY="300.0" prefHeight="27.0" prefWidth="247.0" promptText="Ej. 2232456"/>
+
+        <Button fx:id="btnRegistrar" onAction="#botonRegistrar" layoutX="159.0" layoutY="360.0" mnemonicParsing="false" text="Registrar"/>
+        <Button fx:id="btnCancelarRegistro" onAction="#botonCancelar" layoutX="341.0" layoutY="360.0" mnemonicParsing="false" text="Cancelar"/>
+        <Button fx:id="btnRegresar" onAction="#botonRegresar" layoutX="505.0" layoutY="14.0" mnemonicParsing="false" prefHeight="28.0" prefWidth="69.0" text="Regresar"/>
+    </children>
+</AnchorPane>
