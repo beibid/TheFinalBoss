@@ -76,6 +76,7 @@ public class PracticanteControlGUI implements Initializable{
                 String nombre = txtNombres.getText().trim();
                 String apellidoPaterno = txtApellidoPaterno.getText().trim();
                 String apellidoMaterno = txtApellidoMaterno.getText().trim();
+                String lenguaIndigena = txtLenguaIndigena.getText().trim();
                 String matricula = txtMatricula.getText().trim();
 
                 if (matricula.isEmpty() || nombre.isEmpty() || apellidoPaterno.isEmpty() || apellidoMaterno.isEmpty()) {
@@ -100,6 +101,7 @@ public class PracticanteControlGUI implements Initializable{
                 practicante.setApellidoMaterno(apellidoMaterno);
                 practicante.setGenero(genero);
                 practicante.setMatricula(matricula);
+                practicante.setLenguaIndigena(lenguaIndigena);
                 practicante.setContrasena(contrasenaGenerada);
                 practicante.setEstado(Estado.Activo);
 
@@ -162,6 +164,7 @@ public class PracticanteControlGUI implements Initializable{
                 txtApellidoPaterno.clear();
                 txtApellidoMaterno.clear();
                 txtMatricula.clear();
+                txtLenguaIndigena.clear();
                 grupoGenero.selectToggle(null);
             }
         });
@@ -185,6 +188,7 @@ public class PracticanteControlGUI implements Initializable{
         txtApellidoPaterno.clear();
         txtApellidoMaterno.clear();
         txtMatricula.clear();
+        txtLenguaIndigena.clear();
         grupoGenero.selectToggle(null);
     }
 

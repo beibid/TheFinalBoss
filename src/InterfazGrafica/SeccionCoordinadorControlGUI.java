@@ -35,4 +35,5 @@ public class SeccionCoordinadorControlGUI implements Initializable {
         stage.show();
     }
 
+
 }

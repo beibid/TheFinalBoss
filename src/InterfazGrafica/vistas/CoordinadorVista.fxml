@@ -11,14 +11,14 @@
             <Font size="24.0" />
          </font></Label>
 
-        <VBox fx:id="panelError" layoutX="100.0" layoutY="60.0" managed="false" prefWidth="535.0" spacing="4.0" style="-fx-border-color: #8B0000; -fx-border-width: 2; -fx-background-color: #f5f5dc; -fx-padding: 10;" visible="false">
+        <VBox fx:id="panelError" layoutX="100.0" layoutY="60.0" managed="false" prefWidth="535.0" spacing="4.0" style="-fx-background-color: #f5f5dc; -fx-padding: 10;" visible="false">
             <HBox alignment="CENTER_LEFT" spacing="8">
                 <Label fx:id="lblTituloError" style="-fx-font-weight: bold; -fx-text-fill: #8B0000;" text="" />
             </HBox>
             <Label fx:id="lblMensajeError" style="-fx-text-fill: #8B0000; -fx-font-size: 11;" text="" />
         </VBox>
 
-        <VBox fx:id="panelExito" layoutX="100.0" layoutY="60.0" managed="false" prefWidth="535.0" spacing="4.0" style="-fx-border-color: #2d6a2d; -fx-border-width: 2; -fx-background-color: #f0f7f0; -fx-padding: 10;" visible="false">
+        <VBox fx:id="panelExito" layoutX="100.0" layoutY="60.0" managed="false" prefWidth="535.0" spacing="4.0" style="-fx-background-color: #f0f7f0; -fx-padding: 10;" visible="false">
             <HBox alignment="CENTER_LEFT" spacing="8">
                 <Label fx:id="lblTituloExito" style="-fx-font-weight: bold; -fx-text-fill: #2d6a2d;" text="" />
             </HBox>
@@ -26,19 +26,25 @@
         </VBox>
 
         <Label layoutX="230.0" layoutY="157.0" text="Ingrese nombre(s) del Coordinador" />
+
         <TextField fx:id="txtNombres" layoutX="229.0" layoutY="195.0" prefHeight="27.0" prefWidth="247.0" promptText="Ej. Juan Carlos" />
 
         <Label layoutX="230.0" layoutY="233.0" text="Ingrese apellido paterno" />
+
         <TextField fx:id="txtApellidoPaterno" layoutX="229.0" layoutY="263.0" prefHeight="27.0" prefWidth="247.0" promptText="Ej. Bonilla" />
 
         <Label layoutX="229.0" layoutY="309.0" text="Ingrese apellido materno" />
+
         <TextField fx:id="txtApellidoMaterno" layoutX="229.0" layoutY="345.0" prefHeight="27.0" prefWidth="247.0" promptText="Ej. Pérez" />
 
         <Label layoutX="229.0" layoutY="391.0" text="Ingrese numero de personal" />
+
         <TextField fx:id="txtNumeroPersonal" layoutX="229.0" layoutY="422.0" prefHeight="27.0" prefWidth="247.0" promptText="Ej. 2232456" />
 
         <Button fx:id="btnRegistrar" layoutX="200.0" layoutY="489.0" mnemonicParsing="false" onAction="#botonRegistrar" text="Registrar" />
+
         <Button fx:id="btnCancelarRegistro" layoutX="446.0" layoutY="489.0" mnemonicParsing="false" onAction="#botonCancelar" text="Cancelar" />
+
         <Button fx:id="btnRegresar" layoutX="586.0" layoutY="14.0" mnemonicParsing="false" onAction="#botonRegresar" prefHeight="28.0" prefWidth="69.0" text="Regresar" />
     </children>
 </AnchorPane>
