@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="InterfazGrafica.OrganizacionVinculadaControlGUI">
+    <children>
+
+        <VBox fx:id="panelError" layoutX="80.0" layoutY="5.0" managed="false" prefWidth="440.0" spacing="4.0" style="-fx-border-color: #8B0000; -fx-border-width: 2; -fx-background-color: #f5f5dc; -fx-padding: 10;" visible="false">
+            <HBox alignment="CENTER_LEFT" spacing="8">
+                <Label fx:id="lblTituloError" style="-fx-font-weight: bold; -fx-text-fill: #8B0000;" text="" />
+            </HBox>
+            <Label fx:id="lblMensajeError" style="-fx-text-fill: #8B0000; -fx-font-size: 11;" text="" />
+        </VBox>
+
+        <VBox fx:id="panelExito" layoutX="80.0" layoutY="5.0" managed="false" prefWidth="440.0" spacing="4.0" style="-fx-border-color: #2d6a2d; -fx-border-width: 2; -fx-background-color: #f0f7f0; -fx-padding: 10;" visible="false">
+            <HBox alignment="CENTER_LEFT" spacing="8">
+                <Label fx:id="lblTituloExito" style="-fx-font-weight: bold; -fx-text-fill: #2d6a2d;" text="" />
+            </HBox>
+            <Label fx:id="lblMensajeExito" style="-fx-text-fill: #2d6a2d; -fx-font-size: 11;" text="" />
+        </VBox>
+
+        <Label layoutX="160.0" layoutY="38.0" text="Registrar Organización Vinculada">
+            <font><Font size="20.0" /></font>
+        </Label>
+
+        <Label layoutX="199.0" layoutY="90.0" text="Ingrese nombre de la organización">
+            <font><Font size="15.0" /></font>
+        </Label>
+        <TextField fx:id="txtNombre" layoutX="199.0" layoutY="118.0" prefHeight="26.0" prefWidth="247.0" />
+
+        <Label layoutX="199.0" layoutY="158.0" text="Ingrese dirección de la organización">
+            <font><Font size="15.0" /></font>
+        </Label>
+        <TextField fx:id="txtDireccion" layoutX="199.0" layoutY="186.0" prefHeight="26.0" prefWidth="247.0" />
+
+        <Button layoutX="199.0" layoutY="260.0" mnemonicParsing="false" onAction="#botonRegistrar" text="Registrar" />
+        <Button layoutX="310.0" layoutY="260.0" mnemonicParsing="false" onAction="#botonCancelar" text="Cancelar" />
+        <Button layoutX="510.0" layoutY="14.0" mnemonicParsing="false" onAction="#botonRegresar" text="Regresar" />
+
+    </children>
+</AnchorPane>

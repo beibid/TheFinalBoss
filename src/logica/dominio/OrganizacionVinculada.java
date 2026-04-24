@@ -9,6 +9,9 @@ public class OrganizacionVinculada {
         this.nombre = nombre;
         this.direccion = direccion;
     }
+    public OrganizacionVinculada(){
+
+    }
 
     public String getNombre() {
 

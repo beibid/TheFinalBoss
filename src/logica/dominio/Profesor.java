@@ -15,6 +15,10 @@ public class Profesor extends Usuario {
         this.turno = turno;
     }
 
+    public Profesor (){
+        super("", "", "", "", null);
+    }
+
     public String getNumeroDePersonalProfesor() {
 
         return numeroDePersonalProfesor;
