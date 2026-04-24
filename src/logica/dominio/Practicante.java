@@ -19,6 +19,10 @@ public class Practicante extends Usuario {
         this.idUsuarioPracticante = idUsuarioPracticante;
     }
 
+    public Practicante() {
+        super("", "", "", "", null);
+    }
+
     public String getMatricula() {
 
         return matricula;

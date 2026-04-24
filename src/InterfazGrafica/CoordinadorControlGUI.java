@@ -1,14 +1,13 @@
 package InterfazGrafica;
 
+
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.event.ActionEvent;
@@ -20,13 +19,13 @@ import logica.dominio.enums.Estado;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+
 public class CoordinadorControlGUI implements Initializable {
 
     @FXML private TextField txtNombres;
     @FXML private TextField txtApellidoPaterno;
     @FXML private TextField txtApellidoMaterno;
     @FXML private TextField txtNumeroPersonal;
-    @FXML private Button btnRegresar;
     @FXML private VBox panelError;
     @FXML private Label lblTituloError;
     @FXML private Label lblMensajeError;
@@ -35,6 +34,7 @@ public class CoordinadorControlGUI implements Initializable {
     @FXML private Label lblMensajeExito;
 
     private CoordinadorDao coordinadorDao = new CoordinadorDao();
+    Coordinador coordinador = new Coordinador();
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {}
@@ -42,55 +42,84 @@ public class CoordinadorControlGUI implements Initializable {
     @FXML
     private void botonRegistrar() {
         ocultarError();
+        ocultarExito();
 
-        String nombre = txtNombres.getText().trim();
-        String apellidoPaterno = txtApellidoPaterno.getText().trim();
-        String apellidoMaterno = txtApellidoMaterno.getText().trim();
-        String numeroPersonal = txtNumeroPersonal.getText().trim();
+        Alert alerta = new Alert(Alert.AlertType.CONFIRMATION);
+        alerta.setTitle("Confirmar registro");
+        alerta.setHeaderText("¿Seguro que desea registrar al Coordinador?");
+        alerta.setContentText("");
 
-        if (nombre.isEmpty() || apellidoPaterno.isEmpty() || numeroPersonal.isEmpty()) {
-            mostrarError("Campos obligatorios vacios",
-                    "POR FAVOR LLENA TODOS LOS CAMPOS REQUERIDOS.");
-            return;
-        }
+        ButtonType btnSi = new ButtonType("Sí");
+        ButtonType btnNo = new ButtonType("No");
+        alerta.getButtonTypes().setAll(btnSi, btnNo);
 
-        String contrasena = generarContrasena(nombre, numeroPersonal);
+        alerta.showAndWait().ifPresent(respuesta -> {
+            if (respuesta == btnSi) {
 
-        Coordinador coordinador = new Coordinador();
-        coordinador.setNombre(nombre);
-        coordinador.setApellidoPaterno(apellidoPaterno);
-        coordinador.setApellidoMaterno(apellidoMaterno);
-        coordinador.setNumeroDePersonalCoordinador(numeroPersonal);
-        coordinador.setContrasena(contrasena);
-        coordinador.setEstado(Estado.Activo);
 
-        try {
-            int filasAfectadas = coordinadorDao.insertarCoordinador(coordinador);
+                String nombre = txtNombres.getText().trim();
+                String apellidoPaterno = txtApellidoPaterno.getText().trim();
+                String apellidoMaterno = txtApellidoMaterno.getText().trim();
+                String numeroPersonal = txtNumeroPersonal.getText().trim();
 
-            if (filasAfectadas > 0) {
-                botonCancelar();
-                mostrarExito("Coordinador con estado activo",
-                        "COORDINADOR REGISTRADO EXITOSAMENTE.");
-            } else {
-                mostrarError("Error al registrar",
-                        "NO SE PUDO REGISTRAR EL COORDINADOR. INTENTE DE NUEVO.");
+                if (nombre.isEmpty() || apellidoPaterno.isEmpty() || numeroPersonal.isEmpty()) {
+                    mostrarError("Campos obligatorios vacios",
+                            "Verifica la informacion e intente de nuevo.");
+                    return;
+                }
+
+                String contrasena = generarContrasena(nombre, numeroPersonal);
+                coordinador.setNombre(nombre);
+                coordinador.setApellidoPaterno(apellidoPaterno);
+                coordinador.setApellidoMaterno(apellidoMaterno);
+                coordinador.setNumeroDePersonalCoordinador(numeroPersonal);
+                coordinador.setContrasena(contrasena);
+                coordinador.setEstado(Estado.Activo);
+
+                try {
+                    int filasAfectadas = coordinadorDao.insertarCoordinador(coordinador);
+
+                    if (filasAfectadas > 0) {
+                        limpiarCamposRegistros();
+                        mostrarExito("Coordinador con estado activo",
+                                "COORDINADOR REGISTRADO EXITOSAMENTE.");
+                    } else {
+                        mostrarError("Error al registrar",
+                                "NO SE PUDO REGISTRAR EL COORDINADOR. INTENTE DE NUEVO.");
+                    }
+
+                } catch (RegistroDuplicadoExcepcion e) {
+                    mostrarError("Numero de personal repetido",
+                            "EL NUMERO DE PERSONAL YA EXISTE EN EL SISTEMA. VERIFIQUE LA INFORMACION.");
+                } catch (UsuariosExcepcion e) {
+                    mostrarError("Error inesperado", e.getMessage().toUpperCase());
+                }
+
             }
-
-        } catch (RegistroDuplicadoExcepcion e) {
-            mostrarError("Numero de personal repetido",
-                    "EL NUMERO DE PERSONAL YA EXISTE EN EL SISTEMA. VERIFIQUE LA INFORMACION.");
-        } catch (UsuariosExcepcion e) {
-            mostrarError("Error inesperado", e.getMessage().toUpperCase());
-        }
+        });
     }
+
     @FXML
     private void botonCancelar() {
-        ocultarError();
-        ocultarExito();
-        txtNombres.clear();
-        txtApellidoPaterno.clear();
-        txtApellidoMaterno.clear();
-        txtNumeroPersonal.clear();
+        Alert alerta = new Alert(Alert.AlertType.CONFIRMATION);
+        alerta.setTitle("Cancelar registro");
+        alerta.setHeaderText("¿Seguro que desea cancelar?");
+        alerta.setContentText("");
+
+        ButtonType btnSi = new ButtonType("Sí");
+        ButtonType btnNo = new ButtonType("No");
+        alerta.getButtonTypes().setAll(btnSi, btnNo);
+
+        alerta.showAndWait().ifPresent(respuesta -> {
+            if (respuesta == btnSi) {
+                ocultarError();
+                ocultarExito();
+                txtNombres.clear();
+                txtApellidoPaterno.clear();
+                txtApellidoMaterno.clear();
+                txtNumeroPersonal.clear();
+            }
+        });
     }
 
     @FXML
@@ -127,6 +156,15 @@ public class CoordinadorControlGUI implements Initializable {
     private void ocultarExito() {
         panelExito.setVisible(false);
         panelExito.setManaged(false);
+    }
+
+    private void limpiarCamposRegistros(){
+        ocultarError();
+        ocultarExito();
+        txtNombres.clear();
+        txtApellidoPaterno.clear();
+        txtApellidoMaterno.clear();
+        txtNumeroPersonal.clear();
     }
 }
 

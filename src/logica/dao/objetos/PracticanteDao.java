@@ -1,6 +1,7 @@
 package logica.dao.objetos;
 
 import acceso.bd.ConexionBaseDeDatos;
+import logica.dao.excepciones.RegistroDuplicadoExcepcion;
 import logica.dao.excepciones.UsuariosExcepcion;
 import logica.dominio.Practicante;
 import logica.dao.interfaces.PracticanteDaoInterfaz;
@@ -47,6 +48,9 @@ public class PracticanteDao implements PracticanteDaoInterfaz {
             LOGGER.info("Practicante insertado correctamente con ID de usuario: " + idUsuarioGenerado);
         } catch (SQLException e) {
             LOGGER.log(Level.SEVERE, "Error al insertar practicante", e);
+            if (e.getMessage().contains("Duplicate entry")){
+                throw new RegistroDuplicadoExcepcion("La matricula ingresada ya existe", e);
+            }
             throw new UsuariosExcepcion("Error al insertar practicante", e);
         } finally {
             try {
