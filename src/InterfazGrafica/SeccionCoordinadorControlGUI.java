@@ -35,5 +35,29 @@ public class SeccionCoordinadorControlGUI implements Initializable {
         stage.show();
     }
 
+    @FXML
+    private void botonPracticante(ActionEvent event) throws Exception {
+        Parent root = FXMLLoader.load(getClass().getResource("/InterfazGrafica/vistas/PracticanteVista.fxml"));
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        stage.setScene(new Scene(root));
+        stage.show();
+    }
+
+    @FXML
+    private void botonProfesor(ActionEvent event) throws Exception {
+        Parent root = FXMLLoader.load(getClass().getResource("/InterfazGrafica/vistas/ProfesorVista.fxml"));
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        stage.setScene(new Scene(root));
+        stage.show();
+    }
+
+    @FXML
+    private void botonOrganizacionVinculada(ActionEvent event) throws Exception {
+        Parent root = FXMLLoader.load(getClass().getResource("/InterfazGrafica/vistas/OrganizacionVinculada.fxml"));
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        stage.setScene(new Scene(root));
+        stage.show();
+    }
+
 
 }

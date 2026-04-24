@@ -14,7 +14,7 @@
          <font>
             <Font size="18.0" />
          </font></Button>
-      <Button fx:id="btnInactivarCoordinador" layoutX="253.0" layoutY="202.0" mnemonicParsing="false"  text="Practicante">
+      <Button fx:id="btnInactivarCoordinador" onAction="#botonPracticante" layoutX="253.0" layoutY="202.0" mnemonicParsing="false" text="Practicante">
          <font>
             <Font size="18.0" />
          </font></Button>
@@ -22,5 +22,7 @@
          <font>
             <Font size="14.0" />
          </font></Button>
+      <Button fx:id="btnOv" onAction="#botonOrganizacionVinculada" layoutX="253.0" layoutY="304.0" mnemonicParsing="false" text="btnOv" />
+      <Button fx:id="btnProfesor" onAction="#botonProfesor" layoutX="253.0" layoutY="261.0" mnemonicParsing="false" text="btnProfesor" />
    </children>
 </AnchorPane>
