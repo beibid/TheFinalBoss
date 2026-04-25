@@ -1,18 +1,22 @@
 package InterfazGrafica;
 
-
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.Label;
+import javafx.scene.control.RadioButton;
+import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import javafx.event.ActionEvent;
-import logica.dao.excepciones.UsuariosExcepcion;
 import logica.dao.excepciones.RegistroDuplicadoExcepcion;
+import logica.dao.excepciones.UsuariosExcepcion;
 import logica.dao.objetos.PracticanteDao;
 import logica.dominio.Practicante;
 import logica.dominio.enums.Estado;
@@ -20,34 +24,21 @@ import logica.dominio.enums.Genero;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+public class PracticanteControlGUI implements Initializable {
 
-public class PracticanteControlGUI implements Initializable{
-    @FXML
-    private TextField txtMatricula;
-    @FXML
-    private TextField txtNombres;
-    @FXML
-    private TextField txtApellidoPaterno;
-    @FXML
-    private TextField txtApellidoMaterno;
-    @FXML
-    private RadioButton rdiobtnFemenino;
-    @FXML
-    private RadioButton rdiobtnMasculino;
-    @FXML
-    private TextField txtLenguaIndigena;
-    @FXML
-    private VBox panelError;
-    @FXML
-    private Label lblTituloError;
-    @FXML
-    private Label lblMensajeError;
-    @FXML
-    private VBox panelExito;
-    @FXML
-    private Label lblTituloExito;
-    @FXML
-    private Label lblMensajeExito;
+    @FXML private TextField txtMatricula;
+    @FXML private TextField txtNombres;
+    @FXML private TextField txtApellidoPaterno;
+    @FXML private TextField txtApellidoMaterno;
+    @FXML private RadioButton rdiobtnFemenino;
+    @FXML private RadioButton rdiobtnMasculino;
+    @FXML private TextField txtLenguaIndigena;
+    @FXML private VBox panelError;
+    @FXML private Label lblTituloError;
+    @FXML private Label lblMensajeError;
+    @FXML private VBox panelExito;
+    @FXML private Label lblTituloExito;
+    @FXML private Label lblMensajeExito;
 
     private ToggleGroup grupoGenero = new ToggleGroup();
 
@@ -55,11 +46,10 @@ public class PracticanteControlGUI implements Initializable{
     public void initialize(URL url, ResourceBundle rb) {
         rdiobtnMasculino.setToggleGroup(grupoGenero);
         rdiobtnFemenino.setToggleGroup(grupoGenero);
-
     }
 
     @FXML
-    private void botonRegistrar(){
+    private void botonRegistrar() {
         ocultarError();
         ocultarExito();
 
@@ -74,8 +64,6 @@ public class PracticanteControlGUI implements Initializable{
 
         alerta.showAndWait().ifPresent(respuesta -> {
             if (respuesta == btnSi) {
-
-
                 String nombre = txtNombres.getText().trim();
                 String apellidoPaterno = txtApellidoPaterno.getText().trim();
                 String apellidoMaterno = txtApellidoMaterno.getText().trim();
@@ -85,6 +73,12 @@ public class PracticanteControlGUI implements Initializable{
                 if (matricula.isEmpty() || nombre.isEmpty() || apellidoPaterno.isEmpty() || apellidoMaterno.isEmpty()) {
                     mostrarError("Campos obligatorios vacios",
                             "Verifique la informacion e intente de nuevo");
+                    return;
+                }
+
+                if (grupoGenero.getSelectedToggle() == null) {
+                    mostrarError("Genero no seleccionado",
+                            "Seleccione un genero para el practicante.");
                     return;
                 }
 
@@ -99,13 +93,13 @@ public class PracticanteControlGUI implements Initializable{
                 PracticanteDao practicanteDao = new PracticanteDao();
 
                 String contrasenaGenerada = generarContrasena(nombre, matricula);
-                practicante.setNombre(nombre);
-                practicante.setApellidoPaterno(apellidoPaterno);
-                practicante.setApellidoMaterno(apellidoMaterno);
+                practicante.setNombre(limitarTexto(nombre, 50));
+                practicante.setApellidoPaterno(limitarTexto(apellidoPaterno, 50));
+                practicante.setApellidoMaterno(limitarTexto(apellidoMaterno, 50));
                 practicante.setGenero(genero);
-                practicante.setMatricula(matricula);
-                practicante.setLenguaIndigena(lenguaIndigena);
-                practicante.setContrasena(contrasenaGenerada);
+                practicante.setMatricula(limitarTexto(matricula, 12));
+                practicante.setLenguaIndigena(limitarTexto(lenguaIndigena, 50));
+                practicante.setContrasena(limitarTexto(contrasenaGenerada, 12));
                 practicante.setEstado(Estado.Activo);
 
                 try {
@@ -121,14 +115,12 @@ public class PracticanteControlGUI implements Initializable{
                     }
                 } catch (RegistroDuplicadoExcepcion e) {
                     mostrarError("Matricula repetida",
-                            "La matricula ya existe en el sistema, verifique la iformacion");
+                            "La matricula ya existe en el sistema, verifique la informacion");
                 } catch (UsuariosExcepcion e) {
                     mostrarError("Error inesperado", e.getMessage().toUpperCase());
                 }
             }
-
-            });
-
+        });
     }
 
     @FXML
@@ -140,7 +132,7 @@ public class PracticanteControlGUI implements Initializable{
     }
 
     @FXML
-    private void radioBoton(){
+    private void radioBoton() {
         String genero = "";
         if (rdiobtnFemenino.isSelected()) {
             genero = "Femenino";
@@ -162,14 +154,7 @@ public class PracticanteControlGUI implements Initializable{
 
         alerta.showAndWait().ifPresent(respuesta -> {
             if (respuesta == btnSi) {
-                ocultarError();
-                ocultarExito();
-                txtNombres.clear();
-                txtApellidoPaterno.clear();
-                txtApellidoMaterno.clear();
-                txtMatricula.clear();
-                txtLenguaIndigena.clear();
-                grupoGenero.selectToggle(null);
+                limpiarCamposRegistrados();
             }
         });
     }
@@ -178,14 +163,14 @@ public class PracticanteControlGUI implements Initializable{
         return nombre.toLowerCase() + matricula;
     }
 
-    private void mostrarError(String titulo, String mensaje) {
-        lblTituloError.setText(titulo);
-        lblMensajeError.setText(mensaje);
-        panelError.setVisible(true);
-        panelError.setManaged(true);
+    private String limitarTexto(String texto, int limite) {
+        if (texto == null) {
+            return "";
+        }
+        return texto.substring(0, Math.min(limite, texto.length()));
     }
 
-    private void limpiarCamposRegistrados(){
+    private void limpiarCamposRegistrados() {
         ocultarError();
         ocultarExito();
         txtNombres.clear();
@@ -194,6 +179,13 @@ public class PracticanteControlGUI implements Initializable{
         txtMatricula.clear();
         txtLenguaIndigena.clear();
         grupoGenero.selectToggle(null);
+    }
+
+    private void mostrarError(String titulo, String mensaje) {
+        lblTituloError.setText(titulo);
+        lblMensajeError.setText(mensaje);
+        panelError.setVisible(true);
+        panelError.setManaged(true);
     }
 
     private void ocultarError() {
@@ -212,5 +204,4 @@ public class PracticanteControlGUI implements Initializable{
         panelExito.setVisible(false);
         panelExito.setManaged(false);
     }
-
 }

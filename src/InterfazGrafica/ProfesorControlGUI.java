@@ -7,7 +7,12 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.Label;
+import javafx.scene.control.RadioButton;
+import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import logica.dao.excepciones.RegistroDuplicadoExcepcion;
@@ -60,7 +65,6 @@ public class ProfesorControlGUI implements Initializable {
 
         alerta.showAndWait().ifPresent(respuesta -> {
             if (respuesta == btnSi) {
-
                 String nombre = txtNombreProfesor.getText().trim();
                 String apellidoPaterno = txtApellidoPaternoProfesor.getText().trim();
                 String apellidoMaterno = txtApellidoMaternoProfesor.getText().trim();
@@ -91,12 +95,12 @@ public class ProfesorControlGUI implements Initializable {
                 ProfesorDao profesorDao = new ProfesorDao();
 
                 String contrasenaGenerada = generarContrasena(nombre, numeroPersonal);
-                profesor.setNombre(nombre);
-                profesor.setApellidoPaterno(apellidoPaterno);
-                profesor.setApellidoMaterno(apellidoMaterno);
+                profesor.setNombre(limitarTexto(nombre, 55));
+                profesor.setApellidoPaterno(limitarTexto(apellidoPaterno, 55));
+                profesor.setApellidoMaterno(limitarTexto(apellidoMaterno, 55));
                 profesor.setTurno(turno);
-                profesor.setNumeroDePersonalProfesor(numeroPersonal);
-                profesor.setContrasena(contrasenaGenerada);
+                profesor.setNumeroDePersonalProfesor(limitarTexto(numeroPersonal, 12));
+                profesor.setContrasena(limitarTexto(contrasenaGenerada, 12));
                 profesor.setEstado(Estado.Activo);
 
                 try {
@@ -139,7 +143,7 @@ public class ProfesorControlGUI implements Initializable {
     }
 
     @FXML
-    private void botonRegresar(ActionEvent event) throws Exception{
+    private void botonRegresar(ActionEvent event) throws Exception {
         Parent root = FXMLLoader.load(getClass().getResource("/InterfazGrafica/vistas/SeccionCoordinador.fxml"));
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.setScene(new Scene(root));
@@ -148,6 +152,13 @@ public class ProfesorControlGUI implements Initializable {
 
     private String generarContrasena(String nombre, String numeroPersonal) {
         return nombre.toLowerCase() + numeroPersonal;
+    }
+
+    private String limitarTexto(String texto, int limite) {
+        if (texto == null) {
+            return "";
+        }
+        return texto.substring(0, Math.min(limite, texto.length()));
     }
 
     private void limpiarCamposRegistros() {

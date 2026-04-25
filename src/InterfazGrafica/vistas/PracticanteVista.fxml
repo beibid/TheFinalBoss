@@ -5,56 +5,48 @@
 <?import javafx.scene.text.*?>
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="581.0" prefWidth="705.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="InterfazGrafica.PracticanteControlGUI">
-   <children>
-      <Label layoutX="244.0" layoutY="24.0" text="Registrar Practicante" textAlignment="CENTER">
-         <font>
-            <Font size="24.0" />
-         </font></Label>
+    <children>
+        <Label layoutX="244.0" layoutY="24.0" text="Registrar Practicante" textAlignment="CENTER">
+            <font>
+                <Font size="24.0" />
+            </font></Label>
 
-       <VBox fx:id="panelError" layoutX="100.0" layoutY="60.0" managed="false" prefWidth="535.0" spacing="4.0" style="-fx-background-color: #f5f5dc; -fx-padding: 10;" visible="false">
-           <HBox alignment="CENTER_LEFT" spacing="8">
-               <Label fx:id="lblTituloError" style="-fx-font-weight: bold; -fx-text-fill: #8B0000;" text="" />
-           </HBox>
-           <Label fx:id="lblMensajeError" style="-fx-text-fill: #8B0000; -fx-font-size: 11;" text="" />
-       </VBox>
+        <VBox fx:id="panelError" layoutX="100.0" layoutY="60.0" managed="false" prefWidth="535.0" spacing="4.0" style="-fx-background-color: #f5f5dc; -fx-padding: 10;" visible="false">
+            <HBox alignment="CENTER_LEFT" spacing="8">
+                <Label fx:id="lblTituloError" style="-fx-font-weight: bold; -fx-text-fill: #8B0000;" text="" />
+            </HBox>
+            <Label fx:id="lblMensajeError" style="-fx-text-fill: #8B0000; -fx-font-size: 11;" text="" />
+        </VBox>
 
-       <VBox fx:id="panelExito" layoutX="100.0" layoutY="60.0" managed="false" prefWidth="535.0" spacing="4.0" style="-fx-background-color: #f0f7f0; -fx-padding: 10;" visible="false">
-           <HBox alignment="CENTER_LEFT" spacing="8">
-               <Label fx:id="lblTituloExito" style="-fx-font-weight: bold; -fx-text-fill: #2d6a2d;" text="" />
-           </HBox>
-           <Label fx:id="lblMensajeExito" style="-fx-text-fill: #2d6a2d; -fx-font-size: 11;" text="" />
-       </VBox>
+        <VBox fx:id="panelExito" layoutX="100.0" layoutY="60.0" managed="false" prefWidth="535.0" spacing="4.0" style="-fx-background-color: #f0f7f0; -fx-padding: 10;" visible="false">
+            <HBox alignment="CENTER_LEFT" spacing="8">
+                <Label fx:id="lblTituloExito" style="-fx-font-weight: bold; -fx-text-fill: #2d6a2d;" text="" />
+            </HBox>
+            <Label fx:id="lblMensajeExito" style="-fx-text-fill: #2d6a2d; -fx-font-size: 11;" text="" />
+        </VBox>
 
-      <Label layoutX="210.0" layoutY="197.0" text="Ingrese nombre(s) del estudiante" />
+        <Label layoutX="213.0" layoutY="151.0" text="Ingrese matricula del estudiante" />
+        <TextField fx:id="txtMatricula" layoutX="218.0" layoutY="169.0" prefHeight="27.0" prefWidth="268.0" promptText="Ej. S24013287" />
 
-      <Label layoutX="210.0" layoutY="243.0" text="Ingrese apellido paterno" />
+        <Label layoutX="210.0" layoutY="197.0" text="Ingrese nombre(s) del estudiante" />
+        <TextField fx:id="txtNombres" layoutX="218.0" layoutY="215.0" prefHeight="27.0" prefWidth="269.0" promptText="Ej.Luis " />
 
-      <Label layoutX="210.0" layoutY="291.0" text="Ingrese apellido materno" />
+        <Label layoutX="210.0" layoutY="243.0" text="Ingrese apellido paterno" />
+        <TextField fx:id="txtApellidoPaterno" layoutX="218.0" layoutY="261.0" prefHeight="27.0" prefWidth="269.0" promptText="Ej. Padilla " />
 
-      <Label layoutX="213.0" layoutY="151.0" text="Ingrese matricula del estudiante" />
+        <Label layoutX="210.0" layoutY="291.0" text="Ingrese apellido materno" />
+        <TextField fx:id="txtApellidoMaterno" layoutX="217.0" layoutY="309.0" prefHeight="28.0" prefWidth="270.0" promptText="Ej. Martinez " />
 
-      <Label layoutX="213.0" layoutY="402.0" text="Ingrese gennero del estudiante " />
+        <Label layoutX="210.0" layoutY="346.0" text="Ingrese lengua indigena (solo si habla una)" />
+        <TextField fx:id="txtLenguaIndigena" layoutX="217.0" layoutY="364.0" prefHeight="27.0" prefWidth="270.0" promptText="Ej. nahuatl " />
 
-      <TextField fx:id="txtMatricula" layoutX="218.0" layoutY="169.0" prefHeight="27.0" prefWidth="268.0" promptText="Ej. S24013287" />
+        <Label layoutX="213.0" layoutY="402.0" text="Ingrese genero del estudiante" />
+        <RadioButton fx:id="rdiobtnFemenino" layoutX="218.0" layoutY="438.0" mnemonicParsing="false" text="Femenino" />
+        <RadioButton fx:id="rdiobtnMasculino" layoutX="321.0" layoutY="438.0" mnemonicParsing="false" text="Masculino" />
 
-      <TextField fx:id="txtNombres" layoutX="218.0" layoutY="215.0" prefHeight="27.0" prefWidth="269.0" promptText="Ej.Luis " />
+        <Button fx:id="btnRegistrar" layoutX="214.0" layoutY="477.0" mnemonicParsing="false" onAction="#botonRegistrar" text="Registrar" />
+        <Button fx:id="btnCancelarRegistro" layoutX="427.0" layoutY="477.0" mnemonicParsing="false" onAction="#botonCancelar" text="Cancelar" />
+        <Button fx:id="btnRegresar" layoutX="590.0" layoutY="14.0" mnemonicParsing="false" onAction="#botonRegresar" prefHeight="27.0" prefWidth="88.0" text="Regresar" />
 
-      <TextField fx:id="txtApellidoPaterno" layoutX="218.0" layoutY="261.0" prefHeight="27.0" prefWidth="269.0" promptText="Ej. Padilla " />
-
-      <TextField fx:id="txtApellidoMaterno" layoutX="217.0" layoutY="309.0" prefHeight="28.0" prefWidth="270.0" promptText="Ej. Martinez " />
-
-      <RadioButton fx:id="rdiobtnFemenino" layoutX="218.0" layoutY="438.0" mnemonicParsing="false" text="Femenino" />
-
-      <RadioButton fx:id="rdiobtnMasculino" layoutX="321.0" layoutY="438.0" mnemonicParsing="false" text="Masculino" />
-
-      <Button fx:id="btnRegistrar" layoutX="214.0" layoutY="477.0" mnemonicParsing="false" onAction="#botonRegistrar" text="Registrar" />
-
-      <Button fx:id="btnCancelarRegistro" layoutX="427.0" layoutY="477.0" mnemonicParsing="false" onAction="#botonCancelar" text="Cancelar" />
-
-      <Button fx:id="btnRegresar" layoutX="590.0" layoutY="14.0" mnemonicParsing="false" onAction="#botonRegresar" prefHeight="27.0" prefWidth="88.0" text="Regresar" />
-
-      <Label layoutX="210.0" layoutY="346.0" text="Ingrese lengua indigena (solo si habla una)" />
-
-      <TextField layoutX="217.0" layoutY="364.0" prefHeight="27.0" prefWidth="270.0" promptText="Ej. nahuatl " />
-   </children>
+    </children>
 </AnchorPane>

@@ -2,22 +2,25 @@ package InterfazGrafica;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import java.net.URL;
-import java.util.ResourceBundle;
-
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import logica.dao.excepciones.UsuariosExcepcion;
 import logica.dao.objetos.OrganizacionVinculadaDao;
 import logica.dominio.OrganizacionVinculada;
+import java.net.URL;
+import java.util.ResourceBundle;
 
 public class OrganizacionVinculadaControlGUI implements Initializable {
+
     @FXML private TextField txtNombre;
     @FXML private TextField txtDireccion;
     @FXML private VBox panelError;
@@ -46,7 +49,6 @@ public class OrganizacionVinculadaControlGUI implements Initializable {
 
         alerta.showAndWait().ifPresent(respuesta -> {
             if (respuesta == btnSi) {
-
                 String nombre = txtNombre.getText().trim();
                 String direccion = txtDireccion.getText().trim();
 
@@ -59,8 +61,8 @@ public class OrganizacionVinculadaControlGUI implements Initializable {
                 OrganizacionVinculada organizacion = new OrganizacionVinculada();
                 OrganizacionVinculadaDao organizacionDao = new OrganizacionVinculadaDao();
 
-                organizacion.setNombre(nombre);
-                organizacion.setDireccion(direccion);
+                organizacion.setNombre(limitarTexto(nombre, 80));
+                organizacion.setDireccion(limitarTexto(direccion, 80));
 
                 try {
                     int filasAfectadas = organizacionDao.insertarOrganizacionVinculada(organizacion);
@@ -98,13 +100,19 @@ public class OrganizacionVinculadaControlGUI implements Initializable {
         });
     }
 
-
     @FXML
-    private void botonRegresar(ActionEvent event) throws Exception{
+    private void botonRegresar(ActionEvent event) throws Exception {
         Parent root = FXMLLoader.load(getClass().getResource("/InterfazGrafica/vistas/SeccionCoordinador.fxml"));
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.setScene(new Scene(root));
         stage.show();
+    }
+
+    private String limitarTexto(String texto, int limite) {
+        if (texto == null) {
+            return "";
+        }
+        return texto.substring(0, Math.min(limite, texto.length()));
     }
 
     private void limpiarCampos() {

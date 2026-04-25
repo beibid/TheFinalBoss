@@ -4,61 +4,46 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="581.0" prefWidth="705.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="InterfazGrafica.ProfesorControlGUI">
-   <children>
-      <Label layoutX="264.0" layoutY="27.0" prefHeight="28.0" prefWidth="175.0" text="Registrar Profesor">
-         <font>
-            <Font size="22.0" />
-         </font>
-      </Label>
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="705.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="InterfazGrafica.ProfesorControlGUI">
+    <children>
+        <Label layoutX="219.0" layoutY="15.0" prefHeight="53.0" prefWidth="267.0" text="Registro de Profesor" textAlignment="CENTER">
+            <font><Font size="24.0" /></font>
+        </Label>
 
-       <VBox fx:id="panelError" layoutX="100.0" layoutY="60.0" managed="false" prefWidth="535.0" spacing="4.0" style="-fx-background-color: #f5f5dc; -fx-padding: 10;" visible="false">
-           <HBox alignment="CENTER_LEFT" spacing="8">
-               <Label fx:id="lblTituloError" style="-fx-font-weight: bold; -fx-text-fill: #8B0000;" text="" />
-           </HBox>
-           <Label fx:id="lblMensajeError" style="-fx-text-fill: #8B0000; -fx-font-size: 11;" text="" />
-       </VBox>
+        <Button fx:id="btnRegresar" layoutX="586.0" layoutY="14.0" mnemonicParsing="false" onAction="#botonRegresar" prefHeight="28.0" prefWidth="69.0" text="Regresar" />
 
-       <VBox fx:id="panelExito" layoutX="100.0" layoutY="60.0" managed="false" prefWidth="535.0" spacing="4.0" style="-fx-background-color: #f0f7f0; -fx-padding: 10;" visible="false">
-           <HBox alignment="CENTER_LEFT" spacing="8">
-               <Label fx:id="lblTituloExito" style="-fx-font-weight: bold; -fx-text-fill: #2d6a2d;" text="" />
-           </HBox>
-           <Label fx:id="lblMensajeExito" style="-fx-text-fill: #2d6a2d; -fx-font-size: 11;" text="" />
-       </VBox>
+        <VBox fx:id="panelError" layoutX="100.0" layoutY="60.0" managed="false" prefWidth="535.0" spacing="4.0" style="-fx-background-color: #f5f5dc; -fx-padding: 10;" visible="false">
+            <HBox alignment="CENTER_LEFT" spacing="8">
+                <Label fx:id="lblTituloError" style="-fx-font-weight: bold; -fx-text-fill: #8B0000;" text="" />
+            </HBox>
+            <Label fx:id="lblMensajeError" style="-fx-text-fill: #8B0000; -fx-font-size: 11;" text="" />
+        </VBox>
 
-      <Label layoutX="251.0" layoutY="153.0" prefHeight="19.0" prefWidth="202.0" text="Ingrese nombre(s) del profesor">
-         <font>
-            <Font size="15.0" />
-         </font>
-      </Label>
-      <TextField fx:id="txtNombreProfesor" layoutX="251.0" layoutY="188.0" prefHeight="27.0" prefWidth="230.0" />
-      <Label layoutX="253.0" layoutY="222.0" text="Ingrese apellido paterno del profesor">
-         <font>
-            <Font size="15.0" />
-         </font>
-      </Label>
-      <TextField fx:id="txtApellidoPaternoProfesor" layoutX="256.0" layoutY="257.0" prefHeight="28.0" prefWidth="229.0" />
-      <Label layoutX="256.0" layoutY="354.0" prefHeight="22.0" prefWidth="214.0" text="Ingrese el numero de personal">
-         <font>
-            <Font size="15.0" />
-         </font>
-      </Label>
-      <TextField fx:id="txtNumeroPersonal" layoutX="255.0" layoutY="387.0" prefHeight="28.0" prefWidth="228.0" />
-      <Label layoutX="258.0" layoutY="433.0" text="Ingrese el turno del profesor">
-         <font>
-            <Font size="15.0" />
-         </font>
-      </Label>
-      <Button fx:id="btnRegistrarProfesor" layoutX="242.0" layoutY="525.0" mnemonicParsing="false" onAction="#botonRegistrar" text="Registrar" />
-      <Button fx:id="btnCancelarProfesor" layoutX="464.0" layoutY="525.0" mnemonicParsing="false" onAction="#botonCancelar" text="Cancelar" />
-      <RadioButton fx:id="rdiobtMatutino" layoutX="255.0" layoutY="471.0" mnemonicParsing="false" text="Matutino" />
-      <RadioButton fx:id="rdiobtVespertino" layoutX="338.0" layoutY="471.0" mnemonicParsing="false" text="Vespertino" />
-      <RadioButton fx:id="rdiobtMixto" layoutX="432.0" layoutY="471.0" mnemonicParsing="false" text="Mixto" />
-      <Label layoutX="258.0" layoutY="297.0" text="Ingrese apellido materno del profesor">
-         <font>
-            <Font size="15.0" />
-         </font></Label>
-      <TextField fx:id="txtApellidoMaternoProfesor" layoutX="255.0" layoutY="327.0" prefHeight="27.0" prefWidth="229.0" />
-      <Button fx:id="btnRegresar" onAction="#botonRegresar" layoutX="610.0" layoutY="13.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="68.0" text="Regresar" />
-   </children>
+        <VBox fx:id="panelExito" layoutX="100.0" layoutY="60.0" managed="false" prefWidth="535.0" spacing="4.0" style="-fx-background-color: #f0f7f0; -fx-padding: 10;" visible="false">
+            <HBox alignment="CENTER_LEFT" spacing="8">
+                <Label fx:id="lblTituloExito" style="-fx-font-weight: bold; -fx-text-fill: #2d6a2d;" text="" />
+            </HBox>
+            <Label fx:id="lblMensajeExito" style="-fx-text-fill: #2d6a2d; -fx-font-size: 11;" text="" />
+        </VBox>
+
+        <Label layoutX="230.0" layoutY="157.0" text="Ingrese nombre(s) del Profesor" />
+        <TextField fx:id="txtNombreProfesor" layoutX="229.0" layoutY="185.0" prefHeight="27.0" prefWidth="247.0" promptText="Ej. Juan Carlos" />
+
+        <Label layoutX="230.0" layoutY="223.0" text="Ingrese apellido paterno" />
+        <TextField fx:id="txtApellidoPaternoProfesor" layoutX="229.0" layoutY="251.0" prefHeight="27.0" prefWidth="247.0" promptText="Ej. Bonilla" />
+
+        <Label layoutX="229.0" layoutY="289.0" text="Ingrese apellido materno" />
+        <TextField fx:id="txtApellidoMaternoProfesor" layoutX="229.0" layoutY="317.0" prefHeight="27.0" prefWidth="247.0" promptText="Ej. Pérez" />
+
+        <Label layoutX="229.0" layoutY="355.0" text="Ingrese número de personal" />
+        <TextField fx:id="txtNumeroPersonal" layoutX="229.0" layoutY="383.0" prefHeight="27.0" prefWidth="247.0" promptText="Ej. 2232456" />
+
+        <Label layoutX="229.0" layoutY="425.0" text="Seleccione turno" />
+        <RadioButton fx:id="rdiobtMatutino" layoutX="229.0" layoutY="453.0" text="Matutino" />
+        <RadioButton fx:id="rdiobtVespertino" layoutX="329.0" layoutY="453.0" text="Vespertino" />
+        <RadioButton fx:id="rdiobtMixto" layoutX="439.0" layoutY="453.0" text="Mixto" />
+
+        <Button fx:id="btnRegistrar" layoutX="200.0" layoutY="530.0" mnemonicParsing="false" onAction="#botonRegistrar" text="Registrar" />
+        <Button fx:id="btnCancelarRegistro" layoutX="446.0" layoutY="530.0" mnemonicParsing="false" onAction="#botonCancelar" text="Cancelar" />
+    </children>
 </AnchorPane>

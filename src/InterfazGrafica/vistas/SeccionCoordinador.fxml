@@ -4,25 +4,31 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane prefHeight="369.0" prefWidth="613.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="InterfazGrafica.SeccionCoordinadorControlGUI">
-   <children>
-      <Label layoutX="188.0" layoutY="41.0" text="Seccion Coordinador" textAlignment="CENTER">
-         <font>
-            <Font size="24.0" />
-         </font></Label>
-      <Button fx:id="btnRegistrarCoordinador" layoutX="251.0" layoutY="145.0" mnemonicParsing="false" onAction="#botonVentanaRegistrarCoordinador" text="Registrar">
-         <font>
-            <Font size="18.0" />
-         </font></Button>
-      <Button fx:id="btnInactivarCoordinador" onAction="#botonPracticante" layoutX="253.0" layoutY="202.0" mnemonicParsing="false" text="Practicante">
-         <font>
-            <Font size="18.0" />
-         </font></Button>
-      <Button fx:id="btnRegresar" layoutX="519.0" layoutY="14.0" mnemonicParsing="false" text="Regresar">
-         <font>
-            <Font size="14.0" />
-         </font></Button>
-      <Button fx:id="btnOv" onAction="#botonOrganizacionVinculada" layoutX="253.0" layoutY="304.0" mnemonicParsing="false" text="btnOv" />
-      <Button fx:id="btnProfesor" onAction="#botonProfesor" layoutX="253.0" layoutY="261.0" mnemonicParsing="false" text="btnProfesor" />
-   </children>
+<AnchorPane prefHeight="420.0" prefWidth="650.0" style="-fx-background-color: #f4f6f9;" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="InterfazGrafica.SeccionCoordinadorControlGUI">
+    <children>
+
+        <Label layoutX="175.0" layoutY="35.0" prefWidth="300.0" text="Sección Coordinador" textAlignment="CENTER"
+               style="-fx-font-size: 26px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;" />
+
+        <Button fx:id="btnRegistrarCoordinador" layoutX="200.0" layoutY="120.0" prefWidth="250.0" prefHeight="42.0"
+                mnemonicParsing="false" onAction="#botonVentanaRegistrarCoordinador" text="Registrar Coordinador"
+                style="-fx-text-fill: black; -fx-font-size: 14px; -fx-background-radius: 8;" />
+
+        <Button fx:id="btnInactivarCoordinador" layoutX="200.0" layoutY="178.0" prefWidth="250.0" prefHeight="42.0"
+                mnemonicParsing="false" onAction="#botonPracticante" text="Practicante"
+                style="-fx-text-fill: black; -fx-font-size: 14px; -fx-background-radius: 8;" />
+
+        <Button fx:id="btnProfesor" layoutX="200.0" layoutY="236.0" prefWidth="250.0" prefHeight="42.0"
+                mnemonicParsing="false" onAction="#botonProfesor" text="Profesor"
+                style="-fx-text-fill: black; -fx-font-size: 14px; -fx-background-radius: 8;" />
+
+        <Button fx:id="btnOv" layoutX="200.0" layoutY="294.0" prefWidth="250.0" prefHeight="42.0"
+                mnemonicParsing="false" onAction="#botonOrganizacionVinculada" text="Organización Vinculada"
+                style="-fx-text-fill: black; -fx-font-size: 14px; -fx-background-radius: 8;" />
+
+        <Button fx:id="btnRegresar" layoutX="560.0" layoutY="14.0" prefWidth="75.0" prefHeight="28.0"
+                mnemonicParsing="false" text="Regresar"
+                style="-fx-text-fill: black; -fx-font-size: 12px; -fx-background-radius: 6;" />
+
+    </children>
 </AnchorPane>

@@ -1,24 +1,25 @@
 package InterfazGrafica;
 
-
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import javafx.event.ActionEvent;
-import logica.dao.excepciones.UsuariosExcepcion;
 import logica.dao.excepciones.RegistroDuplicadoExcepcion;
+import logica.dao.excepciones.UsuariosExcepcion;
 import logica.dao.objetos.CoordinadorDao;
 import logica.dominio.Coordinador;
 import logica.dominio.enums.Estado;
 import java.net.URL;
 import java.util.ResourceBundle;
-
 
 public class CoordinadorControlGUI implements Initializable {
 
@@ -34,7 +35,7 @@ public class CoordinadorControlGUI implements Initializable {
     @FXML private Label lblMensajeExito;
 
     private CoordinadorDao coordinadorDao = new CoordinadorDao();
-    Coordinador coordinador = new Coordinador();
+    private Coordinador coordinador = new Coordinador();
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {}
@@ -55,8 +56,6 @@ public class CoordinadorControlGUI implements Initializable {
 
         alerta.showAndWait().ifPresent(respuesta -> {
             if (respuesta == btnSi) {
-
-
                 String nombre = txtNombres.getText().trim();
                 String apellidoPaterno = txtApellidoPaterno.getText().trim();
                 String apellidoMaterno = txtApellidoMaterno.getText().trim();
@@ -69,11 +68,11 @@ public class CoordinadorControlGUI implements Initializable {
                 }
 
                 String contrasena = generarContrasena(nombre, numeroPersonal);
-                coordinador.setNombre(nombre);
-                coordinador.setApellidoPaterno(apellidoPaterno);
-                coordinador.setApellidoMaterno(apellidoMaterno);
-                coordinador.setNumeroDePersonalCoordinador(numeroPersonal);
-                coordinador.setContrasena(contrasena);
+                coordinador.setNombre(limitarTexto(nombre, 55));
+                coordinador.setApellidoPaterno(limitarTexto(apellidoPaterno, 55));
+                coordinador.setApellidoMaterno(limitarTexto(apellidoMaterno, 55));
+                coordinador.setNumeroDePersonalCoordinador(limitarTexto(numeroPersonal, 12));
+                coordinador.setContrasena(limitarTexto(contrasena, 12));
                 coordinador.setEstado(Estado.Activo);
 
                 try {
@@ -87,14 +86,12 @@ public class CoordinadorControlGUI implements Initializable {
                         mostrarError("Error al registrar",
                                 "NO SE PUDO REGISTRAR EL COORDINADOR. INTENTE DE NUEVO.");
                     }
-
                 } catch (RegistroDuplicadoExcepcion e) {
                     mostrarError("Numero de personal repetido",
                             "EL NUMERO DE PERSONAL YA EXISTE EN EL SISTEMA. VERIFIQUE LA INFORMACION.");
                 } catch (UsuariosExcepcion e) {
                     mostrarError("Error inesperado", e.getMessage().toUpperCase());
                 }
-
             }
         });
     }
@@ -112,12 +109,7 @@ public class CoordinadorControlGUI implements Initializable {
 
         alerta.showAndWait().ifPresent(respuesta -> {
             if (respuesta == btnSi) {
-                ocultarError();
-                ocultarExito();
-                txtNombres.clear();
-                txtApellidoPaterno.clear();
-                txtApellidoMaterno.clear();
-                txtNumeroPersonal.clear();
+                limpiarCamposRegistros();
             }
         });
     }
@@ -132,6 +124,22 @@ public class CoordinadorControlGUI implements Initializable {
 
     private String generarContrasena(String nombre, String numeroPersonal) {
         return nombre.toLowerCase() + numeroPersonal;
+    }
+
+    private String limitarTexto(String texto, int limite) {
+        if (texto == null) {
+            return "";
+        }
+        return texto.substring(0, Math.min(limite, texto.length()));
+    }
+
+    private void limpiarCamposRegistros() {
+        ocultarError();
+        ocultarExito();
+        txtNombres.clear();
+        txtApellidoPaterno.clear();
+        txtApellidoMaterno.clear();
+        txtNumeroPersonal.clear();
     }
 
     private void mostrarError(String titulo, String mensaje) {
@@ -157,15 +165,4 @@ public class CoordinadorControlGUI implements Initializable {
         panelExito.setVisible(false);
         panelExito.setManaged(false);
     }
-
-    private void limpiarCamposRegistros(){
-        ocultarError();
-        ocultarExito();
-        txtNombres.clear();
-        txtApellidoPaterno.clear();
-        txtApellidoMaterno.clear();
-        txtNumeroPersonal.clear();
-    }
 }
-
-
