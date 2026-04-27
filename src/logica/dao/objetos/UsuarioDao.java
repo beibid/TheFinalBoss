@@ -3,6 +3,8 @@ package logica.dao.objetos;
 import acceso.bd.ConexionBaseDeDatos;
 import logica.dao.excepciones.UsuariosExcepcion;
 import logica.dominio.Usuario;
+import logica.dominio.UsuarioSesion;
+import logica.dominio.enums.Estado;
 import logica.dao.interfaces.UsuarioDaoInterfaz;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -51,5 +53,57 @@ public class UsuarioDao implements UsuarioDaoInterfaz {
             }
         }
         return idGenerado;
+    }
+
+    public UsuarioSesion buscarUsuario(String identificador, String contrasena) throws UsuariosExcepcion {
+        String consultaBusqueda =
+                "SELECT u.nombre, u.apellidoPaterno, u.apellidoMaterno, u.estado, 'Profesor' as tipo " +
+                        "FROM Usuario u INNER JOIN Profesor p ON u.idUsuario = p.idUsuario " +
+                        "WHERE p.numPersonalProfesor = ? AND u.contrasena = ? " +
+                        "UNION " +
+                        "SELECT u.nombre, u.apellidoPaterno, u.apellidoMaterno, u.estado, 'Coordinador' as tipo " +
+                        "FROM Usuario u INNER JOIN Coordinador c ON u.idUsuario = c.idUsuario " +
+                        "WHERE c.numPersonalCoordinador = ? AND u.contrasena = ? " +
+                        "UNION " +
+                        "SELECT u.nombre, u.apellidoPaterno, u.apellidoMaterno, u.estado, 'Practicante' as tipo " +
+                        "FROM Usuario u INNER JOIN Practicante pr ON u.idUsuario = pr.idUsuario " +
+                        "WHERE pr.matricula = ? AND u.contrasena = ?";
+        Connection conexionBaseDeDatos = null;
+        PreparedStatement busquedaUsuario = null;
+        UsuarioSesion usuarioSesion = null;
+        try {
+            conexionBaseDeDatos = ConexionBaseDeDatos.getInstance().conectar();
+            busquedaUsuario = conexionBaseDeDatos.prepareStatement(consultaBusqueda);
+            busquedaUsuario.setString(1, identificador);
+            busquedaUsuario.setString(2, contrasena);
+            busquedaUsuario.setString(3, identificador);
+            busquedaUsuario.setString(4, contrasena);
+            busquedaUsuario.setString(5, identificador);
+            busquedaUsuario.setString(6, contrasena);
+            ResultSet resultado = busquedaUsuario.executeQuery();
+            if (resultado.next()) {
+                usuarioSesion = new UsuarioSesion();
+                usuarioSesion.setNombre(resultado.getString("nombre"));
+                usuarioSesion.setApellidoPaterno(resultado.getString("apellidoPaterno"));
+                usuarioSesion.setApellidoMaterno(resultado.getString("apellidoMaterno"));
+                usuarioSesion.setTipo(resultado.getString("tipo"));
+                usuarioSesion.setEstado(Estado.valueOf(resultado.getString("estado")));
+            }
+        } catch (SQLException e) {
+            LOGGER.log(Level.SEVERE, "Error al buscar usuario", e);
+            throw new UsuariosExcepcion("Error al buscar usuario", e);
+        } finally {
+            try {
+                if (busquedaUsuario != null) {
+                    busquedaUsuario.close();
+                }
+                if (conexionBaseDeDatos != null) {
+                    conexionBaseDeDatos.close();
+                }
+            } catch (SQLException e) {
+                LOGGER.log(Level.SEVERE, "Error al cerrar la conexión", e);
+            }
+        }
+        return usuarioSesion;
     }
 }

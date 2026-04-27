@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="350.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="InterfazGrafica.IniciarSesionControlGUI">
+    <children>
+        <Label layoutX="170.0" layoutY="30.0" text="Iniciar Sesión">
+            <font>
+                <Font size="24.0"/>
+            </font>
+        </Label>
+
+        <!-- Panel de error -->
+        <VBox fx:id="panelError" layoutX="100.0" layoutY="70.0" managed="false" prefWidth="300.0" spacing="4.0"
+              style="-fx-border-color: #8B0000; -fx-border-width: 2; -fx-background-color: #f5f5dc; -fx-padding: 10;"
+              visible="false">
+            <HBox alignment="CENTER_LEFT" spacing="8">
+                <Label text="✖" style="-fx-text-fill: #8B0000; -fx-font-size: 16; -fx-font-weight: bold;"/>
+                <Label fx:id="lblTituloError" style="-fx-font-weight: bold; -fx-text-fill: #8B0000;" text=""/>
+            </HBox>
+            <Label fx:id="lblMensajeError" style="-fx-text-fill: #8B0000; -fx-font-size: 11;" text=""/>
+        </VBox>
+
+        <Label layoutX="100.0" layoutY="130.0" text="Usuario"/>
+        <TextField fx:id="txtIdentificador" layoutX="100.0" layoutY="155.0" prefHeight="27.0" prefWidth="300.0" promptText="Matrícula o número de personal"/>
+
+        <Label layoutX="100.0" layoutY="200.0" text="Contraseña"/>
+        <PasswordField fx:id="txtContrasena" layoutX="100.0" layoutY="225.0" prefHeight="27.0" prefWidth="300.0" promptText="Contraseña"/>
+
+        <Button fx:id="btnIniciarSesion" onAction="#botonIniciarSesion" layoutX="100.0" layoutY="280.0" prefWidth="300.0" text="Iniciar Sesión"/>
+    </children>
+</AnchorPane>
