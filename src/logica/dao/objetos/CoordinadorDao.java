@@ -19,7 +19,7 @@ public class CoordinadorDao implements CoordinadorDaoInterfaz {
 
     @Override
     public int insertarCoordinador(Coordinador coordinador) throws UsuariosExcepcion {
-        String consultaUsuario = "insert into Usuario (nombre, apellidoPaterno, apellidoMaterno, contrasena, estado) values (?, ?, ?, ?, ?)";
+        String consultaUsuario = "insert into Usuario (nombre, apellidos, contrasena, estado) values (?, ?, ?, ?)";
         String consultaCoordinador = "insert into Coordinador (numPersonalCoordinador, idUsuario) values (?, ?)";
         Connection conexionBaseDeDatos = null;
         PreparedStatement insercionUsuario = null;
@@ -29,10 +29,9 @@ public class CoordinadorDao implements CoordinadorDaoInterfaz {
             conexionBaseDeDatos = ConexionBaseDeDatos.getInstance().conectar();
             insercionUsuario = conexionBaseDeDatos.prepareStatement(consultaUsuario, Statement.RETURN_GENERATED_KEYS);
             insercionUsuario.setString(1, coordinador.getNombre());
-            insercionUsuario.setString(2, coordinador.getApellidoPaterno());
-            insercionUsuario.setString(3, coordinador.getApellidoMaterno());
-            insercionUsuario.setString(4, coordinador.getContrasena());
-            insercionUsuario.setString(5, coordinador.getEstado().toString());
+            insercionUsuario.setString(2, coordinador.getApellidos());
+            insercionUsuario.setString(3, coordinador.getContrasena());
+            insercionUsuario.setString(4, coordinador.getEstado().toString());
             insercionUsuario.executeUpdate();
             ResultSet tomarLlave = insercionUsuario.getGeneratedKeys();
             if (!tomarLlave.next()) {
@@ -52,15 +51,9 @@ public class CoordinadorDao implements CoordinadorDaoInterfaz {
             throw new UsuariosExcepcion("Error al insertar coordinador", e);
         } finally {
             try {
-                if (insercionCoordinador != null) {
-                    insercionCoordinador.close();
-                }
-                if (insercionUsuario != null) {
-                    insercionUsuario.close();
-                }
-                if (conexionBaseDeDatos != null) {
-                    conexionBaseDeDatos.close();
-                }
+                if (insercionCoordinador != null) insercionCoordinador.close();
+                if (insercionUsuario != null) insercionUsuario.close();
+                if (conexionBaseDeDatos != null) conexionBaseDeDatos.close();
             } catch (SQLException e) {
                 LOGGER.log(Level.SEVERE, "Error al cerrar la conexión", e);
             }
@@ -88,12 +81,8 @@ public class CoordinadorDao implements CoordinadorDaoInterfaz {
             throw new UsuariosExcepcion("Error al inactivar coordinador", e);
         } finally {
             try {
-                if (actualizacion != null) {
-                    actualizacion.close();
-                }
-                if (conexionBaseDeDatos != null) {
-                    conexionBaseDeDatos.close();
-                }
+                if (actualizacion != null) actualizacion.close();
+                if (conexionBaseDeDatos != null) conexionBaseDeDatos.close();
             } catch (SQLException e) {
                 LOGGER.log(Level.SEVERE, "Error al cerrar la conexión", e);
             }
@@ -108,7 +97,7 @@ public class CoordinadorDao implements CoordinadorDaoInterfaz {
         if (coordinador.getNombre() == null) {
             throw new UsuariosExcepcion("El nombre del coordinador no puede ser nulo");
         }
-        String consultaUsuario = "UPDATE Usuario SET nombre = ?, apellidoPaterno = ?, apellidoMaterno = ?, contrasena = ?, estado = ? WHERE idUsuario = (SELECT idUsuario FROM Coordinador WHERE numPersonalCoordinador = ?)";
+        String consultaUsuario = "UPDATE Usuario SET nombre = ?, apellidos = ?, contrasena = ?, estado = ? WHERE idUsuario = (SELECT idUsuario FROM Coordinador WHERE numPersonalCoordinador = ?)";
         Connection conexionBaseDeDatos = null;
         PreparedStatement actualizacion = null;
         int filasAfectadas = 0;
@@ -116,11 +105,10 @@ public class CoordinadorDao implements CoordinadorDaoInterfaz {
             conexionBaseDeDatos = ConexionBaseDeDatos.getInstance().conectar();
             actualizacion = conexionBaseDeDatos.prepareStatement(consultaUsuario);
             actualizacion.setString(1, coordinador.getNombre());
-            actualizacion.setString(2, coordinador.getApellidoPaterno());
-            actualizacion.setString(3, coordinador.getApellidoMaterno());
-            actualizacion.setString(4, coordinador.getContrasena());
-            actualizacion.setString(5, coordinador.getEstado().toString());
-            actualizacion.setString(6, numPersonalCoordinador);
+            actualizacion.setString(2, coordinador.getApellidos());
+            actualizacion.setString(3, coordinador.getContrasena());
+            actualizacion.setString(4, coordinador.getEstado().toString());
+            actualizacion.setString(5, numPersonalCoordinador);
             filasAfectadas = actualizacion.executeUpdate();
             LOGGER.info("Coordinador modificado correctamente: " + numPersonalCoordinador);
         } catch (SQLException e) {
@@ -128,12 +116,8 @@ public class CoordinadorDao implements CoordinadorDaoInterfaz {
             throw new UsuariosExcepcion("Error al modificar coordinador", e);
         } finally {
             try {
-                if (actualizacion != null) {
-                    actualizacion.close();
-                }
-                if (conexionBaseDeDatos != null) {
-                    conexionBaseDeDatos.close();
-                }
+                if (actualizacion != null) actualizacion.close();
+                if (conexionBaseDeDatos != null) conexionBaseDeDatos.close();
             } catch (SQLException e) {
                 LOGGER.log(Level.SEVERE, "Error al cerrar la conexión", e);
             }

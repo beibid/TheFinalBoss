@@ -1,9 +1,7 @@
 package logica.dominio;
 
-
 import logica.dominio.enums.Estado;
 import logica.dominio.enums.Genero;
-
 
 public class Practicante extends Usuario {
     private String matricula;
@@ -11,46 +9,38 @@ public class Practicante extends Usuario {
     private Genero genero;
     private int idUsuarioPracticante;
 
-    public Practicante(String matricula, String lenguaIndigena, Genero genero,String nombre, String apellidoPaterno, String apellidoMaterno, String contrasena, Estado estado){
-        super(nombre, apellidoPaterno, apellidoMaterno, contrasena, estado);
+    public Practicante(String matricula, String lenguaIndigena, Genero genero, String nombre, String apellidos, String contrasena, Estado estado) {
+        super(nombre, apellidos, contrasena, estado);
         this.matricula = matricula;
         this.lenguaIndigena = lenguaIndigena;
         this.genero = genero;
-        this.idUsuarioPracticante = idUsuarioPracticante;
     }
 
     public Practicante() {
-        super("", "", "", "", null);
+        super("", "", "", null);
     }
 
     public String getMatricula() {
-
         return matricula;
     }
 
     public String getLenguaIndigena() {
-
         return lenguaIndigena;
     }
 
     public Genero getGenero() {
-
         return genero;
     }
 
     public void setMatricula(String matricula) {
-
         this.matricula = matricula;
     }
 
     public void setLenguaIndigena(String lenguaIndigena) {
-
         this.lenguaIndigena = lenguaIndigena;
     }
 
     public void setGenero(Genero genero) {
-
         this.genero = genero;
     }
-
 }

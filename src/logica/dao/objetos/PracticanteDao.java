@@ -19,7 +19,7 @@ public class PracticanteDao implements PracticanteDaoInterfaz {
 
     @Override
     public int insertarPracticante(Practicante practicante) throws UsuariosExcepcion {
-        String consultaUsuario = "insert into Usuario (nombre, apellidoPaterno, apellidoMaterno, contrasena, estado) values (?, ?, ?, ?, ?)";
+        String consultaUsuario = "insert into Usuario (nombre, apellidos, contrasena, estado) values (?, ?, ?, ?)";
         String consultaPracticante = "insert into Practicante (matricula, lenguaIndigena, genero, idUsuario) values (?, ?, ?, ?)";
         Connection conexionBaseDeDatos = null;
         PreparedStatement insercionUsuario = null;
@@ -29,10 +29,9 @@ public class PracticanteDao implements PracticanteDaoInterfaz {
             conexionBaseDeDatos = ConexionBaseDeDatos.getInstance().conectar();
             insercionUsuario = conexionBaseDeDatos.prepareStatement(consultaUsuario, Statement.RETURN_GENERATED_KEYS);
             insercionUsuario.setString(1, practicante.getNombre());
-            insercionUsuario.setString(2, practicante.getApellidoPaterno());
-            insercionUsuario.setString(3, practicante.getApellidoMaterno());
-            insercionUsuario.setString(4, practicante.getContrasena());
-            insercionUsuario.setString(5, practicante.getEstado().toString());
+            insercionUsuario.setString(2, practicante.getApellidos());
+            insercionUsuario.setString(3, practicante.getContrasena());
+            insercionUsuario.setString(4, practicante.getEstado().toString());
             insercionUsuario.executeUpdate();
             ResultSet tomarLlave = insercionUsuario.getGeneratedKeys();
             if (!tomarLlave.next()) {
@@ -54,15 +53,9 @@ public class PracticanteDao implements PracticanteDaoInterfaz {
             throw new UsuariosExcepcion("Error al insertar practicante", e);
         } finally {
             try {
-                if (insercionPracticante != null) {
-                    insercionPracticante.close();
-                }
-                if (insercionUsuario != null) {
-                    insercionUsuario.close();
-                }
-                if (conexionBaseDeDatos != null) {
-                    conexionBaseDeDatos.close();
-                }
+                if (insercionPracticante != null) insercionPracticante.close();
+                if (insercionUsuario != null) insercionUsuario.close();
+                if (conexionBaseDeDatos != null) conexionBaseDeDatos.close();
             } catch (SQLException e) {
                 LOGGER.log(Level.SEVERE, "Error al cerrar la conexión", e);
             }
@@ -90,12 +83,8 @@ public class PracticanteDao implements PracticanteDaoInterfaz {
             throw new UsuariosExcepcion("Error al inactivar practicante", e);
         } finally {
             try {
-                if (actualizacion != null) {
-                    actualizacion.close();
-                }
-                if (conexionBaseDeDatos != null) {
-                    conexionBaseDeDatos.close();
-                }
+                if (actualizacion != null) actualizacion.close();
+                if (conexionBaseDeDatos != null) conexionBaseDeDatos.close();
             } catch (SQLException e) {
                 LOGGER.log(Level.SEVERE, "Error al cerrar la conexión", e);
             }
@@ -110,7 +99,7 @@ public class PracticanteDao implements PracticanteDaoInterfaz {
         if (practicante.getNombre() == null) {
             throw new UsuariosExcepcion("El nombre del practicante no puede ser nulo");
         }
-        String consultaUsuario = "UPDATE Usuario SET nombre = ?, apellidoPaterno = ?, apellidoMaterno = ?, contrasena = ?, estado = ? WHERE idUsuario = (SELECT idUsuario FROM Practicante WHERE matricula = ?)";
+        String consultaUsuario = "UPDATE Usuario SET nombre = ?, apellidos = ?, contrasena = ?, estado = ? WHERE idUsuario = (SELECT idUsuario FROM Practicante WHERE matricula = ?)";
         String consultaPracticante = "UPDATE Practicante SET lenguaIndigena = ?, genero = ? WHERE matricula = ?";
         Connection conexionBaseDeDatos = null;
         PreparedStatement actualizacionUsuario = null;
@@ -120,11 +109,10 @@ public class PracticanteDao implements PracticanteDaoInterfaz {
             conexionBaseDeDatos = ConexionBaseDeDatos.getInstance().conectar();
             actualizacionUsuario = conexionBaseDeDatos.prepareStatement(consultaUsuario);
             actualizacionUsuario.setString(1, practicante.getNombre());
-            actualizacionUsuario.setString(2, practicante.getApellidoPaterno());
-            actualizacionUsuario.setString(3, practicante.getApellidoMaterno());
-            actualizacionUsuario.setString(4, practicante.getContrasena());
-            actualizacionUsuario.setString(5, practicante.getEstado().toString());
-            actualizacionUsuario.setString(6, matricula);
+            actualizacionUsuario.setString(2, practicante.getApellidos());
+            actualizacionUsuario.setString(3, practicante.getContrasena());
+            actualizacionUsuario.setString(4, practicante.getEstado().toString());
+            actualizacionUsuario.setString(5, matricula);
             actualizacionUsuario.executeUpdate();
             actualizacionPracticante = conexionBaseDeDatos.prepareStatement(consultaPracticante);
             actualizacionPracticante.setString(1, practicante.getLenguaIndigena());
@@ -137,15 +125,9 @@ public class PracticanteDao implements PracticanteDaoInterfaz {
             throw new UsuariosExcepcion("Error al modificar practicante", e);
         } finally {
             try {
-                if (actualizacionPracticante != null) {
-                    actualizacionPracticante.close();
-                }
-                if (actualizacionUsuario != null) {
-                    actualizacionUsuario.close();
-                }
-                if (conexionBaseDeDatos != null) {
-                    conexionBaseDeDatos.close();
-                }
+                if (actualizacionPracticante != null) actualizacionPracticante.close();
+                if (actualizacionUsuario != null) actualizacionUsuario.close();
+                if (conexionBaseDeDatos != null) conexionBaseDeDatos.close();
             } catch (SQLException e) {
                 LOGGER.log(Level.SEVERE, "Error al cerrar la conexión", e);
             }

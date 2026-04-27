@@ -7,26 +7,24 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import logica.dao.excepciones.RegistroDuplicadoExcepcion;
 import logica.dao.excepciones.UsuariosExcepcion;
-import logica.dao.objetos.ProfesorDao;
-import logica.dominio.Profesor;
+import logica.dao.objetos.AdministradorDao;
+import logica.dominio.Administrador;
 import logica.dominio.enums.Estado;
-import logica.dominio.enums.Turno;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class ProfesorControlGUI implements Initializable {
+public class AdministradorControlGUI implements Initializable {
 
-    @FXML private TextField txtNombreProfesor;
-    @FXML private TextField txtApellidosProfesor;
+    @FXML private TextField txtNombres;
+    @FXML private TextField txtApellidos;
     @FXML private TextField txtNumeroPersonal;
-    @FXML private RadioButton rdiobtMatutino;
-    @FXML private RadioButton rdiobtVespertino;
-    @FXML private RadioButton rdiobtMixto;
     @FXML private VBox panelError;
     @FXML private Label lblTituloError;
     @FXML private Label lblMensajeError;
@@ -34,20 +32,14 @@ public class ProfesorControlGUI implements Initializable {
     @FXML private Label lblTituloExito;
     @FXML private Label lblMensajeExito;
 
-    private ToggleGroup grupoTurno = new ToggleGroup();
-
     @Override
-    public void initialize(URL url, ResourceBundle rb) {
-        rdiobtMatutino.setToggleGroup(grupoTurno);
-        rdiobtVespertino.setToggleGroup(grupoTurno);
-        rdiobtMixto.setToggleGroup(grupoTurno);
-    }
+    public void initialize(URL url, ResourceBundle rb) {}
 
     @FXML
     private void botonRegistrar() {
         ocultarError();
         ocultarExito();
-        if (confirmarAccion("¿Seguro que desea registrar al profesor?")) {
+        if (confirmarAccion("¿Seguro que desea registrar al Administrador?")) {
             procesarRegistro();
         }
     }
@@ -61,7 +53,7 @@ public class ProfesorControlGUI implements Initializable {
 
     @FXML
     private void botonRegresar(ActionEvent event) throws Exception {
-        Parent root = FXMLLoader.load(getClass().getResource("/InterfazGrafica/vistas/SeccionCoordinadorVista.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("/InterfazGrafica/vistas/SeccionAdministradorVista.fxml"));
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.setScene(new Scene(root));
         stage.show();
@@ -80,72 +72,46 @@ public class ProfesorControlGUI implements Initializable {
 
     private void procesarRegistro() {
         if (!camposValidos()) {
+            mostrarError("Campos obligatorios vacios",
+                    "Verifica la informacion e intente de nuevo.");
             return;
         }
-        Profesor profesor = construirProfesor();
-        guardarProfesor(profesor);
+        guardarAdministrador(construirAdministrador());
     }
 
     private boolean camposValidos() {
-        String nombre = txtNombreProfesor.getText().trim();
-        String apellidos = txtApellidosProfesor.getText().trim();
+        String nombre = txtNombres.getText().trim();
+        String apellidos = txtApellidos.getText().trim();
         String numeroPersonal = txtNumeroPersonal.getText().trim();
-
-        if (nombre.isEmpty() || apellidos.isEmpty() || numeroPersonal.isEmpty()) {
-            mostrarError("Campos obligatorios vacios",
-                    "Verifique la informacion e intente de nuevo");
-            return false;
-        }
-        if (grupoTurno.getSelectedToggle() == null) {
-            mostrarError("Turno no seleccionado",
-                    "Seleccione un turno para el profesor.");
-            return false;
-        }
-        return true;
+        return !nombre.isEmpty() && !apellidos.isEmpty() && !numeroPersonal.isEmpty();
     }
 
-    private Profesor construirProfesor() {
-        String nombre = txtNombreProfesor.getText().trim();
-        String apellidos = txtApellidosProfesor.getText().trim();
+    private Administrador construirAdministrador() {
+        String nombre = txtNombres.getText().trim();
+        String apellidos = txtApellidos.getText().trim();
         String numeroPersonal = txtNumeroPersonal.getText().trim();
-        Turno turno = obtenerTurnoSeleccionado();
         String contrasena = generarContrasena(nombre, numeroPersonal);
 
-        Profesor profesor = new Profesor();
-        profesor.setNombre(nombre);
-        profesor.setApellidos(apellidos);
-        profesor.setTurno(turno);
-        profesor.setNumeroDePersonalProfesor(numeroPersonal);
-        profesor.setContrasena(contrasena);
-        profesor.setEstado(Estado.Activo);
-        return profesor;
+        Administrador administrador = new Administrador();
+        administrador.setNombre(limitarTexto(nombre, 55));
+        administrador.setApellidos(limitarTexto(apellidos, 55));
+        administrador.setContrasena(limitarTexto(contrasena, 12));
+        administrador.setEstado(Estado.Activo);
+        return administrador;
     }
 
-    private Turno obtenerTurnoSeleccionado() {
-        if (rdiobtMatutino.isSelected()) {
-            return Turno.Matutino;
-        }
-        if (rdiobtVespertino.isSelected()) {
-            return Turno.Vespertino;
-        }
-        return Turno.Mixto;
-    }
-
-    private void guardarProfesor(Profesor profesor) {
-        ProfesorDao profesorDao = new ProfesorDao();
+    private void guardarAdministrador(Administrador administrador) {
+        AdministradorDao administradorDao = new AdministradorDao();
         try {
-            int filasAfectadas = profesorDao.insertarProfesor(profesor);
+            int filasAfectadas = administradorDao.insertarAdministrador(administrador);
             if (filasAfectadas > 0) {
                 limpiarCamposRegistros();
-                mostrarExito("Profesor en estado activo",
-                        "El profesor fue registrado exitosamente");
+                mostrarExito("Administrador con estado activo",
+                        "ADMINISTRADOR REGISTRADO EXITOSAMENTE.");
             } else {
                 mostrarError("Error al registrar",
-                        "No fue posible registrar al profesor, intente mas tarde");
+                        "NO SE PUDO REGISTRAR EL ADMINISTRADOR. INTENTE DE NUEVO.");
             }
-        } catch (RegistroDuplicadoExcepcion e) {
-            mostrarError("Numero de personal repetido",
-                    "El numero de personal ya existe en el sistema, verifique la informacion");
         } catch (UsuariosExcepcion e) {
             mostrarError("Error inesperado", e.getMessage().toUpperCase());
         }
@@ -155,13 +121,16 @@ public class ProfesorControlGUI implements Initializable {
         return nombre.toLowerCase() + numeroPersonal;
     }
 
+    private String limitarTexto(String texto, int limite) {
+        return texto.substring(0, Math.min(limite, texto.length()));
+    }
+
     private void limpiarCamposRegistros() {
         ocultarError();
         ocultarExito();
-        txtNombreProfesor.clear();
-        txtApellidosProfesor.clear();
+        txtNombres.clear();
+        txtApellidos.clear();
         txtNumeroPersonal.clear();
-        grupoTurno.selectToggle(null);
     }
 
     private void mostrarError(String titulo, String mensaje) {

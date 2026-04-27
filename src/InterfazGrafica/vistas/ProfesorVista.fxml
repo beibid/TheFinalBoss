@@ -29,21 +29,18 @@
         <Label layoutX="230.0" layoutY="157.0" text="Ingrese nombre(s) del Profesor" />
         <TextField fx:id="txtNombreProfesor" layoutX="229.0" layoutY="185.0" prefHeight="27.0" prefWidth="247.0" promptText="Ej. Juan Carlos" />
 
-        <Label layoutX="230.0" layoutY="223.0" text="Ingrese apellido paterno" />
-        <TextField fx:id="txtApellidoPaternoProfesor" layoutX="229.0" layoutY="251.0" prefHeight="27.0" prefWidth="247.0" promptText="Ej. Bonilla" />
+        <Label layoutX="230.0" layoutY="223.0" text="Ingrese apellidos" />
+        <TextField fx:id="txtApellidosProfesor" layoutX="229.0" layoutY="251.0" prefHeight="27.0" prefWidth="247.0" promptText="Ej. Bonilla Pérez" />
 
-        <Label layoutX="229.0" layoutY="289.0" text="Ingrese apellido materno" />
-        <TextField fx:id="txtApellidoMaternoProfesor" layoutX="229.0" layoutY="317.0" prefHeight="27.0" prefWidth="247.0" promptText="Ej. Pérez" />
+        <Label layoutX="229.0" layoutY="289.0" text="Ingrese número de personal" />
+        <TextField fx:id="txtNumeroPersonal" layoutX="229.0" layoutY="317.0" prefHeight="27.0" prefWidth="247.0" promptText="Ej. 2232456" />
 
-        <Label layoutX="229.0" layoutY="355.0" text="Ingrese número de personal" />
-        <TextField fx:id="txtNumeroPersonal" layoutX="229.0" layoutY="383.0" prefHeight="27.0" prefWidth="247.0" promptText="Ej. 2232456" />
+        <Label layoutX="229.0" layoutY="355.0" text="Seleccione turno" />
+        <RadioButton fx:id="rdiobtMatutino" layoutX="229.0" layoutY="383.0" text="Matutino" />
+        <RadioButton fx:id="rdiobtVespertino" layoutX="329.0" layoutY="383.0" text="Vespertino" />
+        <RadioButton fx:id="rdiobtMixto" layoutX="439.0" layoutY="383.0" text="Mixto" />
 
-        <Label layoutX="229.0" layoutY="425.0" text="Seleccione turno" />
-        <RadioButton fx:id="rdiobtMatutino" layoutX="229.0" layoutY="453.0" text="Matutino" />
-        <RadioButton fx:id="rdiobtVespertino" layoutX="329.0" layoutY="453.0" text="Vespertino" />
-        <RadioButton fx:id="rdiobtMixto" layoutX="439.0" layoutY="453.0" text="Mixto" />
-
-        <Button fx:id="btnRegistrar" layoutX="200.0" layoutY="530.0" mnemonicParsing="false" onAction="#botonRegistrar" text="Registrar" />
-        <Button fx:id="btnCancelarRegistro" layoutX="446.0" layoutY="530.0" mnemonicParsing="false" onAction="#botonCancelar" text="Cancelar" />
+        <Button fx:id="btnRegistrar" layoutX="200.0" layoutY="460.0" mnemonicParsing="false" onAction="#botonRegistrar" text="Registrar" />
+        <Button fx:id="btnCancelarRegistro" layoutX="446.0" layoutY="460.0" mnemonicParsing="false" onAction="#botonCancelar" text="Cancelar" />
     </children>
 </AnchorPane>

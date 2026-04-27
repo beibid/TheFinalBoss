@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="420.0" prefWidth="650.0" style="-fx-background-color: #f4f6f9;"
+            xmlns="http://javafx.com/javafx/17.0.12"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="InterfazGrafica.SeccionAdministradorGUI">
+    <children>
+
+        <Label layoutX="200.0" layoutY="36.0" prefHeight="31.0" prefWidth="250.0"
+               style="-fx-font-size: 26px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;"
+               text="Sección Administrador" textAlignment="CENTER" />
+
+        <Button fx:id="btnRegistrarCoordinador" layoutX="201.0" layoutY="120.0"
+                mnemonicParsing="false" onAction="#botonRegistrarCoordinador"
+                prefHeight="42.0" prefWidth="250.0"
+                style="-fx-text-fill: black; -fx-font-size: 14px; -fx-background-radius: 8;"
+                text="Registrar Coordinador" />
+
+        <Button fx:id="btnInactivarCoordinador" layoutX="200.0" layoutY="178.0"
+                mnemonicParsing="false" onAction="#botonInactivarCoordinador"
+                prefHeight="42.0" prefWidth="250.0"
+                style="-fx-text-fill: black; -fx-font-size: 14px; -fx-background-radius: 8;"
+                text="Inactivar Coordinador" />
+
+        <Button fx:id="btnRegistrarAdministrador" layoutX="200.0" layoutY="236.0"
+                mnemonicParsing="false" onAction="#botonRegistrarAdministrador"
+                prefHeight="42.0" prefWidth="250.0"
+                style="-fx-text-fill: black; -fx-font-size: 14px; -fx-background-radius: 8;"
+                text="Registrar Administrador" />
+
+        <Button fx:id="btnRegresar" layoutX="560.0" layoutY="14.0"
+                mnemonicParsing="false" onAction="#botonRegresar"
+                prefHeight="28.0" prefWidth="75.0"
+                style="-fx-text-fill: black; -fx-font-size: 12px; -fx-background-radius: 6;"
+                text="Regresar" />
+
+    </children>
+</AnchorPane>

@@ -7,12 +7,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.Label;
-import javafx.scene.control.RadioButton;
-import javafx.scene.control.TextField;
-import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import logica.dao.excepciones.RegistroDuplicadoExcepcion;
@@ -28,8 +23,7 @@ public class PracticanteControlGUI implements Initializable {
 
     @FXML private TextField txtMatricula;
     @FXML private TextField txtNombres;
-    @FXML private TextField txtApellidoPaterno;
-    @FXML private TextField txtApellidoMaterno;
+    @FXML private TextField txtApellidos;
     @FXML private RadioButton rdiobtnFemenino;
     @FXML private RadioButton rdiobtnMasculino;
     @FXML private TextField txtLenguaIndigena;
@@ -52,75 +46,16 @@ public class PracticanteControlGUI implements Initializable {
     private void botonRegistrar() {
         ocultarError();
         ocultarExito();
+        if (confirmarAccion("¿Seguro que desea registrar al practicante?")) {
+            procesarRegistro();
+        }
+    }
 
-        Alert alerta = new Alert(Alert.AlertType.CONFIRMATION);
-        alerta.setTitle("Confirmar registro");
-        alerta.setHeaderText("¿Seguro que desea registrar al practicante?");
-        alerta.setContentText("");
-
-        ButtonType btnSi = new ButtonType("Sí");
-        ButtonType btnNo = new ButtonType("No");
-        alerta.getButtonTypes().setAll(btnSi, btnNo);
-
-        alerta.showAndWait().ifPresent(respuesta -> {
-            if (respuesta == btnSi) {
-                String nombre = txtNombres.getText().trim();
-                String apellidoPaterno = txtApellidoPaterno.getText().trim();
-                String apellidoMaterno = txtApellidoMaterno.getText().trim();
-                String lenguaIndigena = txtLenguaIndigena.getText().trim();
-                String matricula = txtMatricula.getText().trim();
-
-                if (matricula.isEmpty() || nombre.isEmpty() || apellidoPaterno.isEmpty() || apellidoMaterno.isEmpty()) {
-                    mostrarError("Campos obligatorios vacios",
-                            "Verifique la informacion e intente de nuevo");
-                    return;
-                }
-
-                if (grupoGenero.getSelectedToggle() == null) {
-                    mostrarError("Genero no seleccionado",
-                            "Seleccione un genero para el practicante.");
-                    return;
-                }
-
-                Genero genero;
-                if (rdiobtnMasculino.isSelected()) {
-                    genero = Genero.Masculino;
-                } else {
-                    genero = Genero.Femenino;
-                }
-
-                Practicante practicante = new Practicante();
-                PracticanteDao practicanteDao = new PracticanteDao();
-
-                String contrasenaGenerada = generarContrasena(nombre, matricula);
-                practicante.setNombre(limitarTexto(nombre, 50));
-                practicante.setApellidoPaterno(limitarTexto(apellidoPaterno, 50));
-                practicante.setApellidoMaterno(limitarTexto(apellidoMaterno, 50));
-                practicante.setGenero(genero);
-                practicante.setMatricula(limitarTexto(matricula, 12));
-                practicante.setLenguaIndigena(limitarTexto(lenguaIndigena, 50));
-                practicante.setContrasena(limitarTexto(contrasenaGenerada, 12));
-                practicante.setEstado(Estado.Activo);
-
-                try {
-                    int filasAfectadas = practicanteDao.insertarPracticante(practicante);
-
-                    if (filasAfectadas > 0) {
-                        limpiarCamposRegistrados();
-                        mostrarExito("Practicante en estado activo",
-                                "El practicante fue registrado exitosamente");
-                    } else {
-                        mostrarError("Error al registrar",
-                                "No fue posible registrar al practicante, intente mas tarde");
-                    }
-                } catch (RegistroDuplicadoExcepcion e) {
-                    mostrarError("Matricula repetida",
-                            "La matricula ya existe en el sistema, verifique la informacion");
-                } catch (UsuariosExcepcion e) {
-                    mostrarError("Error inesperado", e.getMessage().toUpperCase());
-                }
-            }
-        });
+    @FXML
+    private void botonCancelar() {
+        if (confirmarAccion("¿Seguro que desea cancelar?")) {
+            limpiarCamposRegistrados();
+        }
     }
 
     @FXML
@@ -132,31 +67,82 @@ public class PracticanteControlGUI implements Initializable {
     }
 
     @FXML
-    private void radioBoton() {
-        String genero = "";
-        if (rdiobtnFemenino.isSelected()) {
-            genero = "Femenino";
-        } else if (rdiobtnMasculino.isSelected()) {
-            genero = "Masculino";
-        }
-    }
+    private void radioBoton() {}
 
-    @FXML
-    private void botonCancelar() {
+    private boolean confirmarAccion(String mensaje) {
         Alert alerta = new Alert(Alert.AlertType.CONFIRMATION);
-        alerta.setTitle("Cancelar registro");
-        alerta.setHeaderText("¿Seguro que desea cancelar?");
+        alerta.setTitle("Confirmación");
+        alerta.setHeaderText(mensaje);
         alerta.setContentText("");
-
         ButtonType btnSi = new ButtonType("Sí");
         ButtonType btnNo = new ButtonType("No");
         alerta.getButtonTypes().setAll(btnSi, btnNo);
+        return alerta.showAndWait().filter(r -> r == btnSi).isPresent();
+    }
 
-        alerta.showAndWait().ifPresent(respuesta -> {
-            if (respuesta == btnSi) {
+    private void procesarRegistro() {
+        if (!camposValidos()) {
+            return;
+        }
+        Practicante practicante = construirPracticante();
+        guardarPracticante(practicante);
+    }
+
+    private boolean camposValidos() {
+        String nombre = txtNombres.getText().trim();
+        String apellidos = txtApellidos.getText().trim();
+        String matricula = txtMatricula.getText().trim();
+
+        if (matricula.isEmpty() || nombre.isEmpty() || apellidos.isEmpty()) {
+            mostrarError("Campos obligatorios vacios",
+                    "Verifique la informacion e intente de nuevo");
+            return false;
+        }
+        if (grupoGenero.getSelectedToggle() == null) {
+            mostrarError("Genero no seleccionado",
+                    "Seleccione un genero para el practicante.");
+            return false;
+        }
+        return true;
+    }
+
+    private Practicante construirPracticante() {
+        String nombre = txtNombres.getText().trim();
+        String apellidos = txtApellidos.getText().trim();
+        String matricula = txtMatricula.getText().trim();
+        String lenguaIndigena = txtLenguaIndigena.getText().trim();
+        Genero genero = rdiobtnMasculino.isSelected() ? Genero.Masculino : Genero.Femenino;
+        String contrasena = generarContrasena(nombre, matricula);
+
+        Practicante practicante = new Practicante();
+        practicante.setNombre(limitarTexto(nombre, 50));
+        practicante.setApellidos(limitarTexto(apellidos, 50));
+        practicante.setGenero(genero);
+        practicante.setMatricula(limitarTexto(matricula, 12));
+        practicante.setLenguaIndigena(limitarTexto(lenguaIndigena, 50));
+        practicante.setContrasena(limitarTexto(contrasena, 12));
+        practicante.setEstado(Estado.Activo);
+        return practicante;
+    }
+
+    private void guardarPracticante(Practicante practicante) {
+        PracticanteDao practicanteDao = new PracticanteDao();
+        try {
+            int filasAfectadas = practicanteDao.insertarPracticante(practicante);
+            if (filasAfectadas > 0) {
                 limpiarCamposRegistrados();
+                mostrarExito("Practicante en estado activo",
+                        "El practicante fue registrado exitosamente");
+            } else {
+                mostrarError("Error al registrar",
+                        "No fue posible registrar al practicante, intente mas tarde");
             }
-        });
+        } catch (RegistroDuplicadoExcepcion e) {
+            mostrarError("Matricula repetida",
+                    "La matricula ya existe en el sistema, verifique la informacion");
+        } catch (UsuariosExcepcion e) {
+            mostrarError("Error inesperado", e.getMessage().toUpperCase());
+        }
     }
 
     private String generarContrasena(String nombre, String matricula) {
@@ -164,9 +150,6 @@ public class PracticanteControlGUI implements Initializable {
     }
 
     private String limitarTexto(String texto, int limite) {
-        if (texto == null) {
-            return "";
-        }
         return texto.substring(0, Math.min(limite, texto.length()));
     }
 
@@ -174,8 +157,7 @@ public class PracticanteControlGUI implements Initializable {
         ocultarError();
         ocultarExito();
         txtNombres.clear();
-        txtApellidoPaterno.clear();
-        txtApellidoMaterno.clear();
+        txtApellidos.clear();
         txtMatricula.clear();
         txtLenguaIndigena.clear();
         grupoGenero.selectToggle(null);

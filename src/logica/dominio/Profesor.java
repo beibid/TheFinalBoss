@@ -9,14 +9,14 @@ public class Profesor extends Usuario {
     private String numeroDePersonalProfesor;
     private Turno turno;
 
-    public Profesor (String numeroDePersonalProfesor, Turno turno, String nombre, String apellidoPaterno, String apellidoMaterno,String contrasena, Estado estado ){
-        super(nombre, apellidoPaterno, apellidoMaterno, contrasena, estado);
+    public Profesor (String numeroDePersonalProfesor, Turno turno, String nombre, String apellidos,String contrasena, Estado estado ){
+        super(nombre, apellidos, contrasena, estado);
         this.numeroDePersonalProfesor = numeroDePersonalProfesor;
         this.turno = turno;
     }
 
     public Profesor (){
-        super("", "", "", "", null);
+        super("", "", "",  null);
     }
 
     public String getNumeroDePersonalProfesor() {

@@ -6,15 +6,13 @@ import logica.dominio.enums.Estado;
 
 public class Usuario {
     protected String nombre;
-    protected String apellidoPaterno;
-    protected String apellidoMaterno;
+    protected String apellidos;
     protected String contrasena;
     protected Estado estado;
 
-    public Usuario(String nombre, String apellidoPaterno, String apellidoMaterno, String contrasena, Estado estado){
+    public Usuario(String nombre, String apellidos, String contrasena, Estado estado){
         this.nombre = nombre;
-        this.apellidoPaterno = apellidoPaterno;
-        this.apellidoMaterno = apellidoMaterno;
+        this.apellidos = apellidos;
         this.contrasena = contrasena;
         this.estado = estado;
     }
@@ -23,13 +21,11 @@ public class Usuario {
         return nombre;
     }
 
-    public String getApellidoPaterno() {
-        return apellidoPaterno;
+    public String getApellidos() {
+        return apellidos;
     }
 
-    public String getApellidoMaterno() {
-        return apellidoMaterno;
-    }
+
 
     public String getContrasena() {
         return contrasena;
@@ -43,12 +39,8 @@ public class Usuario {
         this.nombre = nombre;
     }
 
-    public void setApellidoPaterno(String apellidoPaterno) {
-        this.apellidoPaterno = apellidoPaterno;
-    }
-
-    public void setApellidoMaterno(String apellidoMaterno) {
-        this.apellidoMaterno = apellidoMaterno;
+    public void setApellidos(String apellidos) {
+        this.apellidos=apellidos;
     }
 
     public void setContrasena(String contrasena) {

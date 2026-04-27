@@ -19,7 +19,7 @@ public class UsuarioDao implements UsuarioDaoInterfaz {
 
     @Override
     public int insertarUsuario(Usuario usuario) throws UsuariosExcepcion {
-        String consultaUsuario = "insert into Usuario (nombre, apellidoPaterno, apellidoMaterno, contrasena, estado) values (?, ?, ?, ?, ?)";
+        String consultaUsuario = "insert into Usuario (nombre, apellidos, contrasena, estado) values (?, ?, ?, ?)";
         Connection conexionBaseDeDatos = null;
         PreparedStatement insercionBaseDeDatos = null;
         int idGenerado = -1;
@@ -27,10 +27,9 @@ public class UsuarioDao implements UsuarioDaoInterfaz {
             conexionBaseDeDatos = ConexionBaseDeDatos.getInstance().conectar();
             insercionBaseDeDatos = conexionBaseDeDatos.prepareStatement(consultaUsuario, Statement.RETURN_GENERATED_KEYS);
             insercionBaseDeDatos.setString(1, usuario.getNombre());
-            insercionBaseDeDatos.setString(2, usuario.getApellidoPaterno());
-            insercionBaseDeDatos.setString(3, usuario.getApellidoMaterno());
-            insercionBaseDeDatos.setString(4, usuario.getContrasena());
-            insercionBaseDeDatos.setString(5, usuario.getEstado().toString());
+            insercionBaseDeDatos.setString(2, usuario.getApellidos());
+            insercionBaseDeDatos.setString(3, usuario.getContrasena());
+            insercionBaseDeDatos.setString(4, usuario.getEstado().toString());
             insercionBaseDeDatos.executeUpdate();
             ResultSet tomarLlave = insercionBaseDeDatos.getGeneratedKeys();
             if (tomarLlave.next()) {
@@ -42,12 +41,8 @@ public class UsuarioDao implements UsuarioDaoInterfaz {
             throw new UsuariosExcepcion("Error al insertar usuario", e);
         } finally {
             try {
-                if (insercionBaseDeDatos != null) {
-                    insercionBaseDeDatos.close();
-                }
-                if (conexionBaseDeDatos != null) {
-                    conexionBaseDeDatos.close();
-                }
+                if (insercionBaseDeDatos != null) insercionBaseDeDatos.close();
+                if (conexionBaseDeDatos != null) conexionBaseDeDatos.close();
             } catch (SQLException e) {
                 LOGGER.log(Level.SEVERE, "Error al cerrar la conexión", e);
             }
@@ -57,15 +52,15 @@ public class UsuarioDao implements UsuarioDaoInterfaz {
 
     public UsuarioSesion buscarUsuario(String identificador, String contrasena) throws UsuariosExcepcion {
         String consultaBusqueda =
-                "SELECT u.nombre, u.apellidoPaterno, u.apellidoMaterno, u.estado, 'Profesor' as tipo " +
+                "SELECT u.nombre, u.apellidos, u.estado, 'Profesor' as tipo " +
                         "FROM Usuario u INNER JOIN Profesor p ON u.idUsuario = p.idUsuario " +
                         "WHERE p.numPersonalProfesor = ? AND u.contrasena = ? " +
                         "UNION " +
-                        "SELECT u.nombre, u.apellidoPaterno, u.apellidoMaterno, u.estado, 'Coordinador' as tipo " +
+                        "SELECT u.nombre, u.apellidos, u.estado, 'Coordinador' as tipo " +
                         "FROM Usuario u INNER JOIN Coordinador c ON u.idUsuario = c.idUsuario " +
                         "WHERE c.numPersonalCoordinador = ? AND u.contrasena = ? " +
                         "UNION " +
-                        "SELECT u.nombre, u.apellidoPaterno, u.apellidoMaterno, u.estado, 'Practicante' as tipo " +
+                        "SELECT u.nombre, u.apellidos, u.estado, 'Practicante' as tipo " +
                         "FROM Usuario u INNER JOIN Practicante pr ON u.idUsuario = pr.idUsuario " +
                         "WHERE pr.matricula = ? AND u.contrasena = ?";
         Connection conexionBaseDeDatos = null;
@@ -84,8 +79,7 @@ public class UsuarioDao implements UsuarioDaoInterfaz {
             if (resultado.next()) {
                 usuarioSesion = new UsuarioSesion();
                 usuarioSesion.setNombre(resultado.getString("nombre"));
-                usuarioSesion.setApellidoPaterno(resultado.getString("apellidoPaterno"));
-                usuarioSesion.setApellidoMaterno(resultado.getString("apellidoMaterno"));
+                usuarioSesion.setApellidos(resultado.getString("apellidos"));
                 usuarioSesion.setTipo(resultado.getString("tipo"));
                 usuarioSesion.setEstado(Estado.valueOf(resultado.getString("estado")));
             }
@@ -94,12 +88,8 @@ public class UsuarioDao implements UsuarioDaoInterfaz {
             throw new UsuariosExcepcion("Error al buscar usuario", e);
         } finally {
             try {
-                if (busquedaUsuario != null) {
-                    busquedaUsuario.close();
-                }
-                if (conexionBaseDeDatos != null) {
-                    conexionBaseDeDatos.close();
-                }
+                if (busquedaUsuario != null) busquedaUsuario.close();
+                if (conexionBaseDeDatos != null) conexionBaseDeDatos.close();
             } catch (SQLException e) {
                 LOGGER.log(Level.SEVERE, "Error al cerrar la conexión", e);
             }
