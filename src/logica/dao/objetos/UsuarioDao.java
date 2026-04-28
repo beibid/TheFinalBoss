@@ -62,7 +62,11 @@ public class UsuarioDao implements UsuarioDaoInterfaz {
                         "UNION " +
                         "SELECT u.nombre, u.apellidos, u.estado, 'Practicante' as tipo " +
                         "FROM Usuario u INNER JOIN Practicante pr ON u.idUsuario = pr.idUsuario " +
-                        "WHERE pr.matricula = ? AND u.contrasena = ?";
+                        "WHERE pr.matricula = ? AND u.contrasena = ? " +
+                        "UNION " +
+                        "SELECT u.nombre, u.apellidos, u.estado, 'Administrador' as tipo " +
+                        "FROM Usuario u INNER JOIN administrador a ON u.idUsuario = a.idUsuarioAdministrador " +
+                        "WHERE a.numeroDePersonalAdministrador = ? AND u.contrasena = ?";
         Connection conexionBaseDeDatos = null;
         PreparedStatement busquedaUsuario = null;
         UsuarioSesion usuarioSesion = null;
@@ -75,6 +79,8 @@ public class UsuarioDao implements UsuarioDaoInterfaz {
             busquedaUsuario.setString(4, contrasena);
             busquedaUsuario.setString(5, identificador);
             busquedaUsuario.setString(6, contrasena);
+            busquedaUsuario.setString(7, identificador);
+            busquedaUsuario.setString(8, contrasena);
             ResultSet resultado = busquedaUsuario.executeQuery();
             if (resultado.next()) {
                 usuarioSesion = new UsuarioSesion();

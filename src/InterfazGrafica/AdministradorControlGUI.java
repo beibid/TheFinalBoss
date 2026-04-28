@@ -7,12 +7,10 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import logica.dao.excepciones.RegistroDuplicadoExcepcion;
 import logica.dao.excepciones.UsuariosExcepcion;
 import logica.dao.objetos.AdministradorDao;
 import logica.dominio.Administrador;
@@ -39,7 +37,7 @@ public class AdministradorControlGUI implements Initializable {
     private void botonRegistrar() {
         ocultarError();
         ocultarExito();
-        if (confirmarAccion("¿Seguro que desea registrar al Administrador?")) {
+        if (confirmarAccion("¿Seguro que desea registrar al administrador?")) {
             procesarRegistro();
         }
     }
@@ -47,7 +45,7 @@ public class AdministradorControlGUI implements Initializable {
     @FXML
     private void botonCancelar() {
         if (confirmarAccion("¿Seguro que desea cancelar?")) {
-            limpiarCamposRegistros();
+            limpiarCampos();
         }
     }
 
@@ -73,7 +71,7 @@ public class AdministradorControlGUI implements Initializable {
     private void procesarRegistro() {
         if (!camposValidos()) {
             mostrarError("Campos obligatorios vacios",
-                    "Verifica la informacion e intente de nuevo.");
+                    "Verifique la informacion e intente de nuevo.");
             return;
         }
         guardarAdministrador(construirAdministrador());
@@ -95,6 +93,7 @@ public class AdministradorControlGUI implements Initializable {
         Administrador administrador = new Administrador();
         administrador.setNombre(limitarTexto(nombre, 55));
         administrador.setApellidos(limitarTexto(apellidos, 55));
+        administrador.setNumeroDePersonalAdministrador(limitarTexto(numeroPersonal, 20));
         administrador.setContrasena(limitarTexto(contrasena, 12));
         administrador.setEstado(Estado.Activo);
         return administrador;
@@ -105,13 +104,16 @@ public class AdministradorControlGUI implements Initializable {
         try {
             int filasAfectadas = administradorDao.insertarAdministrador(administrador);
             if (filasAfectadas > 0) {
-                limpiarCamposRegistros();
-                mostrarExito("Administrador con estado activo",
-                        "ADMINISTRADOR REGISTRADO EXITOSAMENTE.");
+                limpiarCampos();
+                mostrarExito("Administrador registrado",
+                        "EL ADMINISTRADOR FUE REGISTRADO EXITOSAMENTE.");
             } else {
                 mostrarError("Error al registrar",
                         "NO SE PUDO REGISTRAR EL ADMINISTRADOR. INTENTE DE NUEVO.");
             }
+        } catch (RegistroDuplicadoExcepcion e) {
+            mostrarError("Numero de personal repetido",
+                    "EL NUMERO DE PERSONAL YA EXISTE EN EL SISTEMA. VERIFIQUE LA INFORMACION.");
         } catch (UsuariosExcepcion e) {
             mostrarError("Error inesperado", e.getMessage().toUpperCase());
         }
@@ -125,7 +127,7 @@ public class AdministradorControlGUI implements Initializable {
         return texto.substring(0, Math.min(limite, texto.length()));
     }
 
-    private void limpiarCamposRegistros() {
+    private void limpiarCampos() {
         ocultarError();
         ocultarExito();
         txtNombres.clear();

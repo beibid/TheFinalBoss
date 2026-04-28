@@ -1,7 +1,6 @@
 package logica.dao.objetos;
 
 import acceso.bd.ConexionBaseDeDatos;
-import logica.dao.excepciones.RegistroDuplicadoExcepcion;
 import logica.dao.excepciones.UsuariosExcepcion;
 import logica.dao.interfaces.AdministradorDaoInterfaz;
 import logica.dominio.Administrador;
@@ -19,7 +18,7 @@ public class AdministradorDao implements AdministradorDaoInterfaz {
     @Override
     public int insertarAdministrador(Administrador administrador) throws UsuariosExcepcion {
         String consultaUsuario = "INSERT INTO Usuario (nombre, apellidos, contrasena, estado) VALUES (?, ?, ?, ?)";
-        String consultaAdministrador = "INSERT INTO administrador (numPersonalAdministrador, idUsuario) VALUES (?, ?)";
+        String consultaAdministrador = "INSERT INTO administrador (numeroDePersonalAdministrador, idUsuarioAdministrador) VALUES (?, ?)";
         Connection conexionBaseDeDatos = null;
         PreparedStatement insercionUsuario = null;
         PreparedStatement insercionAdministrador = null;
@@ -44,9 +43,6 @@ public class AdministradorDao implements AdministradorDaoInterfaz {
             LOGGER.info("Administrador insertado correctamente con ID de usuario: " + idUsuarioGenerado);
         } catch (SQLException e) {
             LOGGER.log(Level.SEVERE, "Error al insertar Administrador", e);
-            if (e.getMessage().contains("Duplicate entry")) {
-                throw new RegistroDuplicadoExcepcion("El numero de personal ya existe", e);
-            }
             throw new UsuariosExcepcion("Error al insertar administrador", e);
         } finally {
             try {

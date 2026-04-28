@@ -79,6 +79,7 @@ public class IniciarSesionControlGUI implements Initializable {
             case "Coordinador": return "/InterfazGrafica/vistas/SeccionCoordinadorVista.fxml";
             case "Profesor":    return "/InterfazGrafica/vistas/SeccionProfesorVista.fxml";
             case "Practicante": return "/InterfazGrafica/vistas/SeccionPracticanteVista.fxml";
+            case "Administrador":  return "/InterfazGrafica/vistas/SeccionAdministradorVista.fxml";
             default:            return null;
         }
     }

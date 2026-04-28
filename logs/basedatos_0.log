@@ -520,3 +520,33 @@ abr 27, 2026 2:21:28 P.M. acceso.bd.ConexionBaseDeDatos conectar
 FINE: Intentando establecer conexión a la base de datos...
 abr 27, 2026 2:21:29 P.M. acceso.bd.ConexionBaseDeDatos conectar
 INFO: Conexión a base de datos realizada exitosamente en 252 ms
+abr 27, 2026 6:17:38 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
+INFO: Configuración de base de datos cargada correctamente
+abr 27, 2026 6:17:38 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
+CONFIG: URL de conexión: jdbc:mysql://localhost:3306/practicas_profesionales
+abr 27, 2026 6:17:38 P.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexión a la base de datos...
+abr 27, 2026 6:17:38 P.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexión a base de datos realizada exitosamente en 369 ms
+abr 27, 2026 6:17:38 P.M. logica.dao.objetos.AdministradorDao insertarAdministrador
+INFO: Administrador insertado correctamente con ID de usuario: 74
+abr 27, 2026 6:18:36 P.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexión a la base de datos...
+abr 27, 2026 6:18:36 P.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexión a base de datos realizada exitosamente en 66 ms
+abr 27, 2026 6:18:59 P.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexión a la base de datos...
+abr 27, 2026 6:19:00 P.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexión a base de datos realizada exitosamente en 51 ms
+abr 27, 2026 6:21:36 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
+INFO: Configuración de base de datos cargada correctamente
+abr 27, 2026 6:21:36 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
+CONFIG: URL de conexión: jdbc:mysql://localhost:3306/practicas_profesionales
+abr 27, 2026 6:21:36 P.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexión a la base de datos...
+abr 27, 2026 6:21:37 P.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexión a base de datos realizada exitosamente en 335 ms
+abr 27, 2026 6:21:53 P.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexión a la base de datos...
+abr 27, 2026 6:21:53 P.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexión a base de datos realizada exitosamente en 25 ms
