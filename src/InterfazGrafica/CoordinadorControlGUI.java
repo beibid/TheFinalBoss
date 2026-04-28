@@ -54,7 +54,7 @@ public class CoordinadorControlGUI implements Initializable {
 
     @FXML
     private void botonRegresar(ActionEvent event) throws Exception {
-        Parent root = FXMLLoader.load(getClass().getResource("/InterfazGrafica/vistas/SeccionCoordinadorVista.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("/InterfazGrafica/vistas/SeccionAdministradorVista.fxml"));
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.setScene(new Scene(root));
         stage.show();

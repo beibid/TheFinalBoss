@@ -18,32 +18,31 @@ public class SeccionAdministradorGUI implements Initializable {
 
     @FXML
     private void botonRegistrarCoordinador(ActionEvent event) throws Exception {
-        Parent root = FXMLLoader.load(getClass().getResource("/InterfazGrafica/vistas/CoordinadorVista.fxml"));
-        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        stage.setScene(new Scene(root));
-        stage.show();
+        abrirVentana("/InterfazGrafica/vistas/CoordinadorVista.fxml", "Registrar Coordinador");
     }
 
     @FXML
     private void botonInactivarCoordinador(ActionEvent event) throws Exception {
-        Parent root = FXMLLoader.load(getClass().getResource("/InterfazGrafica/vistas/InactivarCoordinadorVista.fxml"));
-        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        stage.setScene(new Scene(root));
-        stage.show();
+        abrirVentana("/InterfazGrafica/vistas/InactivarCoordinadorVista.fxml", "Inactivar Coordinador");
     }
 
     @FXML
     private void botonRegistrarAdministrador(ActionEvent event) throws Exception {
-        Parent root = FXMLLoader.load(getClass().getResource("/InterfazGrafica/vistas/RegistrarAdministradorVista.fxml"));
-        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        stage.setScene(new Scene(root));
-        stage.show();
+        abrirVentana("/InterfazGrafica/vistas/AdministradorVista.fxml", "Registrar Administrador");
     }
 
     @FXML
     private void botonRegresar(ActionEvent event) throws Exception {
         Parent root = FXMLLoader.load(getClass().getResource("/InterfazGrafica/vistas/IniciarSesionVista.fxml"));
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        stage.setScene(new Scene(root));
+        stage.show();
+    }
+
+    private void abrirVentana(String fxml, String titulo) throws Exception {
+        Parent root = FXMLLoader.load(getClass().getResource(fxml));
+        Stage stage = new Stage();
+        stage.setTitle(titulo);
         stage.setScene(new Scene(root));
         stage.show();
     }
