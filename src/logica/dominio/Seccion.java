@@ -10,6 +10,10 @@ public class Seccion {
         this.periodo = periodo;
     }
 
+    public Seccion(){
+
+    }
+
     public String getNoSeccion() {
         return noSeccion;
     }
@@ -22,5 +26,10 @@ public class Seccion {
     }
     public void setPeriodo(String periodo) {
         this.periodo = periodo;
+    }
+
+    @Override
+    public String toString() {
+        return noSeccion + " " + periodo;
     }
 }

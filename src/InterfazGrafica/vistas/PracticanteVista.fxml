@@ -8,10 +8,10 @@
     <children>
 
 
-        <VBox layoutX="0.0" layoutY="0.0" prefHeight="535.0" prefWidth="180.0" style="-fx-background-color: #3a3a3a; -fx-padding: 15;">
+        <VBox layoutX="0.0" layoutY="0.0" prefHeight="535.0" prefWidth="180.0" style="-fx-background-color: #2ecc71; -fx-padding: 15;">
             <children>
                 <Label style="-fx-text-fill: white; -fx-font-size: 16; -fx-font-weight: bold;" text="Registro" />
-                <Label style="-fx-text-fill: #aaaaaa; -fx-font-size: 12;" text="Practicante">
+                <Label style="-fx-text-fill: black; -fx-font-size: 12;" text="Practicante" >
                     <VBox.margin><Insets top="4.0" /></VBox.margin>
                 </Label>
             </children>
@@ -61,7 +61,7 @@
 
                 <HBox spacing="15.0">
                     <VBox.margin><Insets top="45.0" /></VBox.margin>
-                    <Button fx:id="botonRegistrar" onAction="#botonRegistrar" prefHeight="35.0" prefWidth="140.0" style="-fx-background-color: #2c3e50; -fx-text-fill: white; -fx-background-radius: 6;" text="Registrar" />
+                    <Button fx:id="botonRegistrar" onAction="#botonRegistrar" prefHeight="35.0" prefWidth="140.0" style="-fx-background-color: #27ae60; -fx-text-fill: white; -fx-background-radius: 6;" text="Registrar" />
                     <Button fx:id="botonCancelarRegistro" onAction="#botonCancelar" prefHeight="35.0" prefWidth="140.0" style="-fx-background-color: #c0392b; -fx-text-fill: white; -fx-background-radius: 6;" text="Cancelar" />
                 </HBox>
 

@@ -7,7 +7,6 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.text.Font?>
 
 <AnchorPane prefHeight="450.0" prefWidth="600.0"
             xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1"
@@ -20,58 +19,55 @@
 
                 <Label text="Inactivar Profesor" style="-fx-font-size: 22; -fx-font-weight: bold;"/>
 
-                <!-- Panel error -->
+
                 <VBox fx:id="panelError" managed="false" prefWidth="500.0" spacing="4.0"
                       style="-fx-border-color: #8B0000; -fx-border-width: 2; -fx-background-color: #f5f5dc; -fx-padding: 10;"
                       visible="false">
                     <HBox alignment="CENTER_LEFT" spacing="8">
                         <Label text="✖" style="-fx-text-fill: #8B0000; -fx-font-size: 14; -fx-font-weight: bold;"/>
-                        <Label fx:id="lblTituloError" style="-fx-font-weight: bold; -fx-text-fill: #8B0000;" text=""/>
+                        <Label fx:id="etiquetaTituloError" style="-fx-font-weight: bold; -fx-text-fill: #8B0000;" text=""/>
                     </HBox>
-                    <Label fx:id="lblMensajeError" style="-fx-text-fill: #8B0000; -fx-font-size: 11;" text=""/>
+                    <Label fx:id="etiquetaMensajeError" style="-fx-text-fill: #8B0000; -fx-font-size: 11;" text=""/>
                 </VBox>
 
-                <!-- Panel exito -->
+
                 <VBox fx:id="panelExito" managed="false" prefWidth="500.0" spacing="4.0"
                       style="-fx-border-color: #2d6a2d; -fx-border-width: 2; -fx-background-color: #f0f7f0; -fx-padding: 10;"
                       visible="false">
                     <HBox alignment="CENTER_LEFT" spacing="8">
                         <Label text="✔" style="-fx-text-fill: #2d6a2d; -fx-font-size: 14; -fx-font-weight: bold;"/>
-                        <Label fx:id="lblTituloExito" style="-fx-font-weight: bold; -fx-text-fill: #2d6a2d;" text=""/>
+                        <Label fx:id="etiquetaTituloExito" style="-fx-font-weight: bold; -fx-text-fill: #2d6a2d;" text=""/>
                     </HBox>
-                    <Label fx:id="lblMensajeExito" style="-fx-text-fill: #2d6a2d; -fx-font-size: 11;" text=""/>
+                    <Label fx:id="etiquetaMensajeExito" style="-fx-text-fill: #2d6a2d; -fx-font-size: 11;" text=""/>
                 </VBox>
 
-                <!-- ComboBox -->
                 <Label text="Selecciona un profesor activo" style="-fx-font-size: 13;"/>
-                <ComboBox fx:id="cmbProfesores" prefWidth="500.0" promptText="-- Selecciona un profesor --"
+                <ComboBox fx:id="comboBoxProfesores" prefWidth="500.0" promptText="-- Selecciona un profesor --"
                           onAction="#seleccionarProfesor"/>
 
-                <!-- Datos del profesor -->
                 <VBox fx:id="panelDatos" managed="false" visible="false" spacing="8.0"
                       style="-fx-border-color: #cccccc; -fx-border-width: 1; -fx-padding: 15; -fx-background-color: #f9f9f9;">
                     <Label text="Datos del profesor" style="-fx-font-weight: bold; -fx-font-size: 13;"/>
                     <HBox spacing="10.0">
                         <Label text="Nombre:" style="-fx-font-weight: bold;"/>
-                        <Label fx:id="lblNombre" text=""/>
+                        <Label fx:id="etiquetaNombre" text=""/>
                     </HBox>
                     <HBox spacing="10.0">
                         <Label text="Apellidos:" style="-fx-font-weight: bold;"/>
-                        <Label fx:id="lblApellidos" text=""/>
+                        <Label fx:id="etiquetaApellidos" text=""/>
                     </HBox>
                     <HBox spacing="10.0">
                         <Label text="Número de personal:" style="-fx-font-weight: bold;"/>
-                        <Label fx:id="lblNumeroPersonal" text=""/>
+                        <Label fx:id="etiquetaNumeroPersonal" text=""/>
                     </HBox>
                 </VBox>
 
-                <!-- Botones -->
                 <HBox spacing="15.0">
                     <VBox.margin><Insets top="10.0"/></VBox.margin>
-                    <Button fx:id="btnInactivar" onAction="#botonInactivar" prefWidth="140.0" prefHeight="35.0"
+                    <Button fx:id="botonInactivar" onAction="#botonInactivar" prefWidth="140.0" prefHeight="35.0"
                             text="Inactivar"
                             style="-fx-background-color: #c0392b; -fx-text-fill: white; -fx-background-radius: 6;"/>
-                    <Button fx:id="btnCancelar" onAction="#botonCancelar" prefWidth="140.0" prefHeight="35.0"
+                    <Button fx:id="botonCancelar" onAction="#botonCancelar" prefWidth="140.0" prefHeight="35.0"
                             text="Cancelar"
                             style="-fx-background-color: #7f8c8d; -fx-text-fill: white; -fx-background-radius: 6;"/>
                 </HBox>
@@ -79,7 +75,7 @@
             </children>
         </VBox>
 
-        <Button layoutX="510.0" layoutY="10.0" onAction="#botonRegresar"
+        <Button fx:id="botonRegresar" layoutX="510.0" layoutY="10.0" onAction="#botonRegresar"
                 prefHeight="28.0" prefWidth="75.0" text="Regresar"
                 style="-fx-background-color: #7f8c8d; -fx-text-fill: white; -fx-background-radius: 6;"/>
 

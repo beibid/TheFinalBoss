@@ -9,6 +9,10 @@ public class PracticanteSeccion {
         this.noSeccion = noSeccion;
     }
 
+    public PracticanteSeccion(){
+
+    }
+
     public String getMatricula() {
         return matricula;
     }

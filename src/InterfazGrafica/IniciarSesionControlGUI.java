@@ -19,11 +19,11 @@ import java.util.ResourceBundle;
 
 public class IniciarSesionControlGUI implements Initializable {
 
-    @FXML private TextField txtIdentificador;
-    @FXML private PasswordField txtContrasena;
+    @FXML private TextField campoTextoIdentificador;
+    @FXML private PasswordField campoTextoContrasena;
     @FXML private VBox panelError;
-    @FXML private Label lblTituloError;
-    @FXML private Label lblMensajeError;
+    @FXML private Label etiquetaTituloError;
+    @FXML private Label etiquetaMensajeError;
 
     private UsuarioDao usuarioDao = new UsuarioDao();
 
@@ -35,8 +35,8 @@ public class IniciarSesionControlGUI implements Initializable {
     @FXML
     private void botonIniciarSesion() {
         ocultarError();
-        String identificador = txtIdentificador.getText().trim();
-        String contrasena = txtContrasena.getText().trim();
+        String identificador = campoTextoIdentificador.getText().trim();
+        String contrasena = campoTextoContrasena.getText().trim();
 
         if (camposVacios(identificador, contrasena)) {
             mostrarError("Campos vacíos", "POR FAVOR INGRESA TUS CREDENCIALES.");
@@ -89,7 +89,7 @@ public class IniciarSesionControlGUI implements Initializable {
     private void cargarVista(String fxml) {
         try {
             Parent root = FXMLLoader.load(getClass().getResource(fxml));
-            Stage stage = (Stage) txtIdentificador.getScene().getWindow();
+            Stage stage = (Stage) campoTextoIdentificador.getScene().getWindow();
             stage.setScene(new Scene(root));
             stage.show();
         } catch (Exception e) {
@@ -98,8 +98,8 @@ public class IniciarSesionControlGUI implements Initializable {
     }
 
     private void mostrarError(String titulo, String mensaje) {
-        lblTituloError.setText(titulo);
-        lblMensajeError.setText(mensaje);
+        etiquetaTituloError.setText(titulo);
+        etiquetaMensajeError.setText(mensaje);
         panelError.setVisible(true);
         panelError.setManaged(true);
     }

@@ -4,9 +4,13 @@ import acceso.bd.ConexionBaseDeDatos;
 import logica.dao.excepciones.UsuariosExcepcion;
 import logica.dominio.Seccion;
 import logica.dao.interfaces.SeccionDaoInterfaz;
+
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -76,4 +80,36 @@ public class SeccionDao implements SeccionDaoInterfaz {
         }
         return filasAfectadas;
     }
+
+    public List<Seccion> obtenerSecciones() throws UsuariosExcepcion {
+        String consulta = "SELECT noSeccion, periodo FROM Seccion";
+        Connection conexionBaseDeDatos = null;
+        PreparedStatement consultaSecciones = null;
+        List<Seccion> secciones = new ArrayList<>();
+
+        try {
+            conexionBaseDeDatos = ConexionBaseDeDatos.getInstance().conectar();
+            consultaSecciones = conexionBaseDeDatos.prepareStatement(consulta);
+            ResultSet resultado = consultaSecciones.executeQuery();
+
+            while (resultado.next()) {
+                Seccion seccion = new Seccion();
+                seccion.setNoSeccion(resultado.getString("noSeccion"));
+                seccion.setPeriodo(resultado.getString("periodo"));
+                secciones.add(seccion);
+            }
+        } catch (SQLException e) {
+            LOGGER.log(Level.SEVERE, "Error al obtener secciones", e);
+            throw new UsuariosExcepcion("Error al obtener secciones", e);
+        } finally {
+            try {
+                if (consultaSecciones != null) consultaSecciones.close();
+                if (conexionBaseDeDatos != null) conexionBaseDeDatos.close();
+            } catch (SQLException e) {
+                LOGGER.log(Level.SEVERE, "Error al cerrar la conexión", e);
+            }
+        }
+        return secciones;
+    }
+
 }

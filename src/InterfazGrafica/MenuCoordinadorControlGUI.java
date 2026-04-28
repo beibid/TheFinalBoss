@@ -74,6 +74,9 @@ public class MenuCoordinadorControlGUI implements Initializable {
         stage.show();
     }
 
+    @FXML
+    private
+
     private void abrirVentana(String fxml, String titulo) throws Exception {
         Parent root = FXMLLoader.load(getClass().getResource(fxml));
         Stage stage = new Stage();

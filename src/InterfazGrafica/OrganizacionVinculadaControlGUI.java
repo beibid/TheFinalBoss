@@ -18,14 +18,14 @@ import logica.dao.objetos.OrganizacionVinculadaDao;
 import logica.dominio.OrganizacionVinculada;
 
 public class OrganizacionVinculadaControlGUI implements Initializable {
-    @FXML private TextField txtNombre;
-    @FXML private TextField txtDireccion;
+    @FXML private TextField campoTextoNombre;
+    @FXML private TextField campoTextoDireccion;
     @FXML private VBox panelError;
-    @FXML private Label lblTituloError;
-    @FXML private Label lblMensajeError;
+    @FXML private Label etiquetaTituloError;
+    @FXML private Label etiquetaMensajeError;
     @FXML private VBox panelExito;
-    @FXML private Label lblTituloExito;
-    @FXML private Label lblMensajeExito;
+    @FXML private Label etiquetaTituloExito;
+    @FXML private Label etiquetaMensajeExito;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {}
@@ -47,8 +47,8 @@ public class OrganizacionVinculadaControlGUI implements Initializable {
         alerta.showAndWait().ifPresent(respuesta -> {
             if (respuesta == btnSi) {
 
-                String nombre = txtNombre.getText().trim();
-                String direccion = txtDireccion.getText().trim();
+                String nombre = campoTextoNombre.getText().trim();
+                String direccion = campoTextoDireccion.getText().trim();
 
                 if (nombre.isEmpty() || direccion.isEmpty()) {
                     mostrarError("Campos obligatorios vacios",
@@ -101,22 +101,20 @@ public class OrganizacionVinculadaControlGUI implements Initializable {
 
     @FXML
     private void botonRegresar(ActionEvent event) throws Exception{
-        Parent root = FXMLLoader.load(getClass().getResource("/InterfazGrafica/vistas/MenuCoordinadorVista.fxml"));
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        stage.setScene(new Scene(root));
-        stage.show();
+        stage.close();
     }
 
     private void limpiarCampos() {
         ocultarError();
         ocultarExito();
-        txtNombre.clear();
-        txtDireccion.clear();
+        campoTextoNombre.clear();
+        campoTextoDireccion.clear();
     }
 
     private void mostrarError(String titulo, String mensaje) {
-        lblTituloError.setText(titulo);
-        lblMensajeError.setText(mensaje);
+        etiquetaTituloError.setText(titulo);
+        etiquetaMensajeError.setText(mensaje);
         panelError.setVisible(true);
         panelError.setManaged(true);
     }
@@ -127,8 +125,8 @@ public class OrganizacionVinculadaControlGUI implements Initializable {
     }
 
     private void mostrarExito(String titulo, String mensaje) {
-        lblTituloExito.setText(titulo);
-        lblMensajeExito.setText(mensaje);
+        etiquetaTituloExito.setText(titulo);
+        etiquetaMensajeExito.setText(mensaje);
         panelExito.setVisible(true);
         panelExito.setManaged(true);
     }

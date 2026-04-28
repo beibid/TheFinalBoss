@@ -1,7 +1,6 @@
 package InterfazGrafica;
 
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -30,21 +29,21 @@ import java.util.ResourceBundle;
 
 
 public class ProyectoControlGUI implements Initializable{
-    @FXML private TextField txtNombreProyecto;
-    @FXML private TextField txtDescripcion;
-    @FXML private TextField txtResponsable;
-    @FXML private TextField txtNombreEmpresa;
-    @FXML private TextField txtSectorEmpresa;
-    @FXML private TextField txtDireccionEmpresa;
-    @FXML private ComboBox<Practicante> cmbPracticante;
-    @FXML private ComboBox<Coordinador> cmbCoordinador;
-    @FXML private ComboBox<OrganizacionVinculada> cmbOrganizacion;
+    @FXML private TextField campoTextoNombreProyecto;
+    @FXML private TextField campoTextoDescripcion;
+    @FXML private TextField campoTextoResponsable;
+    @FXML private TextField campoTextoNombreEmpresa;
+    @FXML private TextField campoTextoSectorEmpresa;
+    @FXML private TextField campoTextoDireccionEmpresa;
+    @FXML private ComboBox<Practicante> comboBoxPracticante;
+    @FXML private ComboBox<Coordinador> comboBoxCoordinador;
+    @FXML private ComboBox<OrganizacionVinculada> comboBoxOrganizacion;
     @FXML private VBox panelError;
     @FXML private VBox panelExito;
-    @FXML private Label lblTituloError;
-    @FXML private Label lblMensajeError;
-    @FXML private Label lblTituloExito;
-    @FXML private Label lblMensajeExito;
+    @FXML private Label etiquetaTituloError;
+    @FXML private Label etiquetaMensajeError;
+    @FXML private Label etiquetaTituloExito;
+    @FXML private Label etiquetaMensajeExito;
 
     private ProyectoDao proyectoDao = new ProyectoDao();
     private PracticanteDao practicanteDao = new PracticanteDao();
@@ -65,7 +64,7 @@ public class ProyectoControlGUI implements Initializable{
     private void cargarPracticantes() {
         try {
             List<Practicante> practicantes = practicanteDao.obtenerPracticantesActivos();
-            cmbPracticante.setItems(FXCollections.observableArrayList(practicantes));
+            comboBoxPracticante.setItems(FXCollections.observableArrayList(practicantes));
         } catch (UsuariosExcepcion e) {
             mostrarError("Error al cargar", "NO SE PUDIERON CARGAR LOS PRACTICANTES.");
         }
@@ -74,7 +73,7 @@ public class ProyectoControlGUI implements Initializable{
     private void cargarCoordinadores() {
         try {
             List<Coordinador> coordinadores = coordinadorDao.obtenerCoordinadoresActivos();
-            cmbCoordinador.setItems(FXCollections.observableArrayList(coordinadores));
+            comboBoxCoordinador.setItems(FXCollections.observableArrayList(coordinadores));
         } catch (UsuariosExcepcion e) {
             mostrarError("Error al cargar", "NO SE PUDIERON CARGAR LOS COORDINADORES.");
         }
@@ -83,7 +82,7 @@ public class ProyectoControlGUI implements Initializable{
     private void cargarOrganizaciones() {
         try {
             List<OrganizacionVinculada> organizaciones = organizacionDao.obtenerOrganizacionesActivas();
-            cmbOrganizacion.setItems(FXCollections.observableArrayList(organizaciones));
+            comboBoxOrganizacion.setItems(FXCollections.observableArrayList(organizaciones));
         } catch (UsuariosExcepcion e) {
             mostrarError("Error al cargar", "NO SE PUDIERON CARGAR LAS ORGANIZACIONES.");
         }
@@ -94,19 +93,19 @@ public class ProyectoControlGUI implements Initializable{
         ocultarError();
         ocultarExito();
 
-        String nombreProyecto = txtNombreProyecto.getText().trim();
-        String descripcion = txtDescripcion.getText().trim();
-        String responsable = txtResponsable.getText().trim();
-        String nombreEmpresa = txtNombreEmpresa.getText().trim();
-        String sectorEmpresa = txtSectorEmpresa.getText().trim();
-        String direccionEmpresa = txtDireccionEmpresa.getText().trim();
+        String nombreProyecto = campoTextoNombreProyecto.getText().trim();
+        String descripcion = campoTextoDescripcion.getText().trim();
+        String responsable = campoTextoResponsable.getText().trim();
+        String nombreEmpresa = campoTextoNombreEmpresa.getText().trim();
+        String sectorEmpresa = campoTextoSectorEmpresa.getText().trim();
+        String direccionEmpresa = campoTextoDireccionEmpresa.getText().trim();
 
         if (camposVacios(nombreProyecto, descripcion, responsable, nombreEmpresa, sectorEmpresa, direccionEmpresa)) {
             mostrarError("Campos obligatorios vacíos", "POR FAVOR LLENA TODOS LOS CAMPOS.");
             return;
         }
 
-        if (cmbPracticante.getValue() == null || cmbCoordinador.getValue() == null || cmbOrganizacion.getValue() == null) {
+        if (comboBoxPracticante.getValue() == null || comboBoxCoordinador.getValue() == null || comboBoxOrganizacion.getValue() == null) {
             mostrarError("Selección incompleta", "POR FAVOR SELECCIONA PRACTICANTE, COORDINADOR Y ORGANIZACIÓN.");
             return;
         }
@@ -131,9 +130,9 @@ public class ProyectoControlGUI implements Initializable{
         proyecto.setNombreEmpresa(nombreEmpresa);
         proyecto.setSectorEmpresa(sectorEmpresa);
         proyecto.setDireccionEmpresa(direccionEmpresa);
-        proyecto.setMatricula(cmbPracticante.getValue().getMatricula());
-        proyecto.setNumPersonalCoordinador(cmbCoordinador.getValue().getNumeroDePersonalCoordinador());
-        proyecto.setIdOrganizacion(cmbOrganizacion.getValue().getIdOrganizacion());
+        proyecto.setMatricula(comboBoxPracticante.getValue().getMatricula());
+        proyecto.setNumPersonalCoordinador(comboBoxCoordinador.getValue().getNumeroDePersonalCoordinador());
+        proyecto.setIdOrganizacion(comboBoxOrganizacion.getValue().getIdOrganizacion());
         proyecto.setEstado(EstadoProyecto.Disponible);
         proyecto.setFechaRegistro(Date.valueOf(LocalDate.now()));
         return proyecto;
@@ -165,22 +164,22 @@ public class ProyectoControlGUI implements Initializable{
     }
 
     private void limpiar() {
-        txtNombreProyecto.clear();
-        txtDescripcion.clear();
-        txtResponsable.clear();
-        txtNombreEmpresa.clear();
-        txtSectorEmpresa.clear();
-        txtDireccionEmpresa.clear();
-        cmbPracticante.getSelectionModel().clearSelection();
-        cmbCoordinador.getSelectionModel().clearSelection();
-        cmbOrganizacion.getSelectionModel().clearSelection();
+        campoTextoNombreProyecto.clear();
+        campoTextoDescripcion.clear();
+        campoTextoResponsable.clear();
+        campoTextoNombreEmpresa.clear();
+        campoTextoSectorEmpresa.clear();
+        campoTextoDireccionEmpresa.clear();
+        comboBoxPracticante.getSelectionModel().clearSelection();
+        comboBoxCoordinador.getSelectionModel().clearSelection();
+        comboBoxOrganizacion.getSelectionModel().clearSelection();
         ocultarError();
         ocultarExito();
     }
 
     private void mostrarError(String titulo, String mensaje) {
-        lblTituloError.setText(titulo);
-        lblMensajeError.setText(mensaje);
+        etiquetaTituloError.setText(titulo);
+        etiquetaMensajeError.setText(mensaje);
         panelError.setVisible(true);
         panelError.setManaged(true);
     }
@@ -191,8 +190,8 @@ public class ProyectoControlGUI implements Initializable{
     }
 
     private void mostrarExito(String titulo, String mensaje) {
-        lblTituloExito.setText(titulo);
-        lblMensajeExito.setText(mensaje);
+        etiquetaTituloExito.setText(titulo);
+        etiquetaMensajeExito.setText(mensaje);
         panelExito.setVisible(true);
         panelExito.setManaged(true);
     }

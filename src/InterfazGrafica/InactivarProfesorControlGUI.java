@@ -11,7 +11,6 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
-import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import logica.dao.excepciones.UsuariosExcepcion;
 import logica.dao.objetos.ProfesorDao;
@@ -22,17 +21,17 @@ import java.util.ResourceBundle;
 
 public class InactivarProfesorControlGUI implements Initializable {
 
-    @FXML private ComboBox<Profesor> cmbProfesores;
+    @FXML private ComboBox<Profesor> comboBoxProfesores;
     @FXML private VBox panelDatos;
     @FXML private VBox panelError;
     @FXML private VBox panelExito;
-    @FXML private Label lblTituloError;
-    @FXML private Label lblMensajeError;
-    @FXML private Label lblTituloExito;
-    @FXML private Label lblMensajeExito;
-    @FXML private Label lblNombre;
-    @FXML private Label lblApellidos;
-    @FXML private Label lblNumeroPersonal;
+    @FXML private Label etiquetaTituloError;
+    @FXML private Label etiquetaMensajeError;
+    @FXML private Label etiquetaTituloExito;
+    @FXML private Label etiquetaMensajeExito;
+    @FXML private Label etiquetaNombre;
+    @FXML private Label etiquetaApellidos;
+    @FXML private Label etiquetaNumeroPersonal;
 
     private ProfesorDao profesorDao = new ProfesorDao();
 
@@ -45,7 +44,7 @@ public class InactivarProfesorControlGUI implements Initializable {
         try {
             List<Profesor> profesores = profesorDao.obtenerProfesoresActivos();
             ObservableList<Profesor> lista = FXCollections.observableArrayList(profesores);
-            cmbProfesores.setItems(lista);
+            comboBoxProfesores.setItems(lista);
         } catch (UsuariosExcepcion e) {
             mostrarError("Error al cargar", "NO SE PUDIERON CARGAR LOS PROFESORES.");
         }
@@ -53,11 +52,11 @@ public class InactivarProfesorControlGUI implements Initializable {
 
     @FXML
     private void seleccionarProfesor() {
-        Profesor profesor = cmbProfesores.getSelectionModel().getSelectedItem();
+        Profesor profesor = comboBoxProfesores.getSelectionModel().getSelectedItem();
         if (profesor != null) {
-            lblNombre.setText(profesor.getNombre());
-            lblApellidos.setText(profesor.getApellidos());
-            lblNumeroPersonal.setText(profesor.getNumeroDePersonalProfesor());
+            etiquetaNombre.setText(profesor.getNombre());
+            etiquetaApellidos.setText(profesor.getApellidos());
+            etiquetaNumeroPersonal.setText(profesor.getNumeroDePersonalProfesor());
             panelDatos.setVisible(true);
             panelDatos.setManaged(true);
         }
@@ -65,7 +64,7 @@ public class InactivarProfesorControlGUI implements Initializable {
 
     @FXML
     private void botonInactivar() {
-        Profesor profesor = cmbProfesores.getSelectionModel().getSelectedItem();
+        Profesor profesor = comboBoxProfesores.getSelectionModel().getSelectedItem();
         if (profesor == null) {
             mostrarError("Sin selección", "POR FAVOR SELECCIONA UN PROFESOR.");
             return;
@@ -118,7 +117,7 @@ public class InactivarProfesorControlGUI implements Initializable {
 
 
     private void limpiar() {
-        cmbProfesores.getSelectionModel().clearSelection();
+        comboBoxProfesores.getSelectionModel().clearSelection();
         panelDatos.setVisible(false);
         panelDatos.setManaged(false);
         ocultarError();
@@ -126,8 +125,8 @@ public class InactivarProfesorControlGUI implements Initializable {
     }
 
     private void mostrarError(String titulo, String mensaje) {
-        lblTituloError.setText(titulo);
-        lblMensajeError.setText(mensaje);
+        etiquetaTituloError.setText(titulo);
+        etiquetaMensajeError.setText(mensaje);
         panelError.setVisible(true);
         panelError.setManaged(true);
     }
@@ -138,8 +137,8 @@ public class InactivarProfesorControlGUI implements Initializable {
     }
 
     private void mostrarExito(String titulo, String mensaje) {
-        lblTituloExito.setText(titulo);
-        lblMensajeExito.setText(mensaje);
+        etiquetaTituloExito.setText(titulo);
+        etiquetaMensajeExito.setText(mensaje);
         panelExito.setVisible(true);
         panelExito.setManaged(true);
     }
