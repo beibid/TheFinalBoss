@@ -20,6 +20,13 @@
                 <Button fx:id="botonInactivarPracticante" onAction="#abrirInactivarPracticante" prefWidth="170.0" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-alignment: CENTER-LEFT;" text="Inactivar">
                     <VBox.margin><Insets top="3.0" /></VBox.margin>
                 </Button>
+                <Button fx:id="botonAsignarPracticanteEnSeccion" onAction="#abrirAsignarPracticanteEnSeccion" prefWidth="170.0" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-alignment: CENTER-LEFT;" text="Asignar a seccion">
+                    <VBox.margin><Insets top="3.0" /></VBox.margin>
+                </Button>
+                <Button fx:id="botonAsignarProyectoAlPracticante" onAction="#abrirAsignarProyectoAlPracticante" prefWidth="170.0" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-alignment: CENTER-LEFT;" text="Asignarle proyecto">
+                    <VBox.margin><Insets top="3.0" /></VBox.margin>
+                </Button>
+
 
                 <Separator><VBox.margin><Insets bottom="10.0" top="10.0" /></VBox.margin></Separator>
 

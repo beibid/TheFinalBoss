@@ -9,10 +9,10 @@
     <children>
 
 
-        <VBox layoutX="0.0" layoutY="0.0" prefHeight="700.0" prefWidth="180.0" style="-fx-background-color: #3a3a3a; -fx-padding: 15;">
+        <VBox layoutX="0.0" layoutY="0.0" prefHeight="700.0" prefWidth="180.0" style="-fx-background-color: #2ecc71; -fx-padding: 15;">
             <children>
                 <Label style="-fx-text-fill: white; -fx-font-size: 16; -fx-font-weight: bold;" text="Modificar" />
-                <Label style="-fx-text-fill: #aaaaaa; -fx-font-size: 12;" text="Proyecto">
+                <Label style="-fx-text-fill: black; -fx-font-size: 12;" text="Proyecto">
                     <VBox.margin><Insets top="4.0" /></VBox.margin>
                 </Label>
             </children>

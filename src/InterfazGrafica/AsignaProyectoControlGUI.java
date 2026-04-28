@@ -24,7 +24,10 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 
-public class PracticanteEnSeccionControlGUI implements Initializable{
+
+public class AsignaProyectoControlGUI implements Initializable{
+
+
     @FXML private ComboBox<Practicante> comboBoxPracticantes;
     @FXML private ComboBox<Seccion> comboBoxSecciones;
 
@@ -170,5 +173,6 @@ public class PracticanteEnSeccionControlGUI implements Initializable{
         panelExito.setVisible(false);
         panelExito.setManaged(false);
     }
+
 
 }

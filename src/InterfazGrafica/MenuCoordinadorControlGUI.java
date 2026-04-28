@@ -67,15 +67,23 @@ public class MenuCoordinadorControlGUI implements Initializable {
     }
 
     @FXML
+    private void abrirAsignarPracticanteEnSeccion(ActionEvent event) throws Exception {
+        abrirVentana("/InterfazGrafica/vistas/PracticanteEnSeccionVista.fxml", "Asignar Practicante a Seccion");
+    }
+
+    @FXML
+    private void abrirAsignarProyectoAlPracticante(ActionEvent event) throws Exception {
+        abrirVentana("/InterfazGrafica/vistas/AsignarProyectoVista.fxml", "Asignar proyecto a practicante");
+    }
+
+
+    @FXML
     private void cerrarSesion(ActionEvent event) throws Exception {
         Parent root = FXMLLoader.load(getClass().getResource("/InterfazGrafica/vistas/IniciarSesionVista.fxml"));
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.setScene(new Scene(root));
         stage.show();
     }
-
-    @FXML
-    private
 
     private void abrirVentana(String fxml, String titulo) throws Exception {
         Parent root = FXMLLoader.load(getClass().getResource(fxml));
