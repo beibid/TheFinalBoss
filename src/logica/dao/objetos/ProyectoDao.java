@@ -4,9 +4,14 @@ import acceso.bd.ConexionBaseDeDatos;
 import logica.dominio.Proyecto;
 import logica.dao.excepciones.MensajeriaExcepcion;
 import logica.dao.interfaces.ProyectoDaoInterfaz;
+import logica.dominio.enums.EstadoProyecto;
+
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -94,6 +99,73 @@ public class ProyectoDao implements ProyectoDaoInterfaz {
                 }
             } catch (SQLException e) {
                 LOGGER.log(Level.SEVERE, "Error al cerrar la conexión", e);
+            }
+        }
+        return filasAfectadas;
+    }
+    public List<Proyecto> obtenerProyectosDisponibles() throws MensajeriaExcepcion {
+        String consulta = "SELECT p.idProyecto, p.nombreProyecto, p.estado, o.nombre AS nombreOrganizacion " +
+                "FROM proyecto p JOIN organizacion_vinculada o ON p.idOrganizacion = o.idOrganizacion " +
+                "WHERE p.estado = 'Disponible'";
+        Connection conexionBaseDeDatos = null;
+        PreparedStatement sentencia = null;
+        List<Proyecto> listaProyectos = new ArrayList<>();
+        try {
+            conexionBaseDeDatos = ConexionBaseDeDatos.getInstance().conectar();
+            sentencia = conexionBaseDeDatos.prepareStatement(consulta);
+            ResultSet resultados = sentencia.executeQuery();
+            while (resultados.next()) {
+                Proyecto proyecto = new Proyecto();
+                proyecto.setIdProyecto(resultados.getInt("idProyecto"));
+                proyecto.setNombreProyecto(resultados.getString("nombreProyecto"));
+                proyecto.setEstado(EstadoProyecto.valueOf(
+                        resultados.getString("estado").replace(" ", "_")));
+                proyecto.setNombreEmpresa(resultados.getString("nombreOrganizacion"));
+                listaProyectos.add(proyecto);
+            }
+        } catch (SQLException excepcion) {
+            LOGGER.log(Level.SEVERE, "Error al obtener proyectos disponibles", excepcion);
+            throw new MensajeriaExcepcion("Error al obtener proyectos disponibles", excepcion);
+        } finally {
+            try {
+                if (sentencia != null) {
+                    sentencia.close();
+                }
+                if (conexionBaseDeDatos != null) {
+                    conexionBaseDeDatos.close();
+                }
+            } catch (SQLException excepcion) {
+                LOGGER.log(Level.SEVERE, "Error al cerrar conexión", excepcion);
+            }
+        }
+        return listaProyectos;
+    }
+
+    public int inactivarProyecto(int idProyecto) throws MensajeriaExcepcion {
+        String consulta = "UPDATE proyecto SET estado = ? WHERE idProyecto = ?";
+        Connection conexionBaseDeDatos = null;
+        PreparedStatement actualizacion = null;
+        int filasAfectadas = 0;
+        try {
+            conexionBaseDeDatos = ConexionBaseDeDatos.getInstance().conectar();
+            actualizacion = conexionBaseDeDatos.prepareStatement(consulta);
+            actualizacion.setString(1, EstadoProyecto.Eliminado.toString().replace("_", " "));
+            actualizacion.setInt(2, idProyecto);
+            filasAfectadas = actualizacion.executeUpdate();
+            LOGGER.info("Proyecto inactivado correctamente: " + idProyecto);
+        } catch (SQLException excepcion) {
+            LOGGER.log(Level.SEVERE, "Error al inactivar proyecto", excepcion);
+            throw new MensajeriaExcepcion("Error al inactivar proyecto", excepcion);
+        } finally {
+            try {
+                if (actualizacion != null) {
+                    actualizacion.close();
+                }
+                if (conexionBaseDeDatos != null) {
+                    conexionBaseDeDatos.close();
+                }
+            } catch (SQLException excepcion) {
+                LOGGER.log(Level.SEVERE, "Error al cerrar conexión", excepcion);
             }
         }
         return filasAfectadas;

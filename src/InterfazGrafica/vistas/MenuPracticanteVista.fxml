@@ -1,14 +1,48 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
+<?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="InterfazGrafica.MenuPracticanteControlGUI"
-            prefHeight="400.0" prefWidth="600.0">
+<AnchorPane prefHeight="600.0" prefWidth="750.0"
+            xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="InterfazGrafica.MenuPracticanteControlGUI">
+    <children>
 
+        <VBox layoutX="0.0" layoutY="0.0" prefHeight="600.0" prefWidth="200.0"
+              style="-fx-background-color: #3a3a3a; -fx-padding: 15;">
+            <children>
+                <Label text="Practicante" style="-fx-text-fill: white; -fx-font-size: 16; -fx-font-weight: bold;"/>
+                <Separator><VBox.margin><Insets top="10.0" bottom="10.0"/></VBox.margin></Separator>
+
+                <Label text="Reporte" style="-fx-text-fill: #aaaaaa; -fx-font-size: 11;"/>
+                <Button text="Subir reporte" onAction="#abrirSubirReporte" prefWidth="170.0"
+                        style="-fx-background-color: transparent; -fx-text-fill: white; -fx-alignment: CENTER-LEFT;">
+                    <VBox.margin><Insets top="5.0"/></VBox.margin>
+                </Button>
+                <Button text="Mis reportes" onAction="#abrirMisReportes" prefWidth="170.0"
+                        style="-fx-background-color: transparent; -fx-text-fill: white; -fx-alignment: CENTER-LEFT;">
+                    <VBox.margin><Insets top="3.0"/></VBox.margin>
+                </Button>
+
+                <Separator><VBox.margin><Insets top="10.0" bottom="10.0"/></VBox.margin></Separator>
+
+                <Button text="Cerrar Sesión" onAction="#cerrarSesion" prefWidth="170.0"
+                        style="-fx-background-color: #c0392b; -fx-text-fill: white;">
+                    <VBox.margin><Insets top="5.0"/></VBox.margin>
+                </Button>
+            </children>
+        </VBox>
+
+        <VBox layoutX="200.0" layoutY="0.0" prefHeight="600.0" prefWidth="550.0"
+              alignment="CENTER" style="-fx-padding: 30;">
+            <children>
+                <Label text="Bienvenido Practicante" style="-fx-font-size: 22; -fx-font-weight: bold;"/>
+                <Label text="Selecciona una opción del menú" style="-fx-font-size: 13; -fx-text-fill: #666666;">
+                    <VBox.margin><Insets top="8.0"/></VBox.margin>
+                </Label>
+            </children>
+        </VBox>
+
+    </children>
 </AnchorPane>

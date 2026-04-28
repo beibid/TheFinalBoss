@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="700.0" prefWidth="750.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="InterfazGrafica.ModificarProyectoControlGUI">
+    <children>
+
+
+        <VBox layoutX="0.0" layoutY="0.0" prefHeight="700.0" prefWidth="180.0" style="-fx-background-color: #3a3a3a; -fx-padding: 15;">
+            <children>
+                <Label style="-fx-text-fill: white; -fx-font-size: 16; -fx-font-weight: bold;" text="Modificar" />
+                <Label style="-fx-text-fill: #aaaaaa; -fx-font-size: 12;" text="Proyecto">
+                    <VBox.margin><Insets top="4.0" /></VBox.margin>
+                </Label>
+            </children>
+        </VBox>
+
+
+        <ScrollPane layoutX="180.0" layoutY="0.0" prefHeight="700.0" prefWidth="570.0" fitToWidth="true"
+                    style="-fx-background-color: white; -fx-background: white;">
+            <content>
+                <VBox prefWidth="550.0" spacing="8.0" style="-fx-padding: 25; -fx-background-color: white;">
+                    <children>
+
+                        <Label style="-fx-font-size: 22; -fx-font-weight: bold;" text="Modificar Proyecto" />
+
+
+                        <VBox fx:id="panelError" managed="false" prefWidth="500.0" spacing="4.0"
+                              style="-fx-border-color: #8B0000; -fx-border-width: 2; -fx-background-color: #f5f5dc; -fx-padding: 10;"
+                              visible="false">
+                            <HBox alignment="CENTER_LEFT" spacing="8">
+                                <Label style="-fx-text-fill: #8B0000; -fx-font-size: 14; -fx-font-weight: bold;" text="✖" />
+                                <Label fx:id="etiquetaTituloError" style="-fx-font-weight: bold; -fx-text-fill: #8B0000;" text="" />
+                            </HBox>
+                            <Label fx:id="etiquetaMensajeError" style="-fx-text-fill: #8B0000; -fx-font-size: 11;" text="" />
+                        </VBox>
+
+
+                        <VBox fx:id="panelExito" managed="false" prefWidth="500.0" spacing="4.0"
+                              style="-fx-border-color: #2d6a2d; -fx-border-width: 2; -fx-background-color: #f0f7f0; -fx-padding: 10;"
+                              visible="false">
+                            <HBox alignment="CENTER_LEFT" spacing="8">
+                                <Label style="-fx-text-fill: #2d6a2d; -fx-font-size: 14; -fx-font-weight: bold;" text="✔" />
+                                <Label fx:id="etiquetaTituloExito" style="-fx-font-weight: bold; -fx-text-fill: #2d6a2d;" text="" />
+                            </HBox>
+                            <Label fx:id="etiquetaMensajeExito" style="-fx-text-fill: #2d6a2d; -fx-font-size: 11;" text="" />
+                        </VBox>
+
+                        <Label style="-fx-font-size: 13;" text="Selecciona un proyecto" />
+                        <ComboBox fx:id="comboBoxProyectos" onAction="#seleccionarProyecto"
+                                  prefWidth="500.0" promptText="-- Selecciona un proyecto --" />
+
+                        <Label style="-fx-font-size: 13;" text="Nombre del proyecto" />
+                        <TextField fx:id="campoNombreProyecto" prefHeight="30.0" prefWidth="500.0" promptText="Ej. Sistema de inventario" />
+
+                        <Label style="-fx-font-size: 13;" text="Descripción" />
+                        <TextField fx:id="campoDescripcion" prefHeight="30.0" prefWidth="500.0" promptText="Ej. Sistema para gestionar inventario" />
+
+                        <Label style="-fx-font-size: 13;" text="Responsable del proyecto" />
+                        <TextField fx:id="campoResponsable" prefHeight="30.0" prefWidth="500.0" promptText="Ej. Juan Pérez" />
+
+                        <Label style="-fx-font-size: 13;" text="Estado" />
+                        <ComboBox fx:id="comboBoxEstado" prefWidth="500.0" promptText="-- Selecciona un estado --" />
+
+                        <Label style="-fx-font-size: 13;" text="Nombre de la empresa" />
+                        <TextField fx:id="campoNombreEmpresa" prefHeight="30.0" prefWidth="500.0" promptText="Ej. Tech Solutions" />
+
+                        <Label style="-fx-font-size: 13;" text="Sector de la empresa" />
+                        <TextField fx:id="campoSectorEmpresa" prefHeight="30.0" prefWidth="500.0" promptText="Ej. Tecnología" />
+
+                        <Label style="-fx-font-size: 13;" text="Dirección de la empresa" />
+                        <TextField fx:id="campoDireccionEmpresa" prefHeight="30.0" prefWidth="500.0" promptText="Ej. Av. Principal 123" />
+
+                        <Label style="-fx-font-size: 13;" text="Matrícula" />
+                        <TextField fx:id="campoMatricula" prefHeight="30.0" prefWidth="500.0" promptText="Ej. S12345678" />
+
+                        <Label style="-fx-font-size: 13;" text="Número de personal del coordinador" />
+                        <TextField fx:id="campoNumPersonalCoordinador" prefHeight="30.0" prefWidth="500.0" promptText="Ej. C001" />
+
+                        <Label style="-fx-font-size: 13;" text="Fecha de registro (YYYY-MM-DD)" />
+                        <TextField fx:id="campoFechaRegistro" prefHeight="30.0" prefWidth="500.0" promptText="Ej. 2024-01-15" />
+
+                        <!-- Botones -->
+                        <HBox spacing="15.0">
+                            <VBox.margin><Insets top="10.0" /></VBox.margin>
+                            <Button onAction="#botonGuardar" prefHeight="35.0" prefWidth="140.0"
+                                    style="-fx-background-color: #2c3e50; -fx-text-fill: white; -fx-background-radius: 6;"
+                                    text="Guardar cambios" />
+                            <Button onAction="#botonCancelar" prefHeight="35.0" prefWidth="140.0"
+                                    style="-fx-background-color: #c0392b; -fx-text-fill: white; -fx-background-radius: 6;"
+                                    text="Cancelar" />
+                        </HBox>
+
+                    </children>
+                </VBox>
+            </content>
+        </ScrollPane>
+
+        <!-- Boton regresar -->
+        <Button layoutX="660.0" layoutY="10.0" onAction="#botonRegresar" prefHeight="28.0" prefWidth="75.0"
+                style="-fx-background-color: #7f8c8d; -fx-text-fill: white; -fx-background-radius: 6;" text="Regresar" />
+
+    </children>
+</AnchorPane>
