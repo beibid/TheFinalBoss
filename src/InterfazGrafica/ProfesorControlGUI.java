@@ -21,26 +21,26 @@ import java.util.ResourceBundle;
 
 public class ProfesorControlGUI implements Initializable {
 
-    @FXML private TextField txtNombreProfesor;
-    @FXML private TextField txtApellidosProfesor;
-    @FXML private TextField txtNumeroPersonal;
-    @FXML private RadioButton rdiobtMatutino;
-    @FXML private RadioButton rdiobtVespertino;
-    @FXML private RadioButton rdiobtMixto;
+    @FXML private TextField campoTextoNombres;
+    @FXML private TextField campoTextoApellidos;
+    @FXML private TextField campoTextoNumeroPersonal;
+    @FXML private RadioButton radioBotonMatutino;
+    @FXML private RadioButton radioBotonVespertino;
+    @FXML private RadioButton radioBotonMixto;
     @FXML private VBox panelError;
-    @FXML private Label lblTituloError;
-    @FXML private Label lblMensajeError;
+    @FXML private Label etiquetaTituloError;
+    @FXML private Label etiquetaMensajeError;
     @FXML private VBox panelExito;
-    @FXML private Label lblTituloExito;
-    @FXML private Label lblMensajeExito;
+    @FXML private Label etiquetaTituloExito;
+    @FXML private Label etiquetaMensajeExito;
 
     private ToggleGroup grupoTurno = new ToggleGroup();
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        rdiobtMatutino.setToggleGroup(grupoTurno);
-        rdiobtVespertino.setToggleGroup(grupoTurno);
-        rdiobtMixto.setToggleGroup(grupoTurno);
+        radioBotonMatutino.setToggleGroup(grupoTurno);
+        radioBotonVespertino.setToggleGroup(grupoTurno);
+        radioBotonMixto.setToggleGroup(grupoTurno);
     }
 
     @FXML
@@ -61,10 +61,8 @@ public class ProfesorControlGUI implements Initializable {
 
     @FXML
     private void botonRegresar(ActionEvent event) throws Exception {
-        Parent root = FXMLLoader.load(getClass().getResource("/InterfazGrafica/vistas/SeccionCoordinadorVista.fxml"));
-        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        stage.setScene(new Scene(root));
-        stage.show();
+       Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+       stage.close();
     }
 
     private boolean confirmarAccion(String mensaje) {
@@ -87,9 +85,9 @@ public class ProfesorControlGUI implements Initializable {
     }
 
     private boolean camposValidos() {
-        String nombre = txtNombreProfesor.getText().trim();
-        String apellidos = txtApellidosProfesor.getText().trim();
-        String numeroPersonal = txtNumeroPersonal.getText().trim();
+        String nombre = campoTextoNombres.getText().trim();
+        String apellidos = campoTextoApellidos.getText().trim();
+        String numeroPersonal = campoTextoNumeroPersonal.getText().trim();
 
         if (nombre.isEmpty() || apellidos.isEmpty() || numeroPersonal.isEmpty()) {
             mostrarError("Campos obligatorios vacios",
@@ -105,9 +103,9 @@ public class ProfesorControlGUI implements Initializable {
     }
 
     private Profesor construirProfesor() {
-        String nombre = txtNombreProfesor.getText().trim();
-        String apellidos = txtApellidosProfesor.getText().trim();
-        String numeroPersonal = txtNumeroPersonal.getText().trim();
+        String nombre = campoTextoNombres.getText().trim();
+        String apellidos = campoTextoApellidos.getText().trim();
+        String numeroPersonal = campoTextoNumeroPersonal.getText().trim();
         Turno turno = obtenerTurnoSeleccionado();
         String contrasena = generarContrasena(nombre, numeroPersonal);
 
@@ -122,10 +120,10 @@ public class ProfesorControlGUI implements Initializable {
     }
 
     private Turno obtenerTurnoSeleccionado() {
-        if (rdiobtMatutino.isSelected()) {
+        if (radioBotonMatutino.isSelected()) {
             return Turno.Matutino;
         }
-        if (rdiobtVespertino.isSelected()) {
+        if (radioBotonVespertino.isSelected()) {
             return Turno.Vespertino;
         }
         return Turno.Mixto;
@@ -158,15 +156,15 @@ public class ProfesorControlGUI implements Initializable {
     private void limpiarCamposRegistros() {
         ocultarError();
         ocultarExito();
-        txtNombreProfesor.clear();
-        txtApellidosProfesor.clear();
-        txtNumeroPersonal.clear();
+        campoTextoNombres.clear();
+        campoTextoApellidos.clear();
+        campoTextoNumeroPersonal.clear();
         grupoTurno.selectToggle(null);
     }
 
     private void mostrarError(String titulo, String mensaje) {
-        lblTituloError.setText(titulo);
-        lblMensajeError.setText(mensaje);
+        etiquetaTituloError.setText(titulo);
+        etiquetaMensajeError.setText(mensaje);
         panelError.setVisible(true);
         panelError.setManaged(true);
     }
@@ -177,8 +175,8 @@ public class ProfesorControlGUI implements Initializable {
     }
 
     private void mostrarExito(String titulo, String mensaje) {
-        lblTituloExito.setText(titulo);
-        lblMensajeExito.setText(mensaje);
+        etiquetaTituloExito.setText(titulo);
+        etiquetaMensajeExito.setText(mensaje);
         panelExito.setVisible(true);
         panelExito.setManaged(true);
     }

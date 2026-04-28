@@ -43,4 +43,9 @@ public class Practicante extends Usuario {
     public void setGenero(Genero genero) {
         this.genero = genero;
     }
+
+    @Override
+    public String toString() {
+        return nombre + " " + apellidos + " - " + matricula;
+    }
 }

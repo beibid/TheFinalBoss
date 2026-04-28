@@ -11,7 +11,7 @@ import javafx.stage.Stage;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class SeccionCoordinadorControlGUI implements Initializable {
+public class MenuCoordinadorControlGUI implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {}
@@ -38,7 +38,7 @@ public class SeccionCoordinadorControlGUI implements Initializable {
 
     @FXML
     private void abrirRegistrarProyecto(ActionEvent event) throws Exception {
-        abrirVentana("/InterfazGrafica/vistas/RegistrarProyectoVista.fxml", "Registrar Proyecto");
+        abrirVentana("/InterfazGrafica/vistas/ProyectoVista.fxml", "Registrar Proyecto");
     }
 
     @FXML

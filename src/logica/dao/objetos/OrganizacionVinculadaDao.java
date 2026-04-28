@@ -4,9 +4,13 @@ import acceso.bd.ConexionBaseDeDatos;
 import logica.dao.excepciones.UsuariosExcepcion;
 import logica.dominio.OrganizacionVinculada;
 import logica.dao.interfaces.OrganizacionVinculadaDaoInterfaz;
+
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -79,5 +83,35 @@ public class OrganizacionVinculadaDao implements OrganizacionVinculadaDaoInterfa
             }
         }
         return filasAfectadas;
+    }
+
+    public List<OrganizacionVinculada> obtenerOrganizacionesActivas() throws UsuariosExcepcion {
+        String consulta = "SELECT idOrganizacion, nombre, direccion FROM organizacion_vinculada";
+        Connection conexionBaseDeDatos = null;
+        PreparedStatement consultaOrganizaciones = null;
+        List<OrganizacionVinculada> organizaciones = new ArrayList<>();
+        try {
+            conexionBaseDeDatos = ConexionBaseDeDatos.getInstance().conectar();
+            consultaOrganizaciones = conexionBaseDeDatos.prepareStatement(consulta);
+            ResultSet resultado = consultaOrganizaciones.executeQuery();
+            while (resultado.next()) {
+                OrganizacionVinculada organizacion = new OrganizacionVinculada();
+                organizacion.setIdOrganizacion(resultado.getInt("idOrganizacion"));
+                organizacion.setNombre(resultado.getString("nombre"));
+                organizacion.setDireccion(resultado.getString("direccion"));
+                organizaciones.add(organizacion);
+            }
+        } catch (SQLException e) {
+            LOGGER.log(Level.SEVERE, "Error al obtener organizaciones", e);
+            throw new UsuariosExcepcion("Error al obtener organizaciones", e);
+        } finally {
+            try {
+                if (consultaOrganizaciones != null) consultaOrganizaciones.close();
+                if (conexionBaseDeDatos != null) conexionBaseDeDatos.close();
+            } catch (SQLException e) {
+                LOGGER.log(Level.SEVERE, "Error al cerrar la conexión", e);
+            }
+        }
+        return organizaciones;
     }
 }

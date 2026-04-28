@@ -1,15 +1,18 @@
 package logica.dao.objetos;
+
 import acceso.bd.ConexionBaseDeDatos;
 import logica.dao.excepciones.UsuariosExcepcion;
 import logica.dominio.Profesor;
 import logica.dao.interfaces.ProfesorDaoInterfaz;
 import logica.dominio.enums.Estado;
-
+import logica.dominio.enums.Turno;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -127,5 +130,39 @@ public class ProfesorDao implements ProfesorDaoInterfaz {
             }
         }
         return filasAfectadas;
+    }
+
+    public List<Profesor> obtenerProfesoresActivos() throws UsuariosExcepcion {
+        String consulta = "SELECT u.nombre, u.apellidos, p.numPersonalProfesor, p.turno " +
+                "FROM Usuario u " +
+                "INNER JOIN Profesor p ON u.idUsuario = p.idUsuario " +
+                "WHERE u.estado = 'Activo'";
+        Connection conexionBaseDeDatos = null;
+        PreparedStatement consultaProfesores = null;
+        List<Profesor> profesores = new ArrayList<>();
+        try {
+            conexionBaseDeDatos = ConexionBaseDeDatos.getInstance().conectar();
+            consultaProfesores = conexionBaseDeDatos.prepareStatement(consulta);
+            ResultSet resultado = consultaProfesores.executeQuery();
+            while (resultado.next()) {
+                Profesor profesor = new Profesor();
+                profesor.setNombre(resultado.getString("nombre"));
+                profesor.setApellidos(resultado.getString("apellidos"));
+                profesor.setNumeroDePersonalProfesor(resultado.getString("numPersonalProfesor"));
+                profesor.setTurno(Turno.valueOf(resultado.getString("turno")));
+                profesores.add(profesor);
+            }
+        } catch (SQLException e) {
+            LOGGER.log(Level.SEVERE, "Error al obtener profesores activos", e);
+            throw new UsuariosExcepcion("Error al obtener profesores activos", e);
+        } finally {
+            try {
+                if (consultaProfesores != null) consultaProfesores.close();
+                if (conexionBaseDeDatos != null) conexionBaseDeDatos.close();
+            } catch (SQLException e) {
+                LOGGER.log(Level.SEVERE, "Error al cerrar la conexión", e);
+            }
+        }
+        return profesores;
     }
 }

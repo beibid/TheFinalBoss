@@ -101,7 +101,7 @@ public class OrganizacionVinculadaControlGUI implements Initializable {
 
     @FXML
     private void botonRegresar(ActionEvent event) throws Exception{
-        Parent root = FXMLLoader.load(getClass().getResource("/InterfazGrafica/vistas/SeccionCoordinadorVista.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("/InterfazGrafica/vistas/MenuCoordinadorVista.fxml"));
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.setScene(new Scene(root));
         stage.show();

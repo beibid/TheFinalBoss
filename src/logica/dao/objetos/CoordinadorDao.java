@@ -6,11 +6,14 @@ import logica.dao.excepciones.RegistroDuplicadoExcepcion;
 import logica.dominio.Coordinador;
 import logica.dao.interfaces.CoordinadorDaoInterfaz;
 import logica.dominio.enums.Estado;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -123,5 +126,38 @@ public class CoordinadorDao implements CoordinadorDaoInterfaz {
             }
         }
         return filasAfectadas;
+    }
+
+    public List<Coordinador> obtenerCoordinadoresActivos() throws UsuariosExcepcion {
+        String consulta = "SELECT u.nombre, u.apellidos, p.numPersonalCoordinador " +
+                "FROM Usuario u " +
+                "INNER JOIN Coordinador p ON u.idUsuario = p.idUsuario " +
+                "WHERE u.estado = 'Activo'";
+        Connection conexionBaseDeDatos = null;
+        PreparedStatement consultaCoordinadores = null;
+        List<Coordinador> coordinadores = new ArrayList<>();
+        try {
+            conexionBaseDeDatos = ConexionBaseDeDatos.getInstance().conectar();
+            consultaCoordinadores = conexionBaseDeDatos.prepareStatement(consulta);
+            ResultSet resultado = consultaCoordinadores.executeQuery();
+            while (resultado.next()) {
+                Coordinador coordinador = new Coordinador();
+                coordinador.setNombre(resultado.getString("nombre"));
+                coordinador.setApellidos(resultado.getString("apellidos"));
+                coordinador.setNumeroDePersonalCoordinador(resultado.getString("numPersonalCoordinador"));
+                coordinadores.add(coordinador);
+            }
+        } catch (SQLException e) {
+            LOGGER.log(Level.SEVERE, "Error al obtener coordinadores activos", e);
+            throw new UsuariosExcepcion("Error al obtener coordinadores activos", e);
+        } finally {
+            try {
+                if (consultaCoordinadores != null) consultaCoordinadores.close();
+                if (conexionBaseDeDatos != null) conexionBaseDeDatos.close();
+            } catch (SQLException e) {
+                LOGGER.log(Level.SEVERE, "Error al cerrar la conexión", e);
+            }
+        }
+        return coordinadores;
     }
 }

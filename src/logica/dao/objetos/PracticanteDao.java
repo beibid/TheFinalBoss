@@ -3,6 +3,7 @@ package logica.dao.objetos;
 import acceso.bd.ConexionBaseDeDatos;
 import logica.dao.excepciones.RegistroDuplicadoExcepcion;
 import logica.dao.excepciones.UsuariosExcepcion;
+import logica.dominio.Coordinador;
 import logica.dominio.Practicante;
 import logica.dao.interfaces.PracticanteDaoInterfaz;
 import logica.dominio.enums.Estado;
@@ -11,6 +12,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -133,5 +136,38 @@ public class PracticanteDao implements PracticanteDaoInterfaz {
             }
         }
         return filasAfectadas;
+    }
+
+    public List<Practicante> obtenerPracticantesActivos() throws UsuariosExcepcion {
+        String consulta = "SELECT u.nombre, u.apellidos, p.matricula " +
+                "FROM Usuario u " +
+                "INNER JOIN Practicante p ON u.idUsuario = p.idUsuario " +
+                "WHERE u.estado = 'Activo'";
+        Connection conexionBaseDeDatos = null;
+        PreparedStatement consultaPracticantes = null;
+        List<Practicante> practicantes = new ArrayList<>();
+        try {
+            conexionBaseDeDatos = ConexionBaseDeDatos.getInstance().conectar();
+            consultaPracticantes = conexionBaseDeDatos.prepareStatement(consulta);
+            ResultSet resultado = consultaPracticantes.executeQuery();
+            while (resultado.next()) {
+                Practicante practicante = new Practicante();
+                practicante.setNombre(resultado.getString("nombre"));
+                practicante.setApellidos(resultado.getString("apellidos"));
+                practicante.setMatricula(resultado.getString("matricula"));
+                practicantes.add(practicante);
+            }
+        } catch (SQLException e) {
+            LOGGER.log(Level.SEVERE, "Error al obtener practicantes activos", e);
+            throw new UsuariosExcepcion("Error al obtener practicantes activos", e);
+        } finally {
+            try {
+                if (consultaPracticantes != null) consultaPracticantes.close();
+                if (conexionBaseDeDatos != null) conexionBaseDeDatos.close();
+            } catch (SQLException e) {
+                LOGGER.log(Level.SEVERE, "Error al cerrar la conexión", e);
+            }
+        }
+        return practicantes;
     }
 }

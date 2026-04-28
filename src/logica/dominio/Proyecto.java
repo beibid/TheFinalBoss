@@ -36,6 +36,10 @@ public class Proyecto {
         this.fechaRegistro = fechaRegistro;
     }
 
+    public Proyecto(){
+
+    }
+
     public int getIdProyecto() {
         return idProyecto;
     }

@@ -23,15 +23,15 @@ import java.util.ResourceBundle;
 
 public class CoordinadorControlGUI implements Initializable {
 
-    @FXML private TextField txtNombres;
-    @FXML private TextField txtApellidos;
-    @FXML private TextField txtNumeroPersonal;
+    @FXML private TextField campoTextoNombres;
+    @FXML private TextField campoTextoApellidos;
+    @FXML private TextField campoTextoNumeroPersonal;
     @FXML private VBox panelError;
-    @FXML private Label lblTituloError;
-    @FXML private Label lblMensajeError;
+    @FXML private Label etiquetaTituloError;
+    @FXML private Label etiquetaMensajeError;
     @FXML private VBox panelExito;
-    @FXML private Label lblTituloExito;
-    @FXML private Label lblMensajeExito;
+    @FXML private Label etiquetaTituloExito;
+    @FXML private Label etiquetaMensajeExito;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {}
@@ -53,11 +53,9 @@ public class CoordinadorControlGUI implements Initializable {
     }
 
     @FXML
-    private void botonRegresar(ActionEvent event) throws Exception {
-        Parent root = FXMLLoader.load(getClass().getResource("/InterfazGrafica/vistas/SeccionAdministradorVista.fxml"));
+    private void botonRegresar(ActionEvent event) {
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        stage.setScene(new Scene(root));
-        stage.show();
+        stage.close();
     }
 
     private boolean confirmarAccion(String mensaje) {
@@ -81,16 +79,16 @@ public class CoordinadorControlGUI implements Initializable {
     }
 
     private boolean camposValidos() {
-        String nombre = txtNombres.getText().trim();
-        String apellidos = txtApellidos.getText().trim();
-        String numeroPersonal = txtNumeroPersonal.getText().trim();
+        String nombre = campoTextoNombres.getText().trim();
+        String apellidos = campoTextoApellidos.getText().trim();
+        String numeroPersonal = campoTextoNumeroPersonal.getText().trim();
         return !nombre.isEmpty() && !apellidos.isEmpty() && !numeroPersonal.isEmpty();
     }
 
     private Coordinador construirCoordinador() {
-        String nombre = txtNombres.getText().trim();
-        String apellidos = txtApellidos.getText().trim();
-        String numeroPersonal = txtNumeroPersonal.getText().trim();
+        String nombre = campoTextoNombres.getText().trim();
+        String apellidos = campoTextoApellidos.getText().trim();
+        String numeroPersonal = campoTextoNumeroPersonal.getText().trim();
         String contrasena = generarContrasena(nombre, numeroPersonal);
 
         Coordinador coordinador = new Coordinador();
@@ -133,14 +131,14 @@ public class CoordinadorControlGUI implements Initializable {
     private void limpiarCamposRegistros() {
         ocultarError();
         ocultarExito();
-        txtNombres.clear();
-        txtApellidos.clear();
-        txtNumeroPersonal.clear();
+        campoTextoNombres.clear();
+        campoTextoApellidos.clear();
+        campoTextoNumeroPersonal.clear();
     }
 
     private void mostrarError(String titulo, String mensaje) {
-        lblTituloError.setText(titulo);
-        lblMensajeError.setText(mensaje);
+        etiquetaTituloError.setText(titulo);
+        etiquetaMensajeError.setText(mensaje);
         panelError.setVisible(true);
         panelError.setManaged(true);
     }
@@ -151,8 +149,8 @@ public class CoordinadorControlGUI implements Initializable {
     }
 
     private void mostrarExito(String titulo, String mensaje) {
-        lblTituloExito.setText(titulo);
-        lblMensajeExito.setText(mensaje);
+        etiquetaTituloExito.setText(titulo);
+        etiquetaMensajeExito.setText(mensaje);
         panelExito.setVisible(true);
         panelExito.setManaged(true);
     }

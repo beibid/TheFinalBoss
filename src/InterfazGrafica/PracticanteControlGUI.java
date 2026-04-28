@@ -21,25 +21,25 @@ import java.util.ResourceBundle;
 
 public class PracticanteControlGUI implements Initializable {
 
-    @FXML private TextField txtMatricula;
-    @FXML private TextField txtNombres;
-    @FXML private TextField txtApellidos;
-    @FXML private RadioButton rdiobtnFemenino;
-    @FXML private RadioButton rdiobtnMasculino;
-    @FXML private TextField txtLenguaIndigena;
+    @FXML private TextField campoTextoMatricula;
+    @FXML private TextField campoTextoNombres;
+    @FXML private TextField campoTextoApellidos;
+    @FXML private RadioButton radioBotonFemenino;
+    @FXML private RadioButton radioBotonMasculino;
+    @FXML private TextField campoTextoLenguaIndigena;
     @FXML private VBox panelError;
-    @FXML private Label lblTituloError;
-    @FXML private Label lblMensajeError;
+    @FXML private Label etiquetaTituloError;
+    @FXML private Label etiquetaMensajeError;
     @FXML private VBox panelExito;
-    @FXML private Label lblTituloExito;
-    @FXML private Label lblMensajeExito;
+    @FXML private Label etiquetaTituloExito;
+    @FXML private Label etiquetaMensajeExito;
 
     private ToggleGroup grupoGenero = new ToggleGroup();
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        rdiobtnMasculino.setToggleGroup(grupoGenero);
-        rdiobtnFemenino.setToggleGroup(grupoGenero);
+        radioBotonMasculino.setToggleGroup(grupoGenero);
+        radioBotonFemenino.setToggleGroup(grupoGenero);
     }
 
     @FXML
@@ -59,15 +59,10 @@ public class PracticanteControlGUI implements Initializable {
     }
 
     @FXML
-    private void botonRegresar(ActionEvent event) throws Exception {
-        Parent root = FXMLLoader.load(getClass().getResource("/InterfazGrafica/vistas/SeccionCoordinadorVista.fxml"));
+    private void botonRegresar(ActionEvent event) {
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        stage.setScene(new Scene(root));
-        stage.show();
+        stage.close();
     }
-
-    @FXML
-    private void radioBoton() {}
 
     private boolean confirmarAccion(String mensaje) {
         Alert alerta = new Alert(Alert.AlertType.CONFIRMATION);
@@ -89,9 +84,9 @@ public class PracticanteControlGUI implements Initializable {
     }
 
     private boolean camposValidos() {
-        String nombre = txtNombres.getText().trim();
-        String apellidos = txtApellidos.getText().trim();
-        String matricula = txtMatricula.getText().trim();
+        String nombre = campoTextoNombres.getText().trim();
+        String apellidos = campoTextoApellidos.getText().trim();
+        String matricula = campoTextoMatricula.getText().trim();
 
         if (matricula.isEmpty() || nombre.isEmpty() || apellidos.isEmpty()) {
             mostrarError("Campos obligatorios vacios",
@@ -107,11 +102,11 @@ public class PracticanteControlGUI implements Initializable {
     }
 
     private Practicante construirPracticante() {
-        String nombre = txtNombres.getText().trim();
-        String apellidos = txtApellidos.getText().trim();
-        String matricula = txtMatricula.getText().trim();
-        String lenguaIndigena = txtLenguaIndigena.getText().trim();
-        Genero genero = rdiobtnMasculino.isSelected() ? Genero.Masculino : Genero.Femenino;
+        String nombre = campoTextoNombres.getText().trim();
+        String apellidos = campoTextoApellidos.getText().trim();
+        String matricula = campoTextoMatricula.getText().trim();
+        String lenguaIndigena = campoTextoLenguaIndigena.getText().trim();
+        Genero genero = radioBotonMasculino.isSelected() ? Genero.Masculino : Genero.Femenino;
         String contrasena = generarContrasena(nombre, matricula);
 
         Practicante practicante = new Practicante();
@@ -156,16 +151,16 @@ public class PracticanteControlGUI implements Initializable {
     private void limpiarCamposRegistrados() {
         ocultarError();
         ocultarExito();
-        txtNombres.clear();
-        txtApellidos.clear();
-        txtMatricula.clear();
-        txtLenguaIndigena.clear();
+        campoTextoNombres.clear();
+        campoTextoApellidos.clear();
+        campoTextoMatricula.clear();
+        campoTextoLenguaIndigena.clear();
         grupoGenero.selectToggle(null);
     }
 
     private void mostrarError(String titulo, String mensaje) {
-        lblTituloError.setText(titulo);
-        lblMensajeError.setText(mensaje);
+        etiquetaTituloError.setText(titulo);
+        etiquetaMensajeError.setText(mensaje);
         panelError.setVisible(true);
         panelError.setManaged(true);
     }
@@ -176,8 +171,8 @@ public class PracticanteControlGUI implements Initializable {
     }
 
     private void mostrarExito(String titulo, String mensaje) {
-        lblTituloExito.setText(titulo);
-        lblMensajeExito.setText(mensaje);
+        etiquetaTituloExito.setText(titulo);
+        etiquetaMensajeExito.setText(mensaje);
         panelExito.setVisible(true);
         panelExito.setManaged(true);
     }

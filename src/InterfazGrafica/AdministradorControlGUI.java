@@ -51,7 +51,7 @@ public class AdministradorControlGUI implements Initializable {
 
     @FXML
     private void botonRegresar(ActionEvent event) throws Exception {
-        Parent root = FXMLLoader.load(getClass().getResource("/InterfazGrafica/vistas/SeccionAdministradorVista.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("/InterfazGrafica/vistas/MenuAdministradorVista.fxml"));
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.setScene(new Scene(root));
         stage.show();

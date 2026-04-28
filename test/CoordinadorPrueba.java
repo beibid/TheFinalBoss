@@ -10,7 +10,7 @@ public class CoordinadorPrueba {
 
     @Test
     public void pruebaInsertarCoordinadorExitoso() throws UsuariosExcepcion {
-        Coordinador coordinador = new Coordinador("C050", "Ricardo", "Fuentes", "Castillo", "pass50", Estado.Activo);
+        Coordinador coordinador = new Coordinador("C050", "Ricardo", "Fuentes",  "pass50", Estado.Activo);
         CoordinadorDao coordinadorDao = new CoordinadorDao();
         int filasAfectadas = coordinadorDao.insertarCoordinador(coordinador);
         assertEquals(1, filasAfectadas);
@@ -18,28 +18,28 @@ public class CoordinadorPrueba {
 
     @Test
     public void pruebaInsertarCoordinadorAlternoDuplicado() {
-        Coordinador coordinador = new Coordinador("C031", "Ricardo", "Fuentes", "Castillo", "pass31", Estado.Activo);
+        Coordinador coordinador = new Coordinador("C031", "Ricardo", "Fuentes",  "pass31", Estado.Activo);
         CoordinadorDao coordinadorDao = new CoordinadorDao();
         assertThrows(UsuariosExcepcion.class, () -> coordinadorDao.insertarCoordinador(coordinador));
     }
 
     @Test
     public void pruebaInsertarCoordinadorExcepcionNumPersonalNulo() {
-        Coordinador coordinador = new Coordinador(null, "Ricardo", "Fuentes", "Castillo", "pass31", Estado.Activo);
+        Coordinador coordinador = new Coordinador(null, "Ricardo", "Fuentes",  "pass31", Estado.Activo);
         CoordinadorDao coordinadorDao = new CoordinadorDao();
         assertThrows(UsuariosExcepcion.class, () -> coordinadorDao.insertarCoordinador(coordinador));
     }
 
     @Test
     public void pruebaInsertarCoordinadorExcepcionNombreNulo() {
-        Coordinador coordinador = new Coordinador("C051", null, "Fuentes", "Castillo", "pass31", Estado.Activo);
+        Coordinador coordinador = new Coordinador("C051", null, "Fuentes",  "pass31", Estado.Activo);
         CoordinadorDao coordinadorDao = new CoordinadorDao();
         assertThrows(UsuariosExcepcion.class, () -> coordinadorDao.insertarCoordinador(coordinador));
     }
 
     @Test
     public void pruebaModificarCoordinadorExitoso() throws UsuariosExcepcion {
-        Coordinador coordinador = new Coordinador("C031", "Ricardo", "Fuentes", "Castillo", "pass31nuevo", Estado.Activo);
+        Coordinador coordinador = new Coordinador("C031", "Ricardo", "Fuentes", "pass31nuevo", Estado.Activo);
         CoordinadorDao coordinadorDao = new CoordinadorDao();
         int filasAfectadas = coordinadorDao.modificarCoordinador("C031", coordinador);
         assertEquals(1, filasAfectadas);
@@ -47,7 +47,7 @@ public class CoordinadorPrueba {
 
     @Test
     public void pruebaModificarCoordinadorAlternoNoExistente() throws UsuariosExcepcion {
-        Coordinador coordinador = new Coordinador("C999", "Ricardo", "Fuentes", "Castillo", "pass31", Estado.Activo);
+        Coordinador coordinador = new Coordinador("C999", "Ricardo", "Fuentes",  "pass31", Estado.Activo);
         CoordinadorDao coordinadorDao = new CoordinadorDao();
         int filasAfectadas = coordinadorDao.modificarCoordinador("C999", coordinador);
         assertEquals(0, filasAfectadas);
@@ -55,14 +55,14 @@ public class CoordinadorPrueba {
 
     @Test
     public void pruebaModificarCoordinadorExcepcionNombreNulo() {
-        Coordinador coordinador = new Coordinador("C031", null, "Fuentes", "Castillo", "pass31", Estado.Activo);
+        Coordinador coordinador = new Coordinador("C031", null, "Fuentes",  "pass31", Estado.Activo);
         CoordinadorDao coordinadorDao = new CoordinadorDao();
         assertThrows(UsuariosExcepcion.class, () -> coordinadorDao.modificarCoordinador("C031", coordinador));
     }
 
     @Test
     public void pruebaModificarCoordinadorExcepcionNumPersonalNulo() {
-        Coordinador coordinador = new Coordinador("C031", "Ricardo", "Fuentes", "Castillo", "pass31", Estado.Activo);
+        Coordinador coordinador = new Coordinador("C031", "Ricardo", "Fuentes",  "pass31", Estado.Activo);
         CoordinadorDao coordinadorDao = new CoordinadorDao();
         assertThrows(UsuariosExcepcion.class, () -> coordinadorDao.modificarCoordinador(null, coordinador));
     }

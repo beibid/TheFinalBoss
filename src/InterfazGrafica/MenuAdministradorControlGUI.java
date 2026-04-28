@@ -11,7 +11,7 @@ import javafx.stage.Stage;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class SeccionAdministradorGUI implements Initializable {
+public class MenuAdministradorControlGUI implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {}

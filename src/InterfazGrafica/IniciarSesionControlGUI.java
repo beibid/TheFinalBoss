@@ -28,7 +28,9 @@ public class IniciarSesionControlGUI implements Initializable {
     private UsuarioDao usuarioDao = new UsuarioDao();
 
     @Override
-    public void initialize(URL url, ResourceBundle rb) {}
+    public void initialize(URL url, ResourceBundle rb) {
+
+    }
 
     @FXML
     private void botonIniciarSesion() {
@@ -76,10 +78,10 @@ public class IniciarSesionControlGUI implements Initializable {
 
     private String obtenerRutaFxml(String tipo) {
         switch (tipo) {
-            case "Coordinador": return "/InterfazGrafica/vistas/SeccionCoordinadorVista.fxml";
-            case "Profesor":    return "/InterfazGrafica/vistas/SeccionProfesorVista.fxml";
-            case "Practicante": return "/InterfazGrafica/vistas/SeccionPracticanteVista.fxml";
-            case "Administrador":  return "/InterfazGrafica/vistas/SeccionAdministradorVista.fxml";
+            case "Coordinador": return "/InterfazGrafica/vistas/MenuCoordinadorVista.fxml";
+            case "Profesor":    return "/InterfazGrafica/vistas/MenuProfesorVista.fxml";
+            case "Practicante": return "/InterfazGrafica/vistas/MenuPracticanteVista.fxml";
+            case "Administrador":  return "/InterfazGrafica/vistas/MenuAdministradorVista.fxml";
             default:            return null;
         }
     }

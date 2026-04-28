@@ -24,4 +24,9 @@ public class Coordinador extends Usuario {
         this.numeroDePersonalCoordinador = numeroDePersonalCoordinador;
     }
 
+    @Override
+    public String toString() {
+        return nombre + " " + apellidos + " - " + numeroDePersonalCoordinador;
+    }
+
 }
