@@ -3,7 +3,6 @@ package InterfazGrafica;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -13,12 +12,10 @@ import javafx.stage.Stage;
 import logica.dominio.SesionUsuario;
 import logica.dominio.enums.Rol;
 import java.io.IOException;
-import java.net.URL;
-import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class MenuAdministradorControlGUI implements Initializable {
+public class MenuAdministradorControlGUI {
 
     private static final Logger LOGGER = Logger.getLogger(MenuAdministradorControlGUI.class.getName());
 
@@ -26,8 +23,8 @@ public class MenuAdministradorControlGUI implements Initializable {
     @FXML private Label lblNombre;
     @FXML private Label lblRol;
 
-    @Override
-    public void initialize(URL url, ResourceBundle rb) {
+    @FXML
+    public void initialize() {
         if (!SesionUsuario.getInstance().tieneRol(Rol.Administrador)) {
             cerrarVentanaNoAutorizada();
         } else {
@@ -56,17 +53,17 @@ public class MenuAdministradorControlGUI implements Initializable {
     }
 
     @FXML
-    private void botonRegistrarCoordinador(ActionEvent event) throws Exception {
+    private void botonRegistrarCoordinador(ActionEvent event) throws IOException {
         abrirVentana("/InterfazGrafica/vistas/CoordinadorVista.fxml", "Registrar Coordinador");
     }
 
     @FXML
-    private void botonInactivarCoordinador(ActionEvent event) throws Exception {
+    private void botonInactivarCoordinador(ActionEvent event) throws IOException {
         abrirVentana("/InterfazGrafica/vistas/InactivarCoordinadorVista.fxml", "Inactivar Coordinador");
     }
 
     @FXML
-    private void botonRegistrarAdministrador(ActionEvent event) throws Exception {
+    private void botonRegistrarAdministrador(ActionEvent event) throws IOException {
         abrirVentana("/InterfazGrafica/vistas/AdministradorVista.fxml", "Registrar Administrador");
     }
 
