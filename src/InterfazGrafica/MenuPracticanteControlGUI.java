@@ -12,10 +12,15 @@ import javafx.scene.control.Label;
 import javafx.stage.Stage;
 import logica.dominio.SesionUsuario;
 import logica.dominio.enums.Rol;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class MenuPracticanteControlGUI implements Initializable {
+
+    private static final Logger LOGGER = Logger.getLogger(MenuPracticanteControlGUI.class.getName());
 
     @FXML private Label lblBienvenida;
     @FXML private Label lblNombre;
@@ -45,23 +50,23 @@ public class MenuPracticanteControlGUI implements Initializable {
             Stage stage = (Stage) lblBienvenida.getScene().getWindow();
             stage.setScene(new Scene(root));
             stage.show();
-        } catch (Exception excepcion) {
-            excepcion.printStackTrace();
+        } catch (IOException excepcion) {
+            LOGGER.log(Level.SEVERE, "Error al cargar la vista de login", excepcion);
         }
     }
 
     @FXML
-    private void abrirSubirReporte(ActionEvent event) throws Exception {
+    private void abrirSubirReporte(ActionEvent event) throws IOException {
         abrirVentana("/InterfazGrafica/vistas/SubirReporteVista.fxml", "Subir Reporte");
     }
 
     @FXML
-    private void abrirMisReportes(ActionEvent event) throws Exception {
+    private void abrirMisReportes(ActionEvent event) throws IOException {
         abrirVentana("/InterfazGrafica/vistas/HistorialReportesVista.fxml", "Mis Reportes");
     }
 
     @FXML
-    private void cerrarSesion(ActionEvent event) throws Exception {
+    private void cerrarSesion(ActionEvent event) throws IOException {
         SesionUsuario.getInstance().cerrarSesion();
         Parent root = FXMLLoader.load(getClass().getResource("/InterfazGrafica/vistas/IniciarSesionVista.fxml"));
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
@@ -69,7 +74,7 @@ public class MenuPracticanteControlGUI implements Initializable {
         stage.show();
     }
 
-    private void abrirVentana(String fxml, String titulo) throws Exception {
+    private void abrirVentana(String fxml, String titulo) throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource(fxml));
         Stage stage = new Stage();
         stage.setTitle(titulo);

@@ -12,10 +12,15 @@ import javafx.scene.control.Label;
 import javafx.stage.Stage;
 import logica.dominio.SesionUsuario;
 import logica.dominio.enums.Rol;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class MenuCoordinadorControlGUI implements Initializable {
+
+    private static final Logger LOGGER = Logger.getLogger(MenuCoordinadorControlGUI.class.getName());
 
     @FXML private Label lblBienvenida;
     @FXML private Label lblNombre;
@@ -45,73 +50,73 @@ public class MenuCoordinadorControlGUI implements Initializable {
             Stage stage = (Stage) lblBienvenida.getScene().getWindow();
             stage.setScene(new Scene(root));
             stage.show();
-        } catch (Exception excepcion) {
-            excepcion.printStackTrace();
+        } catch (IOException excepcion) {
+            LOGGER.log(Level.SEVERE, "Error al cargar la vista de login", excepcion);
         }
     }
 
     @FXML
-    private void abrirRegistrarPracticante(ActionEvent event) throws Exception {
+    private void abrirRegistrarPracticante(ActionEvent event) throws IOException {
         abrirVentana("/InterfazGrafica/vistas/PracticanteVista.fxml", "Registrar Practicante");
     }
 
     @FXML
-    private void abrirInactivarPracticante(ActionEvent event) throws Exception {
+    private void abrirInactivarPracticante(ActionEvent event) throws IOException {
         abrirVentana("/InterfazGrafica/vistas/InactivarPracticanteVista.fxml", "Inactivar Practicante");
     }
 
     @FXML
-    private void abrirRegistrarProfesor(ActionEvent event) throws Exception {
+    private void abrirRegistrarProfesor(ActionEvent event) throws IOException {
         abrirVentana("/InterfazGrafica/vistas/ProfesorVista.fxml", "Registrar Profesor");
     }
 
     @FXML
-    private void abrirInactivarProfesor(ActionEvent event) throws Exception {
+    private void abrirInactivarProfesor(ActionEvent event) throws IOException {
         abrirVentana("/InterfazGrafica/vistas/InactivarProfesorVista.fxml", "Inactivar Profesor");
     }
 
     @FXML
-    private void abrirRegistrarProyecto(ActionEvent event) throws Exception {
+    private void abrirRegistrarProyecto(ActionEvent event) throws IOException {
         abrirVentana("/InterfazGrafica/vistas/ProyectoVista.fxml", "Registrar Proyecto");
     }
 
     @FXML
-    private void abrirInactivarProyecto(ActionEvent event) throws Exception {
+    private void abrirInactivarProyecto(ActionEvent event) throws IOException {
         abrirVentana("/InterfazGrafica/vistas/InactivarProyectoVista.fxml", "Inactivar Proyecto");
     }
 
     @FXML
-    private void abrirModificarProyecto(ActionEvent event) throws Exception {
+    private void abrirModificarProyecto(ActionEvent event) throws IOException {
         abrirVentana("/InterfazGrafica/vistas/ModificarProyectoVista.fxml", "Modificar Proyecto");
     }
 
     @FXML
-    private void abrirRegistrarOrganizacion(ActionEvent event) throws Exception {
+    private void abrirRegistrarOrganizacion(ActionEvent event) throws IOException {
         abrirVentana("/InterfazGrafica/vistas/RegistrarOrganizacionVista.fxml", "Registrar Organización");
     }
 
     @FXML
-    private void abrirInactivarOrganizacion(ActionEvent event) throws Exception {
+    private void abrirInactivarOrganizacion(ActionEvent event) throws IOException {
         abrirVentana("/InterfazGrafica/vistas/InactivarOrganizacionVista.fxml", "Inactivar Organización");
     }
 
     @FXML
-    private void abrirModificarOrganizacion(ActionEvent event) throws Exception {
+    private void abrirModificarOrganizacion(ActionEvent event) throws IOException {
         abrirVentana("/InterfazGrafica/vistas/ModificarOrganizacionVista.fxml", "Modificar Organización");
     }
 
     @FXML
-    private void abrirAsignarPracticanteEnSeccion(ActionEvent event) throws Exception {
+    private void abrirAsignarPracticanteEnSeccion(ActionEvent event) throws IOException {
         abrirVentana("/InterfazGrafica/vistas/PracticanteEnSeccionVista.fxml", "Asignar Practicante a Seccion");
     }
 
     @FXML
-    private void abrirAsignarProyectoAlPracticante(ActionEvent event) throws Exception {
+    private void abrirAsignarProyectoAlPracticante(ActionEvent event) throws IOException {
         abrirVentana("/InterfazGrafica/vistas/AsignarProyectoVista.fxml", "Asignar proyecto a practicante");
     }
 
     @FXML
-    private void cerrarSesion(ActionEvent event) throws Exception {
+    private void cerrarSesion(ActionEvent event) throws IOException {
         SesionUsuario.getInstance().cerrarSesion();
         Parent root = FXMLLoader.load(getClass().getResource("/InterfazGrafica/vistas/IniciarSesionVista.fxml"));
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
@@ -119,7 +124,7 @@ public class MenuCoordinadorControlGUI implements Initializable {
         stage.show();
     }
 
-    private void abrirVentana(String fxml, String titulo) throws Exception {
+    private void abrirVentana(String fxml, String titulo) throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource(fxml));
         Stage stage = new Stage();
         stage.setTitle(titulo);

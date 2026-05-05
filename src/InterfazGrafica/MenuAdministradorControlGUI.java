@@ -12,10 +12,15 @@ import javafx.scene.control.Label;
 import javafx.stage.Stage;
 import logica.dominio.SesionUsuario;
 import logica.dominio.enums.Rol;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class MenuAdministradorControlGUI implements Initializable {
+
+    private static final Logger LOGGER = Logger.getLogger(MenuAdministradorControlGUI.class.getName());
 
     @FXML private Label lblBienvenida;
     @FXML private Label lblNombre;
@@ -45,8 +50,8 @@ public class MenuAdministradorControlGUI implements Initializable {
             Stage stage = (Stage) lblBienvenida.getScene().getWindow();
             stage.setScene(new Scene(root));
             stage.show();
-        } catch (Exception excepcion) {
-            excepcion.printStackTrace();
+        } catch (IOException excepcion) {
+            LOGGER.log(Level.SEVERE, "Error al cargar la vista de login", excepcion);
         }
     }
 
@@ -66,7 +71,7 @@ public class MenuAdministradorControlGUI implements Initializable {
     }
 
     @FXML
-    private void botonRegresar(ActionEvent event) throws Exception {
+    private void botonRegresar(ActionEvent event) throws IOException {
         SesionUsuario.getInstance().cerrarSesion();
         Parent root = FXMLLoader.load(getClass().getResource("/InterfazGrafica/vistas/IniciarSesionVista.fxml"));
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
@@ -74,7 +79,7 @@ public class MenuAdministradorControlGUI implements Initializable {
         stage.show();
     }
 
-    private void abrirVentana(String fxml, String titulo) throws Exception {
+    private void abrirVentana(String fxml, String titulo) throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource(fxml));
         Stage stage = new Stage();
         stage.setTitle(titulo);
