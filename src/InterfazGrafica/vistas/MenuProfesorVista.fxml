@@ -13,9 +13,16 @@
               style="-fx-background-color: #2ecc71; -fx-padding: 15;">
             <children>
                 <Label text="Profesor" style="-fx-text-fill: white; -fx-font-size: 16; -fx-font-weight: bold;"/>
-                <Separator><VBox.margin><Insets top="10.0" bottom="10.0"/></VBox.margin></Separator>
+                <Label fx:id="lblNombre" text="" style="-fx-text-fill: white; -fx-font-size: 12;">
+                    <VBox.margin><Insets top="4.0"/></VBox.margin>
+                </Label>
+                <Label fx:id="lblRol" text="" style="-fx-text-fill: white; -fx-font-size: 11; -fx-background-color: #27ae60; -fx-padding: 3 8 3 8; -fx-background-radius: 10;">
+                    <VBox.margin><Insets top="5.0" bottom="10.0"/></VBox.margin>
+                </Label>
 
-                <Label text="Reporte" style="-fx-text-fill: black; -fx-font-size: 11;"/>
+                <Separator><VBox.margin><Insets top="5.0" bottom="10.0"/></VBox.margin></Separator>
+
+                <Label text="Reporte" style="-fx-text-fill: white; -fx-font-size: 11;"/>
                 <Button text="Calificar reporte" onAction="#abrirCalificarReporte" prefWidth="170.0"
                         style="-fx-background-color: transparent; -fx-text-fill: white; -fx-alignment: CENTER-LEFT;">
                     <VBox.margin><Insets top="5.0"/></VBox.margin>
@@ -37,7 +44,7 @@
         <VBox layoutX="200.0" layoutY="0.0" prefHeight="600.0" prefWidth="550.0"
               alignment="CENTER" style="-fx-padding: 30;">
             <children>
-                <Label text="Bienvenido Profesor" style="-fx-font-size: 22; -fx-font-weight: bold;"/>
+                <Label fx:id="lblBienvenida" text="" style="-fx-font-size: 22; -fx-font-weight: bold;"/>
                 <Label text="Selecciona una opción del menú" style="-fx-font-size: 13; -fx-text-fill: #666666;">
                     <VBox.margin><Insets top="8.0"/></VBox.margin>
                 </Label>

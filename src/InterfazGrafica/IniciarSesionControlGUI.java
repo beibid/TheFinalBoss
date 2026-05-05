@@ -12,8 +12,10 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import logica.dao.excepciones.UsuariosExcepcion;
 import logica.dao.objetos.UsuarioDao;
+import logica.dominio.SesionUsuario;
 import logica.dominio.UsuarioSesion;
 import logica.dominio.enums.Estado;
+import logica.dominio.enums.Rol;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -28,9 +30,7 @@ public class IniciarSesionControlGUI implements Initializable {
     private UsuarioDao usuarioDao = new UsuarioDao();
 
     @Override
-    public void initialize(URL url, ResourceBundle rb) {
-
-    }
+    public void initialize(URL url, ResourceBundle rb) {}
 
     @FXML
     private void botonIniciarSesion() {
@@ -46,8 +46,8 @@ public class IniciarSesionControlGUI implements Initializable {
         try {
             UsuarioSesion usuarioSesion = usuarioDao.buscarUsuario(identificador, contrasena);
             procesarResultadoLogin(usuarioSesion);
-        } catch (UsuariosExcepcion e) {
-            mostrarError("Error inesperado", e.getMessage().toUpperCase());
+        } catch (UsuariosExcepcion excepcion) {
+            mostrarError("Error inesperado", excepcion.getMessage().toUpperCase());
         }
     }
 
@@ -68,32 +68,33 @@ public class IniciarSesionControlGUI implements Initializable {
     }
 
     private void redirigir(UsuarioSesion usuarioSesion) {
-        String fxml = obtenerRutaFxml(usuarioSesion.getTipo());
-        if (fxml == null) {
+        SesionUsuario.getInstance().iniciarSesion(usuarioSesion);
+        String rutaFxml = obtenerRutaFxml(usuarioSesion.getRol());
+        if (rutaFxml == null) {
             mostrarError("Error", "TIPO DE USUARIO NO RECONOCIDO.");
             return;
         }
-        cargarVista(fxml);
+        cargarVista(rutaFxml);
     }
 
-    private String obtenerRutaFxml(String tipo) {
-        switch (tipo) {
-            case "Coordinador": return "/InterfazGrafica/vistas/MenuCoordinadorVista.fxml";
-            case "Profesor":    return "/InterfazGrafica/vistas/MenuProfesorVista.fxml";
-            case "Practicante": return "/InterfazGrafica/vistas/MenuPracticanteVista.fxml";
-            case "Administrador":  return "/InterfazGrafica/vistas/MenuAdministradorVista.fxml";
+    private String obtenerRutaFxml(Rol rol) {
+        switch (rol) {
+            case Coordinador:   return "/InterfazGrafica/vistas/MenuCoordinadorVista.fxml";
+            case Profesor:      return "/InterfazGrafica/vistas/MenuProfesorVista.fxml";
+            case Practicante:   return "/InterfazGrafica/vistas/MenuPracticanteVista.fxml";
+            case Administrador: return "/InterfazGrafica/vistas/MenuAdministradorVista.fxml";
             default:            return null;
         }
     }
 
-    private void cargarVista(String fxml) {
+    private void cargarVista(String rutaFxml) {
         try {
-            Parent root = FXMLLoader.load(getClass().getResource(fxml));
+            Parent root = FXMLLoader.load(getClass().getResource(rutaFxml));
             Stage stage = (Stage) campoTextoIdentificador.getScene().getWindow();
             stage.setScene(new Scene(root));
             stage.show();
-        } catch (Exception e) {
-            mostrarError("Error al cargar pantalla", e.getMessage().toUpperCase());
+        } catch (Exception excepcion) {
+            mostrarError("Error al cargar pantalla", excepcion.getMessage().toUpperCase());
         }
     }
 

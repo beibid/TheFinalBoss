@@ -4,79 +4,101 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane prefHeight="600.0" prefWidth="750.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="InterfazGrafica.MenuCoordinadorControlGUI">
+<AnchorPane prefHeight="600.0" prefWidth="750.0"
+            xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="InterfazGrafica.MenuCoordinadorControlGUI">
     <children>
 
-        <!-- Sidebar -->
-        <VBox layoutX="0.0" layoutY="0.0" prefHeight="600.0" prefWidth="200.0" style="-fx-background-color: #2ecc71; -fx-padding: 15;">
+        <VBox layoutX="0.0" layoutY="0.0" prefHeight="600.0" prefWidth="200.0"
+              style="-fx-background-color: #2ecc71; -fx-padding: 15;">
             <children>
-                <Label style="-fx-text-fill: white; -fx-font-size: 16; -fx-font-weight: bold;" text="Coordinador" />
-                <Separator><VBox.margin><Insets bottom="10.0" top="10.0" /></VBox.margin></Separator>
+                <Label text="Coordinador" style="-fx-text-fill: white; -fx-font-size: 16; -fx-font-weight: bold;"/>
+                <Label fx:id="lblNombre" text="" style="-fx-text-fill: white; -fx-font-size: 12;">
+                    <VBox.margin><Insets top="4.0"/></VBox.margin>
+                </Label>
+                <Label fx:id="lblRol" text="" style="-fx-text-fill: white; -fx-font-size: 11; -fx-background-color: #27ae60; -fx-padding: 3 8 3 8; -fx-background-radius: 10;">
+                    <VBox.margin><Insets top="5.0" bottom="10.0"/></VBox.margin>
+                </Label>
 
-                <Label style="-fx-text-fill: black; -fx-font-size: 11;" text="Practicante" />
-                <Button fx:id="botonRegistrarPracticante" onAction="#abrirRegistrarPracticante" prefWidth="170.0" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-alignment: CENTER-LEFT;" text="Registrar">
-                    <VBox.margin><Insets top="5.0" /></VBox.margin>
-                </Button>
-                <Button fx:id="botonInactivarPracticante" onAction="#abrirInactivarPracticante" prefWidth="170.0" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-alignment: CENTER-LEFT;" text="Inactivar">
-                    <VBox.margin><Insets top="3.0" /></VBox.margin>
-                </Button>
-                <Button fx:id="botonAsignarPracticanteEnSeccion" onAction="#abrirAsignarPracticanteEnSeccion" prefWidth="170.0" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-alignment: CENTER-LEFT;" text="Asignar a seccion">
-                    <VBox.margin><Insets top="3.0" /></VBox.margin>
-                </Button>
-                <Button fx:id="botonAsignarProyectoAlPracticante" onAction="#abrirAsignarProyectoAlPracticante" prefWidth="170.0" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-alignment: CENTER-LEFT;" text="Asignarle proyecto">
-                    <VBox.margin><Insets top="3.0" /></VBox.margin>
-                </Button>
+                <Separator><VBox.margin><Insets top="5.0" bottom="10.0"/></VBox.margin></Separator>
 
-
-                <Separator><VBox.margin><Insets bottom="10.0" top="10.0" /></VBox.margin></Separator>
-
-                <Label style="-fx-text-fill: black; -fx-font-size: 11;" text="Profesor" />
-                <Button fx:id="botonRegistrarProfesor" onAction="#abrirRegistrarProfesor" prefWidth="170.0" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-alignment: CENTER-LEFT;" text="Registrar">
-                    <VBox.margin><Insets top="5.0" /></VBox.margin>
+                <Label text="Practicante" style="-fx-text-fill: white; -fx-font-size: 11;"/>
+                <Button fx:id="botonRegistrarPracticante" onAction="#abrirRegistrarPracticante" prefWidth="170.0"
+                        style="-fx-background-color: transparent; -fx-text-fill: white; -fx-alignment: CENTER-LEFT;" text="Registrar">
+                    <VBox.margin><Insets top="5.0"/></VBox.margin>
                 </Button>
-                <Button fx:id="botonInactivarProfesor" onAction="#abrirInactivarProfesor" prefWidth="170.0" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-alignment: CENTER-LEFT;" text="Inactivar">
-                    <VBox.margin><Insets top="3.0" /></VBox.margin>
+                <Button fx:id="botonInactivarPracticante" onAction="#abrirInactivarPracticante" prefWidth="170.0"
+                        style="-fx-background-color: transparent; -fx-text-fill: white; -fx-alignment: CENTER-LEFT;" text="Inactivar">
+                    <VBox.margin><Insets top="3.0"/></VBox.margin>
                 </Button>
-
-                <Separator><VBox.margin><Insets bottom="10.0" top="10.0" /></VBox.margin></Separator>
-
-                <Label style="-fx-text-fill: black; -fx-font-size: 11;" text="Proyecto" />
-                <Button fx:id="botonRegistrarProyecto" onAction="#abrirRegistrarProyecto" prefWidth="170.0" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-alignment: CENTER-LEFT;" text="Registrar">
-                    <VBox.margin><Insets top="5.0" /></VBox.margin>
+                <Button fx:id="botonAsignarPracticanteEnSeccion" onAction="#abrirAsignarPracticanteEnSeccion" prefWidth="170.0"
+                        style="-fx-background-color: transparent; -fx-text-fill: white; -fx-alignment: CENTER-LEFT;" text="Asignar a seccion">
+                    <VBox.margin><Insets top="3.0"/></VBox.margin>
                 </Button>
-                <Button fx:id="botonInactivarProyecto" onAction="#abrirInactivarProyecto" prefWidth="170.0" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-alignment: CENTER-LEFT;" text="Inactivar">
-                    <VBox.margin><Insets top="3.0" /></VBox.margin>
-                </Button>
-                <Button fx:id="botonModificarProyecto" onAction="#abrirModificarProyecto" prefWidth="170.0" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-alignment: CENTER-LEFT;" text="Modificar">
-                    <VBox.margin><Insets top="3.0" /></VBox.margin>
+                <Button fx:id="botonAsignarProyectoAlPracticante" onAction="#abrirAsignarProyectoAlPracticante" prefWidth="170.0"
+                        style="-fx-background-color: transparent; -fx-text-fill: white; -fx-alignment: CENTER-LEFT;" text="Asignarle proyecto">
+                    <VBox.margin><Insets top="3.0"/></VBox.margin>
                 </Button>
 
-                <Separator><VBox.margin><Insets bottom="10.0" top="10.0" /></VBox.margin></Separator>
+                <Separator><VBox.margin><Insets top="10.0" bottom="10.0"/></VBox.margin></Separator>
 
-                <Label style="-fx-text-fill: black; -fx-font-size: 11;" text="Organización Vinculada" />
-                <Button fx:id="botonRegistrarOrganizacion" onAction="#abrirRegistrarOrganizacion" prefWidth="170.0" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-alignment: CENTER-LEFT;" text="Registrar">
-                    <VBox.margin><Insets top="5.0" /></VBox.margin>
+                <Label text="Profesor" style="-fx-text-fill: white; -fx-font-size: 11;"/>
+                <Button fx:id="botonRegistrarProfesor" onAction="#abrirRegistrarProfesor" prefWidth="170.0"
+                        style="-fx-background-color: transparent; -fx-text-fill: white; -fx-alignment: CENTER-LEFT;" text="Registrar">
+                    <VBox.margin><Insets top="5.0"/></VBox.margin>
                 </Button>
-                <Button fx:id="botonInactivarOrganizacion" onAction="#abrirInactivarOrganizacion" prefWidth="170.0" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-alignment: CENTER-LEFT;" text="Inactivar">
-                    <VBox.margin><Insets top="3.0" /></VBox.margin>
-                </Button>
-                <Button fx:id="botonModificarOrganizacion" onAction="#abrirModificarOrganizacion" prefWidth="170.0" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-alignment: CENTER-LEFT;" text="Modificar">
-                    <VBox.margin><Insets top="3.0" /></VBox.margin>
+                <Button fx:id="botonInactivarProfesor" onAction="#abrirInactivarProfesor" prefWidth="170.0"
+                        style="-fx-background-color: transparent; -fx-text-fill: white; -fx-alignment: CENTER-LEFT;" text="Inactivar">
+                    <VBox.margin><Insets top="3.0"/></VBox.margin>
                 </Button>
 
-                <Separator><VBox.margin><Insets bottom="10.0" top="10.0" /></VBox.margin></Separator>
+                <Separator><VBox.margin><Insets top="10.0" bottom="10.0"/></VBox.margin></Separator>
 
-                <Button fx:id="botonCerrarSesion" onAction="#cerrarSesion" prefWidth="170.0" style="-fx-background-color: #c0392b; -fx-text-fill: white;" text="Cerrar Sesión">
-                    <VBox.margin><Insets top="5.0" /></VBox.margin>
+                <Label text="Proyecto" style="-fx-text-fill: white; -fx-font-size: 11;"/>
+                <Button fx:id="botonRegistrarProyecto" onAction="#abrirRegistrarProyecto" prefWidth="170.0"
+                        style="-fx-background-color: transparent; -fx-text-fill: white; -fx-alignment: CENTER-LEFT;" text="Registrar">
+                    <VBox.margin><Insets top="5.0"/></VBox.margin>
+                </Button>
+                <Button fx:id="botonInactivarProyecto" onAction="#abrirInactivarProyecto" prefWidth="170.0"
+                        style="-fx-background-color: transparent; -fx-text-fill: white; -fx-alignment: CENTER-LEFT;" text="Inactivar">
+                    <VBox.margin><Insets top="3.0"/></VBox.margin>
+                </Button>
+                <Button fx:id="botonModificarProyecto" onAction="#abrirModificarProyecto" prefWidth="170.0"
+                        style="-fx-background-color: transparent; -fx-text-fill: white; -fx-alignment: CENTER-LEFT;" text="Modificar">
+                    <VBox.margin><Insets top="3.0"/></VBox.margin>
+                </Button>
+
+                <Separator><VBox.margin><Insets top="10.0" bottom="10.0"/></VBox.margin></Separator>
+
+                <Label text="Organización Vinculada" style="-fx-text-fill: white; -fx-font-size: 11;"/>
+                <Button fx:id="botonRegistrarOrganizacion" onAction="#abrirRegistrarOrganizacion" prefWidth="170.0"
+                        style="-fx-background-color: transparent; -fx-text-fill: white; -fx-alignment: CENTER-LEFT;" text="Registrar">
+                    <VBox.margin><Insets top="5.0"/></VBox.margin>
+                </Button>
+                <Button fx:id="botonInactivarOrganizacion" onAction="#abrirInactivarOrganizacion" prefWidth="170.0"
+                        style="-fx-background-color: transparent; -fx-text-fill: white; -fx-alignment: CENTER-LEFT;" text="Inactivar">
+                    <VBox.margin><Insets top="3.0"/></VBox.margin>
+                </Button>
+                <Button fx:id="botonModificarOrganizacion" onAction="#abrirModificarOrganizacion" prefWidth="170.0"
+                        style="-fx-background-color: transparent; -fx-text-fill: white; -fx-alignment: CENTER-LEFT;" text="Modificar">
+                    <VBox.margin><Insets top="3.0"/></VBox.margin>
+                </Button>
+
+                <Separator><VBox.margin><Insets top="10.0" bottom="10.0"/></VBox.margin></Separator>
+
+                <Button fx:id="botonCerrarSesion" onAction="#cerrarSesion" prefWidth="170.0"
+                        style="-fx-background-color: #c0392b; -fx-text-fill: white;" text="Cerrar Sesión">
+                    <VBox.margin><Insets top="5.0"/></VBox.margin>
                 </Button>
             </children>
         </VBox>
 
-        <VBox alignment="CENTER" layoutX="200.0" layoutY="0.0" prefHeight="600.0" prefWidth="550.0" style="-fx-padding: 30;">
+        <VBox alignment="CENTER" layoutX="200.0" layoutY="0.0" prefHeight="600.0" prefWidth="550.0"
+              style="-fx-padding: 30;">
             <children>
-                <Label style="-fx-font-size: 22; -fx-font-weight: bold;" text="Bienvenido Coordinador" />
-                <Label style="-fx-font-size: 13; -fx-text-fill: #666666;" text="Selecciona una opción del menú">
-                    <VBox.margin><Insets top="8.0" /></VBox.margin>
+                <Label fx:id="lblBienvenida" text="" style="-fx-font-size: 22; -fx-font-weight: bold;"/>
+                <Label text="Selecciona una opción del menú" style="-fx-font-size: 13; -fx-text-fill: #666666;">
+                    <VBox.margin><Insets top="8.0"/></VBox.margin>
                 </Label>
             </children>
         </VBox>

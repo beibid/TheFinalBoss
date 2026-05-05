@@ -1,0 +1,39 @@
+package logica.dominio;
+
+public class SesionUsuario {
+    private static SesionUsuario instancia;
+    private UsuarioSesion usuarioActivo;
+
+    private SesionUsuario() {}
+
+    public static SesionUsuario getInstance() {
+        if (instancia == null) {
+            instancia = new SesionUsuario();
+        }
+        return instancia;
+    }
+
+    public void iniciarSesion(UsuarioSesion usuario) {
+        this.usuarioActivo = usuario;
+    }
+
+    public void cerrarSesion() {
+        this.usuarioActivo = null;
+    }
+
+    public UsuarioSesion getUsuarioActivo() {
+        return usuarioActivo;
+    }
+
+    public String getNombre() {
+        return usuarioActivo != null ? usuarioActivo.getNombre() : null;
+    }
+
+    public String getApellidos() {
+        return usuarioActivo != null ? usuarioActivo.getApellidos() : null;
+    }
+
+    public boolean haySesionActiva() {
+        return usuarioActivo != null;
+    }
+}

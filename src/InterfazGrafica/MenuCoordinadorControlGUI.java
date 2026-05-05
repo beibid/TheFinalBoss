@@ -7,14 +7,26 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.stage.Stage;
+import logica.dominio.SesionUsuario;
 import java.net.URL;
 import java.util.ResourceBundle;
 
 public class MenuCoordinadorControlGUI implements Initializable {
 
+    @FXML private Label lblBienvenida;
+    @FXML private Label lblNombre;
+    @FXML private Label lblRol;
+
     @Override
-    public void initialize(URL url, ResourceBundle rb) {}
+    public void initialize(URL url, ResourceBundle rb) {
+        String nombre = SesionUsuario.getInstance().getNombre();
+        String rol = SesionUsuario.getInstance().getUsuarioActivo().getRol().toString();
+        lblBienvenida.setText("Bienvenido, " + nombre);
+        lblNombre.setText(nombre);
+        lblRol.setText("ROL: " + rol.toUpperCase());
+    }
 
     @FXML
     private void abrirRegistrarPracticante(ActionEvent event) throws Exception {
@@ -76,9 +88,9 @@ public class MenuCoordinadorControlGUI implements Initializable {
         abrirVentana("/InterfazGrafica/vistas/AsignarProyectoVista.fxml", "Asignar proyecto a practicante");
     }
 
-
     @FXML
     private void cerrarSesion(ActionEvent event) throws Exception {
+        SesionUsuario.getInstance().cerrarSesion();
         Parent root = FXMLLoader.load(getClass().getResource("/InterfazGrafica/vistas/IniciarSesionVista.fxml"));
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.setScene(new Scene(root));
