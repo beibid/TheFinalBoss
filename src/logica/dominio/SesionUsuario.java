@@ -1,5 +1,7 @@
 package logica.dominio;
 
+import logica.dominio.enums.Rol;
+
 public class SesionUsuario {
     private static SesionUsuario instancia;
     private UsuarioSesion usuarioActivo;
@@ -35,5 +37,8 @@ public class SesionUsuario {
 
     public boolean haySesionActiva() {
         return usuarioActivo != null;
+    }
+    public boolean tieneRol(Rol rolEsperado) {
+        return usuarioActivo != null && usuarioActivo.getRol() == rolEsperado;
     }
 }
