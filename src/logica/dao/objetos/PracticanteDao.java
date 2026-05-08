@@ -6,6 +6,7 @@ import logica.dao.excepciones.UsuariosExcepcion;
 import logica.dominio.Practicante;
 import logica.dao.interfaces.PracticanteDaoInterfaz;
 import logica.dominio.enums.Estado;
+import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -200,46 +201,20 @@ public class PracticanteDao implements PracticanteDaoInterfaz {
     }
 
     public int asignarProyecto(String matricula, int idProyecto) throws UsuariosExcepcion {
-        String consultaVerificaCapacidad = "SELECT p.capacidad, COUNT(pr.matricula) AS asignados " +
-                "FROM proyecto p " +
-                "LEFT JOIN practicante pr ON pr.idProyecto = p.idProyecto " +
-                "WHERE p.idProyecto = ? " +
-                "GROUP BY p.capacidad";
-        String consultaPracticanteAsignado = "SELECT idProyecto FROM practicante WHERE matricula = ?";
-        String consultaAsignarProyecto = "UPDATE practicante SET idProyecto = ? WHERE matricula = ?";
         Connection conexionBaseDeDatos = null;
         int filasAfectadas = 0;
 
         try {
             conexionBaseDeDatos = ConexionBaseDeDatos.getInstance().conectar();
-
-            PreparedStatement verificaProyectoAsignado = conexionBaseDeDatos.prepareStatement(consultaPracticanteAsignado);
-            verificaProyectoAsignado.setString(1, matricula);
-            ResultSet resultadoVerificacionProyectoAsignado = verificaProyectoAsignado.executeQuery();
-            if (resultadoVerificacionProyectoAsignado.next() && resultadoVerificacionProyectoAsignado.getObject("idProyecto") != null) {
-                throw new UsuariosExcepcion("El practicante ya tiene un proyecto asignado.");
-            }
-
-            PreparedStatement verificacionCapacidad = conexionBaseDeDatos.prepareStatement(consultaVerificaCapacidad);
-            verificacionCapacidad.setInt(1, idProyecto);
-            ResultSet resultadoVerificacionCapacidad = verificacionCapacidad.executeQuery();
-            if (resultadoVerificacionCapacidad.next()) {
-                int capacidad = resultadoVerificacionCapacidad.getInt("capacidad");
-                int asignados = resultadoVerificacionCapacidad.getInt("asignados");
-                if (asignados >= capacidad) {
-                    throw new UsuariosExcepcion("El proyecto ya alcanzó su capacidad máxima.");
-                }
-            }
-
-            PreparedStatement asignacionDeProyecto = conexionBaseDeDatos.prepareStatement(consultaAsignarProyecto);
-            asignacionDeProyecto.setInt(1, idProyecto);
-            asignacionDeProyecto.setString(2, matricula);
-            filasAfectadas = asignacionDeProyecto.executeUpdate();
+            CallableStatement procedimientoAsignaProyecto = conexionBaseDeDatos.prepareCall("{CALL AsignarProyecto(?, ?)}");
+            procedimientoAsignaProyecto.setString(1, matricula);
+            procedimientoAsignaProyecto.setInt(2, idProyecto);
+            procedimientoAsignaProyecto.execute();
+            filasAfectadas = 1;
             LOGGER.info("Proyecto asignado correctamente al practicante: " + matricula);
-
         } catch (SQLException excepcionSQL) {
             LOGGER.log(Level.SEVERE, "Error al asignar proyecto", excepcionSQL);
-            throw new UsuariosExcepcion("Error al asignar proyecto", excepcionSQL);
+            throw new UsuariosExcepcion(excepcionSQL.getMessage(), excepcionSQL);
         } finally {
             try {
                 if (conexionBaseDeDatos != null) conexionBaseDeDatos.close();
