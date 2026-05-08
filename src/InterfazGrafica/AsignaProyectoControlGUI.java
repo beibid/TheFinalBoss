@@ -12,43 +12,36 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import logica.dao.excepciones.MensajeriaExcepcion;
 import logica.dao.excepciones.UsuariosExcepcion;
 import logica.dao.objetos.PracticanteDao;
-import logica.dao.objetos.SeccionDao;
-import logica.dao.objetos.PracticanteSeccionDao;
+import logica.dao.objetos.ProyectoDao;
 import logica.dominio.Practicante;
-import logica.dominio.Seccion;
-import logica.dominio.PracticanteSeccion;
+import logica.dominio.Proyecto;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
-
 
 
 public class AsignaProyectoControlGUI implements Initializable{
 
 
     @FXML private ComboBox<Practicante> comboBoxPracticantes;
-    @FXML private ComboBox<Seccion> comboBoxSecciones;
-
+    @FXML private ComboBox<Proyecto> comboBoxProyectos;
     @FXML private VBox panelError;
     @FXML private VBox panelExito;
-
     @FXML private Label etiquetaTituloError;
     @FXML private Label etiquetaMensajeError;
     @FXML private Label etiquetaTituloExito;
     @FXML private Label etiquetaMensajeExito;
 
-
-
-    private final PracticanteDao        practicanteDao        = new PracticanteDao();
-    private final SeccionDao            seccionDao            = new SeccionDao();
-    private final PracticanteSeccionDao practicanteSeccionDao = new PracticanteSeccionDao();
+    private final PracticanteDao practicanteDao = new PracticanteDao();
+    private final ProyectoDao proyectoDao = new ProyectoDao();
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         cargarPracticantesActivos();
-        cargarSecciones();
+        cargarProyectos();
     }
 
     private void cargarPracticantesActivos() {
@@ -60,17 +53,17 @@ public class AsignaProyectoControlGUI implements Initializable{
         }
     }
 
-    private void cargarSecciones() {
+    private void cargarProyectos() {
         try {
-            List<Seccion> secciones = seccionDao.obtenerSecciones();
-            comboBoxSecciones.setItems(FXCollections.observableArrayList(secciones));
-        } catch (UsuariosExcepcion e) {
-            mostrarError("Error al cargar", "NO SE PUDIERON CARGAR LAS SECCIONES.");
+            List<Proyecto> proyectos = proyectoDao.obtenerProyectosDisponibles();
+            comboBoxProyectos.setItems(FXCollections.observableArrayList(proyectos));
+        } catch (MensajeriaExcepcion e) {
+            mostrarError("Error al cargar", "NO SE PUDIERON CARGAR LOS PROYECTOS DISPONIBLES.");
         }
     }
 
     @FXML
-    private void seleccionarProfesor() {
+    private void seleccionarPracticante() {
         Practicante practicante = comboBoxPracticantes.getSelectionModel().getSelectedItem();
         if (practicante != null) {
             ocultarError();
@@ -81,42 +74,37 @@ public class AsignaProyectoControlGUI implements Initializable{
     @FXML
     private void botonAsignar() {
         Practicante practicante = comboBoxPracticantes.getSelectionModel().getSelectedItem();
-        Seccion     seccion     = comboBoxSecciones.getSelectionModel().getSelectedItem();
+        Proyecto proyecto = comboBoxProyectos.getSelectionModel().getSelectedItem();
 
         if (practicante == null) {
             mostrarError("Sin selección", "POR FAVOR SELECCIONA UN PRACTICANTE.");
             return;
         }
-        if (seccion == null) {
-            mostrarError("Sin selección", "POR FAVOR SELECCIONA UNA SECCIÓN.");
+        if (proyecto == null) {
+            mostrarError("Sin selección", "POR FAVOR SELECCIONA UN PROYECTO.");
             return;
         }
-        if (!confirmarAccion("¿Seguro que desea asignar a " + practicante.getNombre() + " a la sección " + seccion.getNoSeccion() + "?")) {
+        if (!confirmarAccion("¿Seguro que desea asignar a " + practicante.getNombre() + " el proyecto " + proyecto.getNombreProyecto() + "?")) {
             return;
         }
 
-        ejecutarAsignacion(practicante, seccion);
+        ejecutarAsignacion(practicante, proyecto);
     }
 
-    private void ejecutarAsignacion(Practicante practicante, Seccion seccion) {
+    private void ejecutarAsignacion(Practicante practicante, Proyecto proyecto) {
         try {
-            PracticanteSeccion ps = new PracticanteSeccion();
-            ps.setMatricula(practicante.getMatricula());
-            ps.setNoSeccion(seccion.getNoSeccion());
-
-            int filasAfectadas = practicanteSeccionDao.agregarPracticanteSeccion(ps);
+            int filasAfectadas = practicanteDao.asignarProyecto(practicante.getMatricula(), proyecto.getIdProyecto());
 
             if (filasAfectadas > 0) {
                 limpiarSeleccion();
-                mostrarExito("Asignación exitosa", "EL PRACTICANTE FUE ASIGNADO A LA SECCIÓN EXITOSAMENTE.");
+                mostrarExito("Asignación exitosa", "EL PRACTICANTE FUE ASIGNADO AL PROYECTO EXITOSAMENTE.");
             } else {
                 mostrarError("Error", "NO SE PUDO REALIZAR LA ASIGNACIÓN.");
             }
-        } catch (UsuariosExcepcion e) {
-            mostrarError("Error inesperado", e.getMessage().toUpperCase());
+        } catch (UsuariosExcepcion e){
+            mostrarError("ERROR", e.getMessage().toUpperCase());
         }
     }
-
     @FXML
     private void botonCancelar() {
         if (confirmarAccion("¿Seguro que desea cancelar?")) {
@@ -143,7 +131,7 @@ public class AsignaProyectoControlGUI implements Initializable{
 
     private void limpiarSeleccion() {
         comboBoxPracticantes.getSelectionModel().clearSelection();
-        comboBoxSecciones.getSelectionModel().clearSelection();
+        comboBoxProyectos.getSelectionModel().clearSelection();
         ocultarError();
         ocultarExito();
     }

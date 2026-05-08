@@ -16,8 +16,14 @@ public class Reporte {
     private EstadoDeCalificacion estadoDeCalificacion;
     private String matriculaPracticante;
     private String numPersonalProfesor;
+    private String archivoAdjunto;
+    private String nombreArchivo;
 
-    public Reporte (TipoReporte tipoReporte, String descripcion, Date fechaGeneracion, Double calificacion, String observaciones, EstadoDeCalificacion estadoDeCalificacion, String matriculaPracticante, String numPersonalProfesor){
+    public Reporte (TipoReporte tipoReporte, String descripcion, Date fechaGeneracion,
+                    Double calificacion, String observaciones,
+                    EstadoDeCalificacion estadoDeCalificacion, String matriculaPracticante,
+                    String numPersonalProfesor, String archivoAdjunto, String nombreArchivo){
+
         this.tipoReporte = tipoReporte;
         this.descripcion = descripcion;
         this.fechaGeneracion = fechaGeneracion;
@@ -26,6 +32,17 @@ public class Reporte {
         this.estadoDeCalificacion = estadoDeCalificacion;
         this.matriculaPracticante = matriculaPracticante;
         this.numPersonalProfesor = numPersonalProfesor;
+        this.archivoAdjunto = archivoAdjunto;
+        this.nombreArchivo = nombreArchivo;
+
+    }
+
+    public Reporte(TipoReporte tipoReporte, String descripcion, String matriculaPracticante, String archivoAdjunto, String nombreArchivo) {
+        this.tipoReporte = tipoReporte;
+        this.descripcion = descripcion;
+        this.matriculaPracticante = matriculaPracticante;
+        this.archivoAdjunto = archivoAdjunto;
+        this.nombreArchivo = nombreArchivo;
     }
 
     public TipoReporte getTipoReporte() {
@@ -60,6 +77,13 @@ public class Reporte {
         return numPersonalProfesor;
     }
 
+    public String getArchivoAdjunto() {
+        return archivoAdjunto;
+    }
+
+    public String getNombreArchivo() {
+        return nombreArchivo;
+    }
 
     public void setTipoReporte(TipoReporte tipoReporte) {
         this.tipoReporte = tipoReporte;
@@ -91,5 +115,13 @@ public class Reporte {
 
     public void setNumPersonalProfesor(String numPersonalProfesor) {
         this.numPersonalProfesor = numPersonalProfesor;
+    }
+
+    public void setArchivoAdjunto(String archivoAdjunto) {
+        this.archivoAdjunto = archivoAdjunto;
+    }
+
+    public void setNombreArchivo(String nombreArchivo) {
+        this.nombreArchivo = nombreArchivo;
     }
 }

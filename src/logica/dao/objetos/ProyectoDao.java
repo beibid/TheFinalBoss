@@ -20,7 +20,7 @@ public class ProyectoDao implements ProyectoDaoInterfaz {
 
     @Override
     public int agregarProyecto(Proyecto proyecto) throws MensajeriaExcepcion {
-        String consultaProyecto = "INSERT INTO proyecto (nombreProyecto, descripcion, responsableDelProyecto, estado, nombreEmpresa, sectorEmpresa, direccionEmpresa, idOrganizacion, matricula, numPersonalCoordinador, fechaRegistro) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String consultaProyecto = "INSERT INTO proyecto (nombreProyecto, descripcion, responsableDelProyecto, estado, nombreEmpresa, sectorEmpresa, direccionEmpresa, idOrganizacion, numPersonalProfesor, numPersonalCoordinador, fechaRegistro, capacidad) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         Connection conexionBaseDeDatos = null;
         PreparedStatement insertarEnBaseDeDatos = null;
         int filasAfectadas = 0;
@@ -35,9 +35,10 @@ public class ProyectoDao implements ProyectoDaoInterfaz {
             insertarEnBaseDeDatos.setString(6, proyecto.getSectorEmpresa());
             insertarEnBaseDeDatos.setString(7, proyecto.getDireccionEmpresa());
             insertarEnBaseDeDatos.setInt(8, proyecto.getIdOrganizacion());
-            insertarEnBaseDeDatos.setString(9, proyecto.getMatricula());
+            insertarEnBaseDeDatos.setString(9, proyecto.getNumPersonalProfesor());
             insertarEnBaseDeDatos.setString(10, proyecto.getNumPersonalCoordinador());
             insertarEnBaseDeDatos.setDate(11, proyecto.getFechaRegistro());
+            insertarEnBaseDeDatos.setInt(12, proyecto.getCapacidad());
             filasAfectadas = insertarEnBaseDeDatos.executeUpdate();
             LOGGER.info("Proyecto insertado correctamente");
         } catch (SQLException e) {
@@ -45,12 +46,8 @@ public class ProyectoDao implements ProyectoDaoInterfaz {
             throw new MensajeriaExcepcion("Error al agregar el proyecto", e);
         } finally {
             try {
-                if (insertarEnBaseDeDatos != null) {
-                    insertarEnBaseDeDatos.close();
-                }
-                if (conexionBaseDeDatos != null) {
-                    conexionBaseDeDatos.close();
-                }
+                if (insertarEnBaseDeDatos != null) insertarEnBaseDeDatos.close();
+                if (conexionBaseDeDatos != null) conexionBaseDeDatos.close();
             } catch (SQLException e) {
                 LOGGER.log(Level.SEVERE, "Error al cerrar la conexión", e);
             }
@@ -65,7 +62,7 @@ public class ProyectoDao implements ProyectoDaoInterfaz {
         if (proyecto.getFechaRegistro() == null) {
             throw new MensajeriaExcepcion("La fecha de registro no puede ser nula");
         }
-        String consulta = "UPDATE proyecto SET nombreProyecto = ?, descripcion = ?, responsableDelProyecto = ?, estado = ?, nombreEmpresa = ?, sectorEmpresa = ?, direccionEmpresa = ?, idOrganizacion = ?, matricula = ?, numPersonalCoordinador = ?, fechaRegistro = ? WHERE idProyecto = ?";
+        String consulta = "UPDATE proyecto SET nombreProyecto = ?, descripcion = ?, responsableDelProyecto = ?, estado = ?, nombreEmpresa = ?, sectorEmpresa = ?, direccionEmpresa = ?, idOrganizacion = ?, numPersonalProfesor = ?, numPersonalCoordinador = ?, fechaRegistro = ?, capacidad = ? WHERE idProyecto = ?";
         Connection conexionBaseDeDatos = null;
         PreparedStatement actualizacion = null;
         int filasAfectadas = 0;
@@ -80,10 +77,11 @@ public class ProyectoDao implements ProyectoDaoInterfaz {
             actualizacion.setString(6, proyecto.getSectorEmpresa());
             actualizacion.setString(7, proyecto.getDireccionEmpresa());
             actualizacion.setInt(8, proyecto.getIdOrganizacion());
-            actualizacion.setString(9, proyecto.getMatricula());
+            actualizacion.setString(9, proyecto.getNumPersonalProfesor());
             actualizacion.setString(10, proyecto.getNumPersonalCoordinador());
             actualizacion.setDate(11, proyecto.getFechaRegistro());
-            actualizacion.setInt(12, idProyecto);
+            actualizacion.setInt(12, proyecto.getCapacidad());
+            actualizacion.setInt(13, idProyecto);
             filasAfectadas = actualizacion.executeUpdate();
             LOGGER.info("Proyecto modificado correctamente: " + idProyecto);
         } catch (SQLException e) {
@@ -91,12 +89,8 @@ public class ProyectoDao implements ProyectoDaoInterfaz {
             throw new MensajeriaExcepcion("Error al modificar proyecto");
         } finally {
             try {
-                if (actualizacion != null) {
-                    actualizacion.close();
-                }
-                if (conexionBaseDeDatos != null) {
-                    conexionBaseDeDatos.close();
-                }
+                if (actualizacion != null) actualizacion.close();
+                if (conexionBaseDeDatos != null) conexionBaseDeDatos.close();
             } catch (SQLException e) {
                 LOGGER.log(Level.SEVERE, "Error al cerrar la conexión", e);
             }

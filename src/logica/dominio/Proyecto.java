@@ -15,13 +15,15 @@ public class Proyecto {
     private String sectorEmpresa;
     private String direccionEmpresa;
     private int idOrganizacion;
-    private String matricula;
     private String numPersonalCoordinador;
+    private String numPersonalProfesor;
     private Date fechaRegistro;
+    private int capacidad;
 
     public Proyecto(int idProyecto, String nombreProyecto, String descripcion, String responsableDelProyecto,
                     EstadoProyecto estado, String nombreEmpresa, String sectorEmpresa, String direccionEmpresa,
-                    int idOrganizacion, String matricula, String numPersonalCoordinador, Date fechaRegistro) {
+                    int idOrganizacion, String numPersonalCoordinador, String numPersonalProfesor, Date fechaRegistro,
+                    int capacidad) {
         this.idProyecto = idProyecto;
         this.nombreProyecto = nombreProyecto;
         this.descripcion = descripcion;
@@ -31,9 +33,10 @@ public class Proyecto {
         this.sectorEmpresa = sectorEmpresa;
         this.direccionEmpresa = direccionEmpresa;
         this.idOrganizacion = idOrganizacion;
-        this.matricula = matricula;
         this.numPersonalCoordinador = numPersonalCoordinador;
+        this.numPersonalProfesor = numPersonalProfesor;
         this.fechaRegistro = fechaRegistro;
+        this.capacidad = capacidad;
     }
 
     public Proyecto(){
@@ -43,17 +46,45 @@ public class Proyecto {
     public int getIdProyecto() {
         return idProyecto;
     }
-    public String getNombreProyecto() { return nombreProyecto; }
-    public String getDescripcion() { return descripcion; }
-    public String getResponsableDelProyecto() { return responsableDelProyecto; }
-    public EstadoProyecto getEstado() { return estado; }
-    public String getNombreEmpresa() { return nombreEmpresa; }
-    public String getSectorEmpresa() { return sectorEmpresa; }
-    public String getDireccionEmpresa() { return direccionEmpresa; }
-    public int getIdOrganizacion() { return idOrganizacion; }
-    public String getMatricula() { return matricula; }
-    public String getNumPersonalCoordinador() { return numPersonalCoordinador; }
-    public Date getFechaRegistro() { return fechaRegistro; }
+    public String getNombreProyecto() {
+        return nombreProyecto;
+    }
+    public String getDescripcion() {
+        return descripcion;
+    }
+    public String getResponsableDelProyecto() {
+        return responsableDelProyecto;
+    }
+    public EstadoProyecto getEstado() {
+        return estado;
+    }
+    public String getNombreEmpresa() {
+        return nombreEmpresa;
+    }
+    public String getSectorEmpresa() {
+        return sectorEmpresa;
+    }
+    public String getDireccionEmpresa() {
+        return direccionEmpresa;
+    }
+    public int getIdOrganizacion() {
+        return idOrganizacion;
+    }
+    public String getNumPersonalCoordinador() {
+        return numPersonalCoordinador;
+    }
+
+    public String getNumPersonalProfesor() {
+        return numPersonalProfesor;
+    }
+
+    public Date getFechaRegistro() {
+        return fechaRegistro;
+    }
+
+    public int getCapacidad() {
+        return capacidad;
+    }
 
     public void setIdProyecto(int idProyecto) {
         this.idProyecto = idProyecto;
@@ -82,13 +113,24 @@ public class Proyecto {
     public void setIdOrganizacion(int idOrganizacion) {
         this.idOrganizacion = idOrganizacion;
     }
-    public void setMatricula(String matricula) {
-        this.matricula = matricula;
-    }
     public void setNumPersonalCoordinador(String numPersonalCoordinador) {
         this.numPersonalCoordinador = numPersonalCoordinador;
     }
+
+    public void setNumPersonalProfesor(String numPersonalProfesor) {
+        this.numPersonalProfesor = numPersonalProfesor;
+    }
+
     public void setFechaRegistro(Date fechaRegistro) {
         this.fechaRegistro = fechaRegistro;
+    }
+
+    public void setCapacidad(int capacidad) {
+        this.capacidad = capacidad;
+    }
+
+    @Override
+    public String toString() {
+        return idProyecto + " " + nombreProyecto    ;
     }
 }

@@ -7,7 +7,7 @@
 <AnchorPane prefHeight="500.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="InterfazGrafica.AsignaProyectoControlGUI">
     <children>
 
-        <VBox layoutX="0.0" layoutY="0.0" prefHeight="500.0" prefWidth="600.0" spacing="15.0" style="-fx-padding: 30;">
+        <VBox layoutX="0.0" layoutY="0.0" prefHeight="500.0" prefWidth="600.0" spacing="15.0" style="-fx-border-color: black;-fx-padding: 30;">
             <children>
 
                 <Label style="-fx-font-size: 22; -fx-font-weight: bold;" text="Asignar Proyecto a Practicante" />
@@ -30,12 +30,12 @@
 
                 <VBox spacing="5">
                     <Label style="-fx-font-size: 13;" text="Selecciona un practicante activo" />
-                    <ComboBox fx:id="comboBoxPracticantes" onAction="#seleccionarProfesor" prefWidth="500.0" promptText="-- Selecciona un practicante --" />
+                    <ComboBox fx:id="comboBoxPracticantes" onAction="#seleccionarPracticante" prefWidth="500.0" promptText="-- Selecciona un practicante --" />
                 </VBox>
 
                 <VBox spacing="5">
                     <Label style="-fx-font-size: 13;" text="Selecciona un proyecto disponible" />
-                    <ComboBox fx:id="comboBoxSecciones" prefWidth="500.0" promptText="-- Selecciona proyecto --" />
+                    <ComboBox fx:id="comboBoxProyectos" prefWidth="500.0" promptText="-- Selecciona proyecto --" />
                 </VBox>
 
                 <HBox spacing="15.0">

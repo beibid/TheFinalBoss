@@ -100,7 +100,6 @@ public class ModificarProyectoControlGUI implements Initializable {
         campoNombreEmpresa.setText(proyecto.getNombreEmpresa());
         campoSectorEmpresa.setText(proyecto.getSectorEmpresa());
         campoDireccionEmpresa.setText(proyecto.getDireccionEmpresa());
-        campoMatricula.setText(proyecto.getMatricula());
         campoNumPersonalCoordinador.setText(proyecto.getNumPersonalCoordinador());
         campoFechaRegistro.setText(proyecto.getFechaRegistro() != null ?
                 proyecto.getFechaRegistro().toString() : "");
@@ -164,7 +163,6 @@ public class ModificarProyectoControlGUI implements Initializable {
         proyectoModificado.setSectorEmpresa(campoSectorEmpresa.getText().trim());
         proyectoModificado.setDireccionEmpresa(campoDireccionEmpresa.getText().trim());
         proyectoModificado.setIdOrganizacion(proyectoSeleccionado.getIdOrganizacion());
-        proyectoModificado.setMatricula(campoMatricula.getText().trim());
         proyectoModificado.setNumPersonalCoordinador(campoNumPersonalCoordinador.getText().trim());
         try {
             proyectoModificado.setFechaRegistro(Date.valueOf(campoFechaRegistro.getText().trim()));

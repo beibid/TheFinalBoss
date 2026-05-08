@@ -4,12 +4,10 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane prefHeight="650.0" prefWidth="750.0"
-            xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="InterfazGrafica.ProyectoControlGUI">
+<AnchorPane prefHeight="650.0" prefWidth="750.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="InterfazGrafica.ProyectoControlGUI">
     <children>
 
-        <VBox layoutX="0.0" layoutY="0.0" prefHeight="720.0" prefWidth="180.0" style="-fx-background-color: #2ecc71; -fx-padding: 15;">
+        <VBox layoutX="0.0" layoutY="0.0" prefHeight="786.0" prefWidth="180.0" style="-fx-background-color: #2ecc71; -fx-padding: 15;">
             <children>
                 <Label style="-fx-text-fill: white; -fx-font-size: 16; -fx-font-weight: bold;" text="Registro" />
                 <Label style="-fx-text-fill: black; -fx-font-size: 12;" text="Proyecto">
@@ -58,14 +56,17 @@
                 <Label style="-fx-font-size: 13;" text="Dirección de la empresa" />
                 <TextField fx:id="campoTextoDireccionEmpresa" prefHeight="30.0" prefWidth="500.0" promptText="Ej. Av. Principal 123" />
 
-                <Label style="-fx-font-size: 13;" text="Practicante" />
-                <ComboBox fx:id="comboBoxPracticante" prefWidth="500.0" promptText="-- Selecciona un practicante --" />
-
                 <Label style="-fx-font-size: 13;" text="Coordinador" />
                 <ComboBox fx:id="comboBoxCoordinador" prefWidth="500.0" promptText="-- Selecciona un coordinador --" />
 
+                <Label style="-fx-font-size: 13;" text="Profesor" />
+                <ComboBox fx:id="comboBoxProfesor" prefWidth="500.0" promptText="-- Selecciona un profesor --" />
+
                 <Label style="-fx-font-size: 13;" text="Organización" />
                 <ComboBox fx:id="comboBoxOrganizacion" prefWidth="500.0" promptText="-- Selecciona una organización --" />
+
+                <Label style="-fx-font-size: 13;" text="Capacidad del proyecto" />
+                <Spinner fx:id="spinnerCapacidad" editable="false" initialValue="1" max="15" min="1" prefHeight="30.0" prefWidth="500.0" />
 
 
                 <HBox spacing="15.0">

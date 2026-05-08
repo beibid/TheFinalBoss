@@ -60,8 +60,10 @@ public class UsuarioDao implements UsuarioDaoInterfaz {
 
     public UsuarioSesion buscarUsuario(String identificador, String contrasena) throws UsuariosExcepcion {
         String consultaBusqueda =
-                "SELECT u.nombre, u.apellidos, u.estado, u.rol as tipo " +
+                "SELECT u.nombre, u.apellidos, u.estado, u.rol as tipo, " +
+                        "    pr.matricula " +                                          // <-- nuevo
                         "FROM usuario u " +
+                        "LEFT JOIN practicante pr ON pr.idUsuario = u.idUsuario " +   // <-- nuevo
                         "WHERE u.contrasena = ? " +
                         "AND ( " +
                         "    EXISTS (SELECT 1 FROM coordinador c WHERE c.idUsuario = u.idUsuario AND c.numPersonalCoordinador = ?) " +
@@ -89,6 +91,7 @@ public class UsuarioDao implements UsuarioDaoInterfaz {
                 usuarioSesion.setApellidos(resultado.getString("apellidos"));
                 usuarioSesion.setRol(Rol.valueOf(resultado.getString("tipo")));
                 usuarioSesion.setEstado(Estado.valueOf(resultado.getString("estado")));
+                usuarioSesion.setMatricula(resultado.getString("matricula"));
             }
         } catch (SQLException excepcionSQL) {
             LOGGER.log(Level.SEVERE, "Error al buscar usuario", excepcionSQL);

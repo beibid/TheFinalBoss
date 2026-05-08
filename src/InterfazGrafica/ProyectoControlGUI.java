@@ -1,5 +1,6 @@
 package InterfazGrafica;
 
+
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -7,6 +8,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.Spinner;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
@@ -14,12 +16,12 @@ import logica.dao.excepciones.MensajeriaExcepcion;
 import logica.dao.excepciones.UsuariosExcepcion;
 import logica.dao.objetos.CoordinadorDao;
 import logica.dao.objetos.OrganizacionVinculadaDao;
-import logica.dao.objetos.PracticanteDao;
+import logica.dao.objetos.ProfesorDao;
 import logica.dao.objetos.ProyectoDao;
 import logica.dominio.Coordinador;
 import logica.dominio.OrganizacionVinculada;
-import logica.dominio.Practicante;
 import logica.dominio.Proyecto;
+import logica.dominio.Profesor;
 import logica.dominio.enums.EstadoProyecto;
 import java.net.URL;
 import java.sql.Date;
@@ -35,9 +37,10 @@ public class ProyectoControlGUI implements Initializable{
     @FXML private TextField campoTextoNombreEmpresa;
     @FXML private TextField campoTextoSectorEmpresa;
     @FXML private TextField campoTextoDireccionEmpresa;
-    @FXML private ComboBox<Practicante> comboBoxPracticante;
+    @FXML private ComboBox<Profesor> comboBoxProfesor;
     @FXML private ComboBox<Coordinador> comboBoxCoordinador;
     @FXML private ComboBox<OrganizacionVinculada> comboBoxOrganizacion;
+    @FXML private Spinner<Integer> spinnerCapacidad;
     @FXML private VBox panelError;
     @FXML private VBox panelExito;
     @FXML private Label etiquetaTituloError;
@@ -46,7 +49,7 @@ public class ProyectoControlGUI implements Initializable{
     @FXML private Label etiquetaMensajeExito;
 
     private ProyectoDao proyectoDao = new ProyectoDao();
-    private PracticanteDao practicanteDao = new PracticanteDao();
+    private ProfesorDao profesorDao = new ProfesorDao();
     private CoordinadorDao coordinadorDao = new CoordinadorDao();
     private OrganizacionVinculadaDao organizacionDao = new OrganizacionVinculadaDao();
 
@@ -63,8 +66,8 @@ public class ProyectoControlGUI implements Initializable{
 
     private void cargarPracticantes() {
         try {
-            List<Practicante> practicantes = practicanteDao.obtenerPracticantesActivos();
-            comboBoxPracticante.setItems(FXCollections.observableArrayList(practicantes));
+            List<Profesor> profesores = profesorDao.obtenerProfesoresActivos();
+            comboBoxProfesor.setItems(FXCollections.observableArrayList(profesores));
         } catch (UsuariosExcepcion e) {
             mostrarError("Error al cargar", "NO SE PUDIERON CARGAR LOS PRACTICANTES.");
         }
@@ -105,7 +108,7 @@ public class ProyectoControlGUI implements Initializable{
             return;
         }
 
-        if (comboBoxPracticante.getValue() == null || comboBoxCoordinador.getValue() == null || comboBoxOrganizacion.getValue() == null) {
+        if (comboBoxProfesor.getValue() == null || comboBoxCoordinador.getValue() == null || comboBoxOrganizacion.getValue() == null) {
             mostrarError("Selección incompleta", "POR FAVOR SELECCIONA PRACTICANTE, COORDINADOR Y ORGANIZACIÓN.");
             return;
         }
@@ -116,7 +119,9 @@ public class ProyectoControlGUI implements Initializable{
 
     private boolean camposVacios(String... campos) {
         for (String campo : campos) {
-            if (campo.isEmpty()) return true;
+            if (campo.isEmpty()) {
+                return true;
+            }
         }
         return false;
     }
@@ -130,9 +135,10 @@ public class ProyectoControlGUI implements Initializable{
         proyecto.setNombreEmpresa(nombreEmpresa);
         proyecto.setSectorEmpresa(sectorEmpresa);
         proyecto.setDireccionEmpresa(direccionEmpresa);
-        proyecto.setMatricula(comboBoxPracticante.getValue().getMatricula());
         proyecto.setNumPersonalCoordinador(comboBoxCoordinador.getValue().getNumeroDePersonalCoordinador());
+        proyecto.setNumPersonalProfesor(comboBoxProfesor.getValue().getNumeroDePersonalProfesor());
         proyecto.setIdOrganizacion(comboBoxOrganizacion.getValue().getIdOrganizacion());
+        proyecto.setCapacidad(spinnerCapacidad.getValue());
         proyecto.setEstado(EstadoProyecto.Disponible);
         proyecto.setFechaRegistro(Date.valueOf(LocalDate.now()));
         return proyecto;
@@ -170,7 +176,7 @@ public class ProyectoControlGUI implements Initializable{
         campoTextoNombreEmpresa.clear();
         campoTextoSectorEmpresa.clear();
         campoTextoDireccionEmpresa.clear();
-        comboBoxPracticante.getSelectionModel().clearSelection();
+        comboBoxProfesor.getSelectionModel().clearSelection();
         comboBoxCoordinador.getSelectionModel().clearSelection();
         comboBoxOrganizacion.getSelectionModel().clearSelection();
         ocultarError();
