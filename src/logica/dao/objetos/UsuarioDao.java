@@ -13,6 +13,7 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.sql.CallableStatement;
 import java.sql.SQLException;
 
 public class UsuarioDao implements UsuarioDaoInterfaz {
@@ -60,37 +61,33 @@ public class UsuarioDao implements UsuarioDaoInterfaz {
     }
 
     public UsuarioSesion buscarUsuario(String correo, String contrasena) throws UsuariosExcepcion {
-        String consultaBusqueda =
-                "SELECT u.nombre, u.apellidos, u.estado, u.rol as tipo, " +
-                        "pr.matricula " +
-                        "FROM usuario u " +
-                        "LEFT JOIN practicante pr ON pr.idUsuario = u.idUsuario " +
-                        "WHERE u.correo = ? AND u.contrasena = ?";
+        String llamadaProcedimiento = "{CALL sp_buscar_usuario_login(?, ?)}";
         Connection conexionBaseDeDatos = null;
-        PreparedStatement busquedaUsuario = null;
+        CallableStatement procedimiento = null;
         UsuarioSesion usuarioSesion = null;
 
         try {
             conexionBaseDeDatos = ConexionBaseDeDatos.getInstance().conectar();
-            busquedaUsuario = conexionBaseDeDatos.prepareStatement(consultaBusqueda);
-            busquedaUsuario.setString(1, correo);
-            busquedaUsuario.setString(2, contrasena);
+            procedimiento = conexionBaseDeDatos.prepareCall(llamadaProcedimiento);
+            procedimiento.setString(1, correo);
+            procedimiento.setString(2, contrasena);
 
-            ResultSet resultado = busquedaUsuario.executeQuery();
+            ResultSet resultado = procedimiento.executeQuery();
             if (resultado.next()) {
                 usuarioSesion = new UsuarioSesion();
                 usuarioSesion.setNombre(resultado.getString("nombre"));
                 usuarioSesion.setApellidos(resultado.getString("apellidos"));
-                usuarioSesion.setRol(Rol.valueOf(resultado.getString("tipo")));
+                usuarioSesion.setRol(Rol.valueOf(resultado.getString("rol")));
                 usuarioSesion.setEstado(Estado.valueOf(resultado.getString("estado")));
+                usuarioSesion.setMatricula(resultado.getString("matricula"));
             }
         } catch (SQLException excepcionSQL) {
             LOGGER.log(Level.SEVERE, "Error al buscar usuario", excepcionSQL);
             throw new UsuariosExcepcion("Error al buscar usuario", excepcionSQL);
         } finally {
             try {
-                if (busquedaUsuario != null) {
-                    busquedaUsuario.close();
+                if (procedimiento != null) {
+                    procedimiento.close();
                 }
                 if (conexionBaseDeDatos != null) {
                     conexionBaseDeDatos.close();
