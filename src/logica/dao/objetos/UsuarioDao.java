@@ -21,7 +21,7 @@ public class UsuarioDao implements UsuarioDaoInterfaz {
 
     @Override
     public int insertarUsuario(Usuario usuario) throws UsuariosExcepcion {
-        String consultaUsuario = "INSERT INTO usuario (nombre, apellidos, contrasena, estado) VALUES (?, ?, ?, ?)";
+        String consultaUsuario = "INSERT INTO usuario (nombre, apellidos, contrasena, estado, correo) VALUES (?, ?, ?, ?, ?)";
         Connection conexionBaseDeDatos = null;
         PreparedStatement insercionBaseDeDatos = null;
         int idGenerado = -1;
@@ -33,6 +33,7 @@ public class UsuarioDao implements UsuarioDaoInterfaz {
             insercionBaseDeDatos.setString(2, usuario.getApellidos());
             insercionBaseDeDatos.setString(3, usuario.getContrasena());
             insercionBaseDeDatos.setString(4, usuario.getEstado().toString());
+            insercionBaseDeDatos.setString(5, usuario.getCorreo());
             insercionBaseDeDatos.executeUpdate();
 
             ResultSet tomarLlave = insercionBaseDeDatos.getGeneratedKeys();
@@ -58,19 +59,13 @@ public class UsuarioDao implements UsuarioDaoInterfaz {
         return idGenerado;
     }
 
-    public UsuarioSesion buscarUsuario(String identificador, String contrasena) throws UsuariosExcepcion {
+    public UsuarioSesion buscarUsuario(String correo, String contrasena) throws UsuariosExcepcion {
         String consultaBusqueda =
                 "SELECT u.nombre, u.apellidos, u.estado, u.rol as tipo, " +
-                        "    pr.matricula " +                                          // <-- nuevo
+                        "pr.matricula " +
                         "FROM usuario u " +
-                        "LEFT JOIN practicante pr ON pr.idUsuario = u.idUsuario " +   // <-- nuevo
-                        "WHERE u.contrasena = ? " +
-                        "AND ( " +
-                        "    EXISTS (SELECT 1 FROM coordinador c WHERE c.idUsuario = u.idUsuario AND c.numPersonalCoordinador = ?) " +
-                        "    OR EXISTS (SELECT 1 FROM profesor p WHERE p.idUsuario = u.idUsuario AND p.numPersonalProfesor = ?) " +
-                        "    OR EXISTS (SELECT 1 FROM practicante pr WHERE pr.idUsuario = u.idUsuario AND pr.matricula = ?) " +
-                        "    OR EXISTS (SELECT 1 FROM administrador a WHERE a.idUsuarioAdministrador = u.idUsuario AND a.numeroDePersonalAdministrador = ?) " +
-                        ")";
+                        "LEFT JOIN practicante pr ON pr.idUsuario = u.idUsuario " +
+                        "WHERE u.correo = ? AND u.contrasena = ?";
         Connection conexionBaseDeDatos = null;
         PreparedStatement busquedaUsuario = null;
         UsuarioSesion usuarioSesion = null;
@@ -78,11 +73,8 @@ public class UsuarioDao implements UsuarioDaoInterfaz {
         try {
             conexionBaseDeDatos = ConexionBaseDeDatos.getInstance().conectar();
             busquedaUsuario = conexionBaseDeDatos.prepareStatement(consultaBusqueda);
-            busquedaUsuario.setString(1, contrasena);
-            busquedaUsuario.setString(2, identificador);
-            busquedaUsuario.setString(3, identificador);
-            busquedaUsuario.setString(4, identificador);
-            busquedaUsuario.setString(5, identificador);
+            busquedaUsuario.setString(1, correo);
+            busquedaUsuario.setString(2, contrasena);
 
             ResultSet resultado = busquedaUsuario.executeQuery();
             if (resultado.next()) {
@@ -91,7 +83,6 @@ public class UsuarioDao implements UsuarioDaoInterfaz {
                 usuarioSesion.setApellidos(resultado.getString("apellidos"));
                 usuarioSesion.setRol(Rol.valueOf(resultado.getString("tipo")));
                 usuarioSesion.setEstado(Estado.valueOf(resultado.getString("estado")));
-                usuarioSesion.setMatricula(resultado.getString("matricula"));
             }
         } catch (SQLException excepcionSQL) {
             LOGGER.log(Level.SEVERE, "Error al buscar usuario", excepcionSQL);

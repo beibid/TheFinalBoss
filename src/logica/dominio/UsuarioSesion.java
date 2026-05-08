@@ -8,7 +8,7 @@ public class UsuarioSesion {
     private String apellidos;
     private Rol rol;
     private Estado estado;
-    private String matricula;
+
 
     public String getNombre() {
         return nombre;
@@ -21,9 +21,6 @@ public class UsuarioSesion {
     }
     public Estado getEstado() {
         return estado;
-    }
-    public String getMatricula() {
-        return matricula;
     }
 
     public void setNombre(String nombre) {
@@ -38,7 +35,5 @@ public class UsuarioSesion {
     public void setEstado(Estado estado) {
         this.estado = estado;
     }
-    public void setMatricula(String matricula) {
-        this.matricula = matricula;
-    }
+
 }
