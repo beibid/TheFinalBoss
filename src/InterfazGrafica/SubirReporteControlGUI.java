@@ -1,7 +1,6 @@
 package InterfazGrafica;
 
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
@@ -15,16 +14,13 @@ import logica.dao.excepciones.MensajeriaExcepcion;
 import logica.dominio.Reporte;
 import logica.dominio.SesionUsuario;
 import logica.dominio.enums.TipoReporte;
-
 import java.io.File;
 import java.io.IOException;
-import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
-import java.util.ResourceBundle;
 
-public class SubirReporteControlGUI implements Initializable {
+public class SubirReporteControlGUI  {
 
     @FXML private ComboBox<TipoReporte> comboBoxTipoReporte;
     @FXML private TextField campoDescripcion;
@@ -39,10 +35,11 @@ public class SubirReporteControlGUI implements Initializable {
     private static final String CARPETA_UPLOADS = "uploads/";
     private File archivoSeleccionado = null;
 
-    @Override
-    public void initialize(URL url, ResourceBundle rb) {
+    @FXML
+    public void initialize() {
         comboBoxTipoReporte.getItems().addAll(TipoReporte.values());
     }
+
 
     @FXML
     private void botonSeleccionarPDF(ActionEvent event) {

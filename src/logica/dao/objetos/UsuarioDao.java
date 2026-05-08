@@ -80,6 +80,7 @@ public class UsuarioDao implements UsuarioDaoInterfaz {
                 usuarioSesion.setRol(Rol.valueOf(resultado.getString("rol")));
                 usuarioSesion.setEstado(Estado.valueOf(resultado.getString("estado")));
                 usuarioSesion.setMatricula(resultado.getString("matricula"));
+                usuarioSesion.setIdentificador(resultado.getString("identificador"));
             }
         } catch (SQLException excepcionSQL) {
             LOGGER.log(Level.SEVERE, "Error al buscar usuario", excepcionSQL);
