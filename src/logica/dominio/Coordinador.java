@@ -1,19 +1,17 @@
 package logica.dominio;
 
-
 import logica.dominio.enums.Estado;
-
 
 public class Coordinador extends Usuario {
     private String numeroDePersonalCoordinador;
 
-    public Coordinador(String numeroDePersonalCoordinador, String nombre,  String apellidos, String contrasena, Estado estado){
-        super(nombre,apellidos,contrasena, estado);
+    public Coordinador(String numeroDePersonalCoordinador, String nombre, String apellidos, String contrasena, String correo, Estado estado) {
+        super(nombre, apellidos, contrasena, correo, estado);
         this.numeroDePersonalCoordinador = numeroDePersonalCoordinador;
     }
 
     public Coordinador() {
-        super("", "", "",  null);
+        super("", "", "", "", null);
     }
 
     public String getNumeroDePersonalCoordinador() {
@@ -28,5 +26,4 @@ public class Coordinador extends Usuario {
     public String toString() {
         return nombre + " " + apellidos + " - " + numeroDePersonalCoordinador;
     }
-
 }

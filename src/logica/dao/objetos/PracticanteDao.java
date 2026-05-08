@@ -22,7 +22,7 @@ public class PracticanteDao implements PracticanteDaoInterfaz {
 
     @Override
     public int insertarPracticante(Practicante practicante) throws UsuariosExcepcion {
-        String consultaUsuario = "INSERT INTO usuario (nombre, apellidos, contrasena, estado, rol) VALUES (?, ?, ?, ?, 'Practicante')";
+        String consultaUsuario = "INSERT INTO usuario (nombre, apellidos, contrasena, estado, rol, correo) VALUES (?, ?, ?, ?, 'Practicante', ?)";
         String consultaPracticante = "INSERT INTO practicante (matricula, lenguaIndigena, genero, idUsuario) VALUES (?, ?, ?, ?)";
         Connection conexionBaseDeDatos = null;
         PreparedStatement insercionUsuario = null;
@@ -36,6 +36,7 @@ public class PracticanteDao implements PracticanteDaoInterfaz {
             insercionUsuario.setString(2, practicante.getApellidos());
             insercionUsuario.setString(3, practicante.getContrasena());
             insercionUsuario.setString(4, practicante.getEstado().toString());
+            insercionUsuario.setString(5, practicante.getCorreo());
             insercionUsuario.executeUpdate();
 
             ResultSet tomarLlave = insercionUsuario.getGeneratedKeys();

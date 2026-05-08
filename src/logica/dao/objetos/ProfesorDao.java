@@ -22,7 +22,7 @@ public class ProfesorDao implements ProfesorDaoInterfaz {
 
     @Override
     public int insertarProfesor(Profesor profesor) throws UsuariosExcepcion {
-        String consultaUsuario = "INSERT INTO usuario (nombre, apellidos, contrasena, estado, rol) VALUES (?, ?, ?, ?, 'Profesor')";
+        String consultaUsuario = "INSERT INTO usuario (nombre, apellidos, contrasena, estado, rol, correo) VALUES (?, ?, ?, ?, 'Profesor', ?)";
         String consultaProfesor = "INSERT INTO profesor (numPersonalProfesor, turno, idUsuario) VALUES (?, ?, ?)";
         Connection conexionBaseDeDatos = null;
         PreparedStatement insercionUsuario = null;
@@ -36,6 +36,7 @@ public class ProfesorDao implements ProfesorDaoInterfaz {
             insercionUsuario.setString(2, profesor.getApellidos());
             insercionUsuario.setString(3, profesor.getContrasena());
             insercionUsuario.setString(4, profesor.getEstado().toString());
+            insercionUsuario.setString(5, profesor.getCorreo());
             insercionUsuario.executeUpdate();
 
             ResultSet tomarLlave = insercionUsuario.getGeneratedKeys();

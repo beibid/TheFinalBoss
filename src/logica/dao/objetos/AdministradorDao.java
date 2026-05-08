@@ -18,7 +18,7 @@ public class AdministradorDao implements AdministradorDaoInterfaz {
 
     @Override
     public int insertarAdministrador(Administrador administrador) throws UsuariosExcepcion {
-        String consultaUsuario = "INSERT INTO usuario (nombre, apellidos, contrasena, estado, rol) VALUES (?, ?, ?, ?, 'Administrador')";
+        String consultaUsuario = "INSERT INTO usuario (nombre, apellidos, contrasena, estado, rol, correo) VALUES (?, ?, ?, ?, 'Administrador', ?)";
         String consultaAdministrador = "INSERT INTO administrador (numeroDePersonalAdministrador, idUsuarioAdministrador) VALUES (?, ?)";
         Connection conexionBaseDeDatos = null;
         PreparedStatement insercionUsuario = null;
@@ -32,6 +32,7 @@ public class AdministradorDao implements AdministradorDaoInterfaz {
             insercionUsuario.setString(2, administrador.getApellidos());
             insercionUsuario.setString(3, administrador.getContrasena());
             insercionUsuario.setString(4, administrador.getEstado().toString());
+            insercionUsuario.setString(5, administrador.getCorreo());
             insercionUsuario.executeUpdate();
 
             ResultSet tomarLlave = insercionUsuario.getGeneratedKeys();

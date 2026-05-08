@@ -2,7 +2,6 @@ package InterfazGrafica;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
@@ -16,10 +15,8 @@ import logica.dominio.SesionUsuario;
 import logica.dominio.UsuarioSesion;
 import logica.dominio.enums.Estado;
 import logica.dominio.enums.Rol;
-import java.net.URL;
-import java.util.ResourceBundle;
 
-public class IniciarSesionControlGUI implements Initializable {
+public class IniciarSesionControlGUI {
 
     @FXML private TextField campoTextoIdentificador;
     @FXML private PasswordField campoTextoContrasena;
@@ -29,30 +26,27 @@ public class IniciarSesionControlGUI implements Initializable {
 
     private UsuarioDao usuarioDao = new UsuarioDao();
 
-    @Override
-    public void initialize(URL url, ResourceBundle rb) {}
-
     @FXML
     private void botonIniciarSesion() {
         ocultarError();
-        String identificador = campoTextoIdentificador.getText().trim();
+        String correo = campoTextoIdentificador.getText().trim();
         String contrasena = campoTextoContrasena.getText().trim();
 
-        if (camposVacios(identificador, contrasena)) {
+        if (camposVacios(correo, contrasena)) {
             mostrarError("Campos vacíos", "POR FAVOR INGRESA TUS CREDENCIALES.");
             return;
         }
 
         try {
-            UsuarioSesion usuarioSesion = usuarioDao.buscarUsuario(identificador, contrasena);
+            UsuarioSesion usuarioSesion = usuarioDao.buscarUsuario(correo, contrasena);
             procesarResultadoLogin(usuarioSesion);
         } catch (UsuariosExcepcion excepcion) {
             mostrarError("Error inesperado", excepcion.getMessage().toUpperCase());
         }
     }
 
-    private boolean camposVacios(String identificador, String contrasena) {
-        return identificador.isEmpty() || contrasena.isEmpty();
+    private boolean camposVacios(String correo, String contrasena) {
+        return correo.isEmpty() || contrasena.isEmpty();
     }
 
     private void procesarResultadoLogin(UsuarioSesion usuarioSesion) {

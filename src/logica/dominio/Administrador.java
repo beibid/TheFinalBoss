@@ -6,13 +6,13 @@ public class Administrador extends Usuario {
 
     private String numeroDePersonalAdministrador;
 
-    public Administrador(String numeroDePersonalAdministrador, String nombre, String apellidos, String contrasena, Estado estado) {
-        super(nombre, apellidos, contrasena, estado);
+    public Administrador(String numeroDePersonalAdministrador, String nombre, String apellidos, String contrasena, String correo, Estado estado) {
+        super(nombre, apellidos, contrasena, correo, estado);
         this.numeroDePersonalAdministrador = numeroDePersonalAdministrador;
     }
 
     public Administrador() {
-        super("", "", "", null);
+        super("", "", "", "", null);
     }
 
     public String getNumeroDePersonalAdministrador() {

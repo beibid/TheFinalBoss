@@ -45,7 +45,7 @@
 
                 <Separator><VBox.margin><Insets top="10.0" bottom="10.0"/></VBox.margin></Separator>
 
-                <Button text="Cerrar Sesión" onAction="#botonCerrarSesion" prefWidth="170.0"
+                <Button text="Cerrar Sesión" onAction="#botonRegresar" prefWidth="170.0"
                         style="-fx-background-color: #c0392b; -fx-text-fill: white;">
                     <VBox.margin><Insets top="5.0"/></VBox.margin>
                 </Button>

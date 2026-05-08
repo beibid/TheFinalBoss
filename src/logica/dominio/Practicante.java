@@ -7,17 +7,16 @@ public class Practicante extends Usuario {
     private String matricula;
     private String lenguaIndigena;
     private Genero genero;
-    private int idUsuarioPracticante;
 
-    public Practicante(String matricula, String lenguaIndigena, Genero genero, String nombre, String apellidos, String contrasena, Estado estado) {
-        super(nombre, apellidos, contrasena, estado);
+    public Practicante(String matricula, String lenguaIndigena, Genero genero, String nombre, String apellidos, String contrasena, String correo, Estado estado) {
+        super(nombre, apellidos, contrasena, correo, estado);
         this.matricula = matricula;
         this.lenguaIndigena = lenguaIndigena;
         this.genero = genero;
     }
 
     public Practicante() {
-        super("", "", "", null);
+        super("", "", "", "", null);
     }
 
     public String getMatricula() {

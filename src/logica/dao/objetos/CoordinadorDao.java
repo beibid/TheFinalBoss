@@ -22,7 +22,7 @@ public class CoordinadorDao implements CoordinadorDaoInterfaz {
 
     @Override
     public int insertarCoordinador(Coordinador coordinador) throws UsuariosExcepcion {
-        String consultaUsuario = "INSERT INTO usuario (nombre, apellidos, contrasena, estado, rol) VALUES (?, ?, ?, ?, 'Coordinador')";
+        String consultaUsuario = "INSERT INTO usuario (nombre, apellidos, contrasena, estado, rol, correo) VALUES (?, ?, ?, ?, 'Coordinador', ?)";
         String consultaCoordinador = "INSERT INTO coordinador (numPersonalCoordinador, idUsuario) VALUES (?, ?)";
         Connection conexionBaseDeDatos = null;
         PreparedStatement insercionUsuario = null;
@@ -36,6 +36,7 @@ public class CoordinadorDao implements CoordinadorDaoInterfaz {
             insercionUsuario.setString(2, coordinador.getApellidos());
             insercionUsuario.setString(3, coordinador.getContrasena());
             insercionUsuario.setString(4, coordinador.getEstado().toString());
+            insercionUsuario.setString(5, coordinador.getCorreo());
             insercionUsuario.executeUpdate();
 
             ResultSet tomarLlave = insercionUsuario.getGeneratedKeys();
