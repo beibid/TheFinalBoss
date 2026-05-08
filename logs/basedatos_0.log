@@ -346,3 +346,31 @@ may 08, 2026 4:16:59 P.M. acceso.bd.ConexionBaseDeDatos conectar
 INFO: Conexión a base de datos realizada exitosamente en 26 ms
 may 08, 2026 4:16:59 P.M. logica.dao.objetos.ReporteDao agregarReporte
 INFO: Reporte insertado correctamente
+may 08, 2026 4:29:11 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
+INFO: Configuración de base de datos cargada correctamente
+may 08, 2026 4:29:11 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
+CONFIG: URL de conexión: jdbc:mysql://localhost:3306/practicas_profesionales
+may 08, 2026 4:29:11 P.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexión a la base de datos...
+may 08, 2026 4:29:11 P.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexión a base de datos realizada exitosamente en 295 ms
+may 08, 2026 4:31:19 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
+INFO: Configuración de base de datos cargada correctamente
+may 08, 2026 4:31:19 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
+CONFIG: URL de conexión: jdbc:mysql://localhost:3306/practicas_profesionales
+may 08, 2026 4:31:19 P.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexión a la base de datos...
+may 08, 2026 4:31:19 P.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexión a base de datos realizada exitosamente en 312 ms
+may 08, 2026 4:31:29 P.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexión a la base de datos...
+may 08, 2026 4:31:29 P.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexión a base de datos realizada exitosamente en 39 ms
+may 08, 2026 4:31:29 P.M. logica.dao.objetos.DocumentacionPracticanteDao agregarDocumentacion
+INFO: DocumentacionPracticante insertada correctamente con ID: 6
+may 08, 2026 4:31:29 P.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexión a la base de datos...
+may 08, 2026 4:31:29 P.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexión a base de datos realizada exitosamente en 16 ms
+may 08, 2026 4:31:29 P.M. logica.dao.objetos.EntregaDocumentacionDao agregarEntrega
+INFO: EntregaDocumentacion insertada correctamente

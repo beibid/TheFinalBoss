@@ -78,4 +78,8 @@ public class MenuPracticanteControlGUI {
         stage.setScene(new Scene(root));
         stage.show();
     }
+    @FXML
+    private void abrirSubirDocumentacion(ActionEvent event) throws IOException {
+        abrirVentana("/InterfazGrafica/vistas/SubirDocumentacionVista.fxml", "Subir Documentación");
+    }
 }

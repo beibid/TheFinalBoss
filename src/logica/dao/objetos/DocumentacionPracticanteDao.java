@@ -6,6 +6,8 @@ import logica.dao.excepciones.UsuariosExcepcion;
 import logica.dao.interfaces.DocumentacionPracticanteDaoInterfaz;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.Statement;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -24,16 +26,22 @@ public class DocumentacionPracticanteDao implements DocumentacionPracticanteDaoI
         String consulta = "INSERT INTO DocumentacionPracticante (rutaDeArchivo, estadoRevision) VALUES (?, ?)";
         Connection conexion = null;
         PreparedStatement insercion = null;
-        int filasAfectadas = 0;
+        int idGenerado = -1;
+
         try {
             conexion = ConexionBaseDeDatos.getInstance().conectar();
-            insercion = conexion.prepareStatement(consulta);
+            insercion = conexion.prepareStatement(consulta, Statement.RETURN_GENERATED_KEYS);
             insercion.setString(1, documentacion.getRutaDeArchivo());
             insercion.setString(2, documentacion.getEstadoRevision().toString());
-            filasAfectadas = insercion.executeUpdate();
-            LOGGER.info("DocumentacionPracticante insertada correctamente");
-        } catch (SQLException e) {
-            LOGGER.log(Level.SEVERE, "Error al insertar documentacion", e);
+            insercion.executeUpdate();
+
+            ResultSet tomarLlave = insercion.getGeneratedKeys();
+            if (tomarLlave.next()) {
+                idGenerado = tomarLlave.getInt(1);
+                LOGGER.info("DocumentacionPracticante insertada correctamente con ID: " + idGenerado);
+            }
+        } catch (SQLException excepcionSQL) {
+            LOGGER.log(Level.SEVERE, "Error al insertar documentacion", excepcionSQL);
             throw new UsuariosExcepcion("Error al agregar documentacion");
         } finally {
             try {
@@ -43,10 +51,10 @@ public class DocumentacionPracticanteDao implements DocumentacionPracticanteDaoI
                 if (conexion != null) {
                     conexion.close();
                 }
-            } catch (SQLException e) {
-                LOGGER.log(Level.SEVERE, "Error al cerrar la conexión", e);
+            } catch (SQLException excepcionSQL) {
+                LOGGER.log(Level.SEVERE, "Error al cerrar la conexión", excepcionSQL);
             }
         }
-        return filasAfectadas;
+        return idGenerado;
     }
 }
