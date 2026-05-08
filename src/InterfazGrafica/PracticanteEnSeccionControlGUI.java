@@ -24,7 +24,7 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 
-public class PracticanteEnSeccionControlGUI implements Initializable{
+public class PracticanteEnSeccionControlGUI{
     @FXML private ComboBox<Practicante> comboBoxPracticantes;
     @FXML private ComboBox<Seccion> comboBoxSecciones;
 
@@ -42,8 +42,8 @@ public class PracticanteEnSeccionControlGUI implements Initializable{
     private final SeccionDao            seccionDao            = new SeccionDao();
     private final PracticanteSeccionDao practicanteSeccionDao = new PracticanteSeccionDao();
 
-    @Override
-    public void initialize(URL url, ResourceBundle rb) {
+    @FXML
+    public void initialize() {
         cargarPracticantesActivos();
         cargarSecciones();
     }

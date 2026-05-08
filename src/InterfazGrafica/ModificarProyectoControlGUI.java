@@ -21,7 +21,7 @@ import java.sql.Date;
 import java.util.List;
 import java.util.ResourceBundle;
 
-public class ModificarProyectoControlGUI implements Initializable {
+public class ModificarProyectoControlGUI{
 
     @FXML private ComboBox<Proyecto> comboBoxProyectos;
     @FXML private ComboBox<EstadoProyecto> comboBoxEstado;
@@ -44,8 +44,8 @@ public class ModificarProyectoControlGUI implements Initializable {
 
     private Proyecto proyectoSeleccionado;
 
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
+    @FXML
+    public void initialize() {
         cargarProyectosDisponibles();
         comboBoxEstado.setItems(FXCollections.observableArrayList(EstadoProyecto.values()));
     }

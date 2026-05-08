@@ -16,10 +16,8 @@ import logica.dao.objetos.PracticanteDao;
 import logica.dominio.Practicante;
 import logica.dominio.enums.Estado;
 import logica.dominio.enums.Genero;
-import java.net.URL;
-import java.util.ResourceBundle;
 
-public class PracticanteControlGUI implements Initializable {
+public class PracticanteControlGUI{
 
     @FXML private TextField campoTextoMatricula;
     @FXML private TextField campoTextoNombres;
@@ -36,8 +34,8 @@ public class PracticanteControlGUI implements Initializable {
 
     private ToggleGroup grupoGenero = new ToggleGroup();
 
-    @Override
-    public void initialize(URL url, ResourceBundle rb) {
+    @FXML
+    public void initialize() {
         radioBotonMasculino.setToggleGroup(grupoGenero);
         radioBotonFemenino.setToggleGroup(grupoGenero);
     }

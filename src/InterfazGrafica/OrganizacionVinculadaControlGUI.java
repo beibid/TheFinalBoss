@@ -2,14 +2,7 @@ package InterfazGrafica;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import java.net.URL;
-import java.util.ResourceBundle;
-
-import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
 import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
@@ -17,7 +10,7 @@ import logica.dao.excepciones.UsuariosExcepcion;
 import logica.dao.objetos.OrganizacionVinculadaDao;
 import logica.dominio.OrganizacionVinculada;
 
-public class OrganizacionVinculadaControlGUI implements Initializable {
+public class OrganizacionVinculadaControlGUI{
     @FXML private TextField campoTextoNombre;
     @FXML private TextField campoTextoDireccion;
     @FXML private VBox panelError;
@@ -26,9 +19,6 @@ public class OrganizacionVinculadaControlGUI implements Initializable {
     @FXML private VBox panelExito;
     @FXML private Label etiquetaTituloExito;
     @FXML private Label etiquetaMensajeExito;
-
-    @Override
-    public void initialize(URL url, ResourceBundle rb) {}
 
     @FXML
     private void botonRegistrar() {

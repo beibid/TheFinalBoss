@@ -4,7 +4,6 @@ package InterfazGrafica;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
@@ -23,14 +22,12 @@ import logica.dominio.OrganizacionVinculada;
 import logica.dominio.Proyecto;
 import logica.dominio.Profesor;
 import logica.dominio.enums.EstadoProyecto;
-import java.net.URL;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.ResourceBundle;
 
 
-public class ProyectoControlGUI implements Initializable{
+public class ProyectoControlGUI {
     @FXML private TextField campoTextoNombreProyecto;
     @FXML private TextField campoTextoDescripcion;
     @FXML private TextField campoTextoResponsable;
@@ -53,8 +50,8 @@ public class ProyectoControlGUI implements Initializable{
     private CoordinadorDao coordinadorDao = new CoordinadorDao();
     private OrganizacionVinculadaDao organizacionDao = new OrganizacionVinculadaDao();
 
-    @Override
-    public void initialize(URL url, ResourceBundle rb) {
+    @FXML
+    public void initialize() {
         cargarCombos();
     }
 

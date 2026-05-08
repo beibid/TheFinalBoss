@@ -19,7 +19,7 @@ import logica.dominio.enums.Turno;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class ProfesorControlGUI implements Initializable {
+public class ProfesorControlGUI{
 
     @FXML private TextField campoTextoNombres;
     @FXML private TextField campoTextoApellidos;
@@ -36,8 +36,8 @@ public class ProfesorControlGUI implements Initializable {
 
     private ToggleGroup grupoTurno = new ToggleGroup();
 
-    @Override
-    public void initialize(URL url, ResourceBundle rb) {
+    @FXML
+    public void initialize() {
         radioBotonMatutino.setToggleGroup(grupoTurno);
         radioBotonVespertino.setToggleGroup(grupoTurno);
         radioBotonMixto.setToggleGroup(grupoTurno);

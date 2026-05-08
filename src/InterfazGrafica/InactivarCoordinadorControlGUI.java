@@ -19,7 +19,7 @@ import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
 
-public class InactivarCoordinadorControlGUI implements Initializable{
+public class InactivarCoordinadorControlGUI{
 
     @FXML private ComboBox<Coordinador> comboBoxCoordinadores;
     @FXML private VBox panelDatos;
@@ -35,8 +35,8 @@ public class InactivarCoordinadorControlGUI implements Initializable{
 
     private CoordinadorDao coordinadorDao = new CoordinadorDao();
 
-    @Override
-    public void initialize(URL url, ResourceBundle rb) {
+    @FXML
+    public void initialize() {
         cargarCoordinadoresActivos();
     }
 

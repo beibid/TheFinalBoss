@@ -3,7 +3,6 @@ package InterfazGrafica;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
@@ -15,11 +14,7 @@ import logica.dao.excepciones.UsuariosExcepcion;
 import logica.dao.objetos.SeccionDao;
 import logica.dominio.Seccion;
 
-import java.net.URL;
-import java.util.ResourceBundle;
-
-
-public class SeccionControlGUI implements Initializable{
+public class SeccionControlGUI{
 
     @FXML private TextField campoTextoPeriodo;
     @FXML private TextField campoTextoNumeroSeccion;
@@ -30,8 +25,6 @@ public class SeccionControlGUI implements Initializable{
     @FXML private Label etiquetaTituloExito;
     @FXML private Label etiquetaMensajeExito;
 
-    @Override
-    public void initialize(URL url, ResourceBundle rb) {}
 
     @FXML
     private void botonRegistrar() {

@@ -19,7 +19,7 @@ import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
 
-public class InactivarProfesorControlGUI implements Initializable {
+public class InactivarProfesorControlGUI{
 
     @FXML private ComboBox<Profesor> comboBoxProfesores;
     @FXML private VBox panelDatos;
@@ -35,8 +35,8 @@ public class InactivarProfesorControlGUI implements Initializable {
 
     private ProfesorDao profesorDao = new ProfesorDao();
 
-    @Override
-    public void initialize(URL url, ResourceBundle rb) {
+    @FXML
+    public void initialize() {
         cargarProfesoresActivos();
     }
 

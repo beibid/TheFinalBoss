@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 
-public class InactivarPracticanteControlGUI implements Initializable {
+public class InactivarPracticanteControlGUI{
 
     @FXML private ComboBox<Practicante> comboBoxPracticantes;
     @FXML private VBox panelDatos;
@@ -36,8 +36,8 @@ public class InactivarPracticanteControlGUI implements Initializable {
 
     private PracticanteDao practicanteDao = new PracticanteDao();
 
-    @Override
-    public void initialize(URL url, ResourceBundle rb) {
+    @FXML
+    public void initialize() {
         cargarPracticantesActivos();
     }
 

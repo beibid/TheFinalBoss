@@ -15,11 +15,10 @@ import javafx.stage.Stage;
 import logica.dao.excepciones.MensajeriaExcepcion;
 import logica.dao.objetos.ProyectoDao;
 import logica.dominio.Proyecto;
-import java.net.URL;
 import java.util.List;
-import java.util.ResourceBundle;
 
-public class InactivarProyectoControlGUI implements Initializable {
+
+public class InactivarProyectoControlGUI{
 
     @FXML private ComboBox<Proyecto> comboBoxProyectos;
     @FXML private VBox panelDatos;
@@ -36,8 +35,8 @@ public class InactivarProyectoControlGUI implements Initializable {
 
     private Proyecto proyectoSeleccionado;
 
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
+    @FXML
+    public void initialize() {
         cargarProyectosDisponibles();
     }
 
