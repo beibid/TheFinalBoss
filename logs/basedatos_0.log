@@ -1,397 +1,112 @@
-abr 28, 2026 3:44:23 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
+may 10, 2026 7:49:21 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
 INFO: Configuración de base de datos cargada correctamente
-abr 28, 2026 3:44:23 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
+may 10, 2026 7:49:21 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
 CONFIG: URL de conexión: jdbc:mysql://localhost:3306/practicas_profesionales
-abr 28, 2026 3:44:23 P.M. acceso.bd.ConexionBaseDeDatos conectar
+may 10, 2026 7:49:21 P.M. acceso.bd.ConexionBaseDeDatos conectar
 FINE: Intentando establecer conexión a la base de datos...
-abr 28, 2026 3:44:24 P.M. acceso.bd.ConexionBaseDeDatos conectar
-INFO: Conexión a base de datos realizada exitosamente en 526 ms
-abr 28, 2026 3:46:35 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
-INFO: Configuración de base de datos cargada correctamente
-abr 28, 2026 3:46:35 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
-CONFIG: URL de conexión: jdbc:mysql://localhost:3306/practicas_profesionales
-abr 28, 2026 3:46:35 P.M. acceso.bd.ConexionBaseDeDatos conectar
+may 10, 2026 7:49:21 P.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexión a base de datos realizada exitosamente en 243 ms
+may 10, 2026 7:49:23 P.M. acceso.bd.ConexionBaseDeDatos conectar
 FINE: Intentando establecer conexión a la base de datos...
-abr 28, 2026 3:46:35 P.M. acceso.bd.ConexionBaseDeDatos conectar
-INFO: Conexión a base de datos realizada exitosamente en 521 ms
-abr 28, 2026 3:51:53 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
-INFO: Configuración de base de datos cargada correctamente
-abr 28, 2026 3:51:53 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
-CONFIG: URL de conexión: jdbc:mysql://localhost:3306/practicas_profesionales
-abr 28, 2026 3:51:53 P.M. acceso.bd.ConexionBaseDeDatos conectar
-FINE: Intentando establecer conexión a la base de datos...
-abr 28, 2026 3:51:54 P.M. acceso.bd.ConexionBaseDeDatos conectar
-INFO: Conexión a base de datos realizada exitosamente en 524 ms
-abr 28, 2026 4:01:10 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
-INFO: Configuración de base de datos cargada correctamente
-abr 28, 2026 4:01:10 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
-CONFIG: URL de conexión: jdbc:mysql://localhost:3306/practicas_profesionales
-abr 28, 2026 4:01:10 P.M. acceso.bd.ConexionBaseDeDatos conectar
-FINE: Intentando establecer conexión a la base de datos...
-abr 28, 2026 4:01:11 P.M. acceso.bd.ConexionBaseDeDatos conectar
-INFO: Conexión a base de datos realizada exitosamente en 536 ms
-abr 28, 2026 4:09:01 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
-INFO: Configuración de base de datos cargada correctamente
-abr 28, 2026 4:09:01 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
-CONFIG: URL de conexión: jdbc:mysql://localhost:3306/practicas_profesionales
-abr 28, 2026 4:09:01 P.M. acceso.bd.ConexionBaseDeDatos conectar
-FINE: Intentando establecer conexión a la base de datos...
-abr 28, 2026 4:09:02 P.M. acceso.bd.ConexionBaseDeDatos conectar
-INFO: Conexión a base de datos realizada exitosamente en 526 ms
-abr 28, 2026 4:10:00 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
-INFO: Configuración de base de datos cargada correctamente
-abr 28, 2026 4:10:00 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
-CONFIG: URL de conexión: jdbc:mysql://localhost:3306/practicas_profesionales
-abr 28, 2026 4:10:00 P.M. acceso.bd.ConexionBaseDeDatos conectar
-FINE: Intentando establecer conexión a la base de datos...
-abr 28, 2026 4:10:01 P.M. acceso.bd.ConexionBaseDeDatos conectar
-INFO: Conexión a base de datos realizada exitosamente en 560 ms
-abr 28, 2026 5:43:40 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
-INFO: Configuración de base de datos cargada correctamente
-abr 28, 2026 5:43:40 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
-CONFIG: URL de conexión: jdbc:mysql://localhost:3306/practicas_profesionales
-abr 28, 2026 5:43:40 P.M. acceso.bd.ConexionBaseDeDatos conectar
-FINE: Intentando establecer conexión a la base de datos...
-abr 28, 2026 5:43:40 P.M. acceso.bd.ConexionBaseDeDatos conectar
-INFO: Conexión a base de datos realizada exitosamente en 360 ms
-abr 28, 2026 5:43:47 P.M. acceso.bd.ConexionBaseDeDatos conectar
-FINE: Intentando establecer conexión a la base de datos...
-abr 28, 2026 5:43:48 P.M. acceso.bd.ConexionBaseDeDatos conectar
-INFO: Conexión a base de datos realizada exitosamente en 21 ms
-abr 28, 2026 5:43:55 P.M. acceso.bd.ConexionBaseDeDatos conectar
-FINE: Intentando establecer conexión a la base de datos...
-abr 28, 2026 5:43:55 P.M. acceso.bd.ConexionBaseDeDatos conectar
-INFO: Conexión a base de datos realizada exitosamente en 23 ms
-abr 28, 2026 5:43:55 P.M. acceso.bd.ConexionBaseDeDatos conectar
-FINE: Intentando establecer conexión a la base de datos...
-abr 28, 2026 5:43:55 P.M. acceso.bd.ConexionBaseDeDatos conectar
-INFO: Conexión a base de datos realizada exitosamente en 18 ms
-abr 28, 2026 5:44:05 P.M. acceso.bd.ConexionBaseDeDatos conectar
-FINE: Intentando establecer conexión a la base de datos...
-abr 28, 2026 5:44:05 P.M. acceso.bd.ConexionBaseDeDatos conectar
-INFO: Conexión a base de datos realizada exitosamente en 15 ms
-abr 28, 2026 5:44:05 P.M. acceso.bd.ConexionBaseDeDatos conectar
-FINE: Intentando establecer conexión a la base de datos...
-abr 28, 2026 5:44:05 P.M. acceso.bd.ConexionBaseDeDatos conectar
-INFO: Conexión a base de datos realizada exitosamente en 13 ms
-abr 28, 2026 5:44:51 P.M. acceso.bd.ConexionBaseDeDatos conectar
-FINE: Intentando establecer conexión a la base de datos...
-abr 28, 2026 5:44:51 P.M. acceso.bd.ConexionBaseDeDatos conectar
-INFO: Conexión a base de datos realizada exitosamente en 22 ms
-abr 28, 2026 5:44:57 P.M. acceso.bd.ConexionBaseDeDatos conectar
-FINE: Intentando establecer conexión a la base de datos...
-abr 28, 2026 5:44:57 P.M. acceso.bd.ConexionBaseDeDatos conectar
-INFO: Conexión a base de datos realizada exitosamente en 17 ms
-abr 28, 2026 5:44:57 P.M. acceso.bd.ConexionBaseDeDatos conectar
-FINE: Intentando establecer conexión a la base de datos...
-abr 28, 2026 5:44:57 P.M. acceso.bd.ConexionBaseDeDatos conectar
-INFO: Conexión a base de datos realizada exitosamente en 15 ms
-abr 28, 2026 5:44:57 P.M. acceso.bd.ConexionBaseDeDatos conectar
-FINE: Intentando establecer conexión a la base de datos...
-abr 28, 2026 5:44:57 P.M. acceso.bd.ConexionBaseDeDatos conectar
-INFO: Conexión a base de datos realizada exitosamente en 14 ms
-abr 28, 2026 5:45:17 P.M. acceso.bd.ConexionBaseDeDatos conectar
-FINE: Intentando establecer conexión a la base de datos...
-abr 28, 2026 5:45:17 P.M. acceso.bd.ConexionBaseDeDatos conectar
-INFO: Conexión a base de datos realizada exitosamente en 18 ms
-abr 28, 2026 5:45:36 P.M. acceso.bd.ConexionBaseDeDatos conectar
-FINE: Intentando establecer conexión a la base de datos...
-abr 28, 2026 5:45:36 P.M. acceso.bd.ConexionBaseDeDatos conectar
-INFO: Conexión a base de datos realizada exitosamente en 22 ms
-abr 28, 2026 5:46:15 P.M. acceso.bd.ConexionBaseDeDatos conectar
-FINE: Intentando establecer conexión a la base de datos...
-abr 28, 2026 5:46:15 P.M. acceso.bd.ConexionBaseDeDatos conectar
-INFO: Conexión a base de datos realizada exitosamente en 30 ms
-abr 28, 2026 5:46:21 P.M. acceso.bd.ConexionBaseDeDatos conectar
-FINE: Intentando establecer conexión a la base de datos...
-abr 28, 2026 5:46:21 P.M. acceso.bd.ConexionBaseDeDatos conectar
-INFO: Conexión a base de datos realizada exitosamente en 19 ms
-abr 28, 2026 5:46:43 P.M. acceso.bd.ConexionBaseDeDatos conectar
-FINE: Intentando establecer conexión a la base de datos...
-abr 28, 2026 5:46:43 P.M. acceso.bd.ConexionBaseDeDatos conectar
-INFO: Conexión a base de datos realizada exitosamente en 34 ms
-abr 28, 2026 5:46:51 P.M. acceso.bd.ConexionBaseDeDatos conectar
-FINE: Intentando establecer conexión a la base de datos...
-abr 28, 2026 5:46:52 P.M. acceso.bd.ConexionBaseDeDatos conectar
-INFO: Conexión a base de datos realizada exitosamente en 23 ms
-abr 28, 2026 5:47:58 P.M. acceso.bd.ConexionBaseDeDatos conectar
-FINE: Intentando establecer conexión a la base de datos...
-abr 28, 2026 5:47:58 P.M. acceso.bd.ConexionBaseDeDatos conectar
-INFO: Conexión a base de datos realizada exitosamente en 36 ms
-may 05, 2026 12:51:50 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
-INFO: Configuración de base de datos cargada correctamente
-may 05, 2026 12:51:50 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
-CONFIG: URL de conexión: jdbc:mysql://localhost:3306/practicas_profesionales
-may 05, 2026 12:51:50 P.M. acceso.bd.ConexionBaseDeDatos conectar
-FINE: Intentando establecer conexión a la base de datos...
-may 05, 2026 12:51:50 P.M. acceso.bd.ConexionBaseDeDatos conectar
-INFO: Conexión a base de datos realizada exitosamente en 372 ms
-may 05, 2026 12:53:24 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
-INFO: Configuración de base de datos cargada correctamente
-may 05, 2026 12:53:24 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
-CONFIG: URL de conexión: jdbc:mysql://localhost:3306/practicas_profesionales
-may 05, 2026 12:53:24 P.M. acceso.bd.ConexionBaseDeDatos conectar
-FINE: Intentando establecer conexión a la base de datos...
-may 05, 2026 12:53:25 P.M. acceso.bd.ConexionBaseDeDatos conectar
-INFO: Conexión a base de datos realizada exitosamente en 338 ms
-may 05, 2026 12:56:31 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
-INFO: Configuración de base de datos cargada correctamente
-may 05, 2026 12:56:31 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
-CONFIG: URL de conexión: jdbc:mysql://localhost:3306/practicas_profesionales
-may 05, 2026 12:56:31 P.M. acceso.bd.ConexionBaseDeDatos conectar
-FINE: Intentando establecer conexión a la base de datos...
-may 05, 2026 12:56:31 P.M. acceso.bd.ConexionBaseDeDatos conectar
-INFO: Conexión a base de datos realizada exitosamente en 332 ms
-may 05, 2026 12:56:50 P.M. acceso.bd.ConexionBaseDeDatos conectar
-FINE: Intentando establecer conexión a la base de datos...
-may 05, 2026 12:56:50 P.M. acceso.bd.ConexionBaseDeDatos conectar
-INFO: Conexión a base de datos realizada exitosamente en 56 ms
-may 05, 2026 1:03:23 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
-INFO: Configuración de base de datos cargada correctamente
-may 05, 2026 1:03:23 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
-CONFIG: URL de conexión: jdbc:mysql://localhost:3306/practicas_profesionales
-may 05, 2026 1:03:23 P.M. acceso.bd.ConexionBaseDeDatos conectar
-FINE: Intentando establecer conexión a la base de datos...
-may 05, 2026 1:03:23 P.M. acceso.bd.ConexionBaseDeDatos conectar
-INFO: Conexión a base de datos realizada exitosamente en 294 ms
-may 05, 2026 1:04:44 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
-INFO: Configuración de base de datos cargada correctamente
-may 05, 2026 1:04:44 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
-CONFIG: URL de conexión: jdbc:mysql://localhost:3306/practicas_profesionales
-may 05, 2026 1:04:44 P.M. acceso.bd.ConexionBaseDeDatos conectar
-FINE: Intentando establecer conexión a la base de datos...
-may 05, 2026 1:04:44 P.M. acceso.bd.ConexionBaseDeDatos conectar
-INFO: Conexión a base de datos realizada exitosamente en 312 ms
-may 05, 2026 1:06:19 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
-INFO: Configuración de base de datos cargada correctamente
-may 05, 2026 1:06:19 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
-CONFIG: URL de conexión: jdbc:mysql://localhost:3306/practicas_profesionales
-may 05, 2026 1:06:19 P.M. acceso.bd.ConexionBaseDeDatos conectar
-FINE: Intentando establecer conexión a la base de datos...
-may 05, 2026 1:06:20 P.M. acceso.bd.ConexionBaseDeDatos conectar
-INFO: Conexión a base de datos realizada exitosamente en 307 ms
-may 05, 2026 1:06:26 P.M. acceso.bd.ConexionBaseDeDatos conectar
-FINE: Intentando establecer conexión a la base de datos...
-may 05, 2026 1:06:26 P.M. acceso.bd.ConexionBaseDeDatos conectar
-INFO: Conexión a base de datos realizada exitosamente en 19 ms
-may 05, 2026 1:06:27 P.M. acceso.bd.ConexionBaseDeDatos conectar
-FINE: Intentando establecer conexión a la base de datos...
-may 05, 2026 1:06:27 P.M. acceso.bd.ConexionBaseDeDatos conectar
-INFO: Conexión a base de datos realizada exitosamente en 19 ms
-may 05, 2026 1:06:27 P.M. acceso.bd.ConexionBaseDeDatos conectar
-FINE: Intentando establecer conexión a la base de datos...
-may 05, 2026 1:06:28 P.M. acceso.bd.ConexionBaseDeDatos conectar
-INFO: Conexión a base de datos realizada exitosamente en 14 ms
-may 05, 2026 1:06:29 P.M. acceso.bd.ConexionBaseDeDatos conectar
-FINE: Intentando establecer conexión a la base de datos...
-may 05, 2026 1:06:29 P.M. acceso.bd.ConexionBaseDeDatos conectar
-INFO: Conexión a base de datos realizada exitosamente en 17 ms
-may 05, 2026 1:06:29 P.M. acceso.bd.ConexionBaseDeDatos conectar
-FINE: Intentando establecer conexión a la base de datos...
-may 05, 2026 1:06:29 P.M. acceso.bd.ConexionBaseDeDatos conectar
-INFO: Conexión a base de datos realizada exitosamente en 17 ms
-may 05, 2026 1:06:34 P.M. acceso.bd.ConexionBaseDeDatos conectar
-FINE: Intentando establecer conexión a la base de datos...
-may 05, 2026 1:06:34 P.M. acceso.bd.ConexionBaseDeDatos conectar
-INFO: Conexión a base de datos realizada exitosamente en 24 ms
-may 05, 2026 1:06:36 P.M. acceso.bd.ConexionBaseDeDatos conectar
-FINE: Intentando establecer conexión a la base de datos...
-may 05, 2026 1:06:36 P.M. acceso.bd.ConexionBaseDeDatos conectar
-INFO: Conexión a base de datos realizada exitosamente en 23 ms
-may 05, 2026 1:06:36 P.M. acceso.bd.ConexionBaseDeDatos conectar
-FINE: Intentando establecer conexión a la base de datos...
-may 05, 2026 1:06:36 P.M. acceso.bd.ConexionBaseDeDatos conectar
-INFO: Conexión a base de datos realizada exitosamente en 15 ms
-may 05, 2026 1:06:36 P.M. acceso.bd.ConexionBaseDeDatos conectar
-FINE: Intentando establecer conexión a la base de datos...
-may 05, 2026 1:06:36 P.M. acceso.bd.ConexionBaseDeDatos conectar
-INFO: Conexión a base de datos realizada exitosamente en 23 ms
-may 05, 2026 1:06:39 P.M. acceso.bd.ConexionBaseDeDatos conectar
-FINE: Intentando establecer conexión a la base de datos...
-may 05, 2026 1:06:39 P.M. acceso.bd.ConexionBaseDeDatos conectar
-INFO: Conexión a base de datos realizada exitosamente en 22 ms
-may 05, 2026 1:06:41 P.M. acceso.bd.ConexionBaseDeDatos conectar
-FINE: Intentando establecer conexión a la base de datos...
-may 05, 2026 1:06:41 P.M. acceso.bd.ConexionBaseDeDatos conectar
-INFO: Conexión a base de datos realizada exitosamente en 17 ms
-may 05, 2026 3:55:36 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
-INFO: Configuración de base de datos cargada correctamente
-may 05, 2026 3:55:36 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
-CONFIG: URL de conexión: jdbc:mysql://localhost:3306/practicas_profesionales
-may 05, 2026 3:55:36 P.M. acceso.bd.ConexionBaseDeDatos conectar
-FINE: Intentando establecer conexión a la base de datos...
-may 05, 2026 3:55:36 P.M. acceso.bd.ConexionBaseDeDatos conectar
-INFO: Conexión a base de datos realizada exitosamente en 348 ms
-may 05, 2026 3:55:40 P.M. acceso.bd.ConexionBaseDeDatos conectar
-FINE: Intentando establecer conexión a la base de datos...
-may 05, 2026 3:55:40 P.M. acceso.bd.ConexionBaseDeDatos conectar
-INFO: Conexión a base de datos realizada exitosamente en 23 ms
-may 05, 2026 3:55:40 P.M. acceso.bd.ConexionBaseDeDatos conectar
-FINE: Intentando establecer conexión a la base de datos...
-may 05, 2026 3:55:40 P.M. acceso.bd.ConexionBaseDeDatos conectar
+may 10, 2026 7:49:23 P.M. acceso.bd.ConexionBaseDeDatos conectar
 INFO: Conexión a base de datos realizada exitosamente en 16 ms
-may 05, 2026 5:36:27 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
-INFO: Configuración de base de datos cargada correctamente
-may 05, 2026 5:36:27 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
-CONFIG: URL de conexión: jdbc:mysql://localhost:3306/practicas_profesionales
-may 05, 2026 5:36:27 P.M. acceso.bd.ConexionBaseDeDatos conectar
+may 10, 2026 7:49:23 P.M. acceso.bd.ConexionBaseDeDatos conectar
 FINE: Intentando establecer conexión a la base de datos...
-may 05, 2026 5:36:28 P.M. acceso.bd.ConexionBaseDeDatos conectar
-INFO: Conexión a base de datos realizada exitosamente en 340 ms
-may 05, 2026 5:51:55 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
-INFO: Configuración de base de datos cargada correctamente
-may 05, 2026 5:51:55 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
-CONFIG: URL de conexión: jdbc:mysql://localhost:3306/practicas_profesionales
-may 05, 2026 5:51:55 P.M. acceso.bd.ConexionBaseDeDatos conectar
+may 10, 2026 7:49:23 P.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexión a base de datos realizada exitosamente en 7 ms
+may 10, 2026 7:49:24 P.M. acceso.bd.ConexionBaseDeDatos conectar
 FINE: Intentando establecer conexión a la base de datos...
-may 05, 2026 5:51:56 P.M. acceso.bd.ConexionBaseDeDatos conectar
-INFO: Conexión a base de datos realizada exitosamente en 339 ms
-may 05, 2026 5:59:43 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
-INFO: Configuración de base de datos cargada correctamente
-may 05, 2026 5:59:43 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
-CONFIG: URL de conexión: jdbc:mysql://localhost:3306/practicas_profesionales
-may 05, 2026 5:59:43 P.M. acceso.bd.ConexionBaseDeDatos conectar
+may 10, 2026 7:49:24 P.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexión a base de datos realizada exitosamente en 10 ms
+may 10, 2026 7:49:24 P.M. acceso.bd.ConexionBaseDeDatos conectar
 FINE: Intentando establecer conexión a la base de datos...
-may 05, 2026 5:59:43 P.M. acceso.bd.ConexionBaseDeDatos conectar
-INFO: Conexión a base de datos realizada exitosamente en 326 ms
-may 05, 2026 6:00:45 P.M. acceso.bd.ConexionBaseDeDatos conectar
+may 10, 2026 7:49:24 P.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexión a base de datos realizada exitosamente en 10 ms
+may 10, 2026 7:49:24 P.M. logica.dao.objetos.PreferenciaProyectoDao obtenerPreferencias
+INFO: Preferencias obtenidas para: S24013287 — total: 3
+may 10, 2026 7:49:29 P.M. acceso.bd.ConexionBaseDeDatos conectar
 FINE: Intentando establecer conexión a la base de datos...
-may 05, 2026 6:00:45 P.M. acceso.bd.ConexionBaseDeDatos conectar
-INFO: Conexión a base de datos realizada exitosamente en 66 ms
-may 05, 2026 6:01:13 P.M. acceso.bd.ConexionBaseDeDatos conectar
-FINE: Intentando establecer conexión a la base de datos...
-may 05, 2026 6:01:13 P.M. acceso.bd.ConexionBaseDeDatos conectar
-INFO: Conexión a base de datos realizada exitosamente en 43 ms
-may 05, 2026 10:14:09 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
-INFO: Configuración de base de datos cargada correctamente
-may 05, 2026 10:14:09 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
-CONFIG: URL de conexión: jdbc:mysql://localhost:3306/practicas_profesionales
-may 05, 2026 10:14:09 P.M. acceso.bd.ConexionBaseDeDatos conectar
-FINE: Intentando establecer conexión a la base de datos...
-may 05, 2026 10:14:09 P.M. acceso.bd.ConexionBaseDeDatos conectar
-INFO: Conexión a base de datos realizada exitosamente en 350 ms
-may 08, 2026 3:45:38 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
-INFO: Configuración de base de datos cargada correctamente
-may 08, 2026 3:45:38 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
-CONFIG: URL de conexión: jdbc:mysql://localhost:3306/practicas_profesionales
-may 08, 2026 3:45:38 P.M. acceso.bd.ConexionBaseDeDatos conectar
-FINE: Intentando establecer conexión a la base de datos...
-may 08, 2026 3:45:38 P.M. acceso.bd.ConexionBaseDeDatos conectar
-INFO: Conexión a base de datos realizada exitosamente en 299 ms
-may 08, 2026 4:08:09 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
-INFO: Configuración de base de datos cargada correctamente
-may 08, 2026 4:08:09 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
-CONFIG: URL de conexión: jdbc:mysql://localhost:3306/practicas_profesionales
-may 08, 2026 4:08:09 P.M. acceso.bd.ConexionBaseDeDatos conectar
-FINE: Intentando establecer conexión a la base de datos...
-may 08, 2026 4:08:09 P.M. acceso.bd.ConexionBaseDeDatos conectar
-INFO: Conexión a base de datos realizada exitosamente en 304 ms
-may 08, 2026 4:08:11 P.M. acceso.bd.ConexionBaseDeDatos conectar
-FINE: Intentando establecer conexión a la base de datos...
-may 08, 2026 4:08:11 P.M. acceso.bd.ConexionBaseDeDatos conectar
+may 10, 2026 7:49:29 P.M. acceso.bd.ConexionBaseDeDatos conectar
 INFO: Conexión a base de datos realizada exitosamente en 16 ms
-may 08, 2026 4:08:12 P.M. acceso.bd.ConexionBaseDeDatos conectar
+may 10, 2026 7:49:29 P.M. acceso.bd.ConexionBaseDeDatos conectar
 FINE: Intentando establecer conexión a la base de datos...
-may 08, 2026 4:08:12 P.M. acceso.bd.ConexionBaseDeDatos conectar
-INFO: Conexión a base de datos realizada exitosamente en 23 ms
-may 08, 2026 4:08:23 P.M. acceso.bd.ConexionBaseDeDatos conectar
+may 10, 2026 7:49:29 P.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexión a base de datos realizada exitosamente en 7 ms
+may 10, 2026 7:49:29 P.M. logica.dao.objetos.PreferenciaProyectoDao obtenerPreferencias
+INFO: Preferencias obtenidas para: S23098765 — total: 0
+may 10, 2026 7:49:35 P.M. acceso.bd.ConexionBaseDeDatos conectar
 FINE: Intentando establecer conexión a la base de datos...
-may 08, 2026 4:08:23 P.M. acceso.bd.ConexionBaseDeDatos conectar
-INFO: Conexión a base de datos realizada exitosamente en 14 ms
-may 08, 2026 4:08:23 P.M. logica.dao.objetos.ReporteDao evaluarReporte
-INFO: Reporte evaluado correctamente: 16
-may 08, 2026 4:08:34 P.M. acceso.bd.ConexionBaseDeDatos conectar
-FINE: Intentando establecer conexión a la base de datos...
-may 08, 2026 4:08:34 P.M. acceso.bd.ConexionBaseDeDatos conectar
-INFO: Conexión a base de datos realizada exitosamente en 25 ms
-may 08, 2026 4:08:35 P.M. acceso.bd.ConexionBaseDeDatos conectar
-FINE: Intentando establecer conexión a la base de datos...
-may 08, 2026 4:08:35 P.M. acceso.bd.ConexionBaseDeDatos conectar
-INFO: Conexión a base de datos realizada exitosamente en 24 ms
-may 08, 2026 4:08:37 P.M. acceso.bd.ConexionBaseDeDatos conectar
-FINE: Intentando establecer conexión a la base de datos...
-may 08, 2026 4:08:37 P.M. acceso.bd.ConexionBaseDeDatos conectar
-INFO: Conexión a base de datos realizada exitosamente en 20 ms
-may 08, 2026 4:08:39 P.M. acceso.bd.ConexionBaseDeDatos conectar
-FINE: Intentando establecer conexión a la base de datos...
-may 08, 2026 4:08:39 P.M. acceso.bd.ConexionBaseDeDatos conectar
-INFO: Conexión a base de datos realizada exitosamente en 14 ms
-may 08, 2026 4:08:40 P.M. acceso.bd.ConexionBaseDeDatos conectar
-FINE: Intentando establecer conexión a la base de datos...
-may 08, 2026 4:08:40 P.M. acceso.bd.ConexionBaseDeDatos conectar
-INFO: Conexión a base de datos realizada exitosamente en 20 ms
-may 08, 2026 4:08:40 P.M. acceso.bd.ConexionBaseDeDatos conectar
-FINE: Intentando establecer conexión a la base de datos...
-may 08, 2026 4:08:40 P.M. acceso.bd.ConexionBaseDeDatos conectar
-INFO: Conexión a base de datos realizada exitosamente en 18 ms
-may 08, 2026 4:13:52 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
+may 10, 2026 7:49:35 P.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexión a base de datos realizada exitosamente en 8 ms
+may 10, 2026 8:07:39 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
 INFO: Configuración de base de datos cargada correctamente
-may 08, 2026 4:13:52 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
+may 10, 2026 8:07:39 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
 CONFIG: URL de conexión: jdbc:mysql://localhost:3306/practicas_profesionales
-may 08, 2026 4:13:52 P.M. acceso.bd.ConexionBaseDeDatos conectar
+may 10, 2026 8:07:39 P.M. acceso.bd.ConexionBaseDeDatos conectar
 FINE: Intentando establecer conexión a la base de datos...
-may 08, 2026 4:13:53 P.M. acceso.bd.ConexionBaseDeDatos conectar
-INFO: Conexión a base de datos realizada exitosamente en 328 ms
-may 08, 2026 4:16:46 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
-INFO: Configuración de base de datos cargada correctamente
-may 08, 2026 4:16:46 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
-CONFIG: URL de conexión: jdbc:mysql://localhost:3306/practicas_profesionales
-may 08, 2026 4:16:46 P.M. acceso.bd.ConexionBaseDeDatos conectar
+may 10, 2026 8:07:39 P.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexión a base de datos realizada exitosamente en 257 ms
+may 10, 2026 8:07:43 P.M. acceso.bd.ConexionBaseDeDatos conectar
 FINE: Intentando establecer conexión a la base de datos...
-may 08, 2026 4:16:46 P.M. acceso.bd.ConexionBaseDeDatos conectar
-INFO: Conexión a base de datos realizada exitosamente en 299 ms
-may 08, 2026 4:16:59 P.M. acceso.bd.ConexionBaseDeDatos conectar
+may 10, 2026 8:07:43 P.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexión a base de datos realizada exitosamente en 11 ms
+may 10, 2026 8:07:43 P.M. acceso.bd.ConexionBaseDeDatos conectar
 FINE: Intentando establecer conexión a la base de datos...
-may 08, 2026 4:16:59 P.M. acceso.bd.ConexionBaseDeDatos conectar
-INFO: Conexión a base de datos realizada exitosamente en 26 ms
-may 08, 2026 4:16:59 P.M. logica.dao.objetos.ReporteDao agregarReporte
-INFO: Reporte insertado correctamente
-may 08, 2026 4:29:11 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
-INFO: Configuración de base de datos cargada correctamente
-may 08, 2026 4:29:11 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
-CONFIG: URL de conexión: jdbc:mysql://localhost:3306/practicas_profesionales
-may 08, 2026 4:29:11 P.M. acceso.bd.ConexionBaseDeDatos conectar
+may 10, 2026 8:07:43 P.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexión a base de datos realizada exitosamente en 9 ms
+may 10, 2026 8:07:49 P.M. acceso.bd.ConexionBaseDeDatos conectar
 FINE: Intentando establecer conexión a la base de datos...
-may 08, 2026 4:29:11 P.M. acceso.bd.ConexionBaseDeDatos conectar
-INFO: Conexión a base de datos realizada exitosamente en 295 ms
-may 08, 2026 4:31:19 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
-INFO: Configuración de base de datos cargada correctamente
-may 08, 2026 4:31:19 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
-CONFIG: URL de conexión: jdbc:mysql://localhost:3306/practicas_profesionales
-may 08, 2026 4:31:19 P.M. acceso.bd.ConexionBaseDeDatos conectar
+may 10, 2026 8:07:49 P.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexión a base de datos realizada exitosamente en 9 ms
+may 10, 2026 8:07:49 P.M. acceso.bd.ConexionBaseDeDatos conectar
 FINE: Intentando establecer conexión a la base de datos...
-may 08, 2026 4:31:19 P.M. acceso.bd.ConexionBaseDeDatos conectar
-INFO: Conexión a base de datos realizada exitosamente en 312 ms
-may 08, 2026 4:31:29 P.M. acceso.bd.ConexionBaseDeDatos conectar
+may 10, 2026 8:07:49 P.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexión a base de datos realizada exitosamente en 10 ms
+may 10, 2026 8:07:49 P.M. logica.dao.objetos.PreferenciaProyectoDao obtenerPreferencias
+INFO: Preferencias obtenidas para: S24013287 — total: 3
+may 10, 2026 8:07:59 P.M. acceso.bd.ConexionBaseDeDatos conectar
 FINE: Intentando establecer conexión a la base de datos...
-may 08, 2026 4:31:29 P.M. acceso.bd.ConexionBaseDeDatos conectar
-INFO: Conexión a base de datos realizada exitosamente en 39 ms
-may 08, 2026 4:31:29 P.M. logica.dao.objetos.DocumentacionPracticanteDao agregarDocumentacion
-INFO: DocumentacionPracticante insertada correctamente con ID: 6
-may 08, 2026 4:31:29 P.M. acceso.bd.ConexionBaseDeDatos conectar
+may 10, 2026 8:07:59 P.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexión a base de datos realizada exitosamente en 9 ms
+may 10, 2026 8:07:59 P.M. logica.dao.objetos.PracticanteDao asignarProyecto
+INFO: Proyecto asignado correctamente al practicante: S24013287
+may 10, 2026 8:07:59 P.M. acceso.bd.ConexionBaseDeDatos conectar
 FINE: Intentando establecer conexión a la base de datos...
-may 08, 2026 4:31:29 P.M. acceso.bd.ConexionBaseDeDatos conectar
-INFO: Conexión a base de datos realizada exitosamente en 16 ms
-may 08, 2026 4:31:29 P.M. logica.dao.objetos.EntregaDocumentacionDao agregarEntrega
-INFO: EntregaDocumentacion insertada correctamente
-may 08, 2026 4:57:38 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
-INFO: Configuración de base de datos cargada correctamente
-may 08, 2026 4:57:38 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
-CONFIG: URL de conexión: jdbc:mysql://localhost:3306/practicas_profesionales
-may 08, 2026 4:57:38 P.M. acceso.bd.ConexionBaseDeDatos conectar
+may 10, 2026 8:07:59 P.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexión a base de datos realizada exitosamente en 8 ms
+may 10, 2026 8:08:07 P.M. acceso.bd.ConexionBaseDeDatos conectar
 FINE: Intentando establecer conexión a la base de datos...
-may 08, 2026 4:57:38 P.M. acceso.bd.ConexionBaseDeDatos conectar
-INFO: Conexión a base de datos realizada exitosamente en 718 ms
-may 08, 2026 4:57:38 P.M. logica.dao.objetos.UsuarioDao buscarUsuario
-SEVERE: Error al buscar usuario
-java.sql.SQLSyntaxErrorException: execute command denied to user 'usuario_practicas'@'localhost' for routine 'practicas_profesionales.sp_buscar_usuario_login'
-	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:112)
+may 10, 2026 8:08:07 P.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexión a base de datos realizada exitosamente en 8 ms
+may 10, 2026 8:08:07 P.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexión a la base de datos...
+may 10, 2026 8:08:07 P.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexión a base de datos realizada exitosamente en 8 ms
+may 10, 2026 8:08:09 P.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexión a la base de datos...
+may 10, 2026 8:08:09 P.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexión a base de datos realizada exitosamente en 11 ms
+may 10, 2026 8:08:09 P.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexión a la base de datos...
+may 10, 2026 8:08:09 P.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexión a base de datos realizada exitosamente en 8 ms
+may 10, 2026 8:08:09 P.M. logica.dao.objetos.PreferenciaProyectoDao obtenerPreferencias
+INFO: Preferencias obtenidas para: S24013287 — total: 3
+may 10, 2026 8:08:14 P.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexión a la base de datos...
+may 10, 2026 8:08:14 P.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexión a base de datos realizada exitosamente en 6 ms
+may 10, 2026 8:08:14 P.M. logica.dao.objetos.PracticanteDao asignarProyecto
+SEVERE: Error al asignar proyecto
+java.sql.SQLException: El practicante ya tiene un proyecto asignado.
+	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:121)
 	at com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:114)
 	at com.mysql.cj.jdbc.ClientPreparedStatement.executeInternal(ClientPreparedStatement.java:988)
-	at com.mysql.cj.jdbc.ClientPreparedStatement.executeQuery(ClientPreparedStatement.java:1056)
-	at com.mysql.cj.jdbc.CallableStatement.executeQuery(CallableStatement.java:960)
-	at logica.dao.objetos.UsuarioDao.buscarUsuario(UsuarioDao.java:75)
-	at InterfazGrafica.IniciarSesionControlGUI.botonIniciarSesion(IniciarSesionControlGUI.java:41)
+	at com.mysql.cj.jdbc.ClientPreparedStatement.execute(ClientPreparedStatement.java:383)
+	at com.mysql.cj.jdbc.CallableStatement.execute(CallableStatement.java:896)
+	at logica.dao.objetos.PracticanteDao.asignarProyecto(PracticanteDao.java:212)
+	at InterfazGrafica.AsignaProyectoControlGUI.ejecutarAsignacion(AsignaProyectoControlGUI.java:160)
+	at InterfazGrafica.AsignaProyectoControlGUI.botonAsignar(AsignaProyectoControlGUI.java:155)
 	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:104)
 	at java.base/java.lang.reflect.Method.invoke(Method.java:565)
 	at com.sun.javafx.reflect.Trampoline.invoke(MethodUtil.java:65)
@@ -445,24 +160,167 @@ java.sql.SQLSyntaxErrorException: execute command denied to user 'usuario_practi
 	at javafx.graphics@26/com.sun.glass.ui.win.WinApplication.lambda$runLoop$0(WinApplication.java:173)
 	at java.base/java.lang.Thread.run(Thread.java:1474)
 
-may 08, 2026 4:58:10 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
-INFO: Configuración de base de datos cargada correctamente
-may 08, 2026 4:58:10 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
-CONFIG: URL de conexión: jdbc:mysql://localhost:3306/practicas_profesionales
-may 08, 2026 4:58:10 P.M. acceso.bd.ConexionBaseDeDatos conectar
+may 10, 2026 8:08:21 P.M. acceso.bd.ConexionBaseDeDatos conectar
 FINE: Intentando establecer conexión a la base de datos...
-may 08, 2026 4:58:10 P.M. acceso.bd.ConexionBaseDeDatos conectar
-INFO: Conexión a base de datos realizada exitosamente en 551 ms
-may 08, 2026 4:58:11 P.M. logica.dao.objetos.UsuarioDao buscarUsuario
-SEVERE: Error al buscar usuario
-java.sql.SQLSyntaxErrorException: execute command denied to user 'usuario_practicas'@'localhost' for routine 'practicas_profesionales.sp_buscar_usuario_login'
-	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:112)
+may 10, 2026 8:08:21 P.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexión a base de datos realizada exitosamente en 8 ms
+may 10, 2026 8:08:21 P.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexión a la base de datos...
+may 10, 2026 8:08:21 P.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexión a base de datos realizada exitosamente en 7 ms
+may 10, 2026 8:08:23 P.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexión a la base de datos...
+may 10, 2026 8:08:23 P.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexión a base de datos realizada exitosamente en 9 ms
+may 10, 2026 8:08:23 P.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexión a la base de datos...
+may 10, 2026 8:08:23 P.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexión a base de datos realizada exitosamente en 7 ms
+may 10, 2026 8:08:23 P.M. logica.dao.objetos.PreferenciaProyectoDao obtenerPreferencias
+INFO: Preferencias obtenidas para: S23098765 — total: 0
+may 10, 2026 8:08:28 P.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexión a la base de datos...
+may 10, 2026 8:08:28 P.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexión a base de datos realizada exitosamente en 7 ms
+may 10, 2026 8:09:07 P.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexión a la base de datos...
+may 10, 2026 8:09:07 P.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexión a base de datos realizada exitosamente en 9 ms
+may 10, 2026 8:11:13 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
+INFO: Configuración de base de datos cargada correctamente
+may 10, 2026 8:11:13 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
+CONFIG: URL de conexión: jdbc:mysql://localhost:3306/practicas_profesionales
+may 10, 2026 8:11:13 P.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexión a la base de datos...
+may 10, 2026 8:11:13 P.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexión a base de datos realizada exitosamente en 235 ms
+may 10, 2026 8:11:14 P.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexión a la base de datos...
+may 10, 2026 8:11:14 P.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexión a base de datos realizada exitosamente en 11 ms
+may 10, 2026 8:11:14 P.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexión a la base de datos...
+may 10, 2026 8:11:14 P.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexión a base de datos realizada exitosamente en 10 ms
+may 10, 2026 8:11:14 P.M. logica.dao.objetos.PreferenciaProyectoDao obtenerPreferencias
+INFO: Preferencias obtenidas para: S23098765 — total: 0
+may 10, 2026 8:12:10 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
+INFO: Configuración de base de datos cargada correctamente
+may 10, 2026 8:12:10 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
+CONFIG: URL de conexión: jdbc:mysql://localhost:3306/practicas_profesionales
+may 10, 2026 8:12:10 P.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexión a la base de datos...
+may 10, 2026 8:12:10 P.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexión a base de datos realizada exitosamente en 245 ms
+may 10, 2026 8:12:11 P.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexión a la base de datos...
+may 10, 2026 8:12:11 P.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexión a base de datos realizada exitosamente en 11 ms
+may 10, 2026 8:12:11 P.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexión a la base de datos...
+may 10, 2026 8:12:11 P.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexión a base de datos realizada exitosamente en 9 ms
+may 10, 2026 8:12:11 P.M. logica.dao.objetos.PreferenciaProyectoDao obtenerPreferencias
+INFO: Preferencias obtenidas para: S23098765 — total: 0
+may 10, 2026 8:13:44 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
+INFO: Configuración de base de datos cargada correctamente
+may 10, 2026 8:13:44 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
+CONFIG: URL de conexión: jdbc:mysql://localhost:3306/practicas_profesionales
+may 10, 2026 8:13:44 P.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexión a la base de datos...
+may 10, 2026 8:13:44 P.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexión a base de datos realizada exitosamente en 241 ms
+may 10, 2026 8:13:54 P.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexión a la base de datos...
+may 10, 2026 8:13:54 P.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexión a base de datos realizada exitosamente en 10 ms
+may 10, 2026 8:13:54 P.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexión a la base de datos...
+may 10, 2026 8:13:54 P.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexión a base de datos realizada exitosamente en 10 ms
+may 10, 2026 8:13:54 P.M. logica.dao.objetos.PreferenciaProyectoDao obtenerPreferencias
+INFO: Preferencias obtenidas para: S23098765 — total: 0
+may 10, 2026 8:14:15 P.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexión a la base de datos...
+may 10, 2026 8:14:15 P.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexión a base de datos realizada exitosamente en 9 ms
+may 10, 2026 8:14:15 P.M. logica.dao.objetos.PreferenciaProyectoDao guardarPreferencias
+INFO: Preferencias guardadas correctamente para: S23098765
+may 10, 2026 8:14:36 P.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexión a la base de datos...
+may 10, 2026 8:14:36 P.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexión a base de datos realizada exitosamente en 11 ms
+may 10, 2026 8:14:41 P.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexión a la base de datos...
+may 10, 2026 8:14:41 P.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexión a base de datos realizada exitosamente en 13 ms
+may 10, 2026 8:14:41 P.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexión a la base de datos...
+may 10, 2026 8:14:41 P.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexión a base de datos realizada exitosamente en 8 ms
+may 10, 2026 8:14:45 P.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexión a la base de datos...
+may 10, 2026 8:14:45 P.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexión a base de datos realizada exitosamente en 9 ms
+may 10, 2026 8:14:45 P.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexión a la base de datos...
+may 10, 2026 8:14:45 P.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexión a base de datos realizada exitosamente en 8 ms
+may 10, 2026 8:14:45 P.M. logica.dao.objetos.PreferenciaProyectoDao obtenerPreferencias
+INFO: Preferencias obtenidas para: S24013287 — total: 3
+may 10, 2026 8:14:52 P.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexión a la base de datos...
+may 10, 2026 8:14:52 P.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexión a base de datos realizada exitosamente en 8 ms
+may 10, 2026 8:14:52 P.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexión a la base de datos...
+may 10, 2026 8:14:52 P.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexión a base de datos realizada exitosamente en 6 ms
+may 10, 2026 8:14:52 P.M. logica.dao.objetos.PreferenciaProyectoDao obtenerPreferencias
+INFO: Preferencias obtenidas para: S23098765 — total: 3
+may 10, 2026 8:15:01 P.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexión a la base de datos...
+may 10, 2026 8:15:01 P.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexión a base de datos realizada exitosamente en 8 ms
+may 10, 2026 8:15:01 P.M. logica.dao.objetos.PracticanteDao asignarProyecto
+INFO: Proyecto asignado correctamente al practicante: S23098765
+may 10, 2026 8:15:01 P.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexión a la base de datos...
+may 10, 2026 8:15:01 P.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexión a base de datos realizada exitosamente en 6 ms
+may 10, 2026 8:15:05 P.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexión a la base de datos...
+may 10, 2026 8:15:05 P.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexión a base de datos realizada exitosamente en 7 ms
+may 10, 2026 8:15:05 P.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexión a la base de datos...
+may 10, 2026 8:15:05 P.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexión a base de datos realizada exitosamente en 6 ms
+may 10, 2026 8:15:07 P.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexión a la base de datos...
+may 10, 2026 8:15:07 P.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexión a base de datos realizada exitosamente en 8 ms
+may 10, 2026 8:15:07 P.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexión a la base de datos...
+may 10, 2026 8:15:07 P.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexión a base de datos realizada exitosamente en 7 ms
+may 10, 2026 8:15:07 P.M. logica.dao.objetos.PreferenciaProyectoDao obtenerPreferencias
+INFO: Preferencias obtenidas para: S23098765 — total: 3
+may 10, 2026 8:15:11 P.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexión a la base de datos...
+may 10, 2026 8:15:11 P.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexión a base de datos realizada exitosamente en 6 ms
+may 10, 2026 8:15:11 P.M. logica.dao.objetos.PracticanteDao asignarProyecto
+SEVERE: Error al asignar proyecto
+java.sql.SQLException: El practicante ya tiene un proyecto asignado.
+	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:121)
 	at com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:114)
 	at com.mysql.cj.jdbc.ClientPreparedStatement.executeInternal(ClientPreparedStatement.java:988)
-	at com.mysql.cj.jdbc.ClientPreparedStatement.executeQuery(ClientPreparedStatement.java:1056)
-	at com.mysql.cj.jdbc.CallableStatement.executeQuery(CallableStatement.java:960)
-	at logica.dao.objetos.UsuarioDao.buscarUsuario(UsuarioDao.java:75)
-	at InterfazGrafica.IniciarSesionControlGUI.botonIniciarSesion(IniciarSesionControlGUI.java:41)
+	at com.mysql.cj.jdbc.ClientPreparedStatement.execute(ClientPreparedStatement.java:383)
+	at com.mysql.cj.jdbc.CallableStatement.execute(CallableStatement.java:896)
+	at logica.dao.objetos.PracticanteDao.asignarProyecto(PracticanteDao.java:212)
+	at InterfazGrafica.AsignaProyectoControlGUI.ejecutarAsignacion(AsignaProyectoControlGUI.java:160)
+	at InterfazGrafica.AsignaProyectoControlGUI.botonAsignar(AsignaProyectoControlGUI.java:155)
 	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:104)
 	at java.base/java.lang.reflect.Method.invoke(Method.java:565)
 	at com.sun.javafx.reflect.Trampoline.invoke(MethodUtil.java:65)

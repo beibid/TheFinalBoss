@@ -14,6 +14,7 @@ import logica.dao.excepciones.UsuariosExcepcion;
 import logica.dao.objetos.SeccionDao;
 import logica.dominio.Seccion;
 
+
 public class SeccionControlGUI{
 
     @FXML private TextField campoTextoPeriodo;

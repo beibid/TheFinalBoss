@@ -1,5 +1,6 @@
 package InterfazGrafica;
 
+
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
@@ -23,6 +24,7 @@ import java.sql.Date;
 import java.time.LocalDate;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 
 public class SubirDocumentacionControlGUI {
 

@@ -1,7 +1,6 @@
 package InterfazGrafica;
 
 
-import javafx.fxml.Initializable;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -19,9 +18,7 @@ import logica.dao.objetos.PracticanteSeccionDao;
 import logica.dominio.Practicante;
 import logica.dominio.Seccion;
 import logica.dominio.PracticanteSeccion;
-import java.net.URL;
 import java.util.List;
-import java.util.ResourceBundle;
 
 
 public class PracticanteEnSeccionControlGUI{

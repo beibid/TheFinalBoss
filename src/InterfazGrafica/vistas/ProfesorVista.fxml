@@ -8,7 +8,7 @@
     <children>
 
 
-        <VBox layoutX="0.0" layoutY="0.0" prefHeight="535.0" prefWidth="180.0" style="-fx-background-color: #2ecc71; -fx-padding: 15;">
+        <VBox layoutX="0.0" layoutY="0.0" prefHeight="582.0" prefWidth="180.0" style="-fx-background-color: #2ecc71; -fx-padding: 15;">
             <children>
                 <Label style="-fx-text-fill: white; -fx-font-size: 16; -fx-font-weight: bold;" text="Registro" />
                 <Label style="-fx-text-fill: black; -fx-font-size: 12;" text="Profesor">
@@ -52,6 +52,10 @@
 
                 <Label style="-fx-font-size: 13;" text="Apellidos" />
                 <TextField fx:id="campoTextoApellidos" prefHeight="30.0" prefWidth="450.0" promptText="Ej. Bonilla Pérez" />
+
+                <Label style="-fx-font-size: 13;" text="Correo" />
+                <TextField fx:id="campoTextoCorreo" prefHeight="30.0" prefWidth="450.0" promptText="Ej. juanBoni@uv.mx" />
+
                 <Label text="Turno" />
                 <RadioButton fx:id="radioBotonMatutino" mnemonicParsing="false" text="Matutino" />
                 <RadioButton fx:id="radioBotonVespertino" mnemonicParsing="false" text="Vespertino" />

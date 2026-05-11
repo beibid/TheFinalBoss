@@ -8,10 +8,10 @@
     <children>
 
 
-        <VBox layoutX="0.0" layoutY="0.0" prefHeight="535.0" prefWidth="180.0" style="-fx-background-color: #2ecc71; -fx-padding: 15;">
+        <VBox layoutX="0.0" layoutY="0.0" prefHeight="599.0" prefWidth="180.0" style="-fx-background-color: #2ecc71; -fx-padding: 15;">
             <children>
                 <Label style="-fx-text-fill: white; -fx-font-size: 16; -fx-font-weight: bold;" text="Registro" />
-                <Label style="-fx-text-fill: black; -fx-font-size: 12;" text="Practicante" >
+                <Label style="-fx-text-fill: black; -fx-font-size: 12;" text="Practicante">
                     <VBox.margin><Insets top="4.0" /></VBox.margin>
                 </Label>
             </children>
@@ -52,6 +52,10 @@
 
                 <Label style="-fx-font-size: 13;" text="Apellidos" />
                 <TextField fx:id="campoTextoApellidos" prefHeight="30.0" prefWidth="450.0" promptText="Ej. Bonilla Pérez" />
+
+                <Label style="-fx-font-size: 13;" text="Correo" />
+                <TextField fx:id="campoTextoCorreo" prefHeight="30.0" prefWidth="450.0" promptText="Ej. daviCin@uv.mx" />
+
             <Label text="Lengua Indigena (En caso de hablar alguna)" />
             <TextField fx:id="campoTextoLenguaIndigena" promptText="Ej. Nahuatl" />
             <Label text="Genero " />

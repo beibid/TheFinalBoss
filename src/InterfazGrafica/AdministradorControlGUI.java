@@ -1,13 +1,16 @@
 package InterfazGrafica;
 
+
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import logica.dao.excepciones.RegistroDuplicadoExcepcion;
@@ -15,10 +18,9 @@ import logica.dao.excepciones.UsuariosExcepcion;
 import logica.dao.objetos.AdministradorDao;
 import logica.dominio.Administrador;
 import logica.dominio.enums.Estado;
-import java.net.URL;
-import java.util.ResourceBundle;
 
-public class AdministradorControlGUI implements Initializable {
+
+public class AdministradorControlGUI{
 
     @FXML private TextField campoTextoNombres;
     @FXML private TextField campoTextoApellidos;
@@ -29,9 +31,6 @@ public class AdministradorControlGUI implements Initializable {
     @FXML private VBox panelExito;
     @FXML private Label etiquetaTituloExito;
     @FXML private Label etiquetaMensajeExito;
-
-    @Override
-    public void initialize(URL url, ResourceBundle rb) {}
 
     @FXML
     private void botonRegistrar() {

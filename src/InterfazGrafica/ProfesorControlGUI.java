@@ -1,13 +1,15 @@
 package InterfazGrafica;
 
+
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
 import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.control.*;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.Label;
+import javafx.scene.control.RadioButton;
+import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import logica.dao.excepciones.RegistroDuplicadoExcepcion;
@@ -16,14 +18,14 @@ import logica.dao.objetos.ProfesorDao;
 import logica.dominio.Profesor;
 import logica.dominio.enums.Estado;
 import logica.dominio.enums.Turno;
-import java.net.URL;
-import java.util.ResourceBundle;
+
 
 public class ProfesorControlGUI{
 
     @FXML private TextField campoTextoNombres;
     @FXML private TextField campoTextoApellidos;
     @FXML private TextField campoTextoNumeroPersonal;
+    @FXML private TextField campoTextoCorreo;
     @FXML private RadioButton radioBotonMatutino;
     @FXML private RadioButton radioBotonVespertino;
     @FXML private RadioButton radioBotonMixto;
@@ -87,6 +89,7 @@ public class ProfesorControlGUI{
     private boolean camposValidos() {
         String nombre = campoTextoNombres.getText().trim();
         String apellidos = campoTextoApellidos.getText().trim();
+        String correo = campoTextoCorreo.getText().trim();
         String numeroPersonal = campoTextoNumeroPersonal.getText().trim();
 
         if (nombre.isEmpty() || apellidos.isEmpty() || numeroPersonal.isEmpty()) {
@@ -105,16 +108,18 @@ public class ProfesorControlGUI{
     private Profesor construirProfesor() {
         String nombre = campoTextoNombres.getText().trim();
         String apellidos = campoTextoApellidos.getText().trim();
+        String correo = campoTextoCorreo.getText().trim();
         String numeroPersonal = campoTextoNumeroPersonal.getText().trim();
         Turno turno = obtenerTurnoSeleccionado();
         String contrasena = generarContrasena(nombre, numeroPersonal);
 
         Profesor profesor = new Profesor();
-        profesor.setNombre(nombre);
-        profesor.setApellidos(apellidos);
+        profesor.setNombre(limitarTexto(nombre, 55));
+        profesor.setApellidos(limitarTexto(apellidos, 55));
         profesor.setTurno(turno);
-        profesor.setNumeroDePersonalProfesor(numeroPersonal);
-        profesor.setContrasena(contrasena);
+        profesor.setCorreo(limitarTexto(correo, 100));
+        profesor.setNumeroDePersonalProfesor(limitarTexto(numeroPersonal, 12));
+        profesor.setContrasena(limitarTexto(contrasena, 12));
         profesor.setEstado(Estado.Activo);
         return profesor;
     }
@@ -153,11 +158,16 @@ public class ProfesorControlGUI{
         return nombre.toLowerCase() + numeroPersonal;
     }
 
+    private String limitarTexto(String texto, int limite) {
+        return texto.substring(0, Math.min(limite, texto.length()));
+    }
+
     private void limpiarCamposRegistros() {
         ocultarError();
         ocultarExito();
         campoTextoNombres.clear();
         campoTextoApellidos.clear();
+        campoTextoCorreo.clear();
         campoTextoNumeroPersonal.clear();
         grupoTurno.selectToggle(null);
     }

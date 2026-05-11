@@ -1,5 +1,6 @@
 package InterfazGrafica;
 
+
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -15,6 +16,7 @@ import logica.dominio.SesionUsuario;
 import logica.dominio.UsuarioSesion;
 import logica.dominio.enums.Estado;
 import logica.dominio.enums.Rol;
+
 
 public class IniciarSesionControlGUI {
 

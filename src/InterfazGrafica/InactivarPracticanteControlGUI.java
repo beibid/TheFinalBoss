@@ -1,6 +1,6 @@
 package InterfazGrafica;
 
-import javafx.fxml.Initializable;
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -15,9 +15,7 @@ import javafx.stage.Stage;
 import logica.dao.excepciones.UsuariosExcepcion;
 import logica.dao.objetos.PracticanteDao;
 import logica.dominio.Practicante;
-import java.net.URL;
 import java.util.List;
-import java.util.ResourceBundle;
 
 
 public class InactivarPracticanteControlGUI{

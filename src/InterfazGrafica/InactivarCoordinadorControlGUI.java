@@ -1,10 +1,10 @@
 package InterfazGrafica;
 
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
@@ -15,9 +15,8 @@ import javafx.stage.Stage;
 import logica.dao.excepciones.UsuariosExcepcion;
 import logica.dao.objetos.CoordinadorDao;
 import logica.dominio.Coordinador;
-import java.net.URL;
 import java.util.List;
-import java.util.ResourceBundle;
+
 
 public class InactivarCoordinadorControlGUI{
 

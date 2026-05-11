@@ -46,7 +46,7 @@
                       visible="false">
                     <HBox alignment="CENTER_LEFT" spacing="8">
                         <Label text="✔" style="-fx-text-fill: #2d6a2d; -fx-font-size: 14; -fx-font-weight: bold;"/>
-                        <Label fx:id="etquetaTituloExito" style="-fx-font-weight: bold; -fx-text-fill: #2d6a2d;" text=""/>
+                        <Label fx:id="etiquetaTituloExito" style="-fx-font-weight: bold; -fx-text-fill: #2d6a2d;" text=""/>
                     </HBox>
                     <Label fx:id="etiquetaMensajeExito" style="-fx-text-fill: #2d6a2d; -fx-font-size: 11;" text=""/>
                 </VBox>
@@ -58,6 +58,9 @@
 
                 <Label text="Apellidos" style="-fx-font-size: 13;"/>
                 <TextField fx:id="campoTextoApellidos" prefHeight="30.0" prefWidth="450.0" promptText="Ej. Bonilla Pérez"/>
+
+                <Label text="Correo" style="-fx-font-size: 13;"/>
+                <TextField fx:id="campoTextoCorreo" prefHeight="30.0" prefWidth="450.0" promptText="Ej. juanRollo@uv.mx"/>
 
                 <Label text="Número de personal" style="-fx-font-size: 13;"/>
                 <TextField fx:id="campoTextoNumeroPersonal" prefHeight="30.0" prefWidth="450.0" promptText="Ej. 2232456"/>

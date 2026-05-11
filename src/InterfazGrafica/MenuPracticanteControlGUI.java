@@ -1,5 +1,6 @@
 package InterfazGrafica;
 
+
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -14,6 +15,7 @@ import logica.dominio.enums.Rol;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 
 public class MenuPracticanteControlGUI {
 
@@ -63,6 +65,25 @@ public class MenuPracticanteControlGUI {
     }
 
     @FXML
+    private void abrirSubirDocumentacion(ActionEvent event) throws IOException {
+        abrirVentana("/InterfazGrafica/vistas/SubirDocumentacionVista.fxml", "Subir Documentación");
+    }
+
+    @FXML
+    private void abrirSeleccionProyectos(ActionEvent event) throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/InterfazGrafica/vistas/SeleccionPreferenciasVista.fxml"));
+        Parent root = loader.load();
+
+        SeleccionPreferenciasProyectosControlGUI controlador = loader.getController();
+        controlador.setMatricula(SesionUsuario.getInstance().getMatricula());
+
+        Stage stage = new Stage();
+        stage.setTitle("Solicitar proyectos");
+        stage.setScene(new Scene(root));
+        stage.show();
+    }
+
+    @FXML
     private void cerrarSesion(ActionEvent event) throws IOException {
         SesionUsuario.getInstance().cerrarSesion();
         Parent root = FXMLLoader.load(getClass().getResource("/InterfazGrafica/vistas/IniciarSesionVista.fxml"));
@@ -78,8 +99,5 @@ public class MenuPracticanteControlGUI {
         stage.setScene(new Scene(root));
         stage.show();
     }
-    @FXML
-    private void abrirSubirDocumentacion(ActionEvent event) throws IOException {
-        abrirVentana("/InterfazGrafica/vistas/SubirDocumentacionVista.fxml", "Subir Documentación");
-    }
+
 }

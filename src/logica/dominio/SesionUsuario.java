@@ -41,4 +41,7 @@ public class SesionUsuario {
     public boolean tieneRol(Rol rolEsperado) {
         return usuarioActivo != null && usuarioActivo.getRol() == rolEsperado;
     }
+    public String getMatricula() {
+        return usuarioActivo != null ? usuarioActivo.getMatricula() : null;
+    }
 }

@@ -1,5 +1,6 @@
 package InterfazGrafica;
 
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -21,6 +22,7 @@ import logica.dominio.Practicante;
 import logica.dominio.Reporte;
 import logica.dominio.SesionUsuario;
 import java.util.List;
+
 
 public class EvaluacionReporteControlGUI {
 

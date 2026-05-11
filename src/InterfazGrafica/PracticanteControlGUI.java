@@ -1,13 +1,15 @@
 package InterfazGrafica;
 
+
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
 import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.control.*;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.Label;
+import javafx.scene.control.RadioButton;
+import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import logica.dao.excepciones.RegistroDuplicadoExcepcion;
@@ -17,11 +19,13 @@ import logica.dominio.Practicante;
 import logica.dominio.enums.Estado;
 import logica.dominio.enums.Genero;
 
+
 public class PracticanteControlGUI{
 
     @FXML private TextField campoTextoMatricula;
     @FXML private TextField campoTextoNombres;
     @FXML private TextField campoTextoApellidos;
+    @FXML private TextField campoTextoCorreo;
     @FXML private RadioButton radioBotonFemenino;
     @FXML private RadioButton radioBotonMasculino;
     @FXML private TextField campoTextoLenguaIndigena;
@@ -84,6 +88,7 @@ public class PracticanteControlGUI{
     private boolean camposValidos() {
         String nombre = campoTextoNombres.getText().trim();
         String apellidos = campoTextoApellidos.getText().trim();
+        String correo = campoTextoCorreo.getText().trim();
         String matricula = campoTextoMatricula.getText().trim();
 
         if (matricula.isEmpty() || nombre.isEmpty() || apellidos.isEmpty()) {
@@ -103,6 +108,7 @@ public class PracticanteControlGUI{
         String nombre = campoTextoNombres.getText().trim();
         String apellidos = campoTextoApellidos.getText().trim();
         String matricula = campoTextoMatricula.getText().trim();
+        String correo = campoTextoCorreo.getText().trim();
         String lenguaIndigena = campoTextoLenguaIndigena.getText().trim();
         Genero genero = radioBotonMasculino.isSelected() ? Genero.Masculino : Genero.Femenino;
         String contrasena = generarContrasena(nombre, matricula);
@@ -112,6 +118,7 @@ public class PracticanteControlGUI{
         practicante.setApellidos(limitarTexto(apellidos, 50));
         practicante.setGenero(genero);
         practicante.setMatricula(limitarTexto(matricula, 12));
+        practicante.setCorreo(limitarTexto(correo, 100));
         practicante.setLenguaIndigena(limitarTexto(lenguaIndigena, 50));
         practicante.setContrasena(limitarTexto(contrasena, 12));
         practicante.setEstado(Estado.Activo);
@@ -152,6 +159,7 @@ public class PracticanteControlGUI{
         campoTextoNombres.clear();
         campoTextoApellidos.clear();
         campoTextoMatricula.clear();
+        campoTextoCorreo.clear();
         campoTextoLenguaIndigena.clear();
         grupoGenero.selectToggle(null);
     }
