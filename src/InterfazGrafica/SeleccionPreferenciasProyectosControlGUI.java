@@ -17,6 +17,7 @@ import logica.dao.objetos.PreferenciaProyectoDao;
 import logica.dao.objetos.ProyectoDao;
 import logica.dominio.PreferenciaProyecto;
 import logica.dominio.Proyecto;
+import logica.dominio.SesionUsuario;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,12 +39,12 @@ public class SeleccionPreferenciasProyectosControlGUI {
     private final PreferenciaProyectoDao preferenciaDao = new PreferenciaProyectoDao();
     private List<Proyecto> todosLosProyectos = new ArrayList<>();
 
-    public void setMatricula(String matricula) {
-        this.matriculaPracticante = matricula;
+    @FXML
+    public void initialize() {
+        matriculaPracticante = SesionUsuario.getInstance().getMatricula();
         cargarProyectos();
         cargarPreferenciasGuardadas();
     }
-    
     private void cargarProyectos() {
         try {
             todosLosProyectos = proyectoDao.obtenerProyectosDisponibles();
@@ -73,10 +74,12 @@ public class SeleccionPreferenciasProyectosControlGUI {
     }
 
     private Proyecto buscarProyecto(int idProyecto) {
-        return todosLosProyectos.stream()
-                .filter(p -> p.getIdProyecto() == idProyecto)
-                .findFirst()
-                .orElse(null);
+        for (Proyecto proyecto : todosLosProyectos) {
+            if (proyecto.getIdProyecto() == idProyecto) {
+                return proyecto;
+            }
+        }
+        return null;
     }
 
 

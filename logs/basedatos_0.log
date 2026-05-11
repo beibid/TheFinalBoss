@@ -374,3 +374,37 @@ java.sql.SQLException: El practicante ya tiene un proyecto asignado.
 	at javafx.graphics@26/com.sun.glass.ui.win.WinApplication.lambda$runLoop$0(WinApplication.java:173)
 	at java.base/java.lang.Thread.run(Thread.java:1474)
 
+may 11, 2026 1:11:07 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
+INFO: Configuración de base de datos cargada correctamente
+may 11, 2026 1:11:07 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
+CONFIG: URL de conexión: jdbc:mysql://localhost:3306/practicas_profesionales
+may 11, 2026 1:11:07 P.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexión a la base de datos...
+may 11, 2026 1:11:08 P.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexión a base de datos realizada exitosamente en 837 ms
+may 11, 2026 1:12:47 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
+INFO: Configuración de base de datos cargada correctamente
+may 11, 2026 1:12:47 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
+CONFIG: URL de conexión: jdbc:mysql://localhost:3306/practicas_profesionales
+may 11, 2026 1:12:47 P.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexión a la base de datos...
+may 11, 2026 1:12:47 P.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexión a base de datos realizada exitosamente en 560 ms
+may 11, 2026 1:13:57 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
+INFO: Configuración de base de datos cargada correctamente
+may 11, 2026 1:13:57 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
+CONFIG: URL de conexión: jdbc:mysql://localhost:3306/practicas_profesionales
+may 11, 2026 1:13:57 P.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexión a la base de datos...
+may 11, 2026 1:13:57 P.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexión a base de datos realizada exitosamente en 589 ms
+may 11, 2026 1:14:01 P.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexión a la base de datos...
+may 11, 2026 1:14:01 P.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexión a base de datos realizada exitosamente en 28 ms
+may 11, 2026 1:14:01 P.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexión a la base de datos...
+may 11, 2026 1:14:01 P.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexión a base de datos realizada exitosamente en 22 ms
+may 11, 2026 1:14:01 P.M. logica.dao.objetos.PreferenciaProyectoDao obtenerPreferencias
+INFO: Preferencias obtenidas para: S24013287 — total: 3

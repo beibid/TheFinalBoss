@@ -48,7 +48,7 @@
                 <Label style="-fx-text-fill: white; -fx-font-size: 11;" text="Proyecto"/>
                 <Button onAction="#abrirSeleccionProyectos" prefWidth="170.0"
                         style="-fx-background-color: transparent; -fx-text-fill: white; -fx-alignment: CENTER-LEFT;"
-                        text="Mis preferencias">
+                        text="Seleccionar proyectos">
                     <VBox.margin><Insets top="5.0"/></VBox.margin>
                 </Button>
 

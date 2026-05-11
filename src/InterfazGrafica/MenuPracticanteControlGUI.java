@@ -71,14 +71,9 @@ public class MenuPracticanteControlGUI {
 
     @FXML
     private void abrirSeleccionProyectos(ActionEvent event) throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/InterfazGrafica/vistas/SeleccionPreferenciasVista.fxml"));
-        Parent root = loader.load();
-
-        SeleccionPreferenciasProyectosControlGUI controlador = loader.getController();
-        controlador.setMatricula(SesionUsuario.getInstance().getMatricula());
-
+        Parent root = FXMLLoader.load(getClass().getResource("/InterfazGrafica/vistas/SeleccionPreferenciasVista.fxml"));
         Stage stage = new Stage();
-        stage.setTitle("Solicitar proyectos");
+        stage.setTitle("Seleccionar proyectos");
         stage.setScene(new Scene(root));
         stage.show();
     }

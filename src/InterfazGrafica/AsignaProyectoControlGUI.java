@@ -27,7 +27,7 @@ import java.util.List;
 public class AsignaProyectoControlGUI {
 
     @FXML private ComboBox<Practicante> comboBoxPracticantes;
-    @FXML private ComboBox<Proyecto>    comboBoxProyectos;
+    @FXML private ComboBox<Proyecto> comboBoxProyectos;
     @FXML private VBox  panelError;
     @FXML private VBox  panelExito;
     @FXML private Label etiquetaTituloError;
@@ -35,9 +35,9 @@ public class AsignaProyectoControlGUI {
     @FXML private Label etiquetaTituloExito;
     @FXML private Label etiquetaMensajeExito;
 
-    private final PracticanteDao         practicanteDao  = new PracticanteDao();
-    private final ProyectoDao            proyectoDao     = new ProyectoDao();
-    private final PreferenciaProyectoDao preferenciaDao  = new PreferenciaProyectoDao();
+    private final PracticanteDao practicanteDao = new PracticanteDao();
+    private final ProyectoDao proyectoDao = new ProyectoDao();
+    private final PreferenciaProyectoDao preferenciaDao = new PreferenciaProyectoDao();
 
     @FXML
     public void initialize() {
@@ -59,7 +59,6 @@ public class AsignaProyectoControlGUI {
             List<Proyecto> proyectos = proyectoDao.obtenerProyectosDisponibles();
             comboBoxProyectos.setItems(FXCollections.observableArrayList(proyectos));
             comboBoxProyectos.setCellFactory(null);
-            comboBoxProyectos.setButtonCell(null);
         } catch (MensajeriaExcepcion e) {
             mostrarError("Error al cargar", "NO SE PUDIERON CARGAR LOS PROYECTOS DISPONIBLES.");
         }
@@ -98,38 +97,38 @@ public class AsignaProyectoControlGUI {
 
     private List<Proyecto> ordenarProyectos(List<Proyecto> todosDisponibles, List<Integer> idsPriorizados) {
         List<Proyecto> priorizados = new ArrayList<>();
-        for (Integer id : idsPriorizados) {
+        for (Integer idProyecto : idsPriorizados) {
             for (Proyecto proyectos : todosDisponibles) {
-                if (proyectos.getIdProyecto() == id) {
+                if (proyectos.getIdProyecto() == idProyecto) {
                     priorizados.add(proyectos);
                     break;
                 }
             }
         }
-        List<Proyecto> restantes = new ArrayList<>();
-        for (Proyecto p : todosDisponibles) {
-            if (!idsPriorizados.contains(p.getIdProyecto())) {
-                restantes.add(p);
+        List<Proyecto> proyectosRestantes = new ArrayList<>();
+        for (Proyecto proyectos : todosDisponibles) {
+            if (!idsPriorizados.contains(proyectos.getIdProyecto())) {
+                proyectosRestantes.add(proyectos);
             }
         }
-        List<Proyecto> ordenados = new ArrayList<>();
-        ordenados.addAll(priorizados);
-        ordenados.addAll(restantes);
-        return ordenados;
+        List<Proyecto> proyectosOrdenados = new ArrayList<>();
+        proyectosOrdenados.addAll(priorizados);
+        proyectosOrdenados.addAll(proyectosRestantes);
+        return proyectosOrdenados;
     }
 
     private void mostrarProyectosEnComboBox(List<Proyecto> ordenados, List<Integer> idsPriorizados) {
         comboBoxProyectos.setItems(FXCollections.observableArrayList(ordenados));
-        comboBoxProyectos.setCellFactory(cb -> new ListCell<>() {
+        comboBoxProyectos.setCellFactory(listaProyectos -> new ListCell<>() {
             @Override
-            protected void updateItem(Proyecto proyecto, boolean empty) {
-                super.updateItem(proyecto, empty);
-                if (empty || proyecto == null) {
+            protected void updateItem(Proyecto proyecto, boolean estaVacio) {
+                super.updateItem(proyecto, estaVacio);
+                if (estaVacio || proyecto == null) {
                     setText(null);
                 } else {
-                    int idx = idsPriorizados.indexOf(proyecto.getIdProyecto());
-                    if (idx >= 0) {
-                        setText(" Prioridad " + (idx + 1) + " — " + proyecto.getNombreProyecto());
+                    int indicePrioridad = idsPriorizados.indexOf(proyecto.getIdProyecto());
+                    if (indicePrioridad >= 0) {
+                        setText(" Prioridad " + (indicePrioridad + 1) + " — " + proyecto.getNombreProyecto());
                     } else {
                         setText(proyecto.getNombreProyecto());
                     }
