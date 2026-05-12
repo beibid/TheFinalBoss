@@ -1,9 +1,7 @@
 package InterfazGrafica;
 
-
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
@@ -18,15 +16,11 @@ import logica.dominio.Coordinador;
 import logica.dominio.enums.Estado;
 
 
-import java.net.URL;
-import java.util.ResourceBundle;
-
-public class CoordinadorControlGUI implements Initializable {
+public class CoordinadorControlGUI {
 
     @FXML private TextField campoTextoNombres;
     @FXML private TextField campoTextoApellidos;
     @FXML private TextField campoTextoNumeroPersonal;
-    @FXML private TextField campoTextoCorreo;
     @FXML private VBox panelError;
     @FXML private Label etiquetaTituloError;
     @FXML private Label etiquetaMensajeError;
@@ -34,8 +28,7 @@ public class CoordinadorControlGUI implements Initializable {
     @FXML private Label etiquetaTituloExito;
     @FXML private Label etiquetaMensajeExito;
 
-    @Override
-    public void initialize(URL url, ResourceBundle rb) {}
+
 
     @FXML
     private void botonRegistrar() {
@@ -82,7 +75,6 @@ public class CoordinadorControlGUI implements Initializable {
     private boolean camposValidos() {
         String nombre = campoTextoNombres.getText().trim();
         String apellidos = campoTextoApellidos.getText().trim();
-        String correo = campoTextoCorreo.getText().trim();
         String numeroPersonal = campoTextoNumeroPersonal.getText().trim();
         return !nombre.isEmpty() && !apellidos.isEmpty() && !numeroPersonal.isEmpty();
     }
@@ -90,14 +82,12 @@ public class CoordinadorControlGUI implements Initializable {
     private Coordinador construirCoordinador() {
         String nombre = campoTextoNombres.getText().trim();
         String apellidos = campoTextoApellidos.getText().trim();
-        String correo = campoTextoCorreo.getText().trim();
         String numeroPersonal = campoTextoNumeroPersonal.getText().trim();
         String contrasena = generarContrasena(nombre, numeroPersonal);
 
         Coordinador coordinador = new Coordinador();
         coordinador.setNombre(limitarTexto(nombre, 55));
         coordinador.setApellidos(limitarTexto(apellidos, 55));
-        coordinador.setCorreo(limitarTexto(correo, 100));
         coordinador.setNumeroDePersonalCoordinador(limitarTexto(numeroPersonal, 12));
         coordinador.setContrasena(limitarTexto(contrasena, 12));
         coordinador.setEstado(Estado.Activo);
@@ -137,7 +127,6 @@ public class CoordinadorControlGUI implements Initializable {
         ocultarExito();
         campoTextoNombres.clear();
         campoTextoApellidos.clear();
-        campoTextoCorreo.clear();
         campoTextoNumeroPersonal.clear();
     }
 

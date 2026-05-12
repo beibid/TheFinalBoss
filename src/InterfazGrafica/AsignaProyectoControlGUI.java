@@ -9,27 +9,25 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
-import javafx.scene.control.ListCell;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import logica.dao.excepciones.MensajeriaExcepcion;
 import logica.dao.excepciones.UsuariosExcepcion;
 import logica.dao.objetos.PracticanteDao;
-import logica.dao.objetos.PreferenciaProyectoDao;
 import logica.dao.objetos.ProyectoDao;
 import logica.dominio.Practicante;
-import logica.dominio.PreferenciaProyecto;
 import logica.dominio.Proyecto;
-import java.util.ArrayList;
 import java.util.List;
+
 
 
 public class AsignaProyectoControlGUI {
 
+
     @FXML private ComboBox<Practicante> comboBoxPracticantes;
     @FXML private ComboBox<Proyecto> comboBoxProyectos;
-    @FXML private VBox  panelError;
-    @FXML private VBox  panelExito;
+    @FXML private VBox panelError;
+    @FXML private VBox panelExito;
     @FXML private Label etiquetaTituloError;
     @FXML private Label etiquetaMensajeError;
     @FXML private Label etiquetaTituloExito;
@@ -37,7 +35,6 @@ public class AsignaProyectoControlGUI {
 
     private final PracticanteDao practicanteDao = new PracticanteDao();
     private final ProyectoDao proyectoDao = new ProyectoDao();
-    private final PreferenciaProyectoDao preferenciaDao = new PreferenciaProyectoDao();
 
     @FXML
     public void initialize() {
@@ -58,7 +55,6 @@ public class AsignaProyectoControlGUI {
         try {
             List<Proyecto> proyectos = proyectoDao.obtenerProyectosDisponibles();
             comboBoxProyectos.setItems(FXCollections.observableArrayList(proyectos));
-            comboBoxProyectos.setCellFactory(null);
         } catch (MensajeriaExcepcion e) {
             mostrarError("Error al cargar", "NO SE PUDIERON CARGAR LOS PROYECTOS DISPONIBLES.");
         }
@@ -67,75 +63,10 @@ public class AsignaProyectoControlGUI {
     @FXML
     private void seleccionarPracticante() {
         Practicante practicante = comboBoxPracticantes.getSelectionModel().getSelectedItem();
-        if (practicante == null) {
-            return;
+        if (practicante != null) {
+            ocultarError();
+            ocultarExito();
         }
-        ocultarError();
-        ocultarExito();
-        cargarProyectosConPreferencias(practicante.getMatricula());
-    }
-
-    private void cargarProyectosConPreferencias(String matricula) {
-        try {
-            List<Proyecto> todosDisponibles = proyectoDao.obtenerProyectosDisponibles();
-            List<PreferenciaProyecto> preferencias = preferenciaDao.obtenerPreferencias(matricula);
-            List<Integer> idsPriorizados = obtenerIdsPriorizados(preferencias);
-            List<Proyecto> ordenados = ordenarProyectos(todosDisponibles, idsPriorizados);
-            mostrarProyectosEnComboBox(ordenados, idsPriorizados);
-        } catch (MensajeriaExcepcion | UsuariosExcepcion e) {
-            mostrarError("Error al cargar", "NO SE PUDIERON CARGAR LOS PROYECTOS.");
-        }
-    }
-
-    private List<Integer> obtenerIdsPriorizados(List<PreferenciaProyecto> preferencias) {
-        List<Integer> idsPriorizados = new ArrayList<>();
-        for (PreferenciaProyecto prioritarios : preferencias) {
-            idsPriorizados.add(prioritarios.getIdProyecto());
-        }
-        return idsPriorizados;
-    }
-
-    private List<Proyecto> ordenarProyectos(List<Proyecto> todosDisponibles, List<Integer> idsPriorizados) {
-        List<Proyecto> priorizados = new ArrayList<>();
-        for (Integer idProyecto : idsPriorizados) {
-            for (Proyecto proyectos : todosDisponibles) {
-                if (proyectos.getIdProyecto() == idProyecto) {
-                    priorizados.add(proyectos);
-                    break;
-                }
-            }
-        }
-        List<Proyecto> proyectosRestantes = new ArrayList<>();
-        for (Proyecto proyectos : todosDisponibles) {
-            if (!idsPriorizados.contains(proyectos.getIdProyecto())) {
-                proyectosRestantes.add(proyectos);
-            }
-        }
-        List<Proyecto> proyectosOrdenados = new ArrayList<>();
-        proyectosOrdenados.addAll(priorizados);
-        proyectosOrdenados.addAll(proyectosRestantes);
-        return proyectosOrdenados;
-    }
-
-    private void mostrarProyectosEnComboBox(List<Proyecto> ordenados, List<Integer> idsPriorizados) {
-        comboBoxProyectos.setItems(FXCollections.observableArrayList(ordenados));
-        comboBoxProyectos.setCellFactory(listaProyectos -> new ListCell<>() {
-            @Override
-            protected void updateItem(Proyecto proyecto, boolean estaVacio) {
-                super.updateItem(proyecto, estaVacio);
-                if (estaVacio || proyecto == null) {
-                    setText(null);
-                } else {
-                    int indicePrioridad = idsPriorizados.indexOf(proyecto.getIdProyecto());
-                    if (indicePrioridad >= 0) {
-                        setText(" Prioridad " + (indicePrioridad + 1) + " — " + proyecto.getNombreProyecto());
-                    } else {
-                        setText(proyecto.getNombreProyecto());
-                    }
-                }
-            }
-        });
-        comboBoxProyectos.getSelectionModel().clearSelection();
     }
 
     @FXML
@@ -154,23 +85,24 @@ public class AsignaProyectoControlGUI {
         if (!confirmarAccion("¿Seguro que desea asignar a " + practicante.getNombre() + " el proyecto " + proyecto.getNombreProyecto() + "?")) {
             return;
         }
+
         ejecutarAsignacion(practicante, proyecto);
     }
 
     private void ejecutarAsignacion(Practicante practicante, Proyecto proyecto) {
         try {
             int filasAfectadas = practicanteDao.asignarProyecto(practicante.getMatricula(), proyecto.getIdProyecto());
+
             if (filasAfectadas > 0) {
                 limpiarSeleccion();
                 mostrarExito("Asignación exitosa", "EL PRACTICANTE FUE ASIGNADO AL PROYECTO EXITOSAMENTE.");
             } else {
                 mostrarError("Error", "NO SE PUDO REALIZAR LA ASIGNACIÓN.");
             }
-        } catch (UsuariosExcepcion e) {
+        } catch (UsuariosExcepcion e){
             mostrarError("ERROR", e.getMessage().toUpperCase());
         }
     }
-
     @FXML
     private void botonCancelar() {
         if (confirmarAccion("¿Seguro que desea cancelar?")) {
@@ -198,7 +130,6 @@ public class AsignaProyectoControlGUI {
     private void limpiarSeleccion() {
         comboBoxPracticantes.getSelectionModel().clearSelection();
         comboBoxProyectos.getSelectionModel().clearSelection();
-        cargarProyectos();
         ocultarError();
         ocultarExito();
     }
@@ -228,4 +159,6 @@ public class AsignaProyectoControlGUI {
         panelExito.setVisible(false);
         panelExito.setManaged(false);
     }
+
+
 }

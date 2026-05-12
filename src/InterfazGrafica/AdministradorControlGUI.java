@@ -1,6 +1,5 @@
 package InterfazGrafica;
 
-
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -20,7 +19,7 @@ import logica.dominio.Administrador;
 import logica.dominio.enums.Estado;
 
 
-public class AdministradorControlGUI{
+public class AdministradorControlGUI  {
 
     @FXML private TextField campoTextoNombres;
     @FXML private TextField campoTextoApellidos;
@@ -31,6 +30,8 @@ public class AdministradorControlGUI{
     @FXML private VBox panelExito;
     @FXML private Label etiquetaTituloExito;
     @FXML private Label etiquetaMensajeExito;
+
+
 
     @FXML
     private void botonRegistrar() {

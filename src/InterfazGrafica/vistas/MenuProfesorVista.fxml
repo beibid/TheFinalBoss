@@ -39,8 +39,12 @@
                         style="-fx-background-color: transparent; -fx-text-fill: white; -fx-alignment: CENTER-LEFT;">
                     <VBox.margin><Insets top="5.0"/></VBox.margin>
                 </Button>
-                <Separator><VBox.margin><Insets top="10.0" bottom="10.0"/></VBox.margin></Separator>
+                <Button text="Ver buzón" onAction="#abrirBuzon" prefWidth="170.0"
+                        style="-fx-background-color: transparent; -fx-text-fill: white; -fx-alignment: CENTER-LEFT;">
+                    <VBox.margin><Insets top="3.0"/></VBox.margin>
+                </Button>
 
+                <Separator><VBox.margin><Insets top="10.0" bottom="10.0"/></VBox.margin></Separator>
 
                 <Button text="Cerrar Sesión" onAction="#cerrarSesion" prefWidth="170.0"
                         style="-fx-background-color: #c0392b; -fx-text-fill: white;">

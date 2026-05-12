@@ -1,6 +1,5 @@
 package InterfazGrafica;
 
-
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -15,7 +14,6 @@ import logica.dominio.enums.Rol;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
 
 public class MenuProfesorControlGUI {
 
@@ -68,6 +66,12 @@ public class MenuProfesorControlGUI {
     private void abrirMensajeria(ActionEvent event) throws IOException {
         abrirVentana("/InterfazGrafica/vistas/MensajeVista.fxml", "Enviar mensaje");
     }
+
+    @FXML
+    private void abrirBuzon(ActionEvent event) throws IOException {
+        abrirVentana("/InterfazGrafica/vistas/BuzonVista.fxml", "Buzón");
+    }
+
     @FXML
     private void cerrarSesion(ActionEvent event) throws IOException {
         SesionUsuario.getInstance().cerrarSesion();
