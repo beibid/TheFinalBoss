@@ -77,6 +77,11 @@ public class MenuPracticanteControlGUI {
         stage.setScene(new Scene(root));
         stage.show();
     }
+    @FXML
+    private void abrirMensajeria(ActionEvent event) throws IOException {
+        abrirVentana("/InterfazGrafica/vistas/MensajeVista.fxml", "Enviar Mensaje");
+
+    }
 
     @FXML
     private void cerrarSesion(ActionEvent event) throws IOException {

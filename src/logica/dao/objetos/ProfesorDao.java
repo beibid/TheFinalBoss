@@ -157,7 +157,7 @@ public class ProfesorDao implements ProfesorDaoInterfaz {
     }
 
     public List<Profesor> obtenerProfesoresActivos() throws UsuariosExcepcion {
-        String consulta = "SELECT u.nombre, u.apellidos, p.numPersonalProfesor, p.turno " +
+        String consulta = "SELECT u.idUsuario, u.nombre, u.apellidos, p.numPersonalProfesor, p.turno " +
                 "FROM usuario u " +
                 "INNER JOIN profesor p ON u.idUsuario = p.idUsuario " +
                 "WHERE u.estado = 'Activo'";
@@ -171,6 +171,7 @@ public class ProfesorDao implements ProfesorDaoInterfaz {
             ResultSet resultado = consultaProfesores.executeQuery();
             while (resultado.next()) {
                 Profesor profesor = new Profesor();
+                profesor.setIdUsuario(resultado.getInt("idUsuario"));
                 profesor.setNombre(resultado.getString("nombre"));
                 profesor.setApellidos(resultado.getString("apellidos"));
                 profesor.setNumeroDePersonalProfesor(resultado.getString("numPersonalProfesor"));

@@ -44,4 +44,7 @@ public class SesionUsuario {
     public String getMatricula() {
         return usuarioActivo != null ? usuarioActivo.getMatricula() : null;
     }
+    public int getIdUsuario() {
+        return usuarioActivo != null ? usuarioActivo.getIdUsuario() : 0;
+    }
 }

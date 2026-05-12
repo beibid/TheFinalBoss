@@ -53,6 +53,14 @@
                 </Button>
 
                 <Separator><VBox.margin><Insets bottom="10.0" top="10.0"/></VBox.margin></Separator>
+                <Label style="-fx-text-fill: white; -fx-font-size: 11;" text="Mensajes"/>
+                <Button onAction="#abrirMensajeria" prefWidth="170.0"
+                        style="-fx-background-color: transparent; -fx-text-fill: white; -fx-alignment: CENTER-LEFT;"
+                        text="Enviar mensaje">
+                    <VBox.margin><Insets top="5.0"/></VBox.margin>
+                </Button>
+
+                <Separator><VBox.margin><Insets bottom="10.0" top="10.0"/></VBox.margin></Separator>
 
                 <Button onAction="#cerrarSesion" prefWidth="170.0"
                         style="-fx-background-color: #c0392b; -fx-text-fill: white;"

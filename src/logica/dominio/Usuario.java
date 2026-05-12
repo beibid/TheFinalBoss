@@ -3,6 +3,7 @@ package logica.dominio;
 import logica.dominio.enums.Estado;
 
 public class Usuario {
+    protected int idUsuario;
     protected String nombre;
     protected String apellidos;
     protected String contrasena;
@@ -15,6 +16,10 @@ public class Usuario {
         this.contrasena = contrasena;
         this.correo = correo;
         this.estado = estado;
+    }
+
+    public int getIdUsuario() {
+        return idUsuario;
     }
 
     public String getNombre() {
@@ -35,6 +40,10 @@ public class Usuario {
 
     public Estado getEstado() {
         return estado;
+    }
+
+    public void setIdUsuario(int idUsuario) {
+        this.idUsuario = idUsuario;
     }
 
     public void setNombre(String nombre) {

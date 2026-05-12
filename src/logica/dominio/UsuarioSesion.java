@@ -9,6 +9,7 @@ public class UsuarioSesion {
     private Rol rol;
     private Estado estado;
     private String matricula;
+    private int idUsuario;
     private String identificador;
 
     public String getNombre() {
@@ -29,6 +30,10 @@ public class UsuarioSesion {
 
     public String getMatricula() {
         return matricula;
+    }
+
+    public int getIdUsuario() {
+        return idUsuario;
     }
 
     public void setNombre(String nombre) {
@@ -56,5 +61,9 @@ public class UsuarioSesion {
 
     public void setIdentificador(String identificador) {
         this.identificador = identificador;
+    }
+
+    public void setIdUsuario(int idUsuario) {
+        this.idUsuario = idUsuario;
     }
 }

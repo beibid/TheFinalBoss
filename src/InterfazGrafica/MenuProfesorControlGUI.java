@@ -65,6 +65,10 @@ public class MenuProfesorControlGUI {
     }
 
     @FXML
+    private void abrirMensajeria(ActionEvent event) throws IOException {
+        abrirVentana("/InterfazGrafica/vistas/MensajeVista.fxml", "Enviar mensaje");
+    }
+    @FXML
     private void cerrarSesion(ActionEvent event) throws IOException {
         SesionUsuario.getInstance().cerrarSesion();
         Parent root = FXMLLoader.load(getClass().getResource("/InterfazGrafica/vistas/IniciarSesionVista.fxml"));

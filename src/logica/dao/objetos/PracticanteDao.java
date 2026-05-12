@@ -163,7 +163,7 @@ public class PracticanteDao implements PracticanteDaoInterfaz {
     }
 
     public List<Practicante> obtenerPracticantesActivos() throws UsuariosExcepcion {
-        String consulta = "SELECT u.nombre, u.apellidos, p.matricula " +
+        String consulta = "SELECT u.idUsuario, u.nombre, u.apellidos, p.matricula " +
                 "FROM usuario u " +
                 "INNER JOIN practicante p ON u.idUsuario = p.idUsuario " +
                 "WHERE u.estado = 'Activo'";
@@ -177,6 +177,7 @@ public class PracticanteDao implements PracticanteDaoInterfaz {
             ResultSet resultado = consultaPracticantes.executeQuery();
             while (resultado.next()) {
                 Practicante practicante = new Practicante();
+                practicante.setIdUsuario(resultado.getInt("idUsuario"));
                 practicante.setNombre(resultado.getString("nombre"));
                 practicante.setApellidos(resultado.getString("apellidos"));
                 practicante.setMatricula(resultado.getString("matricula"));
