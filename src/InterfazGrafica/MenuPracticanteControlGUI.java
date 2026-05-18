@@ -94,6 +94,10 @@ public class MenuPracticanteControlGUI {
         stage.setScene(new Scene(root));
         stage.show();
     }
+    @FXML
+    private void abrirAutoevaluacionPracticante(ActionEvent event) throws IOException {
+        abrirVentana("/InterfazGrafica/vistas/GenerarAutoevaluacionPracticanteVista.fxml", "Realizar Autoevaluacion");
+    }
 
     private void abrirVentana(String fxml, String titulo) throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource(fxml));

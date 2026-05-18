@@ -1,5 +1,6 @@
 package InterfazGrafica;
 
+
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
@@ -14,6 +15,7 @@ import logica.dao.objetos.MensajeDao;
 import logica.dominio.MensajeVista;
 import logica.dominio.SesionUsuario;
 import java.util.List;
+
 
 public class BuzonControlGUI {
 

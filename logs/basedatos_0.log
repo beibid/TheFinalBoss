@@ -629,3 +629,45 @@ FINE: Intentando establecer conexión a la base de datos...
 may 18, 2026 11:05:21 A.M. acceso.bd.ConexionBaseDeDatos conectar
 INFO: Conexión a base de datos realizada exitosamente en 8 ms
 >>>>>>> Stashed changes
+may 18, 2026 3:40:30 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
+INFO: Configuración de base de datos cargada correctamente
+may 18, 2026 3:40:30 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
+CONFIG: URL de conexión: jdbc:mysql://localhost:3306/practicas_profesionales
+may 18, 2026 3:40:30 P.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexión a la base de datos...
+may 18, 2026 3:40:30 P.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexión a base de datos realizada exitosamente en 316 ms
+may 18, 2026 3:55:28 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
+INFO: Configuración de base de datos cargada correctamente
+may 18, 2026 3:55:28 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
+CONFIG: URL de conexión: jdbc:mysql://localhost:3306/practicas_profesionales
+may 18, 2026 3:55:28 P.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexión a la base de datos...
+may 18, 2026 3:55:28 P.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexión a base de datos realizada exitosamente en 249 ms
+may 18, 2026 3:55:29 P.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexión a la base de datos...
+may 18, 2026 3:55:29 P.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexión a base de datos realizada exitosamente en 11 ms
+may 18, 2026 3:55:29 P.M. logica.dao.objetos.AutoevaluacionPracticanteDao obtenerInfoAutoevaluacion
+INFO: OK
+may 18, 2026 4:06:25 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
+INFO: Configuración de base de datos cargada correctamente
+may 18, 2026 4:06:25 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
+CONFIG: URL de conexión: jdbc:mysql://localhost:3306/practicas_profesionales
+may 18, 2026 4:06:25 P.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexión a la base de datos...
+may 18, 2026 4:06:25 P.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexión a base de datos realizada exitosamente en 251 ms
+may 18, 2026 4:06:26 P.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexión a la base de datos...
+may 18, 2026 4:06:26 P.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexión a base de datos realizada exitosamente en 10 ms
+may 18, 2026 4:06:26 P.M. logica.dao.objetos.AutoevaluacionPracticanteDao obtenerInfoAutoevaluacion
+INFO: OK
+may 18, 2026 4:06:39 P.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexión a la base de datos...
+may 18, 2026 4:06:39 P.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexión a base de datos realizada exitosamente en 15 ms
+may 18, 2026 4:06:39 P.M. logica.dao.objetos.AutoevaluacionPracticanteDao registrarAutoevaluacion
+INFO: Autoevaluación registrada correctamente

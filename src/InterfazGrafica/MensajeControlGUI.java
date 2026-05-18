@@ -75,6 +75,7 @@ public class MensajeControlGUI {
                     }
                 }
             });
+
             comboBoxDestinatario.setButtonCell(new ListCell<>() {
                 @Override
                 protected void updateItem(Usuario usuario, boolean estaVacio) {
