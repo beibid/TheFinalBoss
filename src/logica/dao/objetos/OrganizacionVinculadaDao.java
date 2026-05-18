@@ -6,7 +6,6 @@ import logica.dao.excepciones.UsuariosExcepcion;
 import logica.dominio.OrganizacionVinculada;
 import logica.dao.interfaces.OrganizacionVinculadaDaoInterfaz;
 import logica.dominio.enums.EstadoOrganizacion;
-import logica.dominio.enums.EstadoProyecto;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="InterfazGrafica.ModificarOrganizacionVinculadaControlGUI"
+            prefHeight="300.0" prefWidth="400.0">
+
+    <VBox spacing="15" AnchorPane.topAnchor="20" AnchorPane.leftAnchor="20"
+          AnchorPane.rightAnchor="20" AnchorPane.bottomAnchor="20">
+
+        <Label text="Modificar Organización Vinculada" style="-fx-font-size: 16; -fx-font-weight: bold;"/>
+
+        <GridPane hgap="10" vgap="10">
+            <Label text="Organización:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+            <ComboBox fx:id="comboBoxOrganizacion" prefWidth="250"
+                      GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+
+            <Label text="Nombre:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+            <TextField fx:id="campoNombre" prefWidth="250"
+                       GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+
+            <Label text="Dirección:" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+            <TextField fx:id="campoDireccion" prefWidth="250"
+                       GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+        </GridPane>
+
+        <Label fx:id="etiquetaMensaje" style="-fx-text-fill: red;"/>
+
+        <HBox spacing="10" alignment="CENTER_RIGHT">
+            <Button text="Cancelar" fx:id="botonCancelar" onAction="#cancelar"/>
+            <Button text="Guardar" fx:id="botonGuardar" onAction="#guardar"/>
+        </HBox>
+
+    </VBox>
+</AnchorPane>
