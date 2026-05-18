@@ -1,14 +1,60 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
+<?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="InterfazGrafica.InactivarOrganizacionVinculadaControlGUI"
-            prefHeight="400.0" prefWidth="600.0">
+<AnchorPane prefHeight="450.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="InterfazGrafica.InactivarOrganizacionVinculadaControlGUI">
+    <children>
 
+        <VBox layoutX="0.0" layoutY="0.0" prefHeight="450.0" prefWidth="600.0" spacing="15.0" style="-fx-padding: 30;">
+            <children>
+
+                <Label style="-fx-font-size: 22; -fx-font-weight: bold;" text="Inactivar Organizacion Vinculada" />
+
+                <VBox fx:id="panelError" managed="false" prefWidth="500.0" spacing="4.0" style="-fx-border-color: #8B0000; -fx-border-width: 2; -fx-background-color: #f5f5dc; -fx-padding: 10;" visible="false">
+                    <HBox alignment="CENTER_LEFT" spacing="8">
+                        <Label style="-fx-text-fill: #8B0000; -fx-font-size: 14; -fx-font-weight: bold;" text="✖" />
+                        <Label fx:id="etiquetaTituloError" style="-fx-font-weight: bold; -fx-text-fill: #8B0000;" text="" />
+                    </HBox>
+                    <Label fx:id="etiquetaMensajeError" style="-fx-text-fill: #8B0000; -fx-font-size: 11;" text="" />
+                </VBox>
+
+                <VBox fx:id="panelExito" managed="false" prefWidth="500.0" spacing="4.0" style="-fx-border-color: #2d6a2d; -fx-border-width: 2; -fx-background-color: #f0f7f0; -fx-padding: 10;" visible="false">
+                    <HBox alignment="CENTER_LEFT" spacing="8">
+                        <Label style="-fx-text-fill: #2d6a2d; -fx-font-size: 14; -fx-font-weight: bold;" text="✔" />
+                        <Label fx:id="etiquetaTituloExito" style="-fx-font-weight: bold; -fx-text-fill: #2d6a2d;" text="" />
+                    </HBox>
+                    <Label fx:id="etiquetaMensajeExito" style="-fx-text-fill: #2d6a2d; -fx-font-size: 11;" text="" />
+                </VBox>
+
+                <Label style="-fx-font-size: 13;" text="Selecciona una organizacion activa" />
+                <ComboBox fx:id="comboBoxOrganizacion" onAction="#seleccionarOrganizacion" prefWidth="500.0" promptText="-- Selecciona una organizacion --" />
+
+
+                <VBox fx:id="panelDatos" managed="false" spacing="8.0" style="-fx-border-color: #cccccc; -fx-border-width: 1; -fx-padding: 15; -fx-background-color: #f9f9f9;" visible="false">
+                    <Label style="-fx-font-weight: bold; -fx-font-size: 13;" text="Datos de la organizacion" />
+                    <HBox spacing="10.0">
+                        <Label style="-fx-font-weight: bold;" text="ID:" />
+                        <Label fx:id="etiquetaIdentificadorOrganizacion" text="" />
+                    </HBox>
+                    <HBox spacing="10.0">
+                        <Label style="-fx-font-weight: bold;" text="Nombre:" />
+                        <Label fx:id="etiquetaNombre" text="" />
+                    </HBox>
+                </VBox>
+
+
+                <HBox spacing="15.0">
+                    <VBox.margin><Insets top="10.0" /></VBox.margin>
+                    <Button fx:id="botonInactivar" onAction="#botonInactivar" prefHeight="35.0" prefWidth="140.0" style="-fx-background-color: #c0392b; -fx-text-fill: white; -fx-background-radius: 6;" text="Inactivar" />
+                    <Button fx:id="botonCancelar" onAction="#botonCancelar" prefHeight="35.0" prefWidth="140.0" style="-fx-background-color: #7f8c8d; -fx-text-fill: white; -fx-background-radius: 6;" text="Cancelar" />
+                </HBox>
+
+            </children>
+        </VBox>
+
+        <Button fx:id="botonRegresar" layoutX="510.0" layoutY="10.0" onAction="#botonRegresar" prefHeight="28.0" prefWidth="75.0" style="-fx-background-color: #7f8c8d; -fx-text-fill: white; -fx-background-radius: 6;" text="Regresar" />
+
+    </children>
 </AnchorPane>

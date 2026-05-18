@@ -96,12 +96,12 @@ public class MenuCoordinadorControlGUI {
 
     @FXML
     private void abrirInactivarOrganizacion(ActionEvent event) throws IOException {
-        abrirVentana("/InterfazGrafica/vistas/InactivarOrganizacionVista.fxml", "Inactivar Organización");
+        abrirVentana("/InterfazGrafica/vistas/InactivarOrganizacionVinculadaVista.fxml", "Inactivar Organización");
     }
 
     @FXML
     private void abrirModificarOrganizacion(ActionEvent event) throws IOException {
-        abrirVentana("/InterfazGrafica/vistas/ModificarOrganizacionVista.fxml", "Modificar Organización");
+        abrirVentana("/InterfazGrafica/vistas/ModificarOrganizacionVinculadaVista.fxml", "Modificar Organización");
     }
 
     @FXML

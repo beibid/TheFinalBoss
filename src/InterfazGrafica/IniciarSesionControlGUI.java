@@ -20,6 +20,8 @@ import logica.dominio.enums.Rol;
 
 public class IniciarSesionControlGUI {
 
+
+
     @FXML private TextField campoTextoIdentificador;
     @FXML private PasswordField campoTextoContrasena;
     @FXML private VBox panelError;

@@ -1,9 +1,12 @@
 package logica.dao.objetos;
 
 import acceso.bd.ConexionBaseDeDatos;
+import logica.dao.excepciones.MensajeriaExcepcion;
 import logica.dao.excepciones.UsuariosExcepcion;
 import logica.dominio.OrganizacionVinculada;
 import logica.dao.interfaces.OrganizacionVinculadaDaoInterfaz;
+import logica.dominio.enums.EstadoOrganizacion;
+import logica.dominio.enums.EstadoProyecto;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -113,5 +116,34 @@ public class OrganizacionVinculadaDao implements OrganizacionVinculadaDaoInterfa
             }
         }
         return organizaciones;
+    }
+    public int inactivarOrganizacionVinculada(int idOrganizacion) throws MensajeriaExcepcion {
+        String consulta = "UPDATE organizacion_vinculada SET estado = ? WHERE idOrganizacion = ?";
+        Connection conexionBaseDeDatos = null;
+        PreparedStatement actualizacion = null;
+        int filasAfectadas = 0;
+        try {
+            conexionBaseDeDatos = ConexionBaseDeDatos.getInstance().conectar();
+            actualizacion = conexionBaseDeDatos.prepareStatement(consulta);
+            actualizacion.setString(1, EstadoOrganizacion.Inactiva.name());
+            actualizacion.setInt(2, idOrganizacion);
+            filasAfectadas = actualizacion.executeUpdate();
+            LOGGER.info("Organizacion inactivada correctamente: " + idOrganizacion);
+        } catch (SQLException excepcion) {
+            LOGGER.log(Level.SEVERE, "Error al inactivar la organizacion", excepcion);
+            throw new MensajeriaExcepcion("Error al inactivar la organizacion", excepcion);
+        } finally {
+            try {
+                if (actualizacion != null) {
+                    actualizacion.close();
+                }
+                if (conexionBaseDeDatos != null) {
+                    conexionBaseDeDatos.close();
+                }
+            } catch (SQLException excepcion) {
+                LOGGER.log(Level.SEVERE, "Error al cerrar conexión", excepcion);
+            }
+        }
+        return filasAfectadas;
     }
 }

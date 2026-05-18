@@ -1,14 +1,19 @@
 package logica.dominio;
 
 
+import logica.dominio.enums.EstadoOrganizacion;
+
+
 public class OrganizacionVinculada {
     protected String nombre;
     protected String direccion;
     protected int idOrganizacion;
+    protected EstadoOrganizacion estadoOrganizacion;
 
-    public OrganizacionVinculada (String nombre, String direccion){
+    public OrganizacionVinculada (String nombre, String direccion, EstadoOrganizacion estadoOrganizacion){
         this.nombre = nombre;
         this.direccion = direccion;
+        this.estadoOrganizacion = estadoOrganizacion;
     }
     public OrganizacionVinculada(){
 
@@ -28,6 +33,10 @@ public class OrganizacionVinculada {
         return idOrganizacion;
     }
 
+    public EstadoOrganizacion getEstadoOrganizacion() {
+        return estadoOrganizacion;
+    }
+
     public void setNombre(String nombre) {
 
         this.nombre = nombre;
@@ -40,6 +49,10 @@ public class OrganizacionVinculada {
 
     public void setIdOrganizacion(int idOrganizacion) {
         this.idOrganizacion = idOrganizacion;
+    }
+
+    public void setEstadoOrganizacion(EstadoOrganizacion estadoOrganizacion) {
+        this.estadoOrganizacion = estadoOrganizacion;
     }
 
     @Override
