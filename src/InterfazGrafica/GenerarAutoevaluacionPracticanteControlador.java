@@ -16,6 +16,7 @@ import javafx.stage.Stage;
 import logica.dominio.AutoevaluacionPracticante;
 import logica.dao.excepciones.MensajeriaExcepcion;
 import logica.dominio.SesionUsuario;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -80,8 +81,8 @@ public class GenerarAutoevaluacionPracticanteControlador {
 
     @FXML
     private void botonRegresar(ActionEvent event) {
-        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        stage.close();
+        Stage escenario = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        escenario.close();
     }
 
     private void cargarInformacionProyecto() {
@@ -113,22 +114,19 @@ public class GenerarAutoevaluacionPracticanteControlador {
     }
 
     private boolean respuestasValidas() {
-        return grupoRespuesta1.getSelectedToggle() != null &&
-                grupoRespuesta2.getSelectedToggle() != null &&
-                grupoRespuesta3.getSelectedToggle() != null &&
-                grupoRespuesta4.getSelectedToggle() != null &&
-                grupoRespuesta5.getSelectedToggle() != null &&
-                grupoRespuesta6.getSelectedToggle() != null &&
-                grupoRespuesta7.getSelectedToggle() != null &&
-                grupoRespuesta8.getSelectedToggle() != null &&
-                grupoRespuesta9.getSelectedToggle() != null &&
-                grupoRespuesta10.getSelectedToggle() != null;
+        List<ToggleGroup> grupos = List.of(grupoRespuesta1, grupoRespuesta2, grupoRespuesta3, grupoRespuesta4,
+                grupoRespuesta5, grupoRespuesta6, grupoRespuesta7, grupoRespuesta8, grupoRespuesta9, grupoRespuesta10);
+        for (ToggleGroup grupo : grupos) {
+            if (grupo.getSelectedToggle() == null){
+                return false;
+            }
+        }
+        return true;
     }
 
     private AutoevaluacionPracticante construirAutoevaluacion() {
-        AutoevaluacionPracticante autoevaluacion = new AutoevaluacionPracticante(
-                matricula,
-                idProyecto,
+        AutoevaluacionPracticante autoevaluacionPracticante = new AutoevaluacionPracticante(
+                matricula, idProyecto,
                 obtenerRespuesta(grupoRespuesta1),
                 obtenerRespuesta(grupoRespuesta2),
                 obtenerRespuesta(grupoRespuesta3),
@@ -140,7 +138,7 @@ public class GenerarAutoevaluacionPracticanteControlador {
                 obtenerRespuesta(grupoRespuesta9),
                 obtenerRespuesta(grupoRespuesta10)
         );
-        return autoevaluacion;
+        return autoevaluacionPracticante;
     }
 
     private int obtenerRespuesta(ToggleGroup grupo) {
@@ -190,10 +188,10 @@ public class GenerarAutoevaluacionPracticanteControlador {
         alerta.setTitle("Confirmación");
         alerta.setHeaderText(mensaje);
         alerta.setContentText("");
-        ButtonType btnSi = new ButtonType("Sí");
-        ButtonType btnNo = new ButtonType("No");
-        alerta.getButtonTypes().setAll(btnSi, btnNo);
-        return alerta.showAndWait().filter(r -> r == btnSi).isPresent();
+        ButtonType botonSi = new ButtonType("Sí");
+        ButtonType botonNo = new ButtonType("No");
+        alerta.getButtonTypes().setAll(botonSi, botonNo);
+        return alerta.showAndWait().filter(r -> r == botonSi).isPresent();
     }
 
     private void mostrarError(String titulo, String mensaje) {
