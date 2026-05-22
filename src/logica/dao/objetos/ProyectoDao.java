@@ -164,4 +164,45 @@ public class ProyectoDao implements ProyectoDaoInterfaz {
         }
         return filasAfectadas;
     }
+
+    public Proyecto obtenerProyectoPorPracticante(String matricula) throws MensajeriaExcepcion {
+        String consulta = "SELECT pr.idProyecto, pr.nombreProyecto, pr.responsableDelProyecto, " +
+                "o.nombre AS nombreOrganizacion " +
+                "FROM practicante p " +
+                "INNER JOIN proyecto pr ON p.idProyecto = pr.idProyecto " +
+                "INNER JOIN organizacion_vinculada o ON pr.idOrganizacion = o.idOrganizacion " +
+                "WHERE p.matricula = ?";
+        Connection conexionBaseDeDatos = null;
+        PreparedStatement sentencia = null;
+        Proyecto proyecto = null;
+        try {
+            conexionBaseDeDatos = ConexionBaseDeDatos.getInstance().conectar();
+            sentencia = conexionBaseDeDatos.prepareStatement(consulta);
+            sentencia.setString(1, matricula);
+            ResultSet resultado = sentencia.executeQuery();
+            if (resultado.next()) {
+                proyecto = new Proyecto();
+                proyecto.setIdProyecto(resultado.getInt("idProyecto"));
+                proyecto.setNombreProyecto(resultado.getString("nombreProyecto"));
+                proyecto.setResponsableDelProyecto(resultado.getString("responsableDelProyecto"));
+                proyecto.setNombreOrganizacion(resultado.getString("nombreOrganizacion"));
+            }
+            LOGGER.info("Proyecto cargado para practicante: " + matricula);
+        } catch (SQLException excepcion) {
+            LOGGER.log(Level.SEVERE, "Error al obtener proyecto del practicante", excepcion);
+            throw new MensajeriaExcepcion("Error al obtener proyecto del practicante", excepcion);
+        } finally {
+            try {
+                if (sentencia != null) {
+                    sentencia.close();
+                }
+                if (conexionBaseDeDatos != null) {
+                    conexionBaseDeDatos.close();
+                }
+            } catch (SQLException excepcion) {
+                LOGGER.log(Level.SEVERE, "Error al cerrar conexión", excepcion);
+            }
+        }
+        return proyecto;
+    }
 }

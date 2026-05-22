@@ -115,6 +115,11 @@ public class MenuCoordinadorControlador {
     }
 
     @FXML
+    private void abrirModificarProfesor(ActionEvent event) throws IOException {
+        abrirVentana("/InterfazGrafica/vistas/ModificarProfesorVista.fxml", "Modificar practicante");
+    }
+
+    @FXML
     private void cerrarSesion(ActionEvent event) throws IOException {
         SesionUsuario.getInstance().cerrarSesion();
         Parent ruta = FXMLLoader.load(getClass().getResource("/InterfazGrafica/vistas/IniciarSesionVista.fxml"));

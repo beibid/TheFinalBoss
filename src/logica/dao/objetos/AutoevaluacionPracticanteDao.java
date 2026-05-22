@@ -6,8 +6,9 @@ import logica.dao.interfaces.AutoevaluacionPracticanteDaoInterfaz;
 import logica.dominio.AutoevaluacionPracticante;
 import logica.dao.excepciones.MensajeriaExcepcion;
 import java.sql.CallableStatement;
-import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Types;
 import java.util.logging.Level;
@@ -99,4 +100,53 @@ public class AutoevaluacionPracticanteDao implements AutoevaluacionPracticanteDa
         }
         return informacionParaAutoevaluacion;
     }
+
+    public AutoevaluacionPracticante obtenerAutoevaluacion(String matricula) throws MensajeriaExcepcion {
+        String consulta = "SELECT idAutoevaluacion, idProyecto, respuesta1, respuesta2, respuesta3, " +
+                "respuesta4, respuesta5, respuesta6, respuesta7, respuesta8, respuesta9, respuesta10 " +
+                "FROM autoevaluacion WHERE idPracticante = ?";
+        Connection conexionBaseDeDatos = null;
+        PreparedStatement sentencia = null;
+        AutoevaluacionPracticante autoevaluacion = null;
+        try {
+            conexionBaseDeDatos = ConexionBaseDeDatos.getInstance().conectar();
+            sentencia = conexionBaseDeDatos.prepareStatement(consulta);
+            sentencia.setString(1, matricula);
+            ResultSet resultado = sentencia.executeQuery();
+            if (resultado.next()) {
+                autoevaluacion = new AutoevaluacionPracticante(
+                        matricula,
+                        resultado.getInt("idProyecto"),
+                        resultado.getInt("respuesta1"),
+                        resultado.getInt("respuesta2"),
+                        resultado.getInt("respuesta3"),
+                        resultado.getInt("respuesta4"),
+                        resultado.getInt("respuesta5"),
+                        resultado.getInt("respuesta6"),
+                        resultado.getInt("respuesta7"),
+                        resultado.getInt("respuesta8"),
+                        resultado.getInt("respuesta9"),
+                        resultado.getInt("respuesta10")
+                );
+                autoevaluacion.setIdAutoevaluacion(resultado.getInt("idAutoevaluacion"));
+            }
+            LOGGER.info("Autoevaluación obtenida para: " + matricula);
+        } catch (SQLException excepcion) {
+            LOGGER.log(Level.SEVERE, "Error al obtener autoevaluación", excepcion);
+            throw new MensajeriaExcepcion("Error al obtener autoevaluación", excepcion);
+        } finally {
+            try {
+                if (sentencia != null) {
+                    sentencia.close();
+                }
+                if (conexionBaseDeDatos != null) {
+                    conexionBaseDeDatos.close();
+                }
+            } catch (SQLException excepcion) {
+                LOGGER.log(Level.SEVERE, "Error al cerrar conexión", excepcion);
+            }
+        }
+        return autoevaluacion;
+    }
+
 }

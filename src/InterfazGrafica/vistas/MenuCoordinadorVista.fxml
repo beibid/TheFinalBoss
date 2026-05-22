@@ -51,6 +51,10 @@
                         style="-fx-background-color: transparent; -fx-text-fill: white; -fx-alignment: CENTER-LEFT;" text="Inactivar">
                     <VBox.margin><Insets top="3.0"/></VBox.margin>
                 </Button>
+                <Button fx:id="botonModificarProfesor" onAction="#abrirModificarProfesor" prefWidth="170.0"
+                        style="-fx-background-color: transparent; -fx-text-fill: white; -fx-alignment: CENTER-LEFT;" text="Modificar profesor">
+                    <VBox.margin><Insets top="3.0"/></VBox.margin>
+                </Button>
 
                 <Separator><VBox.margin><Insets top="10.0" bottom="10.0"/></VBox.margin></Separator>
 

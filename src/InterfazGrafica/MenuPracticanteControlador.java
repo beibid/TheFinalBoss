@@ -55,6 +55,11 @@ public class MenuPracticanteControlador {
     }
 
     @FXML
+    private void abrirGenerarReporte(ActionEvent event) throws IOException {
+        abrirVentana("/InterfazGrafica/vistas/GenerarReporteVista.fxml", "Generar Reporte");
+    }
+
+    @FXML
     private void abrirSubirReporte(ActionEvent event) throws IOException {
         abrirVentana("/InterfazGrafica/vistas/SubirReporteVista.fxml", "Subir Reporte");
     }

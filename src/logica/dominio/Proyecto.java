@@ -19,6 +19,7 @@ public class Proyecto {
     private String numPersonalProfesor;
     private Date fechaRegistro;
     private int capacidad;
+    private String nombreOrganizacion;
 
     public Proyecto(int idProyecto, String nombreProyecto, String descripcion, String responsableDelProyecto,
                     EstadoProyecto estado, String nombreEmpresa, String sectorEmpresa, String direccionEmpresa,
@@ -86,6 +87,10 @@ public class Proyecto {
         return capacidad;
     }
 
+    public String getNombreOrganizacion() {
+        return nombreOrganizacion;
+    }
+
     public void setIdProyecto(int idProyecto) {
         this.idProyecto = idProyecto;
     }
@@ -127,6 +132,10 @@ public class Proyecto {
 
     public void setCapacidad(int capacidad) {
         this.capacidad = capacidad;
+    }
+
+    public void setNombreOrganizacion(String nombreOrganizacion) {
+        this.nombreOrganizacion = nombreOrganizacion;
     }
 
     @Override

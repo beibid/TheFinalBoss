@@ -20,6 +20,9 @@
                 <Separator><VBox.margin><Insets bottom="10.0" top="5.0" /></VBox.margin></Separator>
 
                 <Label style="-fx-text-fill: white; -fx-font-size: 11;" text="Reporte" />
+                <Button onAction="#abrirGenerarReporte" prefWidth="170.0" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-alignment: CENTER-LEFT;" text="Generar reporte">
+                    <VBox.margin><Insets top="5.0" /></VBox.margin>
+                </Button>
                 <Button onAction="#abrirSubirReporte" prefWidth="170.0" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-alignment: CENTER-LEFT;" text="Subir reporte">
                     <VBox.margin><Insets top="5.0" /></VBox.margin>
                 </Button>
@@ -55,6 +58,7 @@
                 <Button onAction="#abrirAutoevaluacionPracticante" prefWidth="170.0" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-alignment: CENTER-LEFT;" text="Realizar Autoevaluacion">
                     <VBox.margin><Insets top="3.0" /></VBox.margin>
                 </Button>
+
 
 
                 <Separator><VBox.margin><Insets bottom="10.0" top="10.0" /></VBox.margin></Separator>
