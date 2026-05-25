@@ -38,21 +38,20 @@ public class ConsultarBuzonControlador {
     }
 
     private void configurarColumnas() {
-        columnaRemitenteRecibidos.setCellValueFactory(celda ->
-                new SimpleStringProperty(celda.getValue().getNombreUsuario()));
-        columnaFechaRecibidos.setCellValueFactory(celda ->
-                new SimpleStringProperty(celda.getValue().getFechaEnvio() != null ?
-                        celda.getValue().getFechaEnvio().toString() : ""));
-        columnaContenidoRecibidos.setCellValueFactory(celda ->
-                new SimpleStringProperty(celda.getValue().getContenido()));
+        columnaRemitenteRecibidos.setCellValueFactory(celda -> new SimpleStringProperty(celda.getValue().getNombreUsuario()));
+        columnaFechaRecibidos.setCellValueFactory(celda -> obtenerFecha(celda.getValue()));
+        columnaContenidoRecibidos.setCellValueFactory(celda -> new SimpleStringProperty(celda.getValue().getContenido()));
+        columnaDestinatarioEnviados.setCellValueFactory(celda -> new SimpleStringProperty(celda.getValue().getNombreUsuario()));
+        columnaFechaEnviados.setCellValueFactory(celda -> obtenerFecha(celda.getValue()));
+        columnaContenidoEnviados.setCellValueFactory(celda -> new SimpleStringProperty(celda.getValue().getContenido()));
+    }
 
-        columnaDestinatarioEnviados.setCellValueFactory(celda ->
-                new SimpleStringProperty(celda.getValue().getNombreUsuario()));
-        columnaFechaEnviados.setCellValueFactory(celda ->
-                new SimpleStringProperty(celda.getValue().getFechaEnvio() != null ?
-                        celda.getValue().getFechaEnvio().toString() : ""));
-        columnaContenidoEnviados.setCellValueFactory(celda ->
-                new SimpleStringProperty(celda.getValue().getContenido()));
+    private SimpleStringProperty obtenerFecha(MensajeVista mensaje) {
+        String fecha = "";
+        if (mensaje.getFechaEnvio() != null) {
+            fecha = mensaje.getFechaEnvio().toString();
+        }
+        return new SimpleStringProperty(fecha);
     }
 
     private void cargarMensajes() {
@@ -63,7 +62,7 @@ public class ConsultarBuzonControlador {
 
             List<MensajeVista> enviados = mensajeDao.obtenerMensajesEnviados(idUsuario);
             tablaEnviados.setItems(FXCollections.observableArrayList(enviados));
-        } catch (MensajeriaExcepcion e) {
+        } catch (MensajeriaExcepcion excepcion) {
             areaContenidoMensaje.setText("Error al cargar los mensajes.");
         }
     }

@@ -26,7 +26,7 @@ public class ModificarOrganizacionVinculadaControlGUI {
     @FXML
     public void initialize() {
         cargarOrganizaciones();
-        comboBoxOrganizacion.setOnAction(event -> cargarDatosOrganizacion());
+        comboBoxOrganizacion.setOnAction(evento -> cargarDatosOrganizacion());
     }
 
     private void cargarOrganizaciones() {
@@ -53,17 +53,17 @@ public class ModificarOrganizacionVinculadaControlGUI {
         OrganizacionVinculada organizacionSeleccionada = comboBoxOrganizacion.getValue();
         if (organizacionSeleccionada == null) {
             etiquetaMensaje.setText("Selecciona una organización");
-            return;
+        } else {
+            String nombre = campoNombre.getText().trim();
+            String direccion = campoDireccion.getText().trim();
+            if (nombre.isEmpty() || direccion.isEmpty()) {
+                etiquetaMensaje.setText("Todos los campos son obligatorios");
+            } else {
+                organizacionSeleccionada.setNombre(nombre);
+                organizacionSeleccionada.setDireccion(direccion);
+                guardarOrganizacion(organizacionSeleccionada);
+            }
         }
-        String nombre = campoNombre.getText().trim();
-        String direccion = campoDireccion.getText().trim();
-        if (nombre.isEmpty() || direccion.isEmpty()) {
-            etiquetaMensaje.setText("Todos los campos son obligatorios");
-            return;
-        }
-        organizacionSeleccionada.setNombre(nombre);
-        organizacionSeleccionada.setDireccion(direccion);
-        guardarOrganizacion(organizacionSeleccionada);
     }
 
     private void guardarOrganizacion(OrganizacionVinculada organizacionSeleccionada) {

@@ -115,7 +115,7 @@ public class CoordinadorDao implements CoordinadorDaoInterfaz {
         if (coordinador.getNombre() == null) {
             throw new UsuariosExcepcion("El nombre del coordinador no puede ser nulo");
         }
-        String consultaUsuario = "UPDATE usuario SET nombre = ?, apellidos = ?, contrasena = ?, estado = ? WHERE idUsuario = (SELECT idUsuario FROM coordinador WHERE numPersonalCoordinador = ?)";
+        String consultaUsuario = "UPDATE usuario SET nombre = ?, apellidos = ?, correo = ?, contrasena = ?, estado = ? WHERE idUsuario = (SELECT idUsuario FROM coordinador WHERE numPersonalCoordinador = ?)";
         Connection conexionBaseDeDatos = null;
         PreparedStatement actualizacion = null;
         int filasAfectadas = 0;
@@ -125,9 +125,10 @@ public class CoordinadorDao implements CoordinadorDaoInterfaz {
             actualizacion = conexionBaseDeDatos.prepareStatement(consultaUsuario);
             actualizacion.setString(1, coordinador.getNombre());
             actualizacion.setString(2, coordinador.getApellidos());
-            actualizacion.setString(3, coordinador.getContrasena());
-            actualizacion.setString(4, coordinador.getEstado().toString());
-            actualizacion.setString(5, numPersonalCoordinador);
+            actualizacion.setString(3, coordinador.getCorreo());
+            actualizacion.setString(4, coordinador.getContrasena());
+            actualizacion.setString(5, coordinador.getEstado().toString());
+            actualizacion.setString(6, numPersonalCoordinador);
             filasAfectadas = actualizacion.executeUpdate();
             LOGGER.info("Coordinador modificado correctamente: " + numPersonalCoordinador);
         } catch (SQLException excepcionSQL) {
@@ -149,7 +150,7 @@ public class CoordinadorDao implements CoordinadorDaoInterfaz {
     }
 
     public List<Coordinador> obtenerCoordinadoresActivos() throws UsuariosExcepcion {
-        String consulta = "SELECT u.nombre, u.apellidos, p.numPersonalCoordinador " +
+        String consulta = "SELECT u.nombre, u.apellidos, u.correo, u.estado, u.contrasena, p.numPersonalCoordinador " +
                 "FROM usuario u " +
                 "INNER JOIN coordinador p ON u.idUsuario = p.idUsuario " +
                 "WHERE u.estado = 'Activo'";
@@ -166,6 +167,9 @@ public class CoordinadorDao implements CoordinadorDaoInterfaz {
                 coordinador.setNombre(resultado.getString("nombre"));
                 coordinador.setApellidos(resultado.getString("apellidos"));
                 coordinador.setNumeroDePersonalCoordinador(resultado.getString("numPersonalCoordinador"));
+                coordinador.setCorreo(resultado.getString("correo"));
+                coordinador.setEstado(Estado.valueOf(resultado.getString("estado")));
+                coordinador.setContrasena(resultado.getString("contrasena"));
                 coordinadores.add(coordinador);
             }
         } catch (SQLException excepcionSQL) {

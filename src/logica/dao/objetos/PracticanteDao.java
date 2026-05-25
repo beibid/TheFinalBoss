@@ -6,6 +6,7 @@ import logica.dao.excepciones.UsuariosExcepcion;
 import logica.dominio.Practicante;
 import logica.dao.interfaces.PracticanteDaoInterfaz;
 import logica.dominio.enums.Estado;
+import logica.dominio.enums.Genero;
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -118,7 +119,7 @@ public class PracticanteDao implements PracticanteDaoInterfaz {
         if (practicante.getNombre() == null) {
             throw new UsuariosExcepcion("El nombre del practicante no puede ser nulo");
         }
-        String consultaUsuario = "UPDATE usuario SET nombre = ?, apellidos = ?, contrasena = ?, estado = ? WHERE idUsuario = (SELECT idUsuario FROM practicante WHERE matricula = ?)";
+        String consultaUsuario = "UPDATE usuario SET nombre = ?, apellidos = ?, correo = ?, contrasena = ?, estado = ? WHERE idUsuario = (SELECT idUsuario FROM practicante WHERE matricula = ?)";
         String consultaPracticante = "UPDATE practicante SET lenguaIndigena = ?, genero = ? WHERE matricula = ?";
         Connection conexionBaseDeDatos = null;
         PreparedStatement actualizacionUsuario = null;
@@ -130,9 +131,10 @@ public class PracticanteDao implements PracticanteDaoInterfaz {
             actualizacionUsuario = conexionBaseDeDatos.prepareStatement(consultaUsuario);
             actualizacionUsuario.setString(1, practicante.getNombre());
             actualizacionUsuario.setString(2, practicante.getApellidos());
-            actualizacionUsuario.setString(3, practicante.getContrasena());
-            actualizacionUsuario.setString(4, practicante.getEstado().toString());
-            actualizacionUsuario.setString(5, matricula);
+            actualizacionUsuario.setString(3, practicante.getCorreo());
+            actualizacionUsuario.setString(4, practicante.getContrasena());
+            actualizacionUsuario.setString(5, practicante.getEstado().toString());
+            actualizacionUsuario.setString(6, matricula);
             actualizacionUsuario.executeUpdate();
 
             actualizacionPracticante = conexionBaseDeDatos.prepareStatement(consultaPracticante);
@@ -163,7 +165,8 @@ public class PracticanteDao implements PracticanteDaoInterfaz {
     }
 
     public List<Practicante> obtenerPracticantesActivos() throws UsuariosExcepcion {
-        String consulta = "SELECT u.idUsuario, u.nombre, u.apellidos, p.matricula " +
+        String consulta = "SELECT u.idUsuario, u.nombre, u.apellidos, u.correo, u.estado, u.contrasena, " +
+                "p.matricula, p.lenguaIndigena, p.genero " +
                 "FROM usuario u " +
                 "INNER JOIN practicante p ON u.idUsuario = p.idUsuario " +
                 "WHERE u.estado = 'Activo'";
@@ -180,7 +183,12 @@ public class PracticanteDao implements PracticanteDaoInterfaz {
                 practicante.setIdUsuario(resultado.getInt("idUsuario"));
                 practicante.setNombre(resultado.getString("nombre"));
                 practicante.setApellidos(resultado.getString("apellidos"));
+                practicante.setCorreo(resultado.getString("correo"));
+                practicante.setEstado(Estado.valueOf(resultado.getString("estado")));
+                practicante.setContrasena(resultado.getString("contrasena"));
                 practicante.setMatricula(resultado.getString("matricula"));
+                practicante.setLenguaIndigena(resultado.getString("lenguaIndigena"));
+                practicante.setGenero(Genero.valueOf(resultado.getString("genero")));
                 practicantes.add(practicante);
             }
         } catch (SQLException excepcionSQL) {
@@ -200,6 +208,7 @@ public class PracticanteDao implements PracticanteDaoInterfaz {
         }
         return practicantes;
     }
+
 
     public int asignarProyecto(String matricula, int idProyecto) throws UsuariosExcepcion {
         Connection conexionBaseDeDatos = null;

@@ -18,7 +18,7 @@ import logica.dominio.Proyecto;
 import logica.dominio.Reporte;
 import logica.dominio.SesionUsuario;
 import logica.dominio.enums.TipoReporte;
-import logica.utilidades.GeneradorPdfReporte;
+import logica.archivos.GeneradorPdfReporte;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 

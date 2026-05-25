@@ -35,6 +35,11 @@
                     <VBox.margin><Insets top="3.0"/></VBox.margin>
                 </Button>
 
+                <Button text="Modificar" onAction="#botonModificarCoordinador" prefWidth="170.0"
+                        style="-fx-background-color: transparent; -fx-text-fill: white; -fx-alignment: CENTER-LEFT;">
+                    <VBox.margin><Insets top="3.0"/></VBox.margin>
+                </Button>
+
                 <Separator><VBox.margin><Insets top="10.0" bottom="10.0"/></VBox.margin></Separator>
 
                 <Label text="Administrador" style="-fx-text-fill: white; -fx-font-size: 11;"/>

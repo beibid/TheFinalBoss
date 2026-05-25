@@ -68,6 +68,10 @@ public class MenuAdministradorControlador {
     private void botonRegistrarAdministrador(ActionEvent event) throws IOException {
         abrirVentana("/InterfazGrafica/vistas/RegistrarAdministradorVista.fxml", "Registrar Administrador");
     }
+    @FXML
+    private void botonModificarCoordinador(ActionEvent event) throws IOException {
+        abrirVentana("/InterfazGrafica/vistas/ModificarCoordinadorVista.fxml", "Modificar Coordinador");
+    }
 
     @FXML
     private void botonRegresar(ActionEvent event) throws IOException {

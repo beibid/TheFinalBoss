@@ -1,4 +1,4 @@
-package logica.utilidades;
+package logica.archivos;
 
 import com.itextpdf.kernel.font.PdfFont;
 import com.itextpdf.kernel.pdf.PdfDocument;

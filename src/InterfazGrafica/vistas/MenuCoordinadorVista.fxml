@@ -40,6 +40,11 @@
                     <VBox.margin><Insets top="3.0"/></VBox.margin>
                 </Button>
 
+                <Button fx:id="botonModificarPracticante" onAction="#abrirModificarPracticante" prefWidth="170.0"
+                        style="-fx-background-color: transparent; -fx-text-fill: white; -fx-alignment: CENTER-LEFT;" text="Modificar">
+                    <VBox.margin><Insets top="3.0"/></VBox.margin>
+                </Button>
+
                 <Separator><VBox.margin><Insets top="10.0" bottom="10.0"/></VBox.margin></Separator>
 
                 <Label text="Profesor" style="-fx-text-fill: white; -fx-font-size: 11;"/>

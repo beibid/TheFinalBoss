@@ -36,6 +36,10 @@
                 <Button onAction="#abrirSubirDocumentacion" prefWidth="170.0" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-alignment: CENTER-LEFT;" text="Subir documentación">
                     <VBox.margin><Insets top="5.0" /></VBox.margin>
                 </Button>
+                <Button onAction="#abrirDescargarDocumentacion" prefWidth="170.0" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-alignment: CENTER-LEFT;" text="Descargar documentación">
+                    <VBox.margin><Insets top="5.0" /></VBox.margin>
+                </Button>
+
 
                 <Separator><VBox.margin><Insets bottom="10.0" top="10.0" /></VBox.margin></Separator>
 

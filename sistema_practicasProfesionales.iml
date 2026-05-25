@@ -7,6 +7,7 @@
       <sourceFolder url="file://$MODULE_DIR$/src/acceso/bd/propiedades" type="java-resource" />
       <sourceFolder url="file://$MODULE_DIR$/pruebas" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/test" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/src/recursos" type="java-resource" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
@@ -45,7 +46,7 @@
     </orderEntry>
     <orderEntry type="library" name="lib" level="project" />
     <orderEntry type="library" name="mysql-connector-j-9.6.0" level="project" />
-    <orderEntry type="library" name="commons-9.6.0" level="project" />
     <orderEntry type="library" name="slf4j-api-2.0.13" level="project" />
+    <orderEntry type="library" name="commons-9.6.0" level="project" />
   </component>
 </module>

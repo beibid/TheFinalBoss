@@ -75,6 +75,11 @@ public class MenuPracticanteControlador {
     }
 
     @FXML
+    private void abrirDescargarDocumentacion(ActionEvent event) throws IOException {
+        abrirVentana("/InterfazGrafica/vistas/DescargarDocumentacionVista.fxml", "Descargar Documentación");
+    }
+
+    @FXML
     private void abrirSeleccionProyectos(ActionEvent event) throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource("/InterfazGrafica/vistas/SeleccionPreferenciasProyectoVista.fxml"));
         Stage stage = new Stage();
@@ -101,6 +106,7 @@ public class MenuPracticanteControlador {
         escenario.setScene(new Scene(ruta));
         escenario.show();
     }
+
     @FXML
     private void abrirAutoevaluacionPracticante(ActionEvent event) throws IOException {
         abrirVentana("/InterfazGrafica/vistas/GenerarAutoevaluacionPracticanteVista.fxml", "Realizar Autoevaluacion");

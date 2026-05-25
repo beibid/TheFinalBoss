@@ -15,7 +15,7 @@ import javafx.stage.Stage;
 import logica.dominio.AutoevaluacionPracticante;
 import logica.dao.excepciones.MensajeriaExcepcion;
 import logica.dominio.SesionUsuario;
-import logica.utilidades.GeneradorPdfAutoevaluacion;
+import logica.archivos.GeneradorPdfAutoevaluacion;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;

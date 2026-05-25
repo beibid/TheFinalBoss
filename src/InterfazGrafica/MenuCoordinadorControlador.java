@@ -95,6 +95,11 @@ public class MenuCoordinadorControlador {
     }
 
     @FXML
+    private void abrirModificarPracticante(ActionEvent event) throws IOException {
+        abrirVentana("/InterfazGrafica/vistas/ModificarPracticanteVista.fxml", "Modificar Practicante");
+    }
+
+    @FXML
     private void abrirInactivarOrganizacion(ActionEvent event) throws IOException {
         abrirVentana("/InterfazGrafica/vistas/InactivarOrganizacionVinculadaVista.fxml", "Inactivar Organización");
     }
