@@ -75,6 +75,12 @@ public class MenuProfesorControlador {
     }
 
     @FXML
+    private void abrirValidarDocumentacion(ActionEvent event) throws IOException {
+        abrirVentana("/InterfazGrafica/vistas/ValidarDocumentosPracticanteVista.fxml", "Validar documentos");
+    }
+
+
+    @FXML
     private void cerrarSesion(ActionEvent event) throws IOException {
         SesionUsuario.getInstance().cerrarSesion();
         Parent ruta = FXMLLoader.load(getClass().getResource("/InterfazGrafica/vistas/IniciarSesionVista.fxml"));

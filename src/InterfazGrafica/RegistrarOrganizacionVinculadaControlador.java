@@ -91,8 +91,8 @@ public class RegistrarOrganizacionVinculadaControlador {
         ButtonType botonNo = new ButtonType("No");
         alerta.getButtonTypes().setAll(botonSi, botonNo);
 
-        alerta.showAndWait().ifPresent(respuesta -> {
-            if (respuesta == botonSi) {
+        alerta.showAndWait().ifPresent(botonPresionado -> {
+            if (botonPresionado == botonSi) {
                 limpiarCampos();
             }
         });
@@ -112,7 +112,7 @@ public class RegistrarOrganizacionVinculadaControlador {
         ButtonType botonSi = new ButtonType("Sí");
         ButtonType botonNo = new ButtonType("No");
         alerta.getButtonTypes().setAll(botonSi, botonNo);
-        return alerta.showAndWait().filter(r -> r == botonSi).isPresent();
+        return alerta.showAndWait().filter(botonPresionado -> botonPresionado == botonSi).isPresent();
     }
 
     private String limitarTexto(String texto, int limite) {

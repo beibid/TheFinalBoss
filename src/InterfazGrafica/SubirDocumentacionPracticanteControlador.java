@@ -104,7 +104,7 @@ public class SubirDocumentacionPracticanteControlador {
     private void guardarDocumentacion(String rutaRelativa) {
         try {
             DocumentacionPracticante documentacion = new DocumentacionPracticante(
-                    rutaRelativa, EstadoRevision.Pendiente
+                    rutaRelativa, EstadoRevision.Pendiente, null
             );
             int idDocumentacion = documentacionDao.agregarDocumentacion(documentacion);
             if (idDocumentacion > 0) {
@@ -146,8 +146,8 @@ public class SubirDocumentacionPracticanteControlador {
 
     @FXML
     private void botonRegresar(ActionEvent event) {
-        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        stage.close();
+        Stage escenario = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        escenario.close();
     }
 
     private void limpiarFormulario() {

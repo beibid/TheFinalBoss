@@ -160,8 +160,7 @@ public class GenerarAutoevaluacionPracticanteControlador {
     private void generarPdf() {
         AutoevaluacionPracticante autoevaluacion = construirAutoevaluacion();
         GeneradorPdfAutoevaluacion generador = new GeneradorPdfAutoevaluacion();
-        String rutaPdf = generador.generarPdf(
-                autoevaluacion,
+        String rutaPdf = generador.generarPdf(autoevaluacion,
                 nombrePracticante,
                 etiquetaNombreProyecto.getText(),
                 etiquetaOrganizacion.getText(),
@@ -254,7 +253,7 @@ public class GenerarAutoevaluacionPracticanteControlador {
         ButtonType botonSi = new ButtonType("Sí");
         ButtonType botonNo = new ButtonType("No");
         alerta.getButtonTypes().setAll(botonSi, botonNo);
-        return alerta.showAndWait().filter(r -> r == botonSi).isPresent();
+        return alerta.showAndWait().filter(botonPresionado -> botonPresionado == botonSi).isPresent();
     }
 
     private void mostrarError(String titulo, String mensaje) {

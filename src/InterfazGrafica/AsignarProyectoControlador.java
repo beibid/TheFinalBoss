@@ -120,7 +120,7 @@ public class AsignarProyectoControlador {
         ButtonType botonSi = new ButtonType("Sí");
         ButtonType botonNo = new ButtonType("No");
         alerta.getButtonTypes().setAll(botonSi, botonNo);
-        return alerta.showAndWait().filter(r -> r == botonSi).isPresent();
+        return alerta.showAndWait().filter(botonPresionado -> botonPresionado == botonSi).isPresent();
     }
 
     private void limpiarSeleccion() {

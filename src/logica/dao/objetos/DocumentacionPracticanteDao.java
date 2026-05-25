@@ -4,6 +4,9 @@ import acceso.bd.ConexionBaseDeDatos;
 import logica.dominio.DocumentacionPracticante;
 import logica.dao.excepciones.UsuariosExcepcion;
 import logica.dao.interfaces.DocumentacionPracticanteDaoInterfaz;
+import logica.dominio.enums.EstadoRevision;
+import java.util.ArrayList;
+import java.util.List;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -56,5 +59,78 @@ public class DocumentacionPracticanteDao implements DocumentacionPracticanteDaoI
             }
         }
         return idGenerado;
+    }
+
+    public List<DocumentacionPracticante> obtenerDocumentosPendientes(String matricula) throws UsuariosExcepcion {
+        String consulta = "SELECT dp.idDocumentacionPracticante, dp.rutaDeArchivo, dp.estadoRevision " +
+                "FROM documentacionpracticante dp " +
+                "INNER JOIN entregadocumentacion ed ON dp.idDocumentacionPracticante = ed.entregaDocumentacion " +
+                "WHERE ed.entregaMatricula = ? AND dp.estadoRevision = 'Pendiente'";
+        Connection conexion = null;
+        PreparedStatement sentencia = null;
+        List<DocumentacionPracticante> documentos = new ArrayList<>();
+        try {
+            conexion = ConexionBaseDeDatos.getInstance().conectar();
+            sentencia = conexion.prepareStatement(consulta);
+            sentencia.setString(1, matricula);
+            ResultSet resultado = sentencia.executeQuery();
+            while (resultado.next()) {
+                DocumentacionPracticante documento = new DocumentacionPracticante(
+                        resultado.getString("rutaDeArchivo"),
+                        EstadoRevision.valueOf(resultado.getString("estadoRevision")),
+                        null
+                );
+                documento.setIdDocumentacionPracticante(resultado.getInt("idDocumentacionPracticante"));
+                documentos.add(documento);
+            }
+            LOGGER.info("Documentos pendientes obtenidos para: " + matricula);
+        } catch (SQLException excepcion) {
+            LOGGER.log(Level.SEVERE, "Error al obtener documentos pendientes", excepcion);
+            throw new UsuariosExcepcion("Error al obtener documentos pendientes");
+        } finally {
+            try {
+                if (sentencia != null) {
+                    sentencia.close();
+                }
+                if (conexion != null) {
+                    conexion.close();
+                }
+            } catch (SQLException excepcion) {
+                LOGGER.log(Level.SEVERE, "Error al cerrar conexión", excepcion);
+            }
+        }
+        return documentos;
+    }
+
+    public int validarDocumento(int idDocumento, EstadoRevision estado, String motivoRechazo) throws UsuariosExcepcion {
+        String consulta = "UPDATE documentacionpracticante SET estadoRevision = ?, motivoRechazado = ? " +
+                "WHERE idDocumentacionPracticante = ?";
+        Connection conexion = null;
+        PreparedStatement sentencia = null;
+        int filasAfectadas = 0;
+        try {
+            conexion = ConexionBaseDeDatos.getInstance().conectar();
+            sentencia = conexion.prepareStatement(consulta);
+            sentencia.setString(1, estado.name());
+            sentencia.setString(2, motivoRechazo);
+            sentencia.setInt(3, idDocumento);
+            filasAfectadas = sentencia.executeUpdate();
+            LOGGER.info("Documento validado correctamente: " + idDocumento);
+        } catch (SQLException excepcion) {
+            LOGGER.log(Level.SEVERE, "Error al validar documento", excepcion);
+            throw new UsuariosExcepcion("Error al validar documento");
+        } finally {
+            try {
+                if (sentencia != null) {
+                    sentencia.close();
+                }
+                if (conexion != null) {
+                    conexion.close();
+                }
+            } catch (SQLException excepcion) {
+                LOGGER.log(Level.SEVERE, "Error al cerrar conexión", excepcion);
+            }
+        }
+        return filasAfectadas;
     }
 }

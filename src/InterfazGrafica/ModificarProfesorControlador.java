@@ -135,19 +135,10 @@ public class ModificarProfesorControlador {
     }
 
     private boolean camposValidos() {
-        if (campoNombre.getText().trim().isEmpty()) {
-            return false;
-        }
-        if (campoApellidos.getText().trim().isEmpty()) {
-            return false;
-        }
-        if (campoCorreo.getText().trim().isEmpty()) {
-            return false;
-        }
-        if (comboBoxTurno.getValue() == null) {
-            return false;
-        }
-        return true;
+        String nombre = campoNombre.getText().trim();
+        String apellidos = campoApellidos.getText().trim();
+        String correo = campoCorreo.getText().trim();
+        return !nombre.isEmpty() && !apellidos.isEmpty() && !correo.isEmpty() && comboBoxTurno.getValue() != null;
     }
 
     private Profesor construirProfesor() {
@@ -183,7 +174,7 @@ public class ModificarProfesorControlador {
         ButtonType botonSi = new ButtonType("Sí");
         ButtonType botonNo = new ButtonType("No");
         alerta.getButtonTypes().setAll(botonSi, botonNo);
-        return alerta.showAndWait().filter(r -> r == botonSi).isPresent();
+        return alerta.showAndWait().filter(botonPresionado -> botonPresionado == botonSi).isPresent();
     }
 
     private void ocultarTodo() {

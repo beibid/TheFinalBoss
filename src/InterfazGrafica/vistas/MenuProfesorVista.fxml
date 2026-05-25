@@ -34,6 +34,14 @@
 
                 <Separator><VBox.margin><Insets top="10.0" bottom="10.0"/></VBox.margin></Separator>
 
+                <Label text="Documentacion del practicante" style="-fx-text-fill: white; -fx-font-size: 11;"/>
+                <Button text="Validar documentacion" onAction="#abrirValidarDocumentacion" prefWidth="170.0"
+                        style="-fx-background-color: transparent; -fx-text-fill: white; -fx-alignment: CENTER-LEFT;">
+                    <VBox.margin><Insets top="5.0"/></VBox.margin>
+                </Button>
+
+                <Separator><VBox.margin><Insets top="10.0" bottom="10.0"/></VBox.margin></Separator>
+
                 <Label text="Mensajes" style="-fx-text-fill: white; -fx-font-size: 11;"/>
                 <Button text="Enviar mensaje" onAction="#abrirMensajeria" prefWidth="170.0"
                         style="-fx-background-color: transparent; -fx-text-fill: white; -fx-alignment: CENTER-LEFT;">

@@ -28,9 +28,13 @@ import logica.dominio.Profesor;
 import logica.dominio.enums.RolMensaje;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
 public class EnviarMensajeControlador {
+    private static final Logger LOGGER = Logger.getLogger(EnviarMensajeControlador.class.getName());
+
     @FXML private ComboBox<Usuario> comboBoxDestinatario;
     @FXML private TextArea areaTextoMensaje;
     @FXML private VBox panelError;
@@ -40,11 +44,6 @@ public class EnviarMensajeControlador {
     @FXML private Label etiquetaTituloExito;
     @FXML private Label etiquetaMensajeExito;
 
-    private final PracticanteDao practicanteDao = new PracticanteDao();
-    private final ProfesorDao profesorDao = new ProfesorDao();
-    private final MensajeDao mensajeDao = new MensajeDao();
-    private final BuzonDao buzonDao = new BuzonDao();
-
     @FXML
     public void initialize() {
         cargarDestinatarios();
@@ -52,69 +51,67 @@ public class EnviarMensajeControlador {
 
     private void cargarDestinatarios() {
         try {
-            int idUsuarioActual = SesionUsuario.getInstance().getIdUsuario();
-            List<Usuario> destinatarios = new ArrayList<>();
-            destinatarios.addAll(practicanteDao.obtenerPracticantesActivos());
-            destinatarios.addAll(profesorDao.obtenerProfesoresActivos());
-            List<Usuario> destinatariosFiltrados = new ArrayList<>();
-            for (Usuario usuario : destinatarios) {
-                if (usuario.getIdUsuario() != idUsuarioActual) {
-                    destinatariosFiltrados.add(usuario);
-                }
-            }
-
-            comboBoxDestinatario.setItems(FXCollections.observableArrayList(destinatariosFiltrados));
-            comboBoxDestinatario.setCellFactory(listaUsuarios -> new ListCell<>() {
-                @Override
-                protected void updateItem(Usuario usuario, boolean estaVacio) {
-                    super.updateItem(usuario, estaVacio);
-                    if (estaVacio || usuario == null) {
-                        setText(null);
-                    } else {
-                        setText(usuario.getNombre() + " " + usuario.getApellidos());
-                    }
-                }
-            });
-
-            comboBoxDestinatario.setButtonCell(new ListCell<>() {
-                @Override
-                protected void updateItem(Usuario usuario, boolean estaVacio) {
-                    super.updateItem(usuario, estaVacio);
-                    if (estaVacio || usuario == null) {
-                        setText("-- Selecciona un destinatario --");
-                    } else {
-                        setText(usuario.getNombre() + " " + usuario.getApellidos());
-                    }
-                }
-            });
-
-            comboBoxDestinatario.setCellFactory(listaUsuarios -> new ListCell<>() {
-                @Override
-                protected void updateItem(Usuario usuario, boolean estaVacio) {
-                    super.updateItem(usuario, estaVacio);
-                    if (estaVacio || usuario == null) {
-                        setText(null);
-                    } else {
-                        if (usuario instanceof Practicante) {
-                            setText("[Practicante] " + usuario.getNombre() + " " + usuario.getApellidos());
-                        } else if (usuario instanceof Profesor) {
-                            setText("[Profesor] " + usuario.getNombre() + " " + usuario.getApellidos());
-                        } else {
-                            setText(usuario.getNombre() + " " + usuario.getApellidos());
-                        }
-                    }
-                }
-            });
-        } catch (UsuariosExcepcion e) {
+            List<Usuario> destinatarios = obtenerDestinatariosFiltrados();
+            comboBoxDestinatario.setItems(FXCollections.observableArrayList(destinatarios));
+            configurarCeldasComboBox();
+        } catch (UsuariosExcepcion excepcion) {
+            LOGGER.log(Level.SEVERE, "Error al cargar destinatarios", excepcion);
             mostrarError("Error al cargar", "NO SE PUDIERON CARGAR LOS DESTINATARIOS.");
         }
+    }
+
+    private List<Usuario> obtenerDestinatariosFiltrados() throws UsuariosExcepcion {
+        PracticanteDao practicanteDao = new PracticanteDao();
+        ProfesorDao profesorDao = new ProfesorDao();
+        int idUsuarioActual = SesionUsuario.getInstance().getIdUsuario();
+        List<Usuario> destinatarios = new ArrayList<>();
+        destinatarios.addAll(practicanteDao.obtenerPracticantesActivos());
+        destinatarios.addAll(profesorDao.obtenerProfesoresActivos());
+        List<Usuario> filtrados = new ArrayList<>();
+        for (Usuario usuario : destinatarios) {
+            if (usuario.getIdUsuario() != idUsuarioActual) {
+                filtrados.add(usuario);
+            }
+        }
+        return filtrados;
+    }
+
+    private void configurarCeldasComboBox() {
+        comboBoxDestinatario.setCellFactory(listaUsuarios -> new ListCell<>() {
+            @Override
+            protected void updateItem(Usuario usuario, boolean estaVacio) {
+                super.updateItem(usuario, estaVacio);
+                if (estaVacio || usuario == null) {
+                    setText(null);
+                } else {
+                    if (usuario instanceof Practicante) {
+                        setText("[Practicante] " + usuario.getNombre() + " " + usuario.getApellidos());
+                    } else if (usuario instanceof Profesor) {
+                        setText("[Profesor] " + usuario.getNombre() + " " + usuario.getApellidos());
+                    } else {
+                        setText(usuario.getNombre() + " " + usuario.getApellidos());
+                    }
+                }
+            }
+        });
+
+        comboBoxDestinatario.setButtonCell(new ListCell<>() {
+            @Override
+            protected void updateItem(Usuario usuario, boolean estaVacio) {
+                super.updateItem(usuario, estaVacio);
+                if (estaVacio || usuario == null) {
+                    setText("-- Selecciona un destinatario --");
+                } else {
+                    setText(usuario.getNombre() + " " + usuario.getApellidos());
+                }
+            }
+        });
     }
 
     @FXML
     private void botonEnviar() {
         Usuario destinatario = comboBoxDestinatario.getSelectionModel().getSelectedItem();
         String contenido = areaTextoMensaje.getText().trim();
-
         if (destinatario == null) {
             mostrarError("Sin destinatario", "POR FAVOR SELECCIONA UN DESTINATARIO.");
             return;
@@ -130,22 +127,21 @@ public class EnviarMensajeControlador {
     }
 
     private void ejecutarEnvio(Usuario destinatario, String contenido) {
+        MensajeDao mensajeDao = new MensajeDao();
+        BuzonDao buzonDao = new BuzonDao();
         try {
             Mensaje mensaje = new Mensaje(contenido);
             int idMensaje = mensajeDao.agregarMensaje(mensaje);
-
             int idRemitente = SesionUsuario.getInstance().getIdUsuario();
-
             Buzon buzonRemitente = new Buzon(RolMensaje.Remitente, idMensaje, idRemitente);
             buzonDao.agregarBuzon(buzonRemitente);
-
             Buzon buzonDestinatario = new Buzon(RolMensaje.destinatario, idMensaje, destinatario.getIdUsuario());
             buzonDao.agregarBuzon(buzonDestinatario);
-
             limpiar();
             mostrarExito("Mensaje enviado", "EL MENSAJE FUE ENVIADO EXITOSAMENTE.");
-        } catch (MensajeriaExcepcion e) {
-            mostrarError("Error al enviar", e.getMessage().toUpperCase());
+        } catch (MensajeriaExcepcion excepcion) {
+            LOGGER.log(Level.SEVERE, "Error al enviar mensaje", excepcion);
+            mostrarError("Error al enviar", excepcion.getMessage().toUpperCase());
         }
     }
 
@@ -157,8 +153,8 @@ public class EnviarMensajeControlador {
     }
 
     @FXML
-    private void botonRegresar(ActionEvent event) {
-        Stage escenario = (Stage) ((Node) event.getSource()).getScene().getWindow();
+    private void botonRegresar(ActionEvent evento) {
+        Stage escenario = (Stage) ((Node) evento.getSource()).getScene().getWindow();
         escenario.close();
     }
 
@@ -170,7 +166,7 @@ public class EnviarMensajeControlador {
         ButtonType botonSi = new ButtonType("Sí");
         ButtonType botonNo = new ButtonType("No");
         alerta.getButtonTypes().setAll(botonSi, botonNo);
-        return alerta.showAndWait().filter(r -> r == botonSi).isPresent();
+        return alerta.showAndWait().filter(botonPresionado -> botonPresionado == botonSi).isPresent();
     }
 
     private void limpiar() {

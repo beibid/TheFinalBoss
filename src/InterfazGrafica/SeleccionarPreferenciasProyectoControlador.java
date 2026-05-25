@@ -151,8 +151,8 @@ public class SeleccionarPreferenciasProyectoControlador {
 
     @FXML
     private void botonRegresar(ActionEvent event) {
-        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        stage.close();
+        Stage escenario = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        escenario.close();
     }
 
     private boolean confirmarAccion(String mensaje) {
@@ -160,10 +160,10 @@ public class SeleccionarPreferenciasProyectoControlador {
         alerta.setTitle("Confirmación");
         alerta.setHeaderText(mensaje);
         alerta.setContentText("");
-        ButtonType btnSi = new ButtonType("Sí");
-        ButtonType btnNo = new ButtonType("No");
-        alerta.getButtonTypes().setAll(btnSi, btnNo);
-        return alerta.showAndWait().filter(r -> r == btnSi).isPresent();
+        ButtonType botonSi = new ButtonType("Sí");
+        ButtonType botonNo = new ButtonType("No");
+        alerta.getButtonTypes().setAll(botonSi, botonNo);
+        return alerta.showAndWait().filter(botonPresionado -> botonPresionado == botonSi).isPresent();
     }
 
     private void mostrarError(String titulo, String mensaje) {

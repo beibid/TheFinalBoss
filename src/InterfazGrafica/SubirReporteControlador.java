@@ -51,8 +51,8 @@ public class SubirReporteControlador {
                 new FileChooser.ExtensionFilter("Archivos PDF", "*.pdf")
         );
 
-        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        File archivo = fileChooser.showOpenDialog(stage);
+        Stage escenario = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        File archivo = fileChooser.showOpenDialog(escenario);
 
         if (archivo != null) {
             archivoSeleccionado = archivo;

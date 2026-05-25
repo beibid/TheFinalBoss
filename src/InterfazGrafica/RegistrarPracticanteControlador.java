@@ -63,10 +63,10 @@ public class RegistrarPracticanteControlador {
         alerta.setTitle("Confirmación");
         alerta.setHeaderText(mensaje);
         alerta.setContentText("");
-        ButtonType btnSi = new ButtonType("Sí");
-        ButtonType btnNo = new ButtonType("No");
-        alerta.getButtonTypes().setAll(btnSi, btnNo);
-        return alerta.showAndWait().filter(r -> r == btnSi).isPresent();
+        ButtonType botonSi = new ButtonType("Sí");
+        ButtonType botonNo = new ButtonType("No");
+        alerta.getButtonTypes().setAll(botonSi, botonNo);
+        return alerta.showAndWait().filter(botonPresionado -> botonPresionado == botonSi).isPresent();
     }
 
     private void procesarRegistro() {

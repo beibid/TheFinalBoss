@@ -1,8 +1,10 @@
 package logica.dao.objetos;
 
+
 import acceso.bd.ConexionBaseDeDatos;
 import logica.dao.excepciones.UsuariosExcepcion;
 import logica.dominio.Profesor;
+import logica.dominio.Practicante;
 import logica.dao.interfaces.ProfesorDaoInterfaz;
 import logica.dominio.enums.Estado;
 import logica.dominio.enums.Turno;
@@ -15,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 
 public class ProfesorDao implements ProfesorDaoInterfaz {
 
@@ -113,7 +116,7 @@ public class ProfesorDao implements ProfesorDaoInterfaz {
         if (profesor.getNombre() == null) {
             throw new UsuariosExcepcion("El nombre del profesor no puede ser nulo");
         }
-        String consultaUsuario = "UPDATE usuario SET nombre = ?, apellidos = ?, contrasena = ?, estado = ? WHERE idUsuario = (SELECT idUsuario FROM profesor WHERE numPersonalProfesor = ?)";
+        String consultaUsuario = "UPDATE usuario SET nombre = ?, apellidos = ?, correo = ?, contrasena = ?, estado = ? WHERE idUsuario = (SELECT idUsuario FROM profesor WHERE numPersonalProfesor = ?)";
         String consultaProfesor = "UPDATE profesor SET turno = ? WHERE numPersonalProfesor = ?";
         Connection conexionBaseDeDatos = null;
         PreparedStatement actualizacionUsuario = null;
@@ -125,9 +128,10 @@ public class ProfesorDao implements ProfesorDaoInterfaz {
             actualizacionUsuario = conexionBaseDeDatos.prepareStatement(consultaUsuario);
             actualizacionUsuario.setString(1, profesor.getNombre());
             actualizacionUsuario.setString(2, profesor.getApellidos());
-            actualizacionUsuario.setString(3, profesor.getContrasena());
-            actualizacionUsuario.setString(4, profesor.getEstado().toString());
-            actualizacionUsuario.setString(5, numPersonalProfesor);
+            actualizacionUsuario.setString(3, profesor.getCorreo());
+            actualizacionUsuario.setString(4, profesor.getContrasena());
+            actualizacionUsuario.setString(5, profesor.getEstado().toString());
+            actualizacionUsuario.setString(6, numPersonalProfesor);
             actualizacionUsuario.executeUpdate();
 
             actualizacionProfesor = conexionBaseDeDatos.prepareStatement(consultaProfesor);
@@ -157,7 +161,7 @@ public class ProfesorDao implements ProfesorDaoInterfaz {
     }
 
     public List<Profesor> obtenerProfesoresActivos() throws UsuariosExcepcion {
-        String consulta = "SELECT u.idUsuario, u.nombre, u.apellidos, p.numPersonalProfesor, p.turno " +
+        String consulta = "SELECT u.idUsuario, u.nombre, u.apellidos, u.estado, p.numPersonalProfesor, p.turno " +
                 "FROM usuario u " +
                 "INNER JOIN profesor p ON u.idUsuario = p.idUsuario " +
                 "WHERE u.estado = 'Activo'";
@@ -176,6 +180,7 @@ public class ProfesorDao implements ProfesorDaoInterfaz {
                 profesor.setApellidos(resultado.getString("apellidos"));
                 profesor.setNumeroDePersonalProfesor(resultado.getString("numPersonalProfesor"));
                 profesor.setTurno(Turno.valueOf(resultado.getString("turno")));
+                profesor.setEstado(Estado.valueOf(resultado.getString("estado")));
                 profesores.add(profesor);
             }
         } catch (SQLException excepcionSQL) {
@@ -194,5 +199,46 @@ public class ProfesorDao implements ProfesorDaoInterfaz {
             }
         }
         return profesores;
+    }
+
+    public List<Practicante> obtenerPracticantesPorProfesor(String numPersonalProfesor) throws UsuariosExcepcion {
+        String consulta = "SELECT u.idUsuario, u.nombre, u.apellidos, p.matricula " +
+                "FROM practicante p " +
+                "INNER JOIN proyecto pr ON p.idProyecto = pr.idProyecto " +
+                "INNER JOIN usuario u ON p.idUsuario = u.idUsuario " +
+                "WHERE pr.numPersonalProfesor = ?";
+        Connection conexion = null;
+        PreparedStatement consultaProfesor = null;
+        List<Practicante> practicantes = new ArrayList<>();
+        try {
+            conexion = ConexionBaseDeDatos.getInstance().conectar();
+            consultaProfesor = conexion.prepareStatement(consulta);
+            consultaProfesor.setString(1, numPersonalProfesor);
+            ResultSet resultado = consultaProfesor.executeQuery();
+            while (resultado.next()) {
+                Practicante practicante = new Practicante();
+                practicante.setIdUsuario(resultado.getInt("idUsuario"));
+                practicante.setNombre(resultado.getString("nombre"));
+                practicante.setApellidos(resultado.getString("apellidos"));
+                practicante.setMatricula(resultado.getString("matricula"));
+                practicantes.add(practicante);
+            }
+            LOGGER.info("Practicantes obtenidos para profesor: " + numPersonalProfesor);
+        } catch (SQLException excepcion) {
+            LOGGER.log(Level.SEVERE, "Error al obtener practicantes", excepcion);
+            throw new UsuariosExcepcion("Error al obtener practicantes");
+        } finally {
+            try {
+                if (consultaProfesor != null) {
+                    consultaProfesor.close();
+                }
+                if (conexion != null) {
+                    conexion.close();
+                }
+            } catch (SQLException excepcion) {
+                LOGGER.log(Level.SEVERE, "Error al cerrar conexión", excepcion);
+            }
+        }
+        return practicantes;
     }
 }

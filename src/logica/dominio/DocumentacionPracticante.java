@@ -6,10 +6,12 @@ public class DocumentacionPracticante {
     private int idDocumentacionPracticante;
     private String rutaDeArchivo;
     private EstadoRevision estadoRevision;
+    private String motivoRechazado;
 
-    public DocumentacionPracticante(String rutaDeArchivo, EstadoRevision estadoRevision) {
+    public DocumentacionPracticante(String rutaDeArchivo, EstadoRevision estadoRevision, String motivoRechazado) {
         this.rutaDeArchivo = rutaDeArchivo;
         this.estadoRevision = estadoRevision;
+        this.motivoRechazado = motivoRechazado;
     }
 
     public int getIdDocumentacionPracticante() {
@@ -22,13 +24,22 @@ public class DocumentacionPracticante {
         return estadoRevision;
     }
 
+    public String getMotivoRechazado() {
+        return motivoRechazado;
+    }
+
     public void setIdDocumentacionPracticante(int idDocumentacionPracticante) {
         this.idDocumentacionPracticante = idDocumentacionPracticante;
     }
+
     public void setRutaDeArchivo(String rutaDeArchivo) {
         this.rutaDeArchivo = rutaDeArchivo;
     }
     public void setEstadoRevision(EstadoRevision estadoRevision) {
         this.estadoRevision = estadoRevision;
+    }
+
+    public void setMotivoRechazado(String motivoRechazado) {
+        this.motivoRechazado = motivoRechazado;
     }
 }
