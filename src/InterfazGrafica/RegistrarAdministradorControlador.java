@@ -75,6 +75,7 @@ public class RegistrarAdministradorControlador {
             if (campo.isEmpty()) {
                 hayCamposVacios = true;
             }
+            
         }
         return hayCamposVacios;
     }

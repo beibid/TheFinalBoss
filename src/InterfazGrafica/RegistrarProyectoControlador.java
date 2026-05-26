@@ -1,5 +1,6 @@
 package InterfazGrafica;
 
+
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -24,6 +25,7 @@ import logica.dominio.enums.EstadoProyecto;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.List;
+
 
 public class RegistrarProyectoControlador {
 
@@ -67,8 +69,7 @@ public class RegistrarProyectoControlador {
             List<Profesor> profesores = profesorDao.obtenerProfesoresActivos();
             comboBoxProfesor.setItems(FXCollections.observableArrayList(profesores));
         } catch (UsuariosExcepcion excepcion) {
-            mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
-                    "Error al cargar", "NO SE PUDIERON CARGAR LOS PRACTICANTES.");
+            mostrarError("Error al cargar", "NO SE PUDIERON CARGAR LOS PRACTICANTES.");
         }
     }
 
@@ -77,8 +78,7 @@ public class RegistrarProyectoControlador {
             List<Coordinador> coordinadores = coordinadorDao.obtenerCoordinadoresActivos();
             comboBoxCoordinador.setItems(FXCollections.observableArrayList(coordinadores));
         } catch (UsuariosExcepcion excepcion) {
-            mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
-                    "Error al cargar", "NO SE PUDIERON CARGAR LOS COORDINADORES.");
+            mostrarError("Error al cargar", "NO SE PUDIERON CARGAR LOS COORDINADORES.");
         }
     }
 
@@ -87,15 +87,14 @@ public class RegistrarProyectoControlador {
             List<OrganizacionVinculada> organizaciones = organizacionDao.obtenerOrganizacionesActivas();
             comboBoxOrganizacion.setItems(FXCollections.observableArrayList(organizaciones));
         } catch (UsuariosExcepcion excepcion) {
-            mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
-                    "Error al cargar", "NO SE PUDIERON CARGAR LAS ORGANIZACIONES.");
+            mostrarError("Error al cargar", "NO SE PUDIERON CARGAR LAS ORGANIZACIONES.");
         }
     }
 
     @FXML
     private void botonRegistrar() {
-        ocultarPanel(panelError);
-        ocultarPanel(panelExito);
+        ocultarError();
+        ocultarExito();
 
         String nombreProyecto = campoTextoNombreProyecto.getText().trim();
         String descripcion = campoTextoDescripcion.getText().trim();
@@ -106,28 +105,21 @@ public class RegistrarProyectoControlador {
 
         List<String> campos = List.of(nombreProyecto, descripcion, responsable, nombreEmpresa, sectorEmpresa,
                 direccionEmpresa);
-
-        boolean entradaValida = true;
-
         if (camposVacios(campos)) {
-            mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
-                    "Campos obligatorios vacíos", "POR FAVOR LLENA TODOS LOS CAMPOS.");
-            entradaValida = false;
-        } else if (comboBoxProfesor.getValue() == null || comboBoxCoordinador.getValue() == null
-                || comboBoxOrganizacion.getValue() == null) {
-            mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
-                    "Selección incompleta", "POR FAVOR SELECCIONA PRACTICANTE, COORDINADOR Y ORGANIZACIÓN.");
-            entradaValida = false;
+            mostrarError("Campos obligatorios vacíos", "POR FAVOR LLENA TODOS LOS CAMPOS.");
+            return;
         }
 
-        if (entradaValida) {
-            Proyecto proyecto = armarProyecto(nombreProyecto, descripcion, responsable, nombreEmpresa,
-                    sectorEmpresa, direccionEmpresa);
-            ejecutarRegistro(proyecto);
+        if (comboBoxProfesor.getValue() == null || comboBoxCoordinador.getValue() == null || comboBoxOrganizacion.getValue() == null) {
+            mostrarError("Selección incompleta", "POR FAVOR SELECCIONA PRACTICANTE, COORDINADOR Y ORGANIZACIÓN.");
+            return;
         }
+
+        Proyecto proyecto = armarProyecto(nombreProyecto, descripcion, responsable, nombreEmpresa, sectorEmpresa, direccionEmpresa);
+        ejecutarRegistro(proyecto);
     }
 
-    private boolean camposVacios(List<String> campos) {
+    private boolean camposVacios(List<String>campos) {
         boolean hayCamposVacios = false;
         for (String campo : campos) {
             if (campo.isEmpty()) {
@@ -137,8 +129,8 @@ public class RegistrarProyectoControlador {
         return hayCamposVacios;
     }
 
-    private Proyecto armarProyecto(String nombreProyecto, String descripcion, String responsable,
-                                   String nombreEmpresa, String sectorEmpresa, String direccionEmpresa) {
+    private Proyecto armarProyecto( String nombreProyecto, String descripcion, String responsable,
+                                    String nombreEmpresa, String sectorEmpresa, String direccionEmpresa) {
         Proyecto proyecto = new Proyecto();
         proyecto.setNombreProyecto(nombreProyecto);
         proyecto.setDescripcion(descripcion);
@@ -160,15 +152,12 @@ public class RegistrarProyectoControlador {
             int filasAfectadas = proyectoDao.agregarProyecto(proyecto);
             if (filasAfectadas >= FILAS_AFECTADAS_ESPERADAS) {
                 limpiar();
-                mostrarPanel(etiquetaTituloExito, etiquetaMensajeExito, panelExito,
-                        "Proyecto registrado", "EL PROYECTO FUE REGISTRADO EXITOSAMENTE.");
+                mostrarExito("Proyecto registrado", "EL PROYECTO FUE REGISTRADO EXITOSAMENTE.");
             } else {
-                mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
-                        "Error al registrar", "NO SE PUDO REGISTRAR EL PROYECTO.");
+                mostrarError("Error al registrar", "NO SE PUDO REGISTRAR EL PROYECTO.");
             }
         } catch (MensajeriaExcepcion excepcion) {
-            mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
-                    "Error inesperado", excepcion.getMessage().toUpperCase());
+            mostrarError("Error inesperado", excepcion.getMessage().toUpperCase());
         }
     }
 
@@ -178,8 +167,8 @@ public class RegistrarProyectoControlador {
     }
 
     @FXML
-    private void botonRegresar(ActionEvent evento) {
-        Stage escenario = (Stage) ((Node) evento.getSource()).getScene().getWindow();
+    private void botonRegresar(ActionEvent event) {
+        Stage escenario = (Stage) ((Node) event.getSource()).getScene().getWindow();
         escenario.close();
     }
 
@@ -193,19 +182,31 @@ public class RegistrarProyectoControlador {
         comboBoxProfesor.getSelectionModel().clearSelection();
         comboBoxCoordinador.getSelectionModel().clearSelection();
         comboBoxOrganizacion.getSelectionModel().clearSelection();
-        ocultarPanel(panelError);
-        ocultarPanel(panelExito);
+        ocultarError();
+        ocultarExito();
     }
 
-    private void mostrarPanel(Label etiquetaTitulo, Label etiquetaMensaje, VBox panel, String titulo, String mensaje) {
-        etiquetaTitulo.setText(titulo);
-        etiquetaMensaje.setText(mensaje);
-        panel.setVisible(true);
-        panel.setManaged(true);
+    private void mostrarError(String titulo, String mensaje) {
+        etiquetaTituloError.setText(titulo);
+        etiquetaMensajeError.setText(mensaje);
+        panelError.setVisible(true);
+        panelError.setManaged(true);
     }
 
-    private void ocultarPanel(VBox panel) {
-        panel.setVisible(false);
-        panel.setManaged(false);
+    private void ocultarError() {
+        panelError.setVisible(false);
+        panelError.setManaged(false);
+    }
+
+    private void mostrarExito(String titulo, String mensaje) {
+        etiquetaTituloExito.setText(titulo);
+        etiquetaMensajeExito.setText(mensaje);
+        panelExito.setVisible(true);
+        panelExito.setManaged(true);
+    }
+
+    private void ocultarExito() {
+        panelExito.setVisible(false);
+        panelExito.setManaged(false);
     }
 }

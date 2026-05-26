@@ -76,6 +76,7 @@ public class ReporteDao implements ReporteDaoInterfaz {
                 Reporte reporte = new Reporte(
                         TipoReporte.valueOf(resultado.getString("tipoReporte")),
                         resultado.getString("descripcion"),
+                        resultado.getString("actividades"),
                         matricula, null, null
                 );
                 reporte.setIdReporte(resultado.getInt("idReporte"));

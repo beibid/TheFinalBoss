@@ -7,6 +7,7 @@ import com.itextpdf.layout.Document;
 import com.itextpdf.layout.element.Paragraph;
 import com.itextpdf.layout.element.Table;
 import com.itextpdf.layout.element.Cell;
+import com.itextpdf.layout.element.Text;
 import com.itextpdf.layout.properties.TextAlignment;
 import com.itextpdf.layout.properties.UnitValue;
 import com.itextpdf.kernel.colors.ColorConstants;
@@ -41,6 +42,7 @@ public class GeneradorPdfReporte {
             agregarEncabezado(documento, fontNormal, fontBold);
             agregarDatosPracticante(documento, reporte, nombrePracticante, nombreProyecto, nombreOrganizacion, fontNormal, fontBold);
             agregarDescripcion(documento, reporte, fontNormal, fontBold);
+            agregarActividades(documento, reporte, fontNormal, fontBold);
             agregarPie(documento, fontNormal);
             documento.close();
 
@@ -103,13 +105,34 @@ public class GeneradorPdfReporte {
     }
 
     private void agregarDescripcion(Document documento, Reporte reporte, PdfFont fontNormal, PdfFont fontBold) throws IOException {
-        documento.add(new Paragraph("DESCRIPCIÓN")
+        documento.add(new Paragraph("DESCRIPCIÓN").setFont(fontBold).setFontSize(12));
+        documento.add(new Paragraph(reporte.getDescripcion() != null ? reporte.getDescripcion() : "")
+                .setFont(fontNormal).setFontSize(11).setTextAlignment(TextAlignment.JUSTIFIED));
+        documento.add(new Paragraph(" "));
+    }
+
+    private void agregarActividades(Document documento, Reporte reporte, PdfFont fontNormal, PdfFont fontBold) throws IOException {
+        documento.add(new Paragraph("ACTIVIDADES REALIZADAS")
                 .setFont(fontBold)
                 .setFontSize(12));
-        documento.add(new Paragraph(reporte.getDescripcion() != null ? reporte.getDescripcion() : "")
-                .setFont(fontNormal)
-                .setFontSize(11)
-                .setTextAlignment(TextAlignment.JUSTIFIED));
+
+        Table tabla = new Table(UnitValue.createPercentArray(new float[]{20, 80}));
+        tabla.setWidth(UnitValue.createPercentValue(100));
+
+        String[] actividades = reporte.getActividades().split("\n");
+        for (String actividad : actividades) {
+            String[] partes = actividad.split(": ", 2);
+            String semana = partes.length > 0 ? partes[0] : "";
+            String descripcion = partes.length > 1 ? partes[1] : "";
+            tabla.addCell(new Cell()
+                    .add(new Paragraph(semana).setFont(fontBold))
+                    .setBorder(Border.NO_BORDER)
+                    .setBackgroundColor(ColorConstants.LIGHT_GRAY));
+            tabla.addCell(new Cell()
+                    .add(new Paragraph(descripcion).setFont(fontNormal))
+                    .setBorder(Border.NO_BORDER));
+        }
+        documento.add(tabla);
         documento.add(new Paragraph(" "));
     }
 

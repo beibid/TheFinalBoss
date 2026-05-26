@@ -94,6 +94,16 @@ public class RegistrarPracticanteControlador {
         return hayCamposVacios;
     }
 
+    private Genero obtenerGeneroPracticante () {
+        Genero generoSeleccionado = null;
+        if (radioBotonMasculino.isSelected()){
+            generoSeleccionado = Genero.Masculino;
+        } else if (radioBotonFemenino.isSelected()){
+            generoSeleccionado = Genero.Femenino;
+        }
+        return generoSeleccionado;
+    }
+
     private boolean camposValidos() {
         String nombre = campoTextoNombres.getText().trim();
         String apellidos = campoTextoApellidos.getText().trim();
@@ -102,20 +112,27 @@ public class RegistrarPracticanteControlador {
 
         List<String> campos = List.of(nombre, apellidos, correo, matricula);
         boolean camposFormularioValido = !camposVacios(campos);
+        boolean generoValido = grupoGenero.getSelectedToggle() != null;
 
         if (!camposFormularioValido) {
             mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
                     "Campos obligatorios vacios", "POR FAVOR LLENE TODOS LOS CAMPOS");
         }
-        return camposFormularioValido;
+        if (!generoValido){
+            mostrarPanel(etiquetaTituloError,etiquetaMensajeError, panelError,
+                    "Genero no seleccionado", "Seleccione un genero para el practicante");
+        }
+
+        return camposFormularioValido && generoValido;
     }
 
     private Practicante construirPracticante() {
         String nombre = campoTextoNombres.getText().trim();
         String apellidos = campoTextoApellidos.getText().trim();
         String matricula = campoTextoMatricula.getText().trim();
+        String correo = campoTextoCorreo.getText().trim();
         String lenguaIndigena = campoTextoLenguaIndigena.getText().trim();
-        Genero genero = radioBotonMasculino.isSelected() ? Genero.Masculino : Genero.Femenino;
+        Genero genero = obtenerGeneroPracticante();
         String contrasena = generarContrasena(nombre, matricula);
 
         Practicante practicante = new Practicante();
@@ -123,6 +140,7 @@ public class RegistrarPracticanteControlador {
         practicante.setApellidos(limitarTexto(apellidos, 50));
         practicante.setGenero(genero);
         practicante.setMatricula(limitarTexto(matricula, 12));
+        practicante.setCorreo(limitarTexto(correo, 100));
         practicante.setLenguaIndigena(limitarTexto(lenguaIndigena, 50));
         practicante.setContrasena(limitarTexto(contrasena, 12));
         practicante.setEstado(Estado.Activo);

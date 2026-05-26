@@ -11,6 +11,7 @@ public class Reporte {
     private TipoReporte tipoReporte;
     private int idReporte;
     private String descripcion;
+    private String actividades;
     private Date fechaGeneracion;
     private Double calificacion;
     private String observaciones;
@@ -20,13 +21,14 @@ public class Reporte {
     private String archivoAdjunto;
     private String nombreArchivo;
 
-    public Reporte (TipoReporte tipoReporte, String descripcion, Date fechaGeneracion,
-                    Double calificacion, String observaciones,
-                    EstadoDeCalificacion estadoDeCalificacion, String matriculaPracticante,
-                    String numPersonalProfesor, String archivoAdjunto, String nombreArchivo){
+    public Reporte (TipoReporte tipoReporte, String descripcion, String actividades, Date fechaGeneracion,
+                    Double calificacion, String observaciones, EstadoDeCalificacion estadoDeCalificacion,
+                    String matriculaPracticante, String numPersonalProfesor,
+                    String archivoAdjunto, String nombreArchivo){
 
         this.tipoReporte = tipoReporte;
         this.descripcion = descripcion;
+        this.actividades = actividades;
         this.fechaGeneracion = fechaGeneracion;
         this.calificacion = calificacion;
         this.observaciones = observaciones;
@@ -38,9 +40,10 @@ public class Reporte {
 
     }
 
-    public Reporte(TipoReporte tipoReporte, String descripcion, String matriculaPracticante, String archivoAdjunto, String nombreArchivo) {
+    public Reporte(TipoReporte tipoReporte, String descripcion, String actividades, String matriculaPracticante, String archivoAdjunto, String nombreArchivo) {
         this.tipoReporte = tipoReporte;
         this.descripcion = descripcion;
+        this.actividades = actividades;
         this.matriculaPracticante = matriculaPracticante;
         this.archivoAdjunto = archivoAdjunto;
         this.nombreArchivo = nombreArchivo;
@@ -52,6 +55,10 @@ public class Reporte {
 
     public String getDescripcion() {
         return descripcion;
+    }
+
+    public String getActividades() {
+        return actividades;
     }
 
     public Date getFechaGeneracion() {
@@ -92,6 +99,10 @@ public class Reporte {
 
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
+    }
+
+    public void setActividades(String actividades) {
+        this.actividades = actividades;
     }
 
     public void setFechaGeneracion(Date fechaGeneracion) {

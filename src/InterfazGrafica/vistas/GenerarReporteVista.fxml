@@ -73,10 +73,20 @@
                                   promptText="-- Selecciona el tipo --"/>
 
                         <Label text="Descripción" style="-fx-font-size: 13;"/>
-                        <TextArea fx:id="areaDescripcion" prefHeight="120.0" prefWidth="500.0"
+                        <TextArea fx:id="textoAreaDescripcion" prefHeight="120.0" prefWidth="500.0"
                                   promptText="Escribe una descripción del reporte..." wrapText="true"/>
 
+                        <Label text="Actividades por semana" style="-fx-font-size: 13;"/>
+                        <Label text="Semana 1" style="-fx-font-size: 11;"/>
+                        <TextArea fx:id="textoAreaActividadesSemanaUno" prefHeight="60.0" prefWidth="500.0" wrapText="true"/>
+                        <Label text="Semana 2" style="-fx-font-size: 11;"/>
+                        <TextArea fx:id="textoAreaActividadesSemanaDos" prefHeight="60.0" prefWidth="500.0" wrapText="true"/>
+                        <Label text="Semana 3" style="-fx-font-size: 11;"/>
+                        <TextArea fx:id="textoAreaActividadesSemanaTres" prefHeight="60.0" prefWidth="500.0" wrapText="true"/>
+                        <Label text="Semana 4" style="-fx-font-size: 11;"/>
+                        <TextArea fx:id="textoAreaActividadesSemanaCuatro" prefHeight="60.0" prefWidth="500.0" wrapText="true"/>
                         <HBox spacing="15.0">
+
                             <VBox.margin><Insets top="10.0"/></VBox.margin>
                             <Button fx:id="botonGenerar" onAction="#botonGenerar"
                                     prefHeight="35.0" prefWidth="140.0" text="Generar PDF"

@@ -43,7 +43,7 @@
                 <ComboBox fx:id="comboBoxTipoReporte" prefWidth="500.0" promptText="-- Selecciona el tipo --" />
 
                 <Label style="-fx-font-size: 13;" text="Descripción" />
-                <TextField fx:id="campoDescripcion" prefHeight="30.0" prefWidth="500.0" promptText="Describe el reporte" />
+                <TextField fx:id="campoTextoDescripcion" prefHeight="30.0" prefWidth="500.0" promptText="Describe el reporte" />
 
                 <!-- Sección PDF -->
                 <Label style="-fx-font-size: 13;" text="Archivo PDF del reporte" />
