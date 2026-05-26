@@ -1,6 +1,5 @@
 package InterfazGrafica;
 
-
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -10,15 +9,20 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListCell;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import logica.dao.excepciones.UsuariosExcepcion;
 import logica.dao.objetos.CoordinadorDao;
 import logica.dominio.Coordinador;
 import java.util.List;
-
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class InactivarCoordinadorControlador {
+
+    private static final Logger LOGGER = Logger.getLogger(InactivarCoordinadorControlador.class.getName());
+    private static final int FILAS_AFECTADAS_ESPERADAS = 1;
 
     @FXML private ComboBox<Coordinador> comboBoxCoordinadores;
     @FXML private VBox panelDatos;
@@ -33,6 +37,7 @@ public class InactivarCoordinadorControlador {
     @FXML private Label etiquetaNumeroPersonal;
 
     private CoordinadorDao coordinadorDao = new CoordinadorDao();
+    private Coordinador coordinadorSeleccionado;
 
     @FXML
     public void initialize() {
@@ -42,66 +47,84 @@ public class InactivarCoordinadorControlador {
     private void cargarCoordinadoresActivos() {
         try {
             List<Coordinador> coordinadores = coordinadorDao.obtenerCoordinadoresActivos();
-            ObservableList<Coordinador> lista = FXCollections.observableArrayList(coordinadores);
-            comboBoxCoordinadores.setItems(lista);
-        } catch (UsuariosExcepcion e) {
+            ObservableList<Coordinador> coordinadoresObservable = FXCollections.observableArrayList(coordinadores);
+            comboBoxCoordinadores.setItems(coordinadoresObservable);
+            comboBoxCoordinadores.setCellFactory(listaCoordinadores -> crearCeldaCoordinador());
+            comboBoxCoordinadores.setButtonCell(crearCeldaCoordinador());
+        } catch (UsuariosExcepcion excepcion) {
+            LOGGER.log(Level.SEVERE, "Error al cargar coordinadores", excepcion);
             mostrarError("Error al cargar", "NO SE PUDIERON CARGAR LOS COORDINADORES.");
         }
     }
 
+    private ListCell<Coordinador> crearCeldaCoordinador() {
+        return new ListCell<Coordinador>() {
+            @Override
+            protected void updateItem(Coordinador coordinador, boolean vacio) {
+                super.updateItem(coordinador, vacio);
+                if (vacio || coordinador == null) {
+                    setText("-- Selecciona un coordinador --");
+                } else {
+                    setText(coordinador.getNombre() + " " + coordinador.getApellidos());
+                }
+            }
+        };
+    }
+
     @FXML
     private void seleccionarCoordinador() {
-        Coordinador coordinador = comboBoxCoordinadores.getSelectionModel().getSelectedItem();
-        if (coordinador != null) {
-            etiquetaNombre.setText(coordinador.getNombre());
-            etiquetaApellidos.setText(coordinador.getApellidos());
-            etiquetaNumeroPersonal.setText(coordinador.getNumeroDePersonalCoordinador());
-            panelDatos.setVisible(true);
-            panelDatos.setManaged(true);
+        coordinadorSeleccionado = comboBoxCoordinadores.getValue();
+        if (coordinadorSeleccionado != null) {
+            ocultarPaneles();
+            mostrarDatosCoordinador(coordinadorSeleccionado);
         }
+    }
+
+    private void mostrarDatosCoordinador(Coordinador coordinador) {
+        etiquetaNombre.setText(coordinador.getNombre());
+        etiquetaApellidos.setText(coordinador.getApellidos());
+        etiquetaNumeroPersonal.setText(coordinador.getNumeroDePersonalCoordinador());
+        panelDatos.setVisible(true);
+        panelDatos.setManaged(true);
     }
 
     @FXML
     private void botonInactivar() {
-        Coordinador coordinador = comboBoxCoordinadores.getSelectionModel().getSelectedItem();
-        if (coordinador == null) {
+        if (coordinadorSeleccionado == null) {
             mostrarError("Sin selección", "POR FAVOR SELECCIONA UN COORDINADOR.");
-            return;
+        } else if (confirmarAccion("¿Seguro que desea inactivar a este coordinador?")) {
+            ejecutarInactivacion(coordinadorSeleccionado);
         }
-        if (!confirmarAccion("¿Seguro que desea inactivar a este coordinador?")) {
-            return;
-        }
-        ejecutarInactivacion(coordinador);
     }
 
     private void ejecutarInactivacion(Coordinador coordinador) {
         try {
             int filasAfectadas = coordinadorDao.inactivarCoordinador(coordinador.getNumeroDePersonalCoordinador());
-            if (filasAfectadas > 0) {
-                limpiarSeleccion();
-                mostrarExito("Coordinador inactivado", "EL COORDINADOR FUE INACTIVADO EXITOSAMENTE.");
+            if (filasAfectadas >= FILAS_AFECTADAS_ESPERADAS) {
+                limpiar();
                 cargarCoordinadoresActivos();
+                mostrarExito("Coordinador inactivado", "EL COORDINADOR FUE INACTIVADO EXITOSAMENTE.");
             } else {
                 mostrarError("Error", "NO SE PUDO INACTIVAR AL COORDINADOR.");
             }
-        } catch (UsuariosExcepcion e) {
-            mostrarError("Error inesperado", e.getMessage().toUpperCase());
+        } catch (UsuariosExcepcion excepcion) {
+            LOGGER.log(Level.SEVERE, "Error al inactivar coordinador", excepcion);
+            mostrarError("Error inesperado", excepcion.getMessage().toUpperCase());
         }
     }
 
     @FXML
     private void botonCancelar() {
-        if (confirmarAccion("¿Seguro que desea cancelar?")){
-            limpiarSeleccion();
+        if (confirmarAccion("¿Seguro que desea cancelar?")) {
+            limpiar();
         }
     }
 
     @FXML
-    private void botonRegresar(ActionEvent event) {
-        Stage escenario = (Stage) ((Node) event.getSource()).getScene().getWindow();
+    private void botonRegresar(ActionEvent evento) {
+        Stage escenario = (Stage) ((Node) evento.getSource()).getScene().getWindow();
         escenario.close();
     }
-
 
     private boolean confirmarAccion(String mensaje) {
         Alert alerta = new Alert(Alert.AlertType.CONFIRMATION);
@@ -114,36 +137,40 @@ public class InactivarCoordinadorControlador {
         return alerta.showAndWait().filter(botonPresionado -> botonPresionado == botonSi).isPresent();
     }
 
-    private void limpiarSeleccion() {
-        comboBoxCoordinadores.getSelectionModel().clearSelection();
+    private void limpiar() {
+        comboBoxCoordinadores.setValue(null);
+        coordinadorSeleccionado = null;
         panelDatos.setVisible(false);
         panelDatos.setManaged(false);
-        ocultarError();
-        ocultarExito();
+        ocultarPanel(panelError);
+        ocultarPanel(panelExito);
+    }
+
+    private void ocultarPaneles() {
+        ocultarPanel(panelError);
+        ocultarPanel(panelExito);
+    }
+
+    private void mostrarPanel(VBox panel, Label etiquetaTitulo, Label etiquetaMensaje,
+                              String titulo, String mensaje) {
+        etiquetaTitulo.setText(titulo);
+        etiquetaMensaje.setText(mensaje);
+        panel.setVisible(true);
+        panel.setManaged(true);
+    }
+
+    private void ocultarPanel(VBox panel) {
+        panel.setVisible(false);
+        panel.setManaged(false);
     }
 
     private void mostrarError(String titulo, String mensaje) {
-        etiquetaTituloError.setText(titulo);
-        etiquetaMensajeError.setText(mensaje);
-        panelError.setVisible(true);
-        panelError.setManaged(true);
-    }
-
-    private void ocultarError() {
-        panelError.setVisible(false);
-        panelError.setManaged(false);
+        ocultarPanel(panelExito);
+        mostrarPanel(panelError, etiquetaTituloError, etiquetaMensajeError, titulo, mensaje);
     }
 
     private void mostrarExito(String titulo, String mensaje) {
-        etiquetaTituloExito.setText(titulo);
-        etiquetaMensajeExito.setText(mensaje);
-        panelExito.setVisible(true);
-        panelExito.setManaged(true);
+        ocultarPanel(panelError);
+        mostrarPanel(panelExito, etiquetaTituloExito, etiquetaMensajeExito, titulo, mensaje);
     }
-
-    private void ocultarExito() {
-        panelExito.setVisible(false);
-        panelExito.setManaged(false);
-    }
-
 }

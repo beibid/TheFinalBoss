@@ -1,6 +1,5 @@
 package InterfazGrafica;
 
-
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -21,14 +20,13 @@ import logica.dominio.SesionUsuario;
 import java.util.ArrayList;
 import java.util.List;
 
-
 public class SeleccionarPreferenciasProyectoControlador {
 
     @FXML private ComboBox<Proyecto> comboBoxPrimerPrioridad;
     @FXML private ComboBox<Proyecto> comboBoxSegundaPrioridad;
     @FXML private ComboBox<Proyecto> comboBoxTerceraPrioridad;
     @FXML private VBox panelError;
-    @FXML private VBox  panelExito;
+    @FXML private VBox panelExito;
     @FXML private Label etiquetaTituloError;
     @FXML private Label etiquetaMensajeError;
     @FXML private Label etiquetaTituloExito;
@@ -45,6 +43,7 @@ public class SeleccionarPreferenciasProyectoControlador {
         cargarProyectos();
         cargarPreferenciasGuardadas();
     }
+
     private void cargarProyectos() {
         try {
             todosLosProyectos = proyectoDao.obtenerProyectosDisponibles();
@@ -52,7 +51,8 @@ public class SeleccionarPreferenciasProyectoControlador {
             comboBoxSegundaPrioridad.setItems(FXCollections.observableArrayList(todosLosProyectos));
             comboBoxTerceraPrioridad.setItems(FXCollections.observableArrayList(todosLosProyectos));
         } catch (MensajeriaExcepcion e) {
-            mostrarError("Error al cargar", "NO SE PUDIERON CARGAR LOS PROYECTOS DISPONIBLES.");
+            mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
+                    "Error al cargar", "NO SE PUDIERON CARGAR LOS PROYECTOS DISPONIBLES.");
         }
     }
 
@@ -77,7 +77,8 @@ public class SeleccionarPreferenciasProyectoControlador {
                 }
             }
         } catch (UsuariosExcepcion e) {
-            mostrarError("Error al cargar", "NO SE PUDIERON CARGAR TUS PREFERENCIAS ANTERIORES.");
+            mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
+                    "Error al cargar", "NO SE PUDIERON CARGAR TUS PREFERENCIAS ANTERIORES.");
         }
     }
 
@@ -91,11 +92,10 @@ public class SeleccionarPreferenciasProyectoControlador {
         return proyectoEncontrado;
     }
 
-
     @FXML
     private void validarSeleccion() {
-        ocultarError();
-        ocultarExito();
+        ocultarPanel(panelError);
+        ocultarPanel(panelExito);
     }
 
     @FXML
@@ -104,45 +104,51 @@ public class SeleccionarPreferenciasProyectoControlador {
         Proyecto segundaPrioridad = comboBoxSegundaPrioridad.getSelectionModel().getSelectedItem();
         Proyecto terceraPrioridad = comboBoxTerceraPrioridad.getSelectionModel().getSelectedItem();
 
+        boolean entradaValida = true;
+
         if (primerPrioridad == null) {
-            mostrarError("Campo obligatorio", "DEBES SELECCIONAR AL MENOS TU PRIMERA PRIORIDAD.");
-            return;
+            mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
+                    "Campo obligatorio", "DEBES SELECCIONAR AL MENOS TU PRIMERA PRIORIDAD.");
+            entradaValida = false;
+        } else if (hayRepetidos(primerPrioridad, segundaPrioridad, terceraPrioridad)) {
+            mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
+                    "Selección inválida", "NO PUEDES SELECCIONAR EL MISMO PROYECTO EN DOS PRIORIDADES.");
+            entradaValida = false;
+        } else if (!confirmarAccion("¿Deseas guardar tus preferencias de proyectos?")) {
+            entradaValida = false;
         }
 
-        if (hayRepetidos(primerPrioridad, segundaPrioridad, terceraPrioridad)) {
-            mostrarError("Selección inválida", "NO PUEDES SELECCIONAR EL MISMO PROYECTO EN DOS PRIORIDADES.");
-            return;
+        if (entradaValida) {
+            guardarPreferencias(primerPrioridad, segundaPrioridad, terceraPrioridad);
         }
-
-        if (!confirmarAccion("¿Deseas guardar tus preferencias de proyectos?")) return;
-
-        guardarPreferencias(primerPrioridad, segundaPrioridad, terceraPrioridad);
     }
 
     private boolean hayRepetidos(Proyecto primerProyecto, Proyecto segundoProyecto, Proyecto tercerProyecto) {
-        if (segundoProyecto != null && primerProyecto.getIdProyecto() == segundoProyecto.getIdProyecto()){
-            return true;
-        }
-        if (tercerProyecto != null && primerProyecto.getIdProyecto() == tercerProyecto.getIdProyecto()){
-            return true;
-        }
-        if (segundoProyecto != null && tercerProyecto != null && segundoProyecto.getIdProyecto() == tercerProyecto.getIdProyecto()){
-            return true;
-        }
-        return false;
+        boolean primerYSegundoIguales = segundoProyecto != null &&
+                primerProyecto.getIdProyecto() == segundoProyecto.getIdProyecto();
+        boolean primerYTerceroIguales = tercerProyecto != null &&
+                primerProyecto.getIdProyecto() == tercerProyecto.getIdProyecto();
+        boolean segundoYTerceroIguales = segundoProyecto != null && tercerProyecto != null &&
+                segundoProyecto.getIdProyecto() == tercerProyecto.getIdProyecto();
+        return primerYSegundoIguales || primerYTerceroIguales || segundoYTerceroIguales;
     }
 
     private void guardarPreferencias(Proyecto primerProyecto, Proyecto segundoProyecto, Proyecto tercerProyecto) {
         try {
             List<Integer> idOrdenados = new ArrayList<>();
             idOrdenados.add(primerProyecto.getIdProyecto());
-            if (segundoProyecto != null) idOrdenados.add(segundoProyecto.getIdProyecto());
-            if (tercerProyecto != null) idOrdenados.add(tercerProyecto.getIdProyecto());
-
+            if (segundoProyecto != null) {
+                idOrdenados.add(segundoProyecto.getIdProyecto());
+            }
+            if (tercerProyecto != null) {
+                idOrdenados.add(tercerProyecto.getIdProyecto());
+            }
             preferenciaDao.guardarPreferencias(matriculaPracticante, idOrdenados);
-            mostrarExito("Guardado exitoso", "TUS PREFERENCIAS FUERON GUARDADAS CORRECTAMENTE.");
+            mostrarPanel(etiquetaTituloExito, etiquetaMensajeExito, panelExito,
+                    "Guardado exitoso", "TUS PREFERENCIAS FUERON GUARDADAS CORRECTAMENTE.");
         } catch (UsuariosExcepcion e) {
-            mostrarError("Error al guardar", "NO SE PUDIERON GUARDAR TUS PREFERENCIAS.");
+            mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
+                    "Error al guardar", "NO SE PUDIERON GUARDAR TUS PREFERENCIAS.");
         }
     }
 
@@ -154,8 +160,8 @@ public class SeleccionarPreferenciasProyectoControlador {
         comboBoxPrimerPrioridad.getSelectionModel().clearSelection();
         comboBoxSegundaPrioridad.getSelectionModel().clearSelection();
         comboBoxTerceraPrioridad.getSelectionModel().clearSelection();
-        ocultarError();
-        ocultarExito();
+        ocultarPanel(panelError);
+        ocultarPanel(panelExito);
     }
 
     @FXML
@@ -175,30 +181,15 @@ public class SeleccionarPreferenciasProyectoControlador {
         return alerta.showAndWait().filter(botonPresionado -> botonPresionado == botonSi).isPresent();
     }
 
-    private void mostrarError(String titulo, String mensaje) {
-        etiquetaTituloError.setText(titulo);
-        etiquetaMensajeError.setText(mensaje);
-        panelError.setVisible(true);
-        panelError.setManaged(true);
-        ocultarExito();
+    private void mostrarPanel(Label etiquetaTitulo, Label etiquetaMensaje, VBox panel, String titulo, String mensaje) {
+        etiquetaTitulo.setText(titulo);
+        etiquetaMensaje.setText(mensaje);
+        panel.setVisible(true);
+        panel.setManaged(true);
     }
 
-    private void ocultarError() {
-        panelError.setVisible(false);
-        panelError.setManaged(false);
-    }
-
-    private void mostrarExito(String titulo, String mensaje) {
-        etiquetaTituloExito.setText(titulo);
-        etiquetaMensajeExito.setText(mensaje);
-        panelExito.setVisible(true);
-        panelExito.setManaged(true);
-        ocultarError();
-    }
-
-    private void ocultarExito() {
-        panelExito.setVisible(false);
-        panelExito.setManaged(false);
+    private void ocultarPanel(VBox panel) {
+        panel.setVisible(false);
+        panel.setManaged(false);
     }
 }
-

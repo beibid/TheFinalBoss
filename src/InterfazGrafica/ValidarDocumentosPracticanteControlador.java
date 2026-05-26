@@ -1,6 +1,5 @@
 package InterfazGrafica;
 
-
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -24,7 +23,6 @@ import logica.dominio.enums.EstadoRevision;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
 
 public class ValidarDocumentosPracticanteControlador {
 
@@ -60,31 +58,11 @@ public class ValidarDocumentosPracticanteControlador {
             List<Practicante> practicantes = profesorDao.obtenerPracticantesPorProfesor(numPersonalProfesor);
             ObservableList<Practicante> lista = FXCollections.observableArrayList(practicantes);
             comboBoxPracticantes.setItems(lista);
-            comboBoxPracticantes.setCellFactory(l -> new ListCell<Practicante>() {
-                @Override
-                protected void updateItem(Practicante practicante, boolean vacio) {
-                    super.updateItem(practicante, vacio);
-                    if (vacio || practicante == null) {
-                        setText(null);
-                    } else {
-                        setText(practicante.getNombre() + " " + practicante.getApellidos() + " - " + practicante.getMatricula());
-                    }
-                }
-            });
-            comboBoxPracticantes.setButtonCell(new ListCell<Practicante>() {
-                @Override
-                protected void updateItem(Practicante practicante, boolean vacio) {
-                    super.updateItem(practicante, vacio);
-                    if (vacio || practicante == null) {
-                        setText("-- Selecciona un practicante --");
-                    } else {
-                        setText(practicante.getNombre() + " " + practicante.getApellidos());
-                    }
-                }
-            });
+            comboBoxPracticantes.setCellFactory(l -> crearCeldaPracticante(false));
+            comboBoxPracticantes.setButtonCell(crearCeldaPracticante(true));
         } catch (UsuariosExcepcion excepcion) {
             LOGGER.log(Level.SEVERE, "Error al cargar practicantes", excepcion);
-            mostrarError("Error al cargar", excepcion.getMessage());
+            mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError, "Error al cargar", excepcion.getMessage());
         }
     }
 
@@ -103,38 +81,19 @@ public class ValidarDocumentosPracticanteControlador {
         try {
             List<DocumentacionPracticante> documentos = documentacionDao.obtenerDocumentosPendientes(matricula);
             if (documentos.isEmpty()) {
-                mostrarError("Sin documentos", "El practicante no tiene documentos pendientes de validación.");
+                mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError, "Sin documentos",
+                        "El practicante no tiene documentos pendientes de validación.");
                 return;
             }
             ObservableList<DocumentacionPracticante> lista = FXCollections.observableArrayList(documentos);
             comboBoxDocumentos.setItems(lista);
-            comboBoxDocumentos.setCellFactory(l -> new ListCell<DocumentacionPracticante>() {
-                @Override
-                protected void updateItem(DocumentacionPracticante doc, boolean vacio) {
-                    super.updateItem(doc, vacio);
-                    if (vacio || doc == null) {
-                        setText(null);
-                    } else {
-                        setText("Documento #" + doc.getIdDocumentacionPracticante());
-                    }
-                }
-            });
-            comboBoxDocumentos.setButtonCell(new ListCell<DocumentacionPracticante>() {
-                @Override
-                protected void updateItem(DocumentacionPracticante doc, boolean vacio) {
-                    super.updateItem(doc, vacio);
-                    if (vacio || doc == null) {
-                        setText("-- Selecciona un documento --");
-                    } else {
-                        setText("Documento #" + doc.getIdDocumentacionPracticante());
-                    }
-                }
-            });
+            comboBoxDocumentos.setCellFactory(l -> crearCeldaDocumento(false));
+            comboBoxDocumentos.setButtonCell(crearCeldaDocumento(true));
             panelDocumentos.setVisible(true);
             panelDocumentos.setManaged(true);
         } catch (UsuariosExcepcion excepcion) {
             LOGGER.log(Level.SEVERE, "Error al cargar documentos", excepcion);
-            mostrarError("Error al cargar", excepcion.getMessage());
+            mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError, "Error al cargar", excepcion.getMessage());
         }
     }
 
@@ -154,7 +113,7 @@ public class ValidarDocumentosPracticanteControlador {
 
     @FXML
     private void botonAprobar() {
-        ocultarError();
+        ocultarPanel(panelError);
         if (confirmarAccion("¿Desea aprobar este documento?")) {
             procesarValidacion(EstadoRevision.Aprobado, null);
         }
@@ -162,11 +121,12 @@ public class ValidarDocumentosPracticanteControlador {
 
     @FXML
     private void botonRechazar() {
-        ocultarError();
+        ocultarPanel(panelError);
         panelMotivoRechazo.setVisible(true);
         panelMotivoRechazo.setManaged(true);
         if (!motivoValido()) {
-            mostrarError("Motivo requerido", "Debes ingresar el motivo del rechazo.");
+            mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError, "Motivo requerido",
+                    "Debes ingresar el motivo del rechazo.");
             return;
         }
         if (confirmarAccion("¿Desea rechazar este documento?")) {
@@ -185,15 +145,16 @@ public class ValidarDocumentosPracticanteControlador {
                     documentoSeleccionado.getIdDocumentacionPracticante(), estado, motivo);
             if (filasAfectadas >= FILAS_AFECTADAS_ESPERADAS) {
                 limpiarTodo();
-                mostrarExito("Documento validado",
+                mostrarPanel(etiquetaTituloExito, etiquetaMensajeExito, panelExito, "Documento validado",
                         "El documento fue " + estado.name().toLowerCase() + " exitosamente.");
             } else {
-                mostrarError("Error al validar",
+                mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError, "Error al validar",
                         "No se pudo validar el documento. Intente de nuevo.");
             }
         } catch (UsuariosExcepcion excepcion) {
             LOGGER.log(Level.SEVERE, "Error al validar documento", excepcion);
-            mostrarError("Error inesperado", excepcion.getMessage().toUpperCase());
+            mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError, "Error inesperado",
+                    excepcion.getMessage().toUpperCase());
         }
     }
 
@@ -216,8 +177,8 @@ public class ValidarDocumentosPracticanteControlador {
         areaMotivoRechazo.clear();
         documentoSeleccionado = null;
         ocultarPaneles();
-        ocultarError();
-        ocultarExito();
+        ocultarPanel(panelError);
+        ocultarPanel(panelExito);
     }
 
     private boolean confirmarAccion(String mensaje) {
@@ -240,32 +201,45 @@ public class ValidarDocumentosPracticanteControlador {
         panelMotivoRechazo.setManaged(false);
     }
 
-    private void mostrarError(String titulo, String mensaje) {
-        etiquetaTituloError.setText(titulo);
-        etiquetaMensajeError.setText(mensaje);
-        panelError.setVisible(true);
-        panelError.setManaged(true);
+    private ListCell<Practicante> crearCeldaPracticante(boolean esBoton) {
+        return new ListCell<Practicante>() {
+            @Override
+            protected void updateItem(Practicante practicante, boolean vacio) {
+                super.updateItem(practicante, vacio);
+                if (vacio || practicante == null) {
+                    setText(esBoton ? "-- Selecciona un practicante --" : null);
+                } else if (esBoton) {
+                    setText(practicante.getNombre() + " " + practicante.getApellidos());
+                } else {
+                    setText(practicante.getNombre() + " " + practicante.getApellidos() + " - " + practicante.getMatricula());
+                }
+            }
+        };
     }
 
-    private void ocultarError() {
-        panelError.setVisible(false);
-        panelError.setManaged(false);
+    private ListCell<DocumentacionPracticante> crearCeldaDocumento(boolean esBoton) {
+        return new ListCell<DocumentacionPracticante>() {
+            @Override
+            protected void updateItem(DocumentacionPracticante doc, boolean vacio) {
+                super.updateItem(doc, vacio);
+                if (vacio || doc == null) {
+                    setText(esBoton ? "-- Selecciona un documento --" : null);
+                } else {
+                    setText("Documento #" + doc.getIdDocumentacionPracticante());
+                }
+            }
+        };
     }
 
-    private void mostrarExito(String titulo, String mensaje) {
-        etiquetaTituloExito.setText(titulo);
-        etiquetaMensajeExito.setText(mensaje);
-        panelExito.setVisible(true);
-        panelExito.setManaged(true);
+    private void mostrarPanel(Label etiquetaTitulo, Label etiquetaMensaje, VBox panel, String titulo, String mensaje) {
+        etiquetaTitulo.setText(titulo);
+        etiquetaMensaje.setText(mensaje);
+        panel.setVisible(true);
+        panel.setManaged(true);
     }
 
-    private void ocultarExito() {
-        panelExito.setVisible(false);
-        panelExito.setManaged(false);
+    private void ocultarPanel(VBox panel) {
+        panel.setVisible(false);
+        panel.setManaged(false);
     }
-
-
-
-
-
 }

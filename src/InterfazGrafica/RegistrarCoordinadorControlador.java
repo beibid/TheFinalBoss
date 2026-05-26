@@ -1,6 +1,5 @@
 package InterfazGrafica;
 
-
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
@@ -15,9 +14,7 @@ import logica.dao.excepciones.UsuariosExcepcion;
 import logica.dao.objetos.CoordinadorDao;
 import logica.dominio.Coordinador;
 import logica.dominio.enums.Estado;
-
 import java.util.List;
-
 
 public class RegistrarCoordinadorControlador {
 
@@ -34,11 +31,10 @@ public class RegistrarCoordinadorControlador {
 
     private static final int FILAS_AFECTADAS_ESPERADAS = 1;
 
-
     @FXML
     private void botonRegistrar() {
-        ocultarError();
-        ocultarExito();
+        ocultarPanel(panelError);
+        ocultarPanel(panelExito);
         if (confirmarAccion("¿Seguro que desea registrar al Coordinador?")) {
             procesarRegistro();
         }
@@ -52,8 +48,8 @@ public class RegistrarCoordinadorControlador {
     }
 
     @FXML
-    private void botonRegresar(ActionEvent event) {
-        Stage escenario = (Stage) ((Node) event.getSource()).getScene().getWindow();
+    private void botonRegresar(ActionEvent evento) {
+        Stage escenario = (Stage) ((Node) evento.getSource()).getScene().getWindow();
         escenario.close();
     }
 
@@ -69,17 +65,14 @@ public class RegistrarCoordinadorControlador {
     }
 
     private void procesarRegistro() {
-        if (!camposValidos()) {
-            mostrarError("Campos obligatorios vacios",
-                    "Verifica la informacion e intente de nuevo.");
-            return;
+        if (camposValidos()) {
+            guardarCoordinador(construirCoordinador());
         }
-        guardarCoordinador(construirCoordinador());
     }
 
-    private boolean camposVacios(List<String> campos){
+    private boolean camposVacios(List<String> campos) {
         boolean hayCamposVacios = false;
-        for (String campo : campos){
+        for (String campo : campos) {
             if (campo.isEmpty()) {
                 hayCamposVacios = true;
             }
@@ -93,13 +86,12 @@ public class RegistrarCoordinadorControlador {
         String correo = campoTextoCorreo.getText().trim();
         String numeroPersonal = campoTextoNumeroPersonal.getText().trim();
 
+        List<String> campos = List.of(nombre, apellidos, correo, numeroPersonal);
+        boolean camposFormularioValido = !camposVacios(campos);
 
-        List<String> campo = List.of(nombre, apellidos, correo, numeroPersonal);
-
-        boolean camposFormularioValido = !camposVacios(campo);
-
-        if (!camposFormularioValido){
-            mostrarError("Campos obligatorios vacios" , "POR FAVOR LLENE TODOS LOS CAMPOS");
+        if (!camposFormularioValido) {
+            mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
+                    "Campos obligatorios vacios", "POR FAVOR LLENE TODOS LOS CAMPOS");
         }
         return camposFormularioValido;
     }
@@ -125,17 +117,19 @@ public class RegistrarCoordinadorControlador {
             int filasAfectadas = coordinadorDao.insertarCoordinador(coordinador);
             if (filasAfectadas >= FILAS_AFECTADAS_ESPERADAS) {
                 limpiarCamposRegistros();
-                mostrarExito("Coordinador con estado activo",
-                        "COORDINADOR REGISTRADO EXITOSAMENTE.");
+                mostrarPanel(etiquetaTituloExito, etiquetaMensajeExito, panelExito,
+                        "Coordinador con estado activo", "COORDINADOR REGISTRADO EXITOSAMENTE.");
             } else {
-                mostrarError("Error al registrar",
-                        "NO SE PUDO REGISTRAR EL COORDINADOR. INTENTE DE NUEVO.");
+                mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
+                        "Error al registrar", "NO SE PUDO REGISTRAR EL COORDINADOR. INTENTE DE NUEVO.");
             }
-        } catch (RegistroDuplicadoExcepcion e) {
-            mostrarError("Numero de personal repetido",
+        } catch (RegistroDuplicadoExcepcion excepcion) {
+            mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
+                    "Numero de personal repetido",
                     "EL NUMERO DE PERSONAL YA EXISTE EN EL SISTEMA. VERIFIQUE LA INFORMACION.");
-        } catch (UsuariosExcepcion e) {
-            mostrarError("Error inesperado", e.getMessage().toUpperCase());
+        } catch (UsuariosExcepcion excepcion) {
+            mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
+                    "Error inesperado", excepcion.getMessage().toUpperCase());
         }
     }
 
@@ -148,34 +142,22 @@ public class RegistrarCoordinadorControlador {
     }
 
     private void limpiarCamposRegistros() {
-        ocultarError();
-        ocultarExito();
+        ocultarPanel(panelError);
+        ocultarPanel(panelExito);
         campoTextoNombres.clear();
         campoTextoApellidos.clear();
         campoTextoNumeroPersonal.clear();
     }
 
-    private void mostrarError(String titulo, String mensaje) {
-        etiquetaTituloError.setText(titulo);
-        etiquetaMensajeError.setText(mensaje);
-        panelError.setVisible(true);
-        panelError.setManaged(true);
+    private void mostrarPanel(Label etiquetaTitulo, Label etiquetaMensaje, VBox panel, String titulo, String mensaje) {
+        etiquetaTitulo.setText(titulo);
+        etiquetaMensaje.setText(mensaje);
+        panel.setVisible(true);
+        panel.setManaged(true);
     }
 
-    private void ocultarError() {
-        panelError.setVisible(false);
-        panelError.setManaged(false);
-    }
-
-    private void mostrarExito(String titulo, String mensaje) {
-        etiquetaTituloExito.setText(titulo);
-        etiquetaMensajeExito.setText(mensaje);
-        panelExito.setVisible(true);
-        panelExito.setManaged(true);
-    }
-
-    private void ocultarExito() {
-        panelExito.setVisible(false);
-        panelExito.setManaged(false);
+    private void ocultarPanel(VBox panel) {
+        panel.setVisible(false);
+        panel.setManaged(false);
     }
 }

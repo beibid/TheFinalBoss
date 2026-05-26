@@ -1,6 +1,5 @@
 package InterfazGrafica;
 
-
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
@@ -14,11 +13,10 @@ import logica.dao.excepciones.UsuariosExcepcion;
 import logica.dao.objetos.OrganizacionVinculadaDao;
 import logica.dominio.OrganizacionVinculada;
 import logica.dominio.enums.EstadoOrganizacion;
-
 import java.util.List;
 
-
 public class RegistrarOrganizacionVinculadaControlador {
+
     @FXML private TextField campoTextoNombre;
     @FXML private TextField campoTextoDireccion;
     @FXML private VBox panelError;
@@ -47,21 +45,22 @@ public class RegistrarOrganizacionVinculadaControlador {
             int filasAfectadas = organizacionVinculadaDao.insertarOrganizacionVinculada(organizacionVinculada);
             if (filasAfectadas >= FILAS_AFECTADAS_ESPERADAS) {
                 limpiarCampos();
-                mostrarExito("Organizacion vinculada con estado activa",
-                        "ORGANIZACION REGISTRADA EXITOSAMENTE.");
+                mostrarPanel(etiquetaTituloExito, etiquetaMensajeExito, panelExito,
+                        "Organizacion vinculada con estado activa", "ORGANIZACION REGISTRADA EXITOSAMENTE.");
             } else {
-                mostrarError("Error al registrar",
-                        "NO SE PUDO REGISTRAR LA ORGANIZACION. INTENTE DE NUEVO.");
+                mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
+                        "Error al registrar", "NO SE PUDO REGISTRAR LA ORGANIZACION. INTENTE DE NUEVO.");
             }
-        } catch (UsuariosExcepcion e) {
-            mostrarError("Error inesperado", e.getMessage().toUpperCase());
+        } catch (UsuariosExcepcion excepcion) {
+            mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
+                    "Error inesperado", excepcion.getMessage().toUpperCase());
         }
     }
 
-    private boolean camposVacios(List<String> campos){
+    private boolean camposVacios(List<String> campos) {
         boolean hayCamposVacios = false;
-        for (String campo : campos){
-            if (campo.isEmpty()){
+        for (String campo : campos) {
+            if (campo.isEmpty()) {
                 hayCamposVacios = true;
             }
         }
@@ -72,29 +71,26 @@ public class RegistrarOrganizacionVinculadaControlador {
         String nombre = campoTextoNombre.getText().trim();
         String direccion = campoTextoDireccion.getText().trim();
 
-        List<String> campo = List.of(nombre, direccion);
-        boolean camposFormularioVacios = !camposVacios(campo);
+        List<String> campos = List.of(nombre, direccion);
+        boolean camposFormularioValido = !camposVacios(campos);
 
-        if (!camposFormularioVacios) {
-            mostrarError("Campos obligatorios vacios", "POR FAVOR LLENE TODOS LOS CAMPOS");
+        if (!camposFormularioValido) {
+            mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
+                    "Campos obligatorios vacios", "POR FAVOR LLENE TODOS LOS CAMPOS");
         }
-        return camposFormularioVacios;
+        return camposFormularioValido;
     }
 
-
     private void procesarRegistro() {
-        if (!camposValidos()) {
-            mostrarError("Campos obligatorios vacios",
-                    "Verifica la informacion e intente de nuevo.");
-            return;
+        if (camposValidos()) {
+            guardarOrganizacion(construirOrganizacion());
         }
-        guardarOrganizacion(construirOrganizacion());
     }
 
     @FXML
     private void botonRegistrar() {
-        ocultarError();
-        ocultarExito();
+        ocultarPanel(panelError);
+        ocultarPanel(panelExito);
         if (confirmarAccion("¿Seguro que desea registrar la organizacion?")) {
             procesarRegistro();
         }
@@ -102,25 +98,14 @@ public class RegistrarOrganizacionVinculadaControlador {
 
     @FXML
     private void botonCancelar() {
-        Alert alerta = new Alert(Alert.AlertType.CONFIRMATION);
-        alerta.setTitle("Cancelar registro");
-        alerta.setHeaderText("¿Seguro que desea cancelar?");
-        alerta.setContentText("");
-
-        ButtonType botonSi = new ButtonType("Sí");
-        ButtonType botonNo = new ButtonType("No");
-        alerta.getButtonTypes().setAll(botonSi, botonNo);
-
-        alerta.showAndWait().ifPresent(botonPresionado -> {
-            if (botonPresionado == botonSi) {
-                limpiarCampos();
-            }
-        });
+        if (confirmarAccion("¿Seguro que desea cancelar?")) {
+            limpiarCampos();
+        }
     }
 
     @FXML
-    private void botonRegresar(ActionEvent event) throws Exception{
-        Stage escenario = (Stage) ((Node) event.getSource()).getScene().getWindow();
+    private void botonRegresar(ActionEvent evento) {
+        Stage escenario = (Stage) ((Node) evento.getSource()).getScene().getWindow();
         escenario.close();
     }
 
@@ -140,33 +125,21 @@ public class RegistrarOrganizacionVinculadaControlador {
     }
 
     private void limpiarCampos() {
-        ocultarError();
-        ocultarExito();
+        ocultarPanel(panelError);
+        ocultarPanel(panelExito);
         campoTextoNombre.clear();
         campoTextoDireccion.clear();
     }
 
-    private void mostrarError(String titulo, String mensaje) {
-        etiquetaTituloError.setText(titulo);
-        etiquetaMensajeError.setText(mensaje);
-        panelError.setVisible(true);
-        panelError.setManaged(true);
+    private void mostrarPanel(Label etiquetaTitulo, Label etiquetaMensaje, VBox panel, String titulo, String mensaje) {
+        etiquetaTitulo.setText(titulo);
+        etiquetaMensaje.setText(mensaje);
+        panel.setVisible(true);
+        panel.setManaged(true);
     }
 
-    private void ocultarError() {
-        panelError.setVisible(false);
-        panelError.setManaged(false);
-    }
-
-    private void mostrarExito(String titulo, String mensaje) {
-        etiquetaTituloExito.setText(titulo);
-        etiquetaMensajeExito.setText(mensaje);
-        panelExito.setVisible(true);
-        panelExito.setManaged(true);
-    }
-
-    private void ocultarExito() {
-        panelExito.setVisible(false);
-        panelExito.setManaged(false);
+    private void ocultarPanel(VBox panel) {
+        panel.setVisible(false);
+        panel.setManaged(false);
     }
 }

@@ -1,6 +1,5 @@
 package InterfazGrafica;
 
-
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -17,9 +16,13 @@ import logica.dao.excepciones.MensajeriaExcepcion;
 import logica.dao.objetos.ProyectoDao;
 import logica.dominio.Proyecto;
 import java.util.List;
-
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class InactivarProyectoControlador {
+
+    private static final Logger LOGGER = Logger.getLogger(InactivarProyectoControlador.class.getName());
+    private static final int FILAS_AFECTADAS_ESPERADAS = 1;
 
     @FXML private ComboBox<Proyecto> comboBoxProyectos;
     @FXML private VBox panelDatos;
@@ -33,6 +36,7 @@ public class InactivarProyectoControlador {
     @FXML private Label etiquetaIdProyecto;
     @FXML private Label etiquetaOrganizacion;
     @FXML private Label etiquetaEstado;
+
     private Proyecto proyectoSeleccionado;
 
     @FXML
@@ -44,33 +48,28 @@ public class InactivarProyectoControlador {
         ProyectoDao proyectoDao = new ProyectoDao();
         try {
             List<Proyecto> listaProyectos = proyectoDao.obtenerProyectosDisponibles();
-            ObservableList<Proyecto> proyectosActivos = FXCollections.observableArrayList(listaProyectos);
-            comboBoxProyectos.setItems(proyectosActivos);
-            comboBoxProyectos.setCellFactory(lista -> new ListCell<Proyecto>() {
-                @Override
-                protected void updateItem(Proyecto proyecto, boolean vacio) {
-                    super.updateItem(proyecto, vacio);
-                    if (vacio || proyecto == null) {
-                        setText(null);
-                    } else {
-                        setText(proyecto.getNombreProyecto());
-                    }
-                }
-            });
-            comboBoxProyectos.setButtonCell(new ListCell<Proyecto>() {
-                @Override
-                protected void updateItem(Proyecto proyecto, boolean vacio) {
-                    super.updateItem(proyecto, vacio);
-                    if (vacio || proyecto == null) {
-                        setText("-- Selecciona un proyecto --");
-                    } else {
-                        setText(proyecto.getNombreProyecto());
-                    }
-                }
-            });
+            ObservableList<Proyecto> proyectosObservable = FXCollections.observableArrayList(listaProyectos);
+            comboBoxProyectos.setItems(proyectosObservable);
+            comboBoxProyectos.setCellFactory(listaProyectos2 -> crearCeldaProyecto());
+            comboBoxProyectos.setButtonCell(crearCeldaProyecto());
         } catch (MensajeriaExcepcion excepcion) {
+            LOGGER.log(Level.SEVERE, "Error al cargar proyectos", excepcion);
             mostrarError("Error al cargar proyectos", excepcion.getMessage());
         }
+    }
+
+    private ListCell<Proyecto> crearCeldaProyecto() {
+        return new ListCell<Proyecto>() {
+            @Override
+            protected void updateItem(Proyecto proyecto, boolean vacio) {
+                super.updateItem(proyecto, vacio);
+                if (vacio || proyecto == null) {
+                    setText("-- Selecciona un proyecto --");
+                } else {
+                    setText(proyecto.getNombreProyecto());
+                }
+            }
+        };
     }
 
     @FXML
@@ -104,17 +103,16 @@ public class InactivarProyectoControlador {
         ProyectoDao proyectoDao = new ProyectoDao();
         try {
             int filasAfectadas = proyectoDao.inactivarProyecto(proyectoSeleccionado.getIdProyecto());
-            if (filasAfectadas > 0) {
+            if (filasAfectadas >= FILAS_AFECTADAS_ESPERADAS) {
                 ocultarTodo();
                 comboBoxProyectos.setValue(null);
                 cargarProyectosDisponibles();
-                mostrarExito("Proyecto inactivado",
-                        "El proyecto fue inactivado exitosamente.");
+                mostrarExito("Proyecto inactivado", "El proyecto fue inactivado exitosamente.");
             } else {
-                mostrarError("Error al inactivar",
-                        "No se pudo inactivar el proyecto. Intente de nuevo.");
+                mostrarError("Error al inactivar", "No se pudo inactivar el proyecto. Intente de nuevo.");
             }
         } catch (MensajeriaExcepcion excepcion) {
+            LOGGER.log(Level.SEVERE, "Error al inactivar proyecto", excepcion);
             mostrarError("Error inesperado", excepcion.getMessage().toUpperCase());
         }
     }
@@ -128,7 +126,7 @@ public class InactivarProyectoControlador {
     }
 
     @FXML
-    private void botonRegresar(ActionEvent evento) throws Exception {
+    private void botonRegresar(ActionEvent evento) {
         Stage escenario = (Stage) ((Node) evento.getSource()).getScene().getWindow();
         escenario.close();
     }
@@ -151,23 +149,30 @@ public class InactivarProyectoControlador {
     }
 
     private void ocultarPaneles() {
-        panelError.setVisible(false);
-        panelError.setManaged(false);
-        panelExito.setVisible(false);
-        panelExito.setManaged(false);
+        ocultarPanel(panelError);
+        ocultarPanel(panelExito);
+    }
+
+    private void mostrarPanel(VBox panel, Label etiquetaTitulo, Label etiquetaMensaje,
+                              String titulo, String mensaje) {
+        etiquetaTitulo.setText(titulo);
+        etiquetaMensaje.setText(mensaje);
+        panel.setVisible(true);
+        panel.setManaged(true);
+    }
+
+    private void ocultarPanel(VBox panel) {
+        panel.setVisible(false);
+        panel.setManaged(false);
     }
 
     private void mostrarError(String titulo, String mensaje) {
-        etiquetaTituloError.setText(titulo);
-        etiquetaMensajeError.setText(mensaje);
-        panelError.setVisible(true);
-        panelError.setManaged(true);
+        ocultarPanel(panelExito);
+        mostrarPanel(panelError, etiquetaTituloError, etiquetaMensajeError, titulo, mensaje);
     }
 
     private void mostrarExito(String titulo, String mensaje) {
-        etiquetaTituloExito.setText(titulo);
-        etiquetaMensajeExito.setText(mensaje);
-        panelExito.setVisible(true);
-        panelExito.setManaged(true);
+        ocultarPanel(panelError);
+        mostrarPanel(panelExito, etiquetaTituloExito, etiquetaMensajeExito, titulo, mensaje);
     }
 }

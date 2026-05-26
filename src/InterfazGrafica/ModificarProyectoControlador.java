@@ -1,6 +1,5 @@
 package InterfazGrafica;
 
-
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -20,7 +19,6 @@ import logica.dominio.Proyecto;
 import logica.dominio.enums.EstadoProyecto;
 import java.sql.Date;
 import java.util.List;
-
 
 public class ModificarProyectoControlador {
 
@@ -58,31 +56,26 @@ public class ModificarProyectoControlador {
             List<Proyecto> listaProyectos = proyectoDao.obtenerProyectosDisponibles();
             ObservableList<Proyecto> proyectosObservable = FXCollections.observableArrayList(listaProyectos);
             comboBoxProyectos.setItems(proyectosObservable);
-            comboBoxProyectos.setCellFactory(lista -> new ListCell<Proyecto>() {
-                @Override
-                protected void updateItem(Proyecto proyecto, boolean vacio) {
-                    super.updateItem(proyecto, vacio);
-                    if (vacio || proyecto == null) {
-                        setText(null);
-                    } else {
-                        setText(proyecto.getNombreProyecto());
-                    }
-                }
-            });
-            comboBoxProyectos.setButtonCell(new ListCell<Proyecto>() {
-                @Override
-                protected void updateItem(Proyecto proyecto, boolean vacio) {
-                    super.updateItem(proyecto, vacio);
-                    if (vacio || proyecto == null) {
-                        setText("-- Selecciona un proyecto --");
-                    } else {
-                        setText(proyecto.getNombreProyecto());
-                    }
-                }
-            });
+            comboBoxProyectos.setCellFactory(lista -> crearCeldaProyecto(false));
+            comboBoxProyectos.setButtonCell(crearCeldaProyecto(true));
         } catch (MensajeriaExcepcion excepcion) {
-            mostrarError("Error al cargar proyectos", excepcion.getMessage());
+            mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
+                    "Error al cargar proyectos", excepcion.getMessage());
         }
+    }
+
+    private ListCell<Proyecto> crearCeldaProyecto(boolean esBoton) {
+        return new ListCell<Proyecto>() {
+            @Override
+            protected void updateItem(Proyecto proyecto, boolean vacio) {
+                super.updateItem(proyecto, vacio);
+                if (vacio || proyecto == null) {
+                    setText(esBoton ? "-- Selecciona un proyecto --" : null);
+                } else {
+                    setText(proyecto.getNombreProyecto());
+                }
+            }
+        };
     }
 
     @FXML
@@ -117,51 +110,45 @@ public class ModificarProyectoControlador {
     }
 
     private void procesarModificacion() {
-        if (!camposValidos()) {
-            mostrarError("Campos obligatorios vacíos",
-                    "Verifique la información e intente de nuevo.");
-            return;
-        }
-        ProyectoDao proyectoDao = new ProyectoDao();
-        try {
-            Proyecto proyectoModificado = construirProyecto();
-            int filasAfectadas = proyectoDao.modificarProyecto(
-                    proyectoSeleccionado.getIdProyecto(), proyectoModificado);
-            if (filasAfectadas >= FILAS_AFECTADAS_ESPERADAS) {
-                ocultarTodo();
-                comboBoxProyectos.setValue(null);
-                cargarProyectosDisponibles();
-                mostrarExito("Proyecto modificado",
-                        "El proyecto fue modificado exitosamente.");
-            } else {
-                mostrarError("Error al modificar",
-                        "No se pudo modificar el proyecto. Intente de nuevo.");
+        if (camposValidos()) {
+            ProyectoDao proyectoDao = new ProyectoDao();
+            try {
+                Proyecto proyectoModificado = construirProyecto();
+                int filasAfectadas = proyectoDao.modificarProyecto(
+                        proyectoSeleccionado.getIdProyecto(), proyectoModificado);
+                if (filasAfectadas >= FILAS_AFECTADAS_ESPERADAS) {
+                    ocultarTodo();
+                    comboBoxProyectos.setValue(null);
+                    cargarProyectosDisponibles();
+                    mostrarPanel(etiquetaTituloExito, etiquetaMensajeExito, panelExito,
+                            "Proyecto modificado", "El proyecto fue modificado exitosamente.");
+                } else {
+                    mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
+                            "Error al modificar", "No se pudo modificar el proyecto. Intente de nuevo.");
+                }
+            } catch (MensajeriaExcepcion excepcion) {
+                mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
+                        "Error inesperado", excepcion.getMessage().toUpperCase());
             }
-        } catch (MensajeriaExcepcion excepcion) {
-            mostrarError("Error inesperado", excepcion.getMessage().toUpperCase());
+        } else {
+            mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
+                    "Campos obligatorios vacíos", "Verifique la información e intente de nuevo.");
         }
     }
 
     private boolean camposValidos() {
         List<TextField> camposObligatorios = List.of(
-                campoNombreProyecto,
-                campoDescripcion,
-                campoResponsable,
-                campoNombreEmpresa,
-                campoSectorEmpresa,
-                campoDireccionEmpresa,
-                campoMatricula,
-                campoNumPersonalCoordinador,
-                campoFechaRegistro
+                campoNombreProyecto, campoDescripcion, campoResponsable,
+                campoNombreEmpresa, campoSectorEmpresa, campoDireccionEmpresa,
+                campoMatricula, campoNumPersonalCoordinador, campoFechaRegistro
         );
-
+        boolean camposTextosValidos = true;
         for (TextField campo : camposObligatorios) {
             if (campo.getText().trim().isEmpty()) {
-                return false;
+                camposTextosValidos = false;
             }
         }
-
-        return comboBoxEstado.getValue() != null;
+        return camposTextosValidos && comboBoxEstado.getValue() != null;
     }
 
     private Proyecto construirProyecto() throws MensajeriaExcepcion {
@@ -192,7 +179,7 @@ public class ModificarProyectoControlador {
     }
 
     @FXML
-    private void botonRegresar(ActionEvent evento) throws Exception {
+    private void botonRegresar(ActionEvent evento) {
         Stage escenario = (Stage) ((Node) evento.getSource()).getScene().getWindow();
         escenario.close();
     }
@@ -210,28 +197,23 @@ public class ModificarProyectoControlador {
 
     private void ocultarTodo() {
         ocultarPaneles();
-        panelFormulario.setVisible(false);
-        panelFormulario.setManaged(false);
+        ocultarPanel(panelFormulario);
     }
 
     private void ocultarPaneles() {
-        panelError.setVisible(false);
-        panelError.setManaged(false);
-        panelExito.setVisible(false);
-        panelExito.setManaged(false);
+        ocultarPanel(panelError);
+        ocultarPanel(panelExito);
     }
 
-    private void mostrarError(String titulo, String mensaje) {
-        etiquetaTituloError.setText(titulo);
-        etiquetaMensajeError.setText(mensaje);
-        panelError.setVisible(true);
-        panelError.setManaged(true);
+    private void mostrarPanel(Label etiquetaTitulo, Label etiquetaMensaje, VBox panel, String titulo, String mensaje) {
+        etiquetaTitulo.setText(titulo);
+        etiquetaMensaje.setText(mensaje);
+        panel.setVisible(true);
+        panel.setManaged(true);
     }
 
-    private void mostrarExito(String titulo, String mensaje) {
-        etiquetaTituloExito.setText(titulo);
-        etiquetaMensajeExito.setText(mensaje);
-        panelExito.setVisible(true);
-        panelExito.setManaged(true);
+    private void ocultarPanel(VBox panel) {
+        panel.setVisible(false);
+        panel.setManaged(false);
     }
 }

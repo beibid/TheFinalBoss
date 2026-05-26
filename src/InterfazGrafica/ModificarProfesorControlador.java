@@ -1,7 +1,5 @@
 package InterfazGrafica;
 
-
-import com.sun.jdi.PrimitiveValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -22,7 +20,6 @@ import logica.dominio.enums.Turno;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
 
 public class ModificarProfesorControlador {
 
@@ -56,32 +53,27 @@ public class ModificarProfesorControlador {
             List<Profesor> lista = profesorDao.obtenerProfesoresActivos();
             ObservableList<Profesor> profesoresObservable = FXCollections.observableArrayList(lista);
             comboBoxProfesores.setItems(profesoresObservable);
-            comboBoxProfesores.setCellFactory(l -> new ListCell<Profesor>() {
-                @Override
-                protected void updateItem(Profesor profesor, boolean vacio) {
-                    super.updateItem(profesor, vacio);
-                    if (vacio || profesor == null) {
-                        setText(null);
-                    } else {
-                        setText(profesor.getNombre() + " " + profesor.getApellidos());
-                    }
-                }
-            });
-            comboBoxProfesores.setButtonCell(new ListCell<Profesor>() {
-                @Override
-                protected void updateItem(Profesor profesor, boolean vacio) {
-                    super.updateItem(profesor, vacio);
-                    if (vacio || profesor == null) {
-                        setText("-- Selecciona un profesor --");
-                    } else {
-                        setText(profesor.getNombre() + " " + profesor.getApellidos());
-                    }
-                }
-            });
+            comboBoxProfesores.setCellFactory(l -> crearCeldaProfesor(false));
+            comboBoxProfesores.setButtonCell(crearCeldaProfesor(true));
         } catch (UsuariosExcepcion excepcion) {
             LOGGER.log(Level.SEVERE, "Error al cargar profesores", excepcion);
-            mostrarError("Error al cargar", excepcion.getMessage());
+            mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
+                    "Error al cargar", excepcion.getMessage());
         }
+    }
+
+    private ListCell<Profesor> crearCeldaProfesor(boolean esBoton) {
+        return new ListCell<Profesor>() {
+            @Override
+            protected void updateItem(Profesor profesor, boolean vacio) {
+                super.updateItem(profesor, vacio);
+                if (vacio || profesor == null) {
+                    setText(esBoton ? "-- Selecciona un profesor --" : null);
+                } else {
+                    setText(profesor.getNombre() + " " + profesor.getApellidos());
+                }
+            }
+        };
     }
 
     @FXML
@@ -110,37 +102,61 @@ public class ModificarProfesorControlador {
     }
 
     private void procesarModificacion() {
-        if (!camposValidos()) {
-            mostrarError("Campos obligatorios vacíos",
-                    "Verifica la información e intenta de nuevo.");
-            return;
-        }
-        ProfesorDao profesorDao = new ProfesorDao();
-        try {
-            Profesor profesorModificado = construirProfesor();
-            int filasAfectadas = profesorDao.modificarProfesor(
-                    profesorSeleccionado.getNumeroDePersonalProfesor(), profesorModificado);
-            if (filasAfectadas > FILAS_AFECTADAS_ESPERADAS) {
-                ocultarTodo();
-                comboBoxProfesores.setValue(null);
-                cargarProfesores();
-                mostrarExito("Profesor modificado",
-                        "Profesor actualizado exitosamente.");
-            } else {
-                mostrarError("Error al modificar",
-                        "No se pudo modificar el profesor. Intente de nuevo.");
+        if (camposValidos()) {
+            ProfesorDao profesorDao = new ProfesorDao();
+            try {
+                Profesor profesorModificado = construirProfesor();
+                int filasAfectadas = profesorDao.modificarProfesor(
+                        profesorSeleccionado.getNumeroDePersonalProfesor(), profesorModificado);
+                if (filasAfectadas >= FILAS_AFECTADAS_ESPERADAS) {
+                    ocultarTodo();
+                    comboBoxProfesores.setValue(null);
+                    cargarProfesores();
+                    mostrarPanel(etiquetaTituloExito, etiquetaMensajeExito, panelExito,
+                            "Profesor modificado", "Profesor actualizado exitosamente.");
+                } else {
+                    mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
+                            "Error al modificar", "No se pudo modificar el profesor. Intente de nuevo.");
+                }
+            } catch (UsuariosExcepcion excepcion) {
+                LOGGER.log(Level.SEVERE, "Error al modificar profesor", excepcion);
+                mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
+                        "Error inesperado", excepcion.getMessage().toUpperCase());
             }
-        } catch (UsuariosExcepcion excepcion) {
-            LOGGER.log(Level.SEVERE, "Error al modificar profesor", excepcion);
-            mostrarError("Error inesperado", excepcion.getMessage().toUpperCase());
+        } else {
+            mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
+                    "Campos obligatorios vacíos", "Verifica la información e intenta de nuevo.");
         }
+    }
+
+    private boolean camposVacios(List<String> campos) {
+        boolean hayCamposVacios = false;
+        for (String campo : campos) {
+            if (campo.isEmpty()) {
+                hayCamposVacios = true;
+            }
+        }
+        return hayCamposVacios;
     }
 
     private boolean camposValidos() {
         String nombre = campoNombre.getText().trim();
         String apellidos = campoApellidos.getText().trim();
         String correo = campoCorreo.getText().trim();
-        return !nombre.isEmpty() && !apellidos.isEmpty() && !correo.isEmpty() && comboBoxTurno.getValue() != null;
+
+        List<String> campos = List.of(nombre, apellidos, correo);
+        boolean camposTextosValidos = !camposVacios(campos);
+        boolean turnoValido = comboBoxTurno.getValue() != null;
+
+        if (!camposTextosValidos) {
+            mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
+                    "Campos obligatorios vacios", "Verifique la informacion e intente de nuevo.");
+        }
+        if (!turnoValido) {
+            mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
+                    "Turno no seleccionado", "Seleccione un turno para el profesor.");
+        }
+        return camposTextosValidos && turnoValido;
     }
 
     private Profesor construirProfesor() {
@@ -163,8 +179,8 @@ public class ModificarProfesorControlador {
     }
 
     @FXML
-    private void botonRegresar(ActionEvent event) {
-        Stage escenario = (Stage) ((Node) event.getSource()).getScene().getWindow();
+    private void botonRegresar(ActionEvent evento) {
+        Stage escenario = (Stage) ((Node) evento.getSource()).getScene().getWindow();
         escenario.close();
     }
 
@@ -181,28 +197,23 @@ public class ModificarProfesorControlador {
 
     private void ocultarTodo() {
         ocultarPaneles();
-        panelFormulario.setVisible(false);
-        panelFormulario.setManaged(false);
+        ocultarPanel(panelFormulario);
     }
 
     private void ocultarPaneles() {
-        panelError.setVisible(false);
-        panelError.setManaged(false);
-        panelExito.setVisible(false);
-        panelExito.setManaged(false);
+        ocultarPanel(panelError);
+        ocultarPanel(panelExito);
     }
 
-    private void mostrarError(String titulo, String mensaje) {
-        etiquetaTituloError.setText(titulo);
-        etiquetaMensajeError.setText(mensaje);
-        panelError.setVisible(true);
-        panelError.setManaged(true);
+    private void mostrarPanel(Label etiquetaTitulo, Label etiquetaMensaje, VBox panel, String titulo, String mensaje) {
+        etiquetaTitulo.setText(titulo);
+        etiquetaMensaje.setText(mensaje);
+        panel.setVisible(true);
+        panel.setManaged(true);
     }
 
-    private void mostrarExito(String titulo, String mensaje) {
-        etiquetaTituloExito.setText(titulo);
-        etiquetaMensajeExito.setText(mensaje);
-        panelExito.setVisible(true);
-        panelExito.setManaged(true);
+    private void ocultarPanel(VBox panel) {
+        panel.setVisible(false);
+        panel.setManaged(false);
     }
 }

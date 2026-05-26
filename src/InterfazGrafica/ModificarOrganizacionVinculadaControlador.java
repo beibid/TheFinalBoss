@@ -49,32 +49,26 @@ public class ModificarOrganizacionVinculadaControlador {
             List<OrganizacionVinculada> lista = organizacionDao.obtenerOrganizacionesActivas();
             ObservableList<OrganizacionVinculada> organizacionesObservable = FXCollections.observableArrayList(lista);
             comboBoxOrganizacion.setItems(organizacionesObservable);
-            comboBoxOrganizacion.setCellFactory(l -> new ListCell<OrganizacionVinculada>() {
-                @Override
-                protected void updateItem(OrganizacionVinculada organizacion, boolean vacio) {
-                    super.updateItem(organizacion, vacio);
-                    if (vacio || organizacion == null) {
-                        setText(null);
-                    } else {
-                        setText(organizacion.getNombre());
-                    }
-                }
-            });
-            comboBoxOrganizacion.setButtonCell(new ListCell<OrganizacionVinculada>() {
-                @Override
-                protected void updateItem(OrganizacionVinculada organizacion, boolean vacio) {
-                    super.updateItem(organizacion, vacio);
-                    if (vacio || organizacion == null) {
-                        setText("-- Selecciona una organización --");
-                    } else {
-                        setText(organizacion.getNombre());
-                    }
-                }
-            });
+            comboBoxOrganizacion.setCellFactory(listaOrganizaciones -> crearCeldaOrganizacion());
+            comboBoxOrganizacion.setButtonCell(crearCeldaOrganizacion());
         } catch (UsuariosExcepcion excepcion) {
             LOGGER.log(Level.SEVERE, "Error al cargar organizaciones", excepcion);
             mostrarError("Error al cargar", excepcion.getMessage());
         }
+    }
+
+    private ListCell<OrganizacionVinculada> crearCeldaOrganizacion() {
+        return new ListCell<OrganizacionVinculada>() {
+            @Override
+            protected void updateItem(OrganizacionVinculada organizacion, boolean vacio) {
+                super.updateItem(organizacion, vacio);
+                if (vacio || organizacion == null) {
+                    setText("-- Selecciona una organización --");
+                } else {
+                    setText(organizacion.getNombre());
+                }
+            }
+        };
     }
 
     @FXML
@@ -101,37 +95,31 @@ public class ModificarOrganizacionVinculadaControlador {
     }
 
     private void procesarModificacion() {
-        if (!camposValidos()) {
-            mostrarError("Campos obligatorios vacíos",
-                    "Verifica la información e intenta de nuevo.");
-            return;
-        }
-        OrganizacionVinculadaDao organizacionDao = new OrganizacionVinculadaDao();
-        try {
-            OrganizacionVinculada organizacionModificada = construirOrganizacion();
-            int filasAfectadas = organizacionDao.modificarOrganizacionVinculada(
-                    organizacionSeleccionada.getIdOrganizacion(), organizacionModificada);
-            if (filasAfectadas >= FILAS_AFECTADAS_ESPERADAS) {
-                ocultarTodo();
-                comboBoxOrganizacion.setValue(null);
-                cargarOrganizaciones();
-                mostrarExito("Organización modificada",
-                        "Organización actualizada exitosamente.");
-            } else {
-                mostrarError("Error al modificar",
-                        "No se pudo modificar la organización. Intente de nuevo.");
+        if (camposValidos()) {
+            OrganizacionVinculadaDao organizacionDao = new OrganizacionVinculadaDao();
+            try {
+                OrganizacionVinculada organizacionModificada = construirOrganizacion();
+                int filasAfectadas = organizacionDao.modificarOrganizacionVinculada(
+                        organizacionSeleccionada.getIdOrganizacion(), organizacionModificada);
+                if (filasAfectadas >= FILAS_AFECTADAS_ESPERADAS) {
+                    ocultarTodo();
+                    comboBoxOrganizacion.setValue(null);
+                    cargarOrganizaciones();
+                    mostrarExito("Organización modificada", "Organización actualizada exitosamente.");
+                } else {
+                    mostrarError("Error al modificar", "No se pudo modificar la organización. Intente de nuevo.");
+                }
+            } catch (UsuariosExcepcion excepcion) {
+                LOGGER.log(Level.SEVERE, "Error al modificar organización", excepcion);
+                mostrarError("Error inesperado", excepcion.getMessage().toUpperCase());
             }
-        } catch (UsuariosExcepcion excepcion) {
-            LOGGER.log(Level.SEVERE, "Error al modificar organización", excepcion);
-            mostrarError("Error inesperado", excepcion.getMessage().toUpperCase());
         }
     }
 
     private boolean camposVacios(List<String> campos) {
         boolean hayCamposVacios = false;
-
-        for (String campo : campos){
-            if (campo.isEmpty()){
+        for (String campo : campos) {
+            if (campo.isEmpty()) {
                 hayCamposVacios = true;
             }
         }
@@ -142,14 +130,13 @@ public class ModificarOrganizacionVinculadaControlador {
         String nombre = campoNombre.getText().trim();
         String direccion = campoDireccion.getText().trim();
 
-        List<String> campo = List.of(nombre, direccion);
+        List<String> campos = List.of(nombre, direccion);
+        boolean camposFormularioValidos = !camposVacios(campos);
 
-        boolean camposFormularioValido = !camposVacios(campo);
-
-        if (!camposFormularioValido){
-            mostrarError("Campos obligatorios vacios", "POR FAVOR LLENE TODOS LOS CAMPOS");
+        if (!camposFormularioValidos) {
+            mostrarError("Campos obligatorios vacíos", "Por favor llene todos los campos.");
         }
-      return camposFormularioValido;
+        return camposFormularioValidos;
     }
 
     private OrganizacionVinculada construirOrganizacion() {
@@ -191,23 +178,30 @@ public class ModificarOrganizacionVinculadaControlador {
     }
 
     private void ocultarPaneles() {
-        panelError.setVisible(false);
-        panelError.setManaged(false);
-        panelExito.setVisible(false);
-        panelExito.setManaged(false);
+        ocultarPanel(panelError);
+        ocultarPanel(panelExito);
+    }
+
+    private void mostrarPanel(VBox panel, Label etiquetaTitulo, Label etiquetaMensaje,
+                              String titulo, String mensaje) {
+        etiquetaTitulo.setText(titulo);
+        etiquetaMensaje.setText(mensaje);
+        panel.setVisible(true);
+        panel.setManaged(true);
+    }
+
+    private void ocultarPanel(VBox panel) {
+        panel.setVisible(false);
+        panel.setManaged(false);
     }
 
     private void mostrarError(String titulo, String mensaje) {
-        etiquetaTituloError.setText(titulo);
-        etiquetaMensajeError.setText(mensaje);
-        panelError.setVisible(true);
-        panelError.setManaged(true);
+        ocultarPanel(panelExito);
+        mostrarPanel(panelError, etiquetaTituloError, etiquetaMensajeError, titulo, mensaje);
     }
 
     private void mostrarExito(String titulo, String mensaje) {
-        etiquetaTituloExito.setText(titulo);
-        etiquetaMensajeExito.setText(mensaje);
-        panelExito.setVisible(true);
-        panelExito.setManaged(true);
+        ocultarPanel(panelError);
+        mostrarPanel(panelExito, etiquetaTituloExito, etiquetaMensajeExito, titulo, mensaje);
     }
 }

@@ -1,6 +1,5 @@
 package InterfazGrafica;
 
-
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
@@ -15,9 +14,7 @@ import logica.dao.excepciones.UsuariosExcepcion;
 import logica.dao.objetos.AdministradorDao;
 import logica.dominio.Administrador;
 import logica.dominio.enums.Estado;
-
 import java.util.List;
-
 
 public class RegistrarAdministradorControlador {
 
@@ -35,8 +32,8 @@ public class RegistrarAdministradorControlador {
 
     @FXML
     private void botonRegistrar() {
-        ocultarError();
-        ocultarExito();
+        ocultarPanel(panelError);
+        ocultarPanel(panelExito);
         if (confirmarAccion("¿Seguro que desea registrar al administrador?")) {
             procesarRegistro();
         }
@@ -50,8 +47,8 @@ public class RegistrarAdministradorControlador {
     }
 
     @FXML
-    private void botonRegresar(ActionEvent event) throws Exception {
-        Stage escenario = (Stage) ((Node) event.getSource()).getScene().getWindow();
+    private void botonRegresar(ActionEvent evento) {
+        Stage escenario = (Stage) ((Node) evento.getSource()).getScene().getWindow();
         escenario.close();
     }
 
@@ -67,22 +64,19 @@ public class RegistrarAdministradorControlador {
     }
 
     private void procesarRegistro() {
-        if (!camposValidos()) {
-            mostrarError("Campos obligatorios vacios",
-                    "Verifique la informacion e intente de nuevo.");
-            return;
+        if (camposValidos()) {
+            guardarAdministrador(construirAdministrador());
         }
-        guardarAdministrador(construirAdministrador());
     }
 
-    private boolean camposVacios(List<String> campos){
+    private boolean camposVacios(List<String> campos) {
         boolean hayCamposVacios = false;
-        for (String campo : campos){
-            if (campo.isEmpty()){
+        for (String campo : campos) {
+            if (campo.isEmpty()) {
                 hayCamposVacios = true;
             }
         }
-    return hayCamposVacios;
+        return hayCamposVacios;
     }
 
     private boolean camposValidos() {
@@ -90,11 +84,12 @@ public class RegistrarAdministradorControlador {
         String apellidos = campoTextoApellidos.getText().trim();
         String numeroPersonal = campoTextoNumeroPersonal.getText().trim();
 
-        List<String> campo = List.of(nombre, apellidos, numeroPersonal);
-        boolean camposFormularioValido = !camposVacios(campo);
+        List<String> campos = List.of(nombre, apellidos, numeroPersonal);
+        boolean camposFormularioValido = !camposVacios(campos);
 
         if (!camposFormularioValido) {
-            mostrarError("Campos obligatorios vacios" , "POR FAVOR LLENE TODOS LOS CAMPOS");
+            mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
+                    "Campos obligatorios vacios", "POR FAVOR LLENE TODOS LOS CAMPOS");
         }
         return camposFormularioValido;
     }
@@ -120,17 +115,19 @@ public class RegistrarAdministradorControlador {
             int filasAfectadas = administradorDao.insertarAdministrador(administrador);
             if (filasAfectadas >= FILAS_AFECTADAS_ESPERADAS) {
                 limpiarCampos();
-                mostrarExito("Administrador registrado",
-                        "EL ADMINISTRADOR FUE REGISTRADO EXITOSAMENTE.");
+                mostrarPanel(etiquetaTituloExito, etiquetaMensajeExito, panelExito,
+                        "Administrador registrado", "EL ADMINISTRADOR FUE REGISTRADO EXITOSAMENTE.");
             } else {
-                mostrarError("Error al registrar",
-                        "NO SE PUDO REGISTRAR EL ADMINISTRADOR. INTENTE DE NUEVO.");
+                mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
+                        "Error al registrar", "NO SE PUDO REGISTRAR EL ADMINISTRADOR. INTENTE DE NUEVO.");
             }
-        } catch (RegistroDuplicadoExcepcion e) {
-            mostrarError("Numero de personal repetido",
+        } catch (RegistroDuplicadoExcepcion excepcion) {
+            mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
+                    "Numero de personal repetido",
                     "EL NUMERO DE PERSONAL YA EXISTE EN EL SISTEMA. VERIFIQUE LA INFORMACION.");
-        } catch (UsuariosExcepcion e) {
-            mostrarError("Error inesperado", e.getMessage().toUpperCase());
+        } catch (UsuariosExcepcion excepcion) {
+            mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
+                    "Error inesperado", excepcion.getMessage().toUpperCase());
         }
     }
 
@@ -143,34 +140,22 @@ public class RegistrarAdministradorControlador {
     }
 
     private void limpiarCampos() {
-        ocultarError();
-        ocultarExito();
+        ocultarPanel(panelError);
+        ocultarPanel(panelExito);
         campoTextoNombres.clear();
         campoTextoApellidos.clear();
         campoTextoNumeroPersonal.clear();
     }
 
-    private void mostrarError(String titulo, String mensaje) {
-        etiquetaTituloError.setText(titulo);
-        etiquetaMensajeError.setText(mensaje);
-        panelError.setVisible(true);
-        panelError.setManaged(true);
+    private void mostrarPanel(Label etiquetaTitulo, Label etiquetaMensaje, VBox panel, String titulo, String mensaje) {
+        etiquetaTitulo.setText(titulo);
+        etiquetaMensaje.setText(mensaje);
+        panel.setVisible(true);
+        panel.setManaged(true);
     }
 
-    private void ocultarError() {
-        panelError.setVisible(false);
-        panelError.setManaged(false);
-    }
-
-    private void mostrarExito(String titulo, String mensaje) {
-        etiquetaTituloExito.setText(titulo);
-        etiquetaMensajeExito.setText(mensaje);
-        panelExito.setVisible(true);
-        panelExito.setManaged(true);
-    }
-
-    private void ocultarExito() {
-        panelExito.setVisible(false);
-        panelExito.setManaged(false);
+    private void ocultarPanel(VBox panel) {
+        panel.setVisible(false);
+        panel.setManaged(false);
     }
 }

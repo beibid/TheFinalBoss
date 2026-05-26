@@ -1,6 +1,5 @@
 package InterfazGrafica;
 
-
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
@@ -13,7 +12,6 @@ import javafx.stage.Stage;
 import logica.dao.excepciones.UsuariosExcepcion;
 import logica.dao.objetos.SeccionDao;
 import logica.dominio.Seccion;
-
 
 public class RegistrarSeccionControlador {
 
@@ -30,8 +28,8 @@ public class RegistrarSeccionControlador {
 
     @FXML
     private void botonRegistrar() {
-        ocultarError();
-        ocultarExito();
+        ocultarPanel(panelError);
+        ocultarPanel(panelExito);
         if (confirmarAccion("¿Seguro que desea registrar esta seccion?")) {
             procesarRegistro();
         }
@@ -45,9 +43,9 @@ public class RegistrarSeccionControlador {
     }
 
     @FXML
-    private void botonRegresar(ActionEvent event) {
-        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        stage.close();
+    private void botonRegresar(ActionEvent evento) {
+        Stage escenario = (Stage) ((Node) evento.getSource()).getScene().getWindow();
+        escenario.close();
     }
 
     private boolean confirmarAccion(String mensaje) {
@@ -63,7 +61,8 @@ public class RegistrarSeccionControlador {
 
     private void procesarRegistro() {
         if (!camposValidos()) {
-            mostrarError("Campos obligatorios vacios", "Verifica la informacion e intente de nuevo.");
+            mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
+                    "Campos obligatorios vacios", "Verifica la informacion e intente de nuevo.");
             return;
         }
         guardarSeccion(construirSeccion());
@@ -78,7 +77,6 @@ public class RegistrarSeccionControlador {
     private Seccion construirSeccion() {
         String numeroSeccion = campoTextoNumeroSeccion.getText().trim();
         String periodo = campoTextoPeriodo.getText().trim();
-
         Seccion seccion = new Seccion();
         seccion.setNoSeccion(limitarTexto(numeroSeccion, 55));
         seccion.setPeriodo(limitarTexto(periodo, 55));
@@ -91,14 +89,15 @@ public class RegistrarSeccionControlador {
             int filasAfectadas = seccionDao.agregarSeccion(seccion);
             if (filasAfectadas >= FILAS_AFECTADAS_ESPERADAS) {
                 limpiarCamposRegistros();
-                mostrarExito("Seccion registrada",
-                        "SECCION REGISTRADA EXITOSAMENTE.");
+                mostrarPanel(etiquetaTituloExito, etiquetaMensajeExito, panelExito,
+                        "Seccion registrada", "SECCION REGISTRADA EXITOSAMENTE.");
             } else {
-                mostrarError("Error al registrar",
-                        "NO SE PUDO REGISTRAR LA SECCION. INTENTE DE NUEVO.");
+                mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
+                        "Error al registrar", "NO SE PUDO REGISTRAR LA SECCION. INTENTE DE NUEVO.");
             }
-        } catch (UsuariosExcepcion e) {
-            mostrarError("Error inesperado", e.getMessage().toUpperCase());
+        } catch (UsuariosExcepcion excepcion) {
+            mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
+                    "Error inesperado", excepcion.getMessage().toUpperCase());
         }
     }
 
@@ -107,33 +106,21 @@ public class RegistrarSeccionControlador {
     }
 
     private void limpiarCamposRegistros() {
-        ocultarError();
-        ocultarExito();
+        ocultarPanel(panelError);
+        ocultarPanel(panelExito);
         campoTextoNumeroSeccion.clear();
         campoTextoPeriodo.clear();
     }
 
-    private void mostrarError(String titulo, String mensaje) {
-        etiquetaTituloError.setText(titulo);
-        etiquetaMensajeError.setText(mensaje);
-        panelError.setVisible(true);
-        panelError.setManaged(true);
+    private void mostrarPanel(Label etiquetaTitulo, Label etiquetaMensaje, VBox panel, String titulo, String mensaje) {
+        etiquetaTitulo.setText(titulo);
+        etiquetaMensaje.setText(mensaje);
+        panel.setVisible(true);
+        panel.setManaged(true);
     }
 
-    private void ocultarError() {
-        panelError.setVisible(false);
-        panelError.setManaged(false);
-    }
-
-    private void mostrarExito(String titulo, String mensaje) {
-        etiquetaTituloExito.setText(titulo);
-        etiquetaMensajeExito.setText(mensaje);
-        panelExito.setVisible(true);
-        panelExito.setManaged(true);
-    }
-
-    private void ocultarExito() {
-        panelExito.setVisible(false);
-        panelExito.setManaged(false);
+    private void ocultarPanel(VBox panel) {
+        panel.setVisible(false);
+        panel.setManaged(false);
     }
 }

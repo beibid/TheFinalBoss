@@ -1,6 +1,5 @@
 package InterfazGrafica;
 
-
 import logica.dao.objetos.AutoevaluacionPracticanteDao;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -19,7 +18,6 @@ import logica.archivos.GeneradorPdfAutoevaluacion;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
 
 public class GenerarAutoevaluacionPracticanteControlador {
 
@@ -62,8 +60,8 @@ public class GenerarAutoevaluacionPracticanteControlador {
 
     @FXML
     private void botonGuardar() {
-        ocultarError();
-        ocultarExito();
+        ocultarPanel(panelError);
+        ocultarPanel(panelExito);
         if (confirmarAccion("¿Seguro que desea guardar la autoevaluación?")) {
             procesarRegistro();
         }
@@ -71,8 +69,8 @@ public class GenerarAutoevaluacionPracticanteControlador {
 
     @FXML
     private void botonGenerarPDF() {
-        ocultarError();
-        ocultarExito();
+        ocultarPanel(panelError);
+        ocultarPanel(panelExito);
         if (!respuestasValidas()) {
             mostrarError("Respuestas incompletas",
                     "Debes responder todas las afirmaciones antes de generar el PDF.");
@@ -89,8 +87,8 @@ public class GenerarAutoevaluacionPracticanteControlador {
     }
 
     @FXML
-    private void botonRegresar(ActionEvent event) {
-        Stage escenario = (Stage) ((Node) event.getSource()).getScene().getWindow();
+    private void botonRegresar(ActionEvent evento) {
+        Stage escenario = (Stage) ((Node) evento.getSource()).getScene().getWindow();
         escenario.close();
     }
 
@@ -120,11 +118,16 @@ public class GenerarAutoevaluacionPracticanteControlador {
     }
 
     private void seleccionarRespuesta(ToggleGroup grupo, int valor) {
-        for (Toggle toggle : grupo.getToggles()) {
+        boolean encontrado = false;
+        int indice = 0;
+        List<Toggle> toggles = grupo.getToggles();
+        while (!encontrado && indice < toggles.size()) {
+            Toggle toggle = toggles.get(indice);
             if (Integer.parseInt(toggle.getUserData().toString()) == valor) {
                 toggle.setSelected(true);
-                break;
+                encontrado = true;
             }
+            indice++;
         }
     }
 
@@ -149,41 +152,36 @@ public class GenerarAutoevaluacionPracticanteControlador {
 
     private void procesarRegistro() {
         if (!respuestasValidas()) {
-            mostrarError("Respuestas incompletas",
-                    "Debes responder todo antes de guardar.");
-            return;
+            mostrarError("Respuestas incompletas", "Debes responder todo antes de guardar.");
+        } else {
+            guardarAutoevaluacion(construirAutoevaluacion());
         }
-        guardarAutoevaluacion(construirAutoevaluacion());
     }
 
     private void generarPdf() {
         AutoevaluacionPracticante autoevaluacion = construirAutoevaluacion();
         GeneradorPdfAutoevaluacion generador = new GeneradorPdfAutoevaluacion();
-        String rutaPdf = generador.generarPdf(autoevaluacion, nombrePracticante, etiquetaNombreProyecto.getText(),
-                etiquetaOrganizacion.getText(),
-                etiquetaResponsable.getText()
-        );
+        String rutaPdf = generador.generarPdf(autoevaluacion, nombrePracticante,
+                etiquetaNombreProyecto.getText(), etiquetaOrganizacion.getText(),
+                etiquetaResponsable.getText());
         if (rutaPdf != null) {
-            mostrarExito("PDF generado correctamente",
-                    "La autoevaluación se guardó en: " + rutaPdf);
+            mostrarExito("PDF generado correctamente", "La autoevaluación se guardó en: " + rutaPdf);
         } else {
-            mostrarError("Error al generar",
-                    "No se pudo generar el PDF. Intente de nuevo.");
+            mostrarError("Error al generar", "No se pudo generar el PDF. Intente de nuevo.");
         }
     }
 
     private boolean respuestasValidas() {
-        List<ToggleGroup> grupos = List.of(grupoRespuesta1, grupoRespuesta2, grupoRespuesta3, grupoRespuesta4,
-                grupoRespuesta5, grupoRespuesta6,
-                grupoRespuesta7, grupoRespuesta8, grupoRespuesta9,
-                grupoRespuesta10);
-        boolean grupoSeleccionado = true;
+        List<ToggleGroup> grupos = List.of(grupoRespuesta1, grupoRespuesta2, grupoRespuesta3,
+                grupoRespuesta4, grupoRespuesta5, grupoRespuesta6, grupoRespuesta7,
+                grupoRespuesta8, grupoRespuesta9, grupoRespuesta10);
+        boolean todasRespondidas = true;
         for (ToggleGroup grupo : grupos) {
             if (grupo.getSelectedToggle() == null) {
-                grupoSeleccionado = false;
+                todasRespondidas = false;
             }
         }
-        return grupoSeleccionado;
+        return todasRespondidas;
     }
 
     private AutoevaluacionPracticante construirAutoevaluacion() {
@@ -214,11 +212,9 @@ public class GenerarAutoevaluacionPracticanteControlador {
             int filasAfectadas = autoevaluacionDao.registrarAutoevaluacion(autoevaluacion);
             if (filasAfectadas >= FILAS_AFECTADAS_ESPERADAS) {
                 limpiarRespuestas();
-                mostrarExito("Autoevaluación registrada",
-                        "LA AUTOEVALUACIÓN SE GUARDÓ EXITOSAMENTE.");
+                mostrarExito("Autoevaluación registrada", "LA AUTOEVALUACIÓN SE GUARDÓ EXITOSAMENTE.");
             } else {
-                mostrarError("Error al guardar",
-                        "NO SE PUDO GUARDAR LA AUTOEVALUACIÓN. INTENTE DE NUEVO.");
+                mostrarError("Error al guardar", "NO SE PUDO GUARDAR LA AUTOEVALUACIÓN. INTENTE DE NUEVO.");
             }
         } catch (MensajeriaExcepcion excepcion) {
             LOGGER.log(Level.SEVERE, "Error al guardar autoevaluación", excepcion);
@@ -227,8 +223,8 @@ public class GenerarAutoevaluacionPracticanteControlador {
     }
 
     private void limpiarRespuestas() {
-        ocultarError();
-        ocultarExito();
+        ocultarPanel(panelError);
+        ocultarPanel(panelExito);
         grupoRespuesta1.selectToggle(null);
         grupoRespuesta2.selectToggle(null);
         grupoRespuesta3.selectToggle(null);
@@ -252,28 +248,25 @@ public class GenerarAutoevaluacionPracticanteControlador {
         return alerta.showAndWait().filter(botonPresionado -> botonPresionado == botonSi).isPresent();
     }
 
-    private void mostrarError(String titulo, String mensaje) {
-        etiquetaTituloError.setText(titulo);
-        etiquetaMensajeError.setText(mensaje);
-        panelError.setVisible(true);
-        panelError.setManaged(true);
+    private void mostrarPanel(VBox panel, Label etiquetaTitulo, Label etiquetaMensaje,String titulo, String mensaje) {
+        etiquetaTitulo.setText(titulo);
+        etiquetaMensaje.setText(mensaje);
+        panel.setVisible(true);
+        panel.setManaged(true);
     }
 
-    private void ocultarError() {
-        panelError.setVisible(false);
-        panelError.setManaged(false);
+    private void ocultarPanel(VBox panel) {
+        panel.setVisible(false);
+        panel.setManaged(false);
+    }
+
+    private void mostrarError(String titulo, String mensaje) {
+        ocultarPanel(panelExito);
+        mostrarPanel(panelError, etiquetaTituloError, etiquetaMensajeError, titulo, mensaje);
     }
 
     private void mostrarExito(String titulo, String mensaje) {
-        etiquetaTituloExito.setText(titulo);
-        etiquetaMensajeExito.setText(mensaje);
-        panelExito.setVisible(true);
-        panelExito.setManaged(true);
+        ocultarPanel(panelError);
+        mostrarPanel(panelExito, etiquetaTituloExito, etiquetaMensajeExito, titulo, mensaje);
     }
-
-    private void ocultarExito() {
-        panelExito.setVisible(false);
-        panelExito.setManaged(false);
-    }
-
 }

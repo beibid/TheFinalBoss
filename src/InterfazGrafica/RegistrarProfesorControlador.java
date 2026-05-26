@@ -1,6 +1,5 @@
 package InterfazGrafica;
 
-
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
@@ -19,7 +18,6 @@ import logica.dominio.Profesor;
 import logica.dominio.enums.Estado;
 import logica.dominio.enums.Turno;
 import java.util.List;
-
 
 public class RegistrarProfesorControlador {
 
@@ -50,24 +48,24 @@ public class RegistrarProfesorControlador {
 
     @FXML
     private void botonRegistrar() {
-        ocultarError();
-        ocultarExito();
+        ocultarPanel(panelError);
+        ocultarPanel(panelExito);
         if (confirmarAccion("¿Seguro que desea registrar al profesor?")) {
             procesarRegistro();
         }
     }
 
     @FXML
-    private void botonCancelar () {
+    private void botonCancelar() {
         if (confirmarAccion("¿Seguro que desea cancelar?")) {
             limpiarCamposRegistros();
         }
     }
 
     @FXML
-    private void botonRegresar (ActionEvent event) {
-       Stage escenario = (Stage) ((Node) event.getSource()).getScene().getWindow();
-       escenario.close();
+    private void botonRegresar(ActionEvent evento) {
+        Stage escenario = (Stage) ((Node) evento.getSource()).getScene().getWindow();
+        escenario.close();
     }
 
     private boolean confirmarAccion(String mensaje) {
@@ -82,17 +80,16 @@ public class RegistrarProfesorControlador {
     }
 
     private void procesarRegistro() {
-        if (!camposValidos()) {
-            return;
+        if (camposValidos()) {
+            Profesor profesor = construirProfesor();
+            guardarProfesor(profesor);
         }
-        Profesor profesor = construirProfesor();
-        guardarProfesor(profesor);
     }
 
-    private boolean camposVacios(List<String> campos){
+    private boolean camposVacios(List<String> campos) {
         boolean hayCamposVacios = false;
-        for ( String campo : campos){
-            if (campo.isEmpty()){
+        for (String campo : campos) {
+            if (campo.isEmpty()) {
                 hayCamposVacios = true;
             }
         }
@@ -106,14 +103,16 @@ public class RegistrarProfesorControlador {
         String numeroPersonal = campoTextoNumeroPersonal.getText().trim();
 
         List<String> campos = List.of(nombre, apellidos, correo, numeroPersonal);
-        boolean nombreValido = !camposVacios (campos);
+        boolean nombreValido = !camposVacios(campos);
         boolean turnoValido = grupoTurno.getSelectedToggle() != null;
 
         if (!nombreValido) {
-            mostrarError("Campos obligatorios vacios", "Verifique la informacion e intente de nuevo");
+            mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
+                    "Campos obligatorios vacios", "Verifique la informacion e intente de nuevo");
         }
         if (!turnoValido) {
-            mostrarError("Turno no seleccionado", "Seleccione un turno para el profesor.");
+            mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
+                    "Turno no seleccionado", "Seleccione un turno para el profesor.");
         }
         return nombreValido && turnoValido;
     }
@@ -143,7 +142,7 @@ public class RegistrarProfesorControlador {
             turnoSeleccionado = Turno.Matutino;
         } else if (radioBotonVespertino.isSelected()) {
             turnoSeleccionado = Turno.Vespertino;
-        } else if (radioBotonMixto.isSelected()){
+        } else if (radioBotonMixto.isSelected()) {
             turnoSeleccionado = Turno.Mixto;
         }
         return turnoSeleccionado;
@@ -155,17 +154,19 @@ public class RegistrarProfesorControlador {
             int filasAfectadas = profesorDao.insertarProfesor(profesor);
             if (filasAfectadas >= FILAS_AFECTADAS_ESPERADAS) {
                 limpiarCamposRegistros();
-                mostrarExito("Profesor en estado activo",
-                        "El profesor fue registrado exitosamente");
+                mostrarPanel(etiquetaTituloExito, etiquetaMensajeExito, panelExito,
+                        "Profesor en estado activo", "El profesor fue registrado exitosamente");
             } else {
-                mostrarError("Error al registrar",
-                        "No fue posible registrar al profesor, intente mas tarde");
+                mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
+                        "Error al registrar", "No fue posible registrar al profesor, intente mas tarde");
             }
-        } catch (RegistroDuplicadoExcepcion e) {
-            mostrarError("Numero de personal repetido",
+        } catch (RegistroDuplicadoExcepcion excepcion) {
+            mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
+                    "Numero de personal repetido",
                     "El numero de personal ya existe en el sistema, verifique la informacion");
-        } catch (UsuariosExcepcion e) {
-            mostrarError("Error inesperado", e.getMessage().toUpperCase());
+        } catch (UsuariosExcepcion excepcion) {
+            mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
+                    "Error inesperado", excepcion.getMessage().toUpperCase());
         }
     }
 
@@ -178,8 +179,8 @@ public class RegistrarProfesorControlador {
     }
 
     private void limpiarCamposRegistros() {
-        ocultarError();
-        ocultarExito();
+        ocultarPanel(panelError);
+        ocultarPanel(panelExito);
         campoTextoNombres.clear();
         campoTextoApellidos.clear();
         campoTextoCorreo.clear();
@@ -187,27 +188,15 @@ public class RegistrarProfesorControlador {
         grupoTurno.selectToggle(null);
     }
 
-    private void mostrarError(String titulo, String mensaje) {
-        etiquetaTituloError.setText(titulo);
-        etiquetaMensajeError.setText(mensaje);
-        panelError.setVisible(true);
-        panelError.setManaged(true);
+    private void mostrarPanel(Label etiquetaTitulo, Label etiquetaMensaje, VBox panel, String titulo, String mensaje) {
+        etiquetaTitulo.setText(titulo);
+        etiquetaMensaje.setText(mensaje);
+        panel.setVisible(true);
+        panel.setManaged(true);
     }
 
-    private void ocultarError() {
-        panelError.setVisible(false);
-        panelError.setManaged(false);
-    }
-
-    private void mostrarExito(String titulo, String mensaje) {
-        etiquetaTituloExito.setText(titulo);
-        etiquetaMensajeExito.setText(mensaje);
-        panelExito.setVisible(true);
-        panelExito.setManaged(true);
-    }
-
-    private void ocultarExito() {
-        panelExito.setVisible(false);
-        panelExito.setManaged(false);
+    private void ocultarPanel(VBox panel) {
+        panel.setVisible(false);
+        panel.setManaged(false);
     }
 }

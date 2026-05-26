@@ -1,6 +1,5 @@
 package InterfazGrafica;
 
-
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -19,11 +18,9 @@ import logica.dominio.Reporte;
 import logica.dominio.SesionUsuario;
 import logica.dominio.enums.TipoReporte;
 import logica.archivos.GeneradorPdfReporte;
-
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
 
 public class GenerarReporteControlador {
 
@@ -57,8 +54,8 @@ public class GenerarReporteControlador {
 
     @FXML
     private void botonGenerar() {
-        ocultarError();
-        ocultarExito();
+        ocultarPanel(panelError);
+        ocultarPanel(panelExito);
         if (confirmarAccion("¿Desea generar el reporte?")) {
             procesarGeneracion();
         }
@@ -72,8 +69,8 @@ public class GenerarReporteControlador {
     }
 
     @FXML
-    private void botonRegresar(ActionEvent event) {
-        Stage escenario = (Stage) ((Node) event.getSource()).getScene().getWindow();
+    private void botonRegresar(ActionEvent evento) {
+        Stage escenario = (Stage) ((Node) evento.getSource()).getScene().getWindow();
         escenario.close();
     }
 
@@ -87,8 +84,7 @@ public class GenerarReporteControlador {
                 etiquetaProyecto.setText(nombreProyecto);
                 etiquetaOrganizacion.setText(nombreOrganizacion);
             } else {
-                mostrarError("Sin proyecto asignado", "No se encontró proyecto para la matrícula: "
-                        + matricula);
+                mostrarError("Sin proyecto asignado", "No se encontró proyecto para la matrícula: " + matricula);
             }
         } catch (MensajeriaExcepcion excepcion) {
             LOGGER.log(Level.SEVERE, "Error al cargar proyecto", excepcion);
@@ -96,12 +92,10 @@ public class GenerarReporteControlador {
         }
     }
 
-
-    private boolean camposVacios(List<String> campos){
+    private boolean camposVacios(List<String> campos) {
         boolean hayCamposVacios = false;
-
-        for (String campo : campos){
-            if (campo.isEmpty()){
+        for (String campo : campos) {
+            if (campo.isEmpty()) {
                 hayCamposVacios = true;
             }
         }
@@ -120,13 +114,19 @@ public class GenerarReporteControlador {
         if (!camposTextosValidos) {
             mostrarError("Campo requerido", "La descripción no puede estar vacía.");
         }
-        return tipoSeleccionado && camposTextosValidos;
+        boolean formularioCompleto = tipoSeleccionado && camposTextosValidos;
+        return formularioCompleto;
+    }
+
+    private void procesarGeneracion() {
+        if (camposValidos()) {
+            generarPdf();
+        }
     }
 
     private void generarPdf() {
         Reporte reporte = new Reporte(comboBoxTipoReporte.getValue(), areaDescripcion.getText().trim(),
-                matricula, null, null );
-
+                matricula, null, null);
         GeneradorPdfReporte generadorPdf = new GeneradorPdfReporte();
         String rutaPdf = generadorPdf.generarPdf(reporte, nombrePracticante, nombreProyecto, nombreOrganizacion);
         if (rutaPdf != null) {
@@ -137,17 +137,11 @@ public class GenerarReporteControlador {
         }
     }
 
-    private void procesarGeneracion() {
-        if (camposValidos()) {
-            generarPdf();
-        }
-    }
-
     private void limpiarFormulario() {
         comboBoxTipoReporte.getSelectionModel().clearSelection();
         areaDescripcion.clear();
-        ocultarError();
-        ocultarExito();
+        ocultarPanel(panelError);
+        ocultarPanel(panelExito);
     }
 
     private boolean confirmarAccion(String mensaje) {
@@ -161,28 +155,26 @@ public class GenerarReporteControlador {
         return alerta.showAndWait().filter(botonPresionado -> botonPresionado == botonSi).isPresent();
     }
 
-    private void mostrarError(String titulo, String mensaje) {
-        etiquetaTituloError.setText(titulo);
-        etiquetaMensajeError.setText(mensaje);
-        panelError.setVisible(true);
-        panelError.setManaged(true);
+    private void mostrarPanel(VBox panel, Label etiquetaTitulo, Label etiquetaMensaje,
+                              String titulo, String mensaje) {
+        etiquetaTitulo.setText(titulo);
+        etiquetaMensaje.setText(mensaje);
+        panel.setVisible(true);
+        panel.setManaged(true);
     }
 
-    private void ocultarError() {
-        panelError.setVisible(false);
-        panelError.setManaged(false);
+    private void ocultarPanel(VBox panel) {
+        panel.setVisible(false);
+        panel.setManaged(false);
+    }
+
+    private void mostrarError(String titulo, String mensaje) {
+        ocultarPanel(panelExito);
+        mostrarPanel(panelError, etiquetaTituloError, etiquetaMensajeError, titulo, mensaje);
     }
 
     private void mostrarExito(String titulo, String mensaje) {
-        etiquetaTituloExito.setText(titulo);
-        etiquetaMensajeExito.setText(mensaje);
-        panelExito.setVisible(true);
-        panelExito.setManaged(true);
-    }
-
-    private void ocultarExito() {
-        panelExito.setVisible(false);
-        panelExito.setManaged(false);
+        ocultarPanel(panelError);
+        mostrarPanel(panelExito, etiquetaTituloExito, etiquetaMensajeExito, titulo, mensaje);
     }
 }
-

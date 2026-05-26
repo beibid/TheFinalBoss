@@ -24,6 +24,7 @@ import java.util.logging.Logger;
 public class ModificarPracticanteControlador {
 
     private static final Logger LOGGER = Logger.getLogger(ModificarPracticanteControlador.class.getName());
+    private static final int FILAS_AFECTADAS_ESPERADAS = 1;
 
     @FXML private ComboBox<Practicante> comboBoxPracticantes;
     @FXML private ComboBox<Genero> comboBoxGenero;
@@ -39,7 +40,6 @@ public class ModificarPracticanteControlador {
     @FXML private TextField campoCorreo;
     @FXML private TextField campoLenguaIndigena;
 
-    private static final int FILAS_AFECTADAS_ESPERADAS = 1;
     private Practicante practicanteSeleccionado;
 
     @FXML
@@ -54,32 +54,26 @@ public class ModificarPracticanteControlador {
             List<Practicante> lista = practicanteDao.obtenerPracticantesActivos();
             ObservableList<Practicante> practicantesObservable = FXCollections.observableArrayList(lista);
             comboBoxPracticantes.setItems(practicantesObservable);
-            comboBoxPracticantes.setCellFactory(l -> new ListCell<Practicante>() {
-                @Override
-                protected void updateItem(Practicante practicante, boolean vacio) {
-                    super.updateItem(practicante, vacio);
-                    if (vacio || practicante == null) {
-                        setText(null);
-                    } else {
-                        setText(practicante.getNombre() + " " + practicante.getApellidos() + " - " + practicante.getMatricula());
-                    }
-                }
-            });
-            comboBoxPracticantes.setButtonCell(new ListCell<Practicante>() {
-                @Override
-                protected void updateItem(Practicante practicante, boolean vacio) {
-                    super.updateItem(practicante, vacio);
-                    if (vacio || practicante == null) {
-                        setText("-- Selecciona un practicante --");
-                    } else {
-                        setText(practicante.getNombre() + " " + practicante.getApellidos());
-                    }
-                }
-            });
+            comboBoxPracticantes.setCellFactory(listaPracticantes -> crearCeldaPracticante());
+            comboBoxPracticantes.setButtonCell(crearCeldaPracticante());
         } catch (UsuariosExcepcion excepcion) {
             LOGGER.log(Level.SEVERE, "Error al cargar practicantes", excepcion);
             mostrarError("Error al cargar", excepcion.getMessage());
         }
+    }
+
+    private ListCell<Practicante> crearCeldaPracticante() {
+        return new ListCell<Practicante>() {
+            @Override
+            protected void updateItem(Practicante practicante, boolean vacio) {
+                super.updateItem(practicante, vacio);
+                if (vacio || practicante == null) {
+                    setText("-- Selecciona un practicante --");
+                } else {
+                    setText(practicante.getNombre() + " " + practicante.getApellidos() + " - " + practicante.getMatricula());
+                }
+            }
+        };
     }
 
     @FXML
@@ -113,37 +107,54 @@ public class ModificarPracticanteControlador {
     }
 
     private void procesarModificacion() {
-        if (!camposValidos()) {
-            mostrarError("Campos obligatorios vacíos",
-                    "Verifica la información e intenta de nuevo.");
-            return;
-        }
-        PracticanteDao practicanteDao = new PracticanteDao();
-        try {
-            Practicante practicanteModificado = construirPracticante();
-            int filasAfectadas = practicanteDao.modificarPracticante(
-                    practicanteSeleccionado.getMatricula(), practicanteModificado);
-            if (filasAfectadas >= FILAS_AFECTADAS_ESPERADAS) {
-                ocultarTodo();
-                comboBoxPracticantes.setValue(null);
-                cargarPracticantes();
-                mostrarExito("Practicante modificado",
-                        "Practicante actualizado exitosamente.");
-            } else {
-                mostrarError("Error al modificar",
-                        "No se pudo modificar el practicante. Intente de nuevo.");
+        if (camposValidos()) {
+            PracticanteDao practicanteDao = new PracticanteDao();
+            try {
+                Practicante practicanteModificado = construirPracticante();
+                int filasAfectadas = practicanteDao.modificarPracticante(
+                        practicanteSeleccionado.getMatricula(), practicanteModificado);
+                if (filasAfectadas >= FILAS_AFECTADAS_ESPERADAS) {
+                    ocultarTodo();
+                    comboBoxPracticantes.setValue(null);
+                    cargarPracticantes();
+                    mostrarExito("Practicante modificado", "Practicante actualizado exitosamente.");
+                } else {
+                    mostrarError("Error al modificar", "No se pudo modificar el practicante. Intente de nuevo.");
+                }
+            } catch (UsuariosExcepcion excepcion) {
+                LOGGER.log(Level.SEVERE, "Error al modificar practicante", excepcion);
+                mostrarError("Error inesperado", excepcion.getMessage().toUpperCase());
             }
-        } catch (UsuariosExcepcion excepcion) {
-            LOGGER.log(Level.SEVERE, "Error al modificar practicante", excepcion);
-            mostrarError("Error inesperado", excepcion.getMessage().toUpperCase());
         }
+    }
+
+    private boolean camposVacios(List<String> campos) {
+        boolean hayCamposVacios = false;
+        for (String campo : campos) {
+            if (campo.isEmpty()) {
+                hayCamposVacios = true;
+            }
+        }
+        return hayCamposVacios;
     }
 
     private boolean camposValidos() {
         String nombre = campoNombre.getText().trim();
         String apellidos = campoApellidos.getText().trim();
         String correo = campoCorreo.getText().trim();
-        return !nombre.isEmpty() && !apellidos.isEmpty() && !correo.isEmpty() && comboBoxGenero.getValue() != null;
+
+        List<String> campos = List.of(nombre, apellidos, correo);
+        boolean camposTextosValidos = !camposVacios(campos);
+        boolean generoValido = comboBoxGenero.getValue() != null;
+
+        if (!camposTextosValidos) {
+            mostrarError("Campos obligatorios vacíos", "Verifica la información e intenta de nuevo.");
+        }
+        if (!generoValido) {
+            mostrarError("Género no seleccionado", "Selecciona un género para el practicante.");
+        }
+        boolean formularioCompleto = camposTextosValidos && generoValido;
+        return formularioCompleto;
     }
 
     private Practicante construirPracticante() {
@@ -167,8 +178,8 @@ public class ModificarPracticanteControlador {
     }
 
     @FXML
-    private void botonRegresar(ActionEvent event) {
-        Stage escenario = (Stage) ((Node) event.getSource()).getScene().getWindow();
+    private void botonRegresar(ActionEvent evento) {
+        Stage escenario = (Stage) ((Node) evento.getSource()).getScene().getWindow();
         escenario.close();
     }
 
@@ -180,7 +191,7 @@ public class ModificarPracticanteControlador {
         ButtonType botonSi = new ButtonType("Sí");
         ButtonType botonNo = new ButtonType("No");
         alerta.getButtonTypes().setAll(botonSi, botonNo);
-        return alerta.showAndWait().filter(r -> r == botonSi).isPresent();
+        return alerta.showAndWait().filter(botonPresionado -> botonPresionado == botonSi).isPresent();
     }
 
     private void ocultarTodo() {
@@ -196,17 +207,26 @@ public class ModificarPracticanteControlador {
         panelExito.setManaged(false);
     }
 
+    private void mostrarPanel(VBox panel, Label etiquetaTitulo, Label etiquetaMensaje,
+                              String titulo, String mensaje) {
+        etiquetaTitulo.setText(titulo);
+        etiquetaMensaje.setText(mensaje);
+        panel.setVisible(true);
+        panel.setManaged(true);
+    }
+
+    private void ocultarPanel(VBox panel) {
+        panel.setVisible(false);
+        panel.setManaged(false);
+    }
+
     private void mostrarError(String titulo, String mensaje) {
-        etiquetaTituloError.setText(titulo);
-        etiquetaMensajeError.setText(mensaje);
-        panelError.setVisible(true);
-        panelError.setManaged(true);
+        ocultarPanel(panelExito);
+        mostrarPanel(panelError, etiquetaTituloError, etiquetaMensajeError, titulo, mensaje);
     }
 
     private void mostrarExito(String titulo, String mensaje) {
-        etiquetaTituloExito.setText(titulo);
-        etiquetaMensajeExito.setText(mensaje);
-        panelExito.setVisible(true);
-        panelExito.setManaged(true);
+        ocultarPanel(panelError);
+        mostrarPanel(panelExito, etiquetaTituloExito, etiquetaMensajeExito, titulo, mensaje);
     }
 }

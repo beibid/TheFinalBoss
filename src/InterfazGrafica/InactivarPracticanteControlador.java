@@ -1,6 +1,5 @@
 package InterfazGrafica;
 
-
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -10,15 +9,20 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListCell;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import logica.dao.excepciones.UsuariosExcepcion;
 import logica.dao.objetos.PracticanteDao;
 import logica.dominio.Practicante;
 import java.util.List;
-
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class InactivarPracticanteControlador {
+
+    private static final Logger LOGGER = Logger.getLogger(InactivarPracticanteControlador.class.getName());
+    private static final int FILAS_AFECTADAS_ESPERADAS = 1;
 
     @FXML private ComboBox<Practicante> comboBoxPracticantes;
     @FXML private VBox panelDatos;
@@ -33,6 +37,7 @@ public class InactivarPracticanteControlador {
     @FXML private Label etiquetaNumeroPersonal;
 
     private PracticanteDao practicanteDao = new PracticanteDao();
+    private Practicante practicanteSeleccionado;
 
     @FXML
     public void initialize() {
@@ -42,63 +47,82 @@ public class InactivarPracticanteControlador {
     private void cargarPracticantesActivos() {
         try {
             List<Practicante> practicantes = practicanteDao.obtenerPracticantesActivos();
-            ObservableList<Practicante> listaPracticantes = FXCollections.observableArrayList(practicantes);
-            comboBoxPracticantes.setItems(listaPracticantes);
-        } catch (UsuariosExcepcion e) {
-            mostrarError("Error al cargar", "NO SE PUDIERON CARGAR LOS COORDINADORES.");
+            ObservableList<Practicante> practicantesObservable = FXCollections.observableArrayList(practicantes);
+            comboBoxPracticantes.setItems(practicantesObservable);
+            comboBoxPracticantes.setCellFactory(listaPracticantes -> crearCeldaPracticante());
+            comboBoxPracticantes.setButtonCell(crearCeldaPracticante());
+        } catch (UsuariosExcepcion excepcion) {
+            LOGGER.log(Level.SEVERE, "Error al cargar practicantes", excepcion);
+            mostrarError("Error al cargar", "NO SE PUDIERON CARGAR LOS PRACTICANTES.");
         }
+    }
+
+    private ListCell<Practicante> crearCeldaPracticante() {
+        return new ListCell<Practicante>() {
+            @Override
+            protected void updateItem(Practicante practicante, boolean vacio) {
+                super.updateItem(practicante, vacio);
+                if (vacio || practicante == null) {
+                    setText("-- Selecciona un practicante --");
+                } else {
+                    setText(practicante.getNombre() + " " + practicante.getApellidos() + " - " + practicante.getMatricula());
+                }
+            }
+        };
     }
 
     @FXML
     private void seleccionarPracticante() {
-        Practicante practicante= comboBoxPracticantes.getSelectionModel().getSelectedItem();
-        if (practicante != null) {
-            etiquetaNombre.setText(practicante.getNombre());
-            etiquetaApellidos.setText(practicante.getApellidos());
-            etiquetaNumeroPersonal.setText(practicante.getMatricula());
-            panelDatos.setVisible(true);
-            panelDatos.setManaged(true);
+        practicanteSeleccionado = comboBoxPracticantes.getValue();
+        if (practicanteSeleccionado != null) {
+            ocultarPaneles();
+            mostrarDatosPracticante(practicanteSeleccionado);
         }
+    }
+
+    private void mostrarDatosPracticante(Practicante practicante) {
+        etiquetaNombre.setText(practicante.getNombre());
+        etiquetaApellidos.setText(practicante.getApellidos());
+        etiquetaNumeroPersonal.setText(practicante.getMatricula());
+        panelDatos.setVisible(true);
+        panelDatos.setManaged(true);
     }
 
     @FXML
     private void botonInactivar() {
-        Practicante practicante = comboBoxPracticantes.getSelectionModel().getSelectedItem();
-        if (practicante == null) {
+        if (practicanteSeleccionado == null) {
             mostrarError("Sin selección", "POR FAVOR SELECCIONA UN PRACTICANTE.");
-            return;
+        } else if (confirmarAccion("¿Seguro que desea inactivar a este practicante?")) {
+            ejecutarInactivacion(practicanteSeleccionado);
         }
-        if (!confirmarAccion("¿Seguro que desea inactivar a este practicante?")) {
-            return;
-        }
-        ejecutarInactivacion(practicante);
     }
 
     private void ejecutarInactivacion(Practicante practicante) {
         try {
             int filasAfectadas = practicanteDao.inactivarPracticante(practicante.getMatricula());
-            if (filasAfectadas > 0) {
-                limpiarSeleccion();
-                mostrarExito("Practicante inactivado", "EL PRACTICANTE FUE INACTIVADO EXITOSAMENTE.");
+            if (filasAfectadas >= FILAS_AFECTADAS_ESPERADAS) {
+                limpiar();
                 cargarPracticantesActivos();
+                mostrarExito("Practicante inactivado", "EL PRACTICANTE FUE INACTIVADO EXITOSAMENTE.");
             } else {
-                mostrarError("Error", "NO SE PUDO INACTIVAR AL PRACTICANTE");
+                mostrarError("Error", "NO SE PUDO INACTIVAR AL PRACTICANTE.");
             }
-        } catch (UsuariosExcepcion e) {
-            mostrarError("Error inesperado", e.getMessage().toUpperCase());
+        } catch (UsuariosExcepcion excepcion) {
+            LOGGER.log(Level.SEVERE, "Error al inactivar practicante", excepcion);
+            mostrarError("Error inesperado", excepcion.getMessage().toUpperCase());
         }
     }
 
     @FXML
     private void botonCancelar() {
-        if (confirmarAccion("¿Seguro que desea cancelar?")){
-            limpiarSeleccion();
+        if (confirmarAccion("¿Seguro que desea cancelar?")) {
+            limpiar();
         }
     }
 
     @FXML
-    private void botonRegresar(ActionEvent event) {
-        Stage escenario = (Stage) ((Node) event.getSource()).getScene().getWindow();
+    private void botonRegresar(ActionEvent evento) {
+        Stage escenario = (Stage) ((Node) evento.getSource()).getScene().getWindow();
         escenario.close();
     }
 
@@ -113,35 +137,40 @@ public class InactivarPracticanteControlador {
         return alerta.showAndWait().filter(botonPresionado -> botonPresionado == botonSi).isPresent();
     }
 
-    private void limpiarSeleccion() {
-        comboBoxPracticantes.getSelectionModel().clearSelection();
+    private void limpiar() {
+        comboBoxPracticantes.setValue(null);
+        practicanteSeleccionado = null;
         panelDatos.setVisible(false);
         panelDatos.setManaged(false);
-        ocultarError();
-        ocultarExito();
+        ocultarPanel(panelError);
+        ocultarPanel(panelExito);
+    }
+
+    private void ocultarPaneles() {
+        ocultarPanel(panelError);
+        ocultarPanel(panelExito);
+    }
+
+    private void mostrarPanel(VBox panel, Label etiquetaTitulo, Label etiquetaMensaje,
+                              String titulo, String mensaje) {
+        etiquetaTitulo.setText(titulo);
+        etiquetaMensaje.setText(mensaje);
+        panel.setVisible(true);
+        panel.setManaged(true);
+    }
+
+    private void ocultarPanel(VBox panel) {
+        panel.setVisible(false);
+        panel.setManaged(false);
     }
 
     private void mostrarError(String titulo, String mensaje) {
-        etiquetaTituloError.setText(titulo);
-        etiquetaMensajeError.setText(mensaje);
-        panelError.setVisible(true);
-        panelError.setManaged(true);
-    }
-
-    private void ocultarError() {
-        panelError.setVisible(false);
-        panelError.setManaged(false);
+        ocultarPanel(panelExito);
+        mostrarPanel(panelError, etiquetaTituloError, etiquetaMensajeError, titulo, mensaje);
     }
 
     private void mostrarExito(String titulo, String mensaje) {
-        etiquetaTituloExito.setText(titulo);
-        etiquetaMensajeExito.setText(mensaje);
-        panelExito.setVisible(true);
-        panelExito.setManaged(true);
-    }
-
-    private void ocultarExito() {
-        panelExito.setVisible(false);
-        panelExito.setManaged(false);
+        ocultarPanel(panelError);
+        mostrarPanel(panelExito, etiquetaTituloExito, etiquetaMensajeExito, titulo, mensaje);
     }
 }

@@ -23,6 +23,7 @@ import java.util.logging.Logger;
 public class ModificarCoordinadorControlador {
 
     private static final Logger LOGGER = Logger.getLogger(ModificarCoordinadorControlador.class.getName());
+    private static final int FILAS_AFECTADAS_ESPERADAS = 1;
 
     @FXML private ComboBox<Coordinador> comboBoxCoordinadores;
     @FXML private VBox panelFormulario;
@@ -37,7 +38,6 @@ public class ModificarCoordinadorControlador {
     @FXML private TextField campoCorreo;
 
     private Coordinador coordinadorSeleccionado;
-    private static final int FILAS_AFECTADAS_ESPERADAS = 1;
 
     @FXML
     public void initialize() {
@@ -50,32 +50,26 @@ public class ModificarCoordinadorControlador {
             List<Coordinador> lista = coordinadorDao.obtenerCoordinadoresActivos();
             ObservableList<Coordinador> coordinadoresObservable = FXCollections.observableArrayList(lista);
             comboBoxCoordinadores.setItems(coordinadoresObservable);
-            comboBoxCoordinadores.setCellFactory(l -> new ListCell<Coordinador>() {
-                @Override
-                protected void updateItem(Coordinador coordinador, boolean vacio) {
-                    super.updateItem(coordinador, vacio);
-                    if (vacio || coordinador == null) {
-                        setText(null);
-                    } else {
-                        setText(coordinador.getNombre() + " " + coordinador.getApellidos());
-                    }
-                }
-            });
-            comboBoxCoordinadores.setButtonCell(new ListCell<Coordinador>() {
-                @Override
-                protected void updateItem(Coordinador coordinador, boolean vacio) {
-                    super.updateItem(coordinador, vacio);
-                    if (vacio || coordinador == null) {
-                        setText("-- Selecciona un coordinador --");
-                    } else {
-                        setText(coordinador.getNombre() + " " + coordinador.getApellidos());
-                    }
-                }
-            });
+            comboBoxCoordinadores.setCellFactory(listaCoordinadores -> crearCeldaCoordinador());
+            comboBoxCoordinadores.setButtonCell(crearCeldaCoordinador());
         } catch (UsuariosExcepcion excepcion) {
             LOGGER.log(Level.SEVERE, "Error al cargar coordinadores", excepcion);
             mostrarError("Error al cargar", excepcion.getMessage());
         }
+    }
+
+    private ListCell<Coordinador> crearCeldaCoordinador() {
+        return new ListCell<Coordinador>() {
+            @Override
+            protected void updateItem(Coordinador coordinador, boolean vacio) {
+                super.updateItem(coordinador, vacio);
+                if (vacio || coordinador == null) {
+                    setText("-- Selecciona un coordinador --");
+                } else {
+                    setText(coordinador.getNombre() + " " + coordinador.getApellidos());
+                }
+            }
+        };
     }
 
     @FXML
@@ -107,37 +101,49 @@ public class ModificarCoordinadorControlador {
     }
 
     private void procesarModificacion() {
-        if (!camposValidos()) {
-            mostrarError("Campos obligatorios vacíos",
-                    "Verifica la información e intenta de nuevo.");
-            return;
-        }
-        CoordinadorDao coordinadorDao = new CoordinadorDao();
-        try {
-            Coordinador coordinadorModificado = construirCoordinador();
-            int filasAfectadas = coordinadorDao.modificarCoordinador(
-                    coordinadorSeleccionado.getNumeroDePersonalCoordinador(), coordinadorModificado);
-            if (filasAfectadas >= FILAS_AFECTADAS_ESPERADAS) {
-                ocultarTodo();
-                comboBoxCoordinadores.setValue(null);
-                cargarCoordinadores();
-                mostrarExito("Coordinador modificado",
-                        "Coordinador actualizado exitosamente.");
-            } else {
-                mostrarError("Error al modificar",
-                        "No se pudo modificar el coordinador. Intente de nuevo.");
+        if (camposValidos()) {
+            CoordinadorDao coordinadorDao = new CoordinadorDao();
+            try {
+                Coordinador coordinadorModificado = construirCoordinador();
+                int filasAfectadas = coordinadorDao.modificarCoordinador(
+                        coordinadorSeleccionado.getNumeroDePersonalCoordinador(), coordinadorModificado);
+                if (filasAfectadas >= FILAS_AFECTADAS_ESPERADAS) {
+                    ocultarTodo();
+                    comboBoxCoordinadores.setValue(null);
+                    cargarCoordinadores();
+                    mostrarExito("Coordinador modificado", "Coordinador actualizado exitosamente.");
+                } else {
+                    mostrarError("Error al modificar", "No se pudo modificar el coordinador. Intente de nuevo.");
+                }
+            } catch (UsuariosExcepcion excepcion) {
+                LOGGER.log(Level.SEVERE, "Error al modificar coordinador", excepcion);
+                mostrarError("Error inesperado", excepcion.getMessage().toUpperCase());
             }
-        } catch (UsuariosExcepcion excepcion) {
-            LOGGER.log(Level.SEVERE, "Error al modificar coordinador", excepcion);
-            mostrarError("Error inesperado", excepcion.getMessage().toUpperCase());
         }
+    }
+
+    private boolean camposVacios(List<String> campos) {
+        boolean hayCamposVacios = false;
+        for (String campo : campos) {
+            if (campo.isEmpty()) {
+                hayCamposVacios = true;
+            }
+        }
+        return hayCamposVacios;
     }
 
     private boolean camposValidos() {
         String nombre = campoNombre.getText().trim();
         String apellidos = campoApellidos.getText().trim();
         String correo = campoCorreo.getText().trim();
-        return !nombre.isEmpty() && !apellidos.isEmpty() && !correo.isEmpty();
+
+        List<String> campos = List.of(nombre, apellidos, correo);
+        boolean camposFormularioValidos = !camposVacios(campos);
+
+        if (!camposFormularioValidos) {
+            mostrarError("Campos obligatorios vacíos", "Verifica la información e intenta de nuevo.");
+        }
+        return camposFormularioValidos;
     }
 
     private Coordinador construirCoordinador() {
@@ -159,8 +165,8 @@ public class ModificarCoordinadorControlador {
     }
 
     @FXML
-    private void botonRegresar(ActionEvent event) {
-        Stage escenario = (Stage) ((Node) event.getSource()).getScene().getWindow();
+    private void botonRegresar(ActionEvent evento) {
+        Stage escenario = (Stage) ((Node) evento.getSource()).getScene().getWindow();
         escenario.close();
     }
 
@@ -172,7 +178,7 @@ public class ModificarCoordinadorControlador {
         ButtonType botonSi = new ButtonType("Sí");
         ButtonType botonNo = new ButtonType("No");
         alerta.getButtonTypes().setAll(botonSi, botonNo);
-        return alerta.showAndWait().filter(r -> r == botonSi).isPresent();
+        return alerta.showAndWait().filter(botonPresionado -> botonPresionado == botonSi).isPresent();
     }
 
     private void ocultarTodo() {
@@ -182,23 +188,30 @@ public class ModificarCoordinadorControlador {
     }
 
     private void ocultarPaneles() {
-        panelError.setVisible(false);
-        panelError.setManaged(false);
-        panelExito.setVisible(false);
-        panelExito.setManaged(false);
+        ocultarPanel(panelError);
+        ocultarPanel(panelExito);
+    }
+
+    private void mostrarPanel(VBox panel, Label etiquetaTitulo, Label etiquetaMensaje,
+                              String titulo, String mensaje) {
+        etiquetaTitulo.setText(titulo);
+        etiquetaMensaje.setText(mensaje);
+        panel.setVisible(true);
+        panel.setManaged(true);
+    }
+
+    private void ocultarPanel(VBox panel) {
+        panel.setVisible(false);
+        panel.setManaged(false);
     }
 
     private void mostrarError(String titulo, String mensaje) {
-        etiquetaTituloError.setText(titulo);
-        etiquetaMensajeError.setText(mensaje);
-        panelError.setVisible(true);
-        panelError.setManaged(true);
+        ocultarPanel(panelExito);
+        mostrarPanel(panelError, etiquetaTituloError, etiquetaMensajeError, titulo, mensaje);
     }
 
     private void mostrarExito(String titulo, String mensaje) {
-        etiquetaTituloExito.setText(titulo);
-        etiquetaMensajeExito.setText(mensaje);
-        panelExito.setVisible(true);
-        panelExito.setManaged(true);
+        ocultarPanel(panelError);
+        mostrarPanel(panelExito, etiquetaTituloExito, etiquetaMensajeExito, titulo, mensaje);
     }
 }

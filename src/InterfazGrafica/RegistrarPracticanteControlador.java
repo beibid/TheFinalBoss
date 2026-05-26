@@ -3,7 +3,12 @@ package InterfazGrafica;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
-import javafx.scene.control.*;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.Label;
+import javafx.scene.control.RadioButton;
+import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import logica.dao.excepciones.RegistroDuplicadoExcepcion;
@@ -12,7 +17,6 @@ import logica.dao.objetos.PracticanteDao;
 import logica.dominio.Practicante;
 import logica.dominio.enums.Estado;
 import logica.dominio.enums.Genero;
-
 import java.util.List;
 
 public class RegistrarPracticanteControlador {
@@ -42,8 +46,8 @@ public class RegistrarPracticanteControlador {
 
     @FXML
     private void botonRegistrar() {
-        ocultarError();
-        ocultarExito();
+        ocultarPanel(panelError);
+        ocultarPanel(panelExito);
         if (confirmarAccion("¿Seguro que desea registrar al practicante?")) {
             procesarRegistro();
         }
@@ -57,9 +61,9 @@ public class RegistrarPracticanteControlador {
     }
 
     @FXML
-    private void botonRegresar(ActionEvent event) {
-        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        stage.close();
+    private void botonRegresar(ActionEvent evento) {
+        Stage escenario = (Stage) ((Node) evento.getSource()).getScene().getWindow();
+        escenario.close();
     }
 
     private boolean confirmarAccion(String mensaje) {
@@ -74,19 +78,18 @@ public class RegistrarPracticanteControlador {
     }
 
     private void procesarRegistro() {
-        if (!camposValidos()) {
-            return;
+        if (camposValidos()) {
+            Practicante practicante = construirPracticante();
+            guardarPracticante(practicante);
         }
-        Practicante practicante = construirPracticante();
-        guardarPracticante(practicante);
     }
 
-    private boolean camposVacios(List<String> campos){
+    private boolean camposVacios(List<String> campos) {
         boolean hayCamposVacios = false;
-        for ( String campo : campos ){
-             if(campo.isEmpty()){
-                 hayCamposVacios = true;
-             }
+        for (String campo : campos) {
+            if (campo.isEmpty()) {
+                hayCamposVacios = true;
+            }
         }
         return hayCamposVacios;
     }
@@ -101,7 +104,8 @@ public class RegistrarPracticanteControlador {
         boolean camposFormularioValido = !camposVacios(campos);
 
         if (!camposFormularioValido) {
-            mostrarError("Campos obligatorios vacios", "POR FAVOR LLENE TODOS LOS CAMPOS");
+            mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
+                    "Campos obligatorios vacios", "POR FAVOR LLENE TODOS LOS CAMPOS");
         }
         return camposFormularioValido;
     }
@@ -131,17 +135,18 @@ public class RegistrarPracticanteControlador {
             int filasAfectadas = practicanteDao.insertarPracticante(practicante);
             if (filasAfectadas >= FILAS_AFECTADAS_ESPERADAS) {
                 limpiarCamposRegistrados();
-                mostrarExito("Practicante en estado activo",
-                        "El practicante fue registrado exitosamente");
+                mostrarPanel(etiquetaTituloExito, etiquetaMensajeExito, panelExito,
+                        "Practicante en estado activo", "El practicante fue registrado exitosamente");
             } else {
-                mostrarError("Error al registrar",
-                        "No fue posible registrar al practicante, intente mas tarde");
+                mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
+                        "Error al registrar", "No fue posible registrar al practicante, intente mas tarde");
             }
-        } catch (RegistroDuplicadoExcepcion e) {
-            mostrarError("Matricula repetida",
-                    "La matricula ya existe en el sistema, verifique la informacion");
-        } catch (UsuariosExcepcion e) {
-            mostrarError("Error inesperado", e.getMessage().toUpperCase());
+        } catch (RegistroDuplicadoExcepcion excepcion) {
+            mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
+                    "Matricula repetida", "La matricula ya existe en el sistema, verifique la informacion");
+        } catch (UsuariosExcepcion excepcion) {
+            mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
+                    "Error inesperado", excepcion.getMessage().toUpperCase());
         }
     }
 
@@ -154,8 +159,8 @@ public class RegistrarPracticanteControlador {
     }
 
     private void limpiarCamposRegistrados() {
-        ocultarError();
-        ocultarExito();
+        ocultarPanel(panelError);
+        ocultarPanel(panelExito);
         campoTextoNombres.clear();
         campoTextoApellidos.clear();
         campoTextoMatricula.clear();
@@ -163,27 +168,15 @@ public class RegistrarPracticanteControlador {
         grupoGenero.selectToggle(null);
     }
 
-    private void mostrarError(String titulo, String mensaje) {
-        etiquetaTituloError.setText(titulo);
-        etiquetaMensajeError.setText(mensaje);
-        panelError.setVisible(true);
-        panelError.setManaged(true);
+    private void mostrarPanel(Label etiquetaTitulo, Label etiquetaMensaje, VBox panel, String titulo, String mensaje) {
+        etiquetaTitulo.setText(titulo);
+        etiquetaMensaje.setText(mensaje);
+        panel.setVisible(true);
+        panel.setManaged(true);
     }
 
-    private void ocultarError() {
-        panelError.setVisible(false);
-        panelError.setManaged(false);
-    }
-
-    private void mostrarExito(String titulo, String mensaje) {
-        etiquetaTituloExito.setText(titulo);
-        etiquetaMensajeExito.setText(mensaje);
-        panelExito.setVisible(true);
-        panelExito.setManaged(true);
-    }
-
-    private void ocultarExito() {
-        panelExito.setVisible(false);
-        panelExito.setManaged(false);
+    private void ocultarPanel(VBox panel) {
+        panel.setVisible(false);
+        panel.setManaged(false);
     }
 }
