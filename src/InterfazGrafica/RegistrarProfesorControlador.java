@@ -18,9 +18,12 @@ import logica.dao.objetos.ProfesorDao;
 import logica.dominio.Profesor;
 import logica.dominio.enums.Estado;
 import logica.dominio.enums.Turno;
+import java.util.List;
 
 
 public class RegistrarProfesorControlador {
+
+    private static final int FILAS_AFECTADAS_ESPERADAS = 1;
 
     @FXML private TextField campoTextoNombres;
     @FXML private TextField campoTextoApellidos;
@@ -55,16 +58,16 @@ public class RegistrarProfesorControlador {
     }
 
     @FXML
-    private void botonCancelar() {
+    private void botonCancelar () {
         if (confirmarAccion("¿Seguro que desea cancelar?")) {
             limpiarCamposRegistros();
         }
     }
 
     @FXML
-    private void botonRegresar(ActionEvent event) throws Exception {
-       Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-       stage.close();
+    private void botonRegresar (ActionEvent event) {
+       Stage escenario = (Stage) ((Node) event.getSource()).getScene().getWindow();
+       escenario.close();
     }
 
     private boolean confirmarAccion(String mensaje) {
@@ -86,23 +89,33 @@ public class RegistrarProfesorControlador {
         guardarProfesor(profesor);
     }
 
+    private boolean camposVacios(List<String> campos){
+        boolean hayCamposVacios = false;
+        for ( String campo : campos){
+            if (campo.isEmpty()){
+                hayCamposVacios = true;
+            }
+        }
+        return hayCamposVacios;
+    }
+
     private boolean camposValidos() {
         String nombre = campoTextoNombres.getText().trim();
         String apellidos = campoTextoApellidos.getText().trim();
         String correo = campoTextoCorreo.getText().trim();
         String numeroPersonal = campoTextoNumeroPersonal.getText().trim();
 
-        if (nombre.isEmpty() || apellidos.isEmpty() || numeroPersonal.isEmpty()) {
-            mostrarError("Campos obligatorios vacios",
-                    "Verifique la informacion e intente de nuevo");
-            return false;
+        List<String> campos = List.of(nombre, apellidos, correo, numeroPersonal);
+        boolean nombreValido = !camposVacios (campos);
+        boolean turnoValido = grupoTurno.getSelectedToggle() != null;
+
+        if (!nombreValido) {
+            mostrarError("Campos obligatorios vacios", "Verifique la informacion e intente de nuevo");
         }
-        if (grupoTurno.getSelectedToggle() == null) {
-            mostrarError("Turno no seleccionado",
-                    "Seleccione un turno para el profesor.");
-            return false;
+        if (!turnoValido) {
+            mostrarError("Turno no seleccionado", "Seleccione un turno para el profesor.");
         }
-        return true;
+        return nombreValido && turnoValido;
     }
 
     private Profesor construirProfesor() {
@@ -125,20 +138,22 @@ public class RegistrarProfesorControlador {
     }
 
     private Turno obtenerTurnoSeleccionado() {
+        Turno turnoSeleccionado = null;
         if (radioBotonMatutino.isSelected()) {
-            return Turno.Matutino;
+            turnoSeleccionado = Turno.Matutino;
+        } else if (radioBotonVespertino.isSelected()) {
+            turnoSeleccionado = Turno.Vespertino;
+        } else if (radioBotonMixto.isSelected()){
+            turnoSeleccionado = Turno.Mixto;
         }
-        if (radioBotonVespertino.isSelected()) {
-            return Turno.Vespertino;
-        }
-        return Turno.Mixto;
+        return turnoSeleccionado;
     }
 
     private void guardarProfesor(Profesor profesor) {
         ProfesorDao profesorDao = new ProfesorDao();
         try {
             int filasAfectadas = profesorDao.insertarProfesor(profesor);
-            if (filasAfectadas > 0) {
+            if (filasAfectadas >= FILAS_AFECTADAS_ESPERADAS) {
                 limpiarCamposRegistros();
                 mostrarExito("Profesor en estado activo",
                         "El profesor fue registrado exitosamente");

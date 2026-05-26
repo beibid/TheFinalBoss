@@ -24,6 +24,7 @@ import java.util.logging.Logger;
 public class GenerarAutoevaluacionPracticanteControlador {
 
     private static final Logger LOGGER = Logger.getLogger(GenerarAutoevaluacionPracticanteControlador.class.getName());
+    private static final int FILAS_AFECTADAS_ESPERADAS = 1;
 
     @FXML private Label etiquetaMatricula;
     @FXML private Label etiquetaOrganizacion;
@@ -75,9 +76,7 @@ public class GenerarAutoevaluacionPracticanteControlador {
         if (!respuestasValidas()) {
             mostrarError("Respuestas incompletas",
                     "Debes responder todas las afirmaciones antes de generar el PDF.");
-            return;
-        }
-        if (confirmarAccion("¿Desea generar el PDF de la autoevaluación?")) {
+        } else if (confirmarAccion("¿Desea generar el PDF de la autoevaluación?")) {
             generarPdf();
         }
     }
@@ -160,9 +159,7 @@ public class GenerarAutoevaluacionPracticanteControlador {
     private void generarPdf() {
         AutoevaluacionPracticante autoevaluacion = construirAutoevaluacion();
         GeneradorPdfAutoevaluacion generador = new GeneradorPdfAutoevaluacion();
-        String rutaPdf = generador.generarPdf(autoevaluacion,
-                nombrePracticante,
-                etiquetaNombreProyecto.getText(),
+        String rutaPdf = generador.generarPdf(autoevaluacion, nombrePracticante, etiquetaNombreProyecto.getText(),
                 etiquetaOrganizacion.getText(),
                 etiquetaResponsable.getText()
         );
@@ -176,18 +173,17 @@ public class GenerarAutoevaluacionPracticanteControlador {
     }
 
     private boolean respuestasValidas() {
-        List<ToggleGroup> grupos = List.of(
-                grupoRespuesta1, grupoRespuesta2, grupoRespuesta3,
-                grupoRespuesta4, grupoRespuesta5, grupoRespuesta6,
+        List<ToggleGroup> grupos = List.of(grupoRespuesta1, grupoRespuesta2, grupoRespuesta3, grupoRespuesta4,
+                grupoRespuesta5, grupoRespuesta6,
                 grupoRespuesta7, grupoRespuesta8, grupoRespuesta9,
-                grupoRespuesta10
-        );
+                grupoRespuesta10);
+        boolean grupoSeleccionado = true;
         for (ToggleGroup grupo : grupos) {
             if (grupo.getSelectedToggle() == null) {
-                return false;
+                grupoSeleccionado = false;
             }
         }
-        return true;
+        return grupoSeleccionado;
     }
 
     private AutoevaluacionPracticante construirAutoevaluacion() {
@@ -216,7 +212,7 @@ public class GenerarAutoevaluacionPracticanteControlador {
         AutoevaluacionPracticanteDao autoevaluacionDao = new AutoevaluacionPracticanteDao();
         try {
             int filasAfectadas = autoevaluacionDao.registrarAutoevaluacion(autoevaluacion);
-            if (filasAfectadas > 0) {
+            if (filasAfectadas >= FILAS_AFECTADAS_ESPERADAS) {
                 limpiarRespuestas();
                 mostrarExito("Autoevaluación registrada",
                         "LA AUTOEVALUACIÓN SE GUARDÓ EXITOSAMENTE.");

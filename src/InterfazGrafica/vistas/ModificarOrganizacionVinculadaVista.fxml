@@ -4,7 +4,7 @@
 <?import javafx.scene.layout.*?>
 
 <AnchorPane xmlns:fx="http://javafx.com/fxml"
-            fx:controller="InterfazGrafica.ModificarOrganizacionVinculadaControlGUI"
+            fx:controller="InterfazGrafica.ModificarOrganizacionVinculadaControlador"
             prefHeight="300.0" prefWidth="400.0">
 
     <VBox spacing="15" AnchorPane.topAnchor="20" AnchorPane.leftAnchor="20"
@@ -29,8 +29,8 @@
         <Label fx:id="etiquetaMensaje" style="-fx-text-fill: red;"/>
 
         <HBox spacing="10" alignment="CENTER_RIGHT">
-            <Button text="Cancelar" fx:id="botonCancelar" onAction="#cancelar"/>
-            <Button text="Guardar" fx:id="botonGuardar" onAction="#guardar"/>
+            <Button text="Cancelar" fx:id="botonCancelar" onAction="#botonCancelar"/>
+            <Button text="Guardar" fx:id="botonGuardar" onAction="#botonGuardar"/>
         </HBox>
 
     </VBox>

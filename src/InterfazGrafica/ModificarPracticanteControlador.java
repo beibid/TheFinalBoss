@@ -39,6 +39,7 @@ public class ModificarPracticanteControlador {
     @FXML private TextField campoCorreo;
     @FXML private TextField campoLenguaIndigena;
 
+    private static final int FILAS_AFECTADAS_ESPERADAS = 1;
     private Practicante practicanteSeleccionado;
 
     @FXML
@@ -122,7 +123,7 @@ public class ModificarPracticanteControlador {
             Practicante practicanteModificado = construirPracticante();
             int filasAfectadas = practicanteDao.modificarPracticante(
                     practicanteSeleccionado.getMatricula(), practicanteModificado);
-            if (filasAfectadas > 0) {
+            if (filasAfectadas >= FILAS_AFECTADAS_ESPERADAS) {
                 ocultarTodo();
                 comboBoxPracticantes.setValue(null);
                 cargarPracticantes();

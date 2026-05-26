@@ -37,6 +37,7 @@ public class ModificarCoordinadorControlador {
     @FXML private TextField campoCorreo;
 
     private Coordinador coordinadorSeleccionado;
+    private static final int FILAS_AFECTADAS_ESPERADAS = 1;
 
     @FXML
     public void initialize() {
@@ -116,7 +117,7 @@ public class ModificarCoordinadorControlador {
             Coordinador coordinadorModificado = construirCoordinador();
             int filasAfectadas = coordinadorDao.modificarCoordinador(
                     coordinadorSeleccionado.getNumeroDePersonalCoordinador(), coordinadorModificado);
-            if (filasAfectadas > 0) {
+            if (filasAfectadas >= FILAS_AFECTADAS_ESPERADAS) {
                 ocultarTodo();
                 comboBoxCoordinadores.setValue(null);
                 cargarCoordinadores();

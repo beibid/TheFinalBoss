@@ -44,6 +44,7 @@ public class ModificarProyectoControlador {
     @FXML private TextField campoFechaRegistro;
 
     private Proyecto proyectoSeleccionado;
+    private static final int FILAS_AFECTADAS_ESPERADAS = 1;
 
     @FXML
     public void initialize() {
@@ -126,7 +127,7 @@ public class ModificarProyectoControlador {
             Proyecto proyectoModificado = construirProyecto();
             int filasAfectadas = proyectoDao.modificarProyecto(
                     proyectoSeleccionado.getIdProyecto(), proyectoModificado);
-            if (filasAfectadas > 0) {
+            if (filasAfectadas >= FILAS_AFECTADAS_ESPERADAS) {
                 ocultarTodo();
                 comboBoxProyectos.setValue(null);
                 cargarProyectosDisponibles();

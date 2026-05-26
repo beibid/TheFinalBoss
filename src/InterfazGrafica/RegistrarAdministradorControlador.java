@@ -16,6 +16,8 @@ import logica.dao.objetos.AdministradorDao;
 import logica.dominio.Administrador;
 import logica.dominio.enums.Estado;
 
+import java.util.List;
+
 
 public class RegistrarAdministradorControlador {
 
@@ -28,6 +30,8 @@ public class RegistrarAdministradorControlador {
     @FXML private VBox panelExito;
     @FXML private Label etiquetaTituloExito;
     @FXML private Label etiquetaMensajeExito;
+
+    private static final int FILAS_AFECTADAS_ESPERADAS = 1;
 
     @FXML
     private void botonRegistrar() {
@@ -71,11 +75,28 @@ public class RegistrarAdministradorControlador {
         guardarAdministrador(construirAdministrador());
     }
 
+    private boolean camposVacios(List<String> campos){
+        boolean hayCamposVacios = false;
+        for (String campo : campos){
+            if (campo.isEmpty()){
+                hayCamposVacios = true;
+            }
+        }
+    return hayCamposVacios;
+    }
+
     private boolean camposValidos() {
         String nombre = campoTextoNombres.getText().trim();
         String apellidos = campoTextoApellidos.getText().trim();
         String numeroPersonal = campoTextoNumeroPersonal.getText().trim();
-        return !nombre.isEmpty() && !apellidos.isEmpty() && !numeroPersonal.isEmpty();
+
+        List<String> campo = List.of(nombre, apellidos, numeroPersonal);
+        boolean camposFormularioValido = !camposVacios(campo);
+
+        if (!camposFormularioValido) {
+            mostrarError("Campos obligatorios vacios" , "POR FAVOR LLENE TODOS LOS CAMPOS");
+        }
+        return camposFormularioValido;
     }
 
     private Administrador construirAdministrador() {
@@ -97,7 +118,7 @@ public class RegistrarAdministradorControlador {
         AdministradorDao administradorDao = new AdministradorDao();
         try {
             int filasAfectadas = administradorDao.insertarAdministrador(administrador);
-            if (filasAfectadas > 0) {
+            if (filasAfectadas >= FILAS_AFECTADAS_ESPERADAS) {
                 limpiarCampos();
                 mostrarExito("Administrador registrado",
                         "EL ADMINISTRADOR FUE REGISTRADO EXITOSAMENTE.");

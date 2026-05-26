@@ -29,6 +29,7 @@ import java.util.logging.Logger;
 public class ValidarDocumentosPracticanteControlador {
 
     private static final Logger LOGGER = Logger.getLogger(ValidarDocumentosPracticanteControlador.class.getName());
+    private static final int FILAS_AFECTADAS_ESPERADAS = 1;
 
     @FXML private ComboBox<Practicante> comboBoxPracticantes;
     @FXML private ComboBox<DocumentacionPracticante> comboBoxDocumentos;
@@ -182,7 +183,7 @@ public class ValidarDocumentosPracticanteControlador {
         try {
             int filasAfectadas = documentacionDao.validarDocumento(
                     documentoSeleccionado.getIdDocumentacionPracticante(), estado, motivo);
-            if (filasAfectadas > 0) {
+            if (filasAfectadas >= FILAS_AFECTADAS_ESPERADAS) {
                 limpiarTodo();
                 mostrarExito("Documento validado",
                         "El documento fue " + estado.name().toLowerCase() + " exitosamente.");

@@ -14,7 +14,7 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 
-public class ConsultarHistorialReportesControlador implements Initializable {
+public class ConsultarHistorialReportesControlador {
 
     @FXML private TableView<?> tablaReportes;
     @FXML private TableColumn<?, ?> columnaTipo;
@@ -27,8 +27,9 @@ public class ConsultarHistorialReportesControlador implements Initializable {
     @FXML private Label etiquetaTituloError;
     @FXML private Label etiquetaMensajeError;
 
-    @Override
-    public void initialize(URL url, ResourceBundle rb) {}
+    public void initialize() {
+
+    }
 
     @FXML
     private void botonRegresar(ActionEvent event) {

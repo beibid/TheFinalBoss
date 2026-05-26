@@ -81,11 +81,11 @@ public class MenuPracticanteControlador {
 
     @FXML
     private void abrirSeleccionProyectos(ActionEvent event) throws IOException {
-        Parent root = FXMLLoader.load(getClass().getResource("/InterfazGrafica/vistas/SeleccionPreferenciasProyectoVista.fxml"));
-        Stage stage = new Stage();
-        stage.setTitle("Seleccionar proyectos");
-        stage.setScene(new Scene(root));
-        stage.show();
+        Parent ruta = FXMLLoader.load(getClass().getResource("/InterfazGrafica/vistas/SeleccionPreferenciasProyectoVista.fxml"));
+        Stage escenario = new Stage();
+        escenario.setTitle("Seleccionar proyectos");
+        escenario.setScene(new Scene(ruta));
+        escenario.show();
     }
 
     @FXML

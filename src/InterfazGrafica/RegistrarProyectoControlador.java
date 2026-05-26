@@ -28,6 +28,9 @@ import java.util.List;
 
 
 public class RegistrarProyectoControlador {
+
+    private static final int FILAS_AFECTADAS_ESPERADAS = 1;
+
     @FXML private TextField campoTextoNombreProyecto;
     @FXML private TextField campoTextoDescripcion;
     @FXML private TextField campoTextoResponsable;
@@ -100,7 +103,9 @@ public class RegistrarProyectoControlador {
         String sectorEmpresa = campoTextoSectorEmpresa.getText().trim();
         String direccionEmpresa = campoTextoDireccionEmpresa.getText().trim();
 
-        if (camposVacios(nombreProyecto, descripcion, responsable, nombreEmpresa, sectorEmpresa, direccionEmpresa)) {
+        List<String> campos = List.of(nombreProyecto, descripcion, responsable, nombreEmpresa, sectorEmpresa,
+                direccionEmpresa);
+        if (camposVacios(campos)) {
             mostrarError("Campos obligatorios vacíos", "POR FAVOR LLENA TODOS LOS CAMPOS.");
             return;
         }
@@ -114,17 +119,18 @@ public class RegistrarProyectoControlador {
         ejecutarRegistro(proyecto);
     }
 
-    private boolean camposVacios(String... campos) {
+    private boolean camposVacios(List<String>campos) {
+        boolean hayCamposVacios = false;
         for (String campo : campos) {
             if (campo.isEmpty()) {
-                return true;
+                hayCamposVacios = true;
             }
         }
-        return false;
+        return hayCamposVacios;
     }
 
-    private Proyecto armarProyecto(String nombreProyecto, String descripcion, String responsable,
-                                   String nombreEmpresa, String sectorEmpresa, String direccionEmpresa) {
+    private Proyecto armarProyecto( String nombreProyecto, String descripcion, String responsable, String nombreEmpresa,
+                                    String sectorEmpresa, String direccionEmpresa) {
         Proyecto proyecto = new Proyecto();
         proyecto.setNombreProyecto(nombreProyecto);
         proyecto.setDescripcion(descripcion);
@@ -144,7 +150,7 @@ public class RegistrarProyectoControlador {
     private void ejecutarRegistro(Proyecto proyecto) {
         try {
             int filasAfectadas = proyectoDao.agregarProyecto(proyecto);
-            if (filasAfectadas > 0) {
+            if (filasAfectadas >= FILAS_AFECTADAS_ESPERADAS) {
                 limpiar();
                 mostrarExito("Proyecto registrado", "EL PROYECTO FUE REGISTRADO EXITOSAMENTE.");
             } else {
@@ -162,8 +168,8 @@ public class RegistrarProyectoControlador {
 
     @FXML
     private void botonRegresar(ActionEvent event) {
-        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        stage.close();
+        Stage escenario = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        escenario.close();
     }
 
     private void limpiar() {

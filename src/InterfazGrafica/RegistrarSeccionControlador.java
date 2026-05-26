@@ -17,6 +17,8 @@ import logica.dominio.Seccion;
 
 public class RegistrarSeccionControlador {
 
+    private static final int FILAS_AFECTADAS_ESPERADAS = 1;
+
     @FXML private TextField campoTextoPeriodo;
     @FXML private TextField campoTextoNumeroSeccion;
     @FXML private VBox panelError;
@@ -25,7 +27,6 @@ public class RegistrarSeccionControlador {
     @FXML private VBox panelExito;
     @FXML private Label etiquetaTituloExito;
     @FXML private Label etiquetaMensajeExito;
-
 
     @FXML
     private void botonRegistrar() {
@@ -62,8 +63,7 @@ public class RegistrarSeccionControlador {
 
     private void procesarRegistro() {
         if (!camposValidos()) {
-            mostrarError("Campos obligatorios vacios",
-                    "Verifica la informacion e intente de nuevo.");
+            mostrarError("Campos obligatorios vacios", "Verifica la informacion e intente de nuevo.");
             return;
         }
         guardarSeccion(construirSeccion());
@@ -89,7 +89,7 @@ public class RegistrarSeccionControlador {
         SeccionDao seccionDao = new SeccionDao();
         try {
             int filasAfectadas = seccionDao.agregarSeccion(seccion);
-            if (filasAfectadas > 0) {
+            if (filasAfectadas >= FILAS_AFECTADAS_ESPERADAS) {
                 limpiarCamposRegistros();
                 mostrarExito("Seccion registrada",
                         "SECCION REGISTRADA EXITOSAMENTE.");

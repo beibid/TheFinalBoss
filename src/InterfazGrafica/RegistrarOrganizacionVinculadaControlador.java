@@ -15,6 +15,8 @@ import logica.dao.objetos.OrganizacionVinculadaDao;
 import logica.dominio.OrganizacionVinculada;
 import logica.dominio.enums.EstadoOrganizacion;
 
+import java.util.List;
+
 
 public class RegistrarOrganizacionVinculadaControlador {
     @FXML private TextField campoTextoNombre;
@@ -26,6 +28,7 @@ public class RegistrarOrganizacionVinculadaControlador {
     @FXML private Label etiquetaTituloExito;
     @FXML private Label etiquetaMensajeExito;
 
+    private static final int FILAS_AFECTADAS_ESPERADAS = 1;
 
     private OrganizacionVinculada construirOrganizacion() {
         String nombre = campoTextoNombre.getText().trim();
@@ -42,7 +45,7 @@ public class RegistrarOrganizacionVinculadaControlador {
         OrganizacionVinculadaDao organizacionVinculadaDao = new OrganizacionVinculadaDao();
         try {
             int filasAfectadas = organizacionVinculadaDao.insertarOrganizacionVinculada(organizacionVinculada);
-            if (filasAfectadas > 0) {
+            if (filasAfectadas >= FILAS_AFECTADAS_ESPERADAS) {
                 limpiarCampos();
                 mostrarExito("Organizacion vinculada con estado activa",
                         "ORGANIZACION REGISTRADA EXITOSAMENTE.");
@@ -55,10 +58,27 @@ public class RegistrarOrganizacionVinculadaControlador {
         }
     }
 
+    private boolean camposVacios(List<String> campos){
+        boolean hayCamposVacios = false;
+        for (String campo : campos){
+            if (campo.isEmpty()){
+                hayCamposVacios = true;
+            }
+        }
+        return hayCamposVacios;
+    }
+
     private boolean camposValidos() {
         String nombre = campoTextoNombre.getText().trim();
         String direccion = campoTextoDireccion.getText().trim();
-        return !nombre.isEmpty() && !direccion.isEmpty();
+
+        List<String> campo = List.of(nombre, direccion);
+        boolean camposFormularioVacios = !camposVacios(campo);
+
+        if (!camposFormularioVacios) {
+            mostrarError("Campos obligatorios vacios", "POR FAVOR LLENE TODOS LOS CAMPOS");
+        }
+        return camposFormularioVacios;
     }
 
 

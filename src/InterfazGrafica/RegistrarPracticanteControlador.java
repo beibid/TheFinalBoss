@@ -13,11 +13,14 @@ import logica.dominio.Practicante;
 import logica.dominio.enums.Estado;
 import logica.dominio.enums.Genero;
 
+import java.util.List;
+
 public class RegistrarPracticanteControlador {
 
     @FXML private TextField campoTextoMatricula;
     @FXML private TextField campoTextoNombres;
     @FXML private TextField campoTextoApellidos;
+    @FXML private TextField campoTextoCorreo;
     @FXML private RadioButton radioBotonFemenino;
     @FXML private RadioButton radioBotonMasculino;
     @FXML private TextField campoTextoLenguaIndigena;
@@ -28,6 +31,7 @@ public class RegistrarPracticanteControlador {
     @FXML private Label etiquetaTituloExito;
     @FXML private Label etiquetaMensajeExito;
 
+    private static final int FILAS_AFECTADAS_ESPERADAS = 1;
     private ToggleGroup grupoGenero = new ToggleGroup();
 
     @FXML
@@ -77,22 +81,29 @@ public class RegistrarPracticanteControlador {
         guardarPracticante(practicante);
     }
 
+    private boolean camposVacios(List<String> campos){
+        boolean hayCamposVacios = false;
+        for ( String campo : campos ){
+             if(campo.isEmpty()){
+                 hayCamposVacios = true;
+             }
+        }
+        return hayCamposVacios;
+    }
+
     private boolean camposValidos() {
         String nombre = campoTextoNombres.getText().trim();
         String apellidos = campoTextoApellidos.getText().trim();
+        String correo = campoTextoCorreo.getText().trim();
         String matricula = campoTextoMatricula.getText().trim();
 
-        if (matricula.isEmpty() || nombre.isEmpty() || apellidos.isEmpty()) {
-            mostrarError("Campos obligatorios vacios",
-                    "Verifique la informacion e intente de nuevo");
-            return false;
+        List<String> campos = List.of(nombre, apellidos, correo, matricula);
+        boolean camposFormularioValido = !camposVacios(campos);
+
+        if (!camposFormularioValido) {
+            mostrarError("Campos obligatorios vacios", "POR FAVOR LLENE TODOS LOS CAMPOS");
         }
-        if (grupoGenero.getSelectedToggle() == null) {
-            mostrarError("Genero no seleccionado",
-                    "Seleccione un genero para el practicante.");
-            return false;
-        }
-        return true;
+        return camposFormularioValido;
     }
 
     private Practicante construirPracticante() {
@@ -118,7 +129,7 @@ public class RegistrarPracticanteControlador {
         PracticanteDao practicanteDao = new PracticanteDao();
         try {
             int filasAfectadas = practicanteDao.insertarPracticante(practicante);
-            if (filasAfectadas > 0) {
+            if (filasAfectadas >= FILAS_AFECTADAS_ESPERADAS) {
                 limpiarCamposRegistrados();
                 mostrarExito("Practicante en estado activo",
                         "El practicante fue registrado exitosamente");

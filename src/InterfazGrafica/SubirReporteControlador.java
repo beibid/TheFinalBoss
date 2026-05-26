@@ -24,6 +24,8 @@ import java.nio.file.StandardCopyOption;
 
 public class SubirReporteControlador {
 
+    private static final int FILAS_AFECTADAS_ESPERADAS = 1;
+
     @FXML private ComboBox<TipoReporte> comboBoxTipoReporte;
     @FXML private TextField campoDescripcion;
     @FXML private Label etiquetaArchivo;
@@ -123,7 +125,7 @@ public class SubirReporteControlador {
         ReporteDao dao = new ReporteDao();
         int resultado = dao.agregarReporte(reporte);
 
-        if (resultado > 0) {
+        if (resultado >= FILAS_AFECTADAS_ESPERADAS) {
             mostrarExito("Reporte subido", "Tu reporte fue enviado correctamente.");
             limpiarFormulario();
         } else {

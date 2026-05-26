@@ -22,6 +22,8 @@ import java.util.List;
 
 public class AsignarProyectoControlador {
 
+    private static final int FILAS_AFECTADAS_ESPERADAS = 1;
+
     @FXML private ComboBox<Practicante> comboBoxPracticantes;
     @FXML private ComboBox<Proyecto> comboBoxProyectos;
     @FXML private VBox panelError;
@@ -43,7 +45,7 @@ public class AsignarProyectoControlador {
         try {
             List<Practicante> practicantes = practicanteDao.obtenerPracticantesActivos();
             comboBoxPracticantes.setItems(FXCollections.observableArrayList(practicantes));
-        } catch (UsuariosExcepcion e) {
+        } catch (UsuariosExcepcion excepcion) {
             mostrarError("Error al cargar", "NO SE PUDIERON CARGAR LOS PRACTICANTES.");
         }
     }
@@ -52,7 +54,7 @@ public class AsignarProyectoControlador {
         try {
             List<Proyecto> proyectos = proyectoDao.obtenerProyectosDisponibles();
             comboBoxProyectos.setItems(FXCollections.observableArrayList(proyectos));
-        } catch (MensajeriaExcepcion e) {
+        } catch (MensajeriaExcepcion excepcion) {
             mostrarError("Error al cargar", "NO SE PUDIERON CARGAR LOS PROYECTOS DISPONIBLES.");
         }
     }
@@ -61,8 +63,8 @@ public class AsignarProyectoControlador {
     private void seleccionarPracticante() {
         Practicante practicante = comboBoxPracticantes.getSelectionModel().getSelectedItem();
         if (practicante != null) {
-            ocultarError();
-            ocultarExito();
+            ocultarPanel(panelError);
+            ocultarPanel(panelExito);
         }
     }
 
@@ -89,14 +91,14 @@ public class AsignarProyectoControlador {
         try {
             int filasAfectadas = practicanteDao.asignarProyecto(practicante.getMatricula(), proyecto.getIdProyecto());
 
-            if (filasAfectadas > 0) {
+            if (filasAfectadas >= FILAS_AFECTADAS_ESPERADAS) {
                 limpiarSeleccion();
                 mostrarExito("Asignación exitosa", "EL PRACTICANTE FUE ASIGNADO AL PROYECTO EXITOSAMENTE.");
             } else {
                 mostrarError("Error", "NO SE PUDO REALIZAR LA ASIGNACIÓN.");
             }
-        } catch (UsuariosExcepcion e){
-            mostrarError("ERROR", e.getMessage().toUpperCase());
+        } catch (UsuariosExcepcion excepcion){
+            mostrarError("ERROR", excepcion.getMessage().toUpperCase());
         }
     }
     @FXML
@@ -126,35 +128,31 @@ public class AsignarProyectoControlador {
     private void limpiarSeleccion() {
         comboBoxPracticantes.getSelectionModel().clearSelection();
         comboBoxProyectos.getSelectionModel().clearSelection();
-        ocultarError();
-        ocultarExito();
+        ocultarPanel(panelError);
+        ocultarPanel(panelExito);
+    }
+
+    private void mostrarPanel(VBox panel, Label etiquetaTitulo, Label etiquetaMensaje, String titulo, String mensaje) {
+        etiquetaTitulo.setText(titulo);
+        etiquetaMensaje.setText(mensaje);
+        panel.setVisible(true);
+        panel.setManaged(true);
+    }
+
+    private void ocultarPanel(VBox panel) {
+        panel.setVisible(false);
+        panel.setManaged(false);
     }
 
     private void mostrarError(String titulo, String mensaje) {
-        etiquetaTituloError.setText(titulo);
-        etiquetaMensajeError.setText(mensaje);
-        panelError.setVisible(true);
-        panelError.setManaged(true);
-        ocultarExito();
-    }
+        ocultarPanel(panelExito);
+        mostrarPanel(panelError, etiquetaTituloError, etiquetaMensajeError, titulo, mensaje);
 
-    private void ocultarError() {
-        panelError.setVisible(false);
-        panelError.setManaged(false);
     }
 
     private void mostrarExito(String titulo, String mensaje) {
-        etiquetaTituloExito.setText(titulo);
-        etiquetaMensajeExito.setText(mensaje);
-        panelExito.setVisible(true);
-        panelExito.setManaged(true);
-        ocultarError();
+        ocultarPanel(panelError);
+        mostrarPanel(panelExito, etiquetaTituloExito, etiquetaMensajeExito, titulo, mensaje);
+
     }
-
-    private void ocultarExito() {
-        panelExito.setVisible(false);
-        panelExito.setManaged(false);
-    }
-
-
 }

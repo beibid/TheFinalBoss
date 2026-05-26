@@ -61,11 +61,19 @@ public class SeleccionarPreferenciasProyectoControlador {
             List<PreferenciaProyecto> preferencias = preferenciaDao.obtenerPreferencias(matriculaPracticante);
             for (PreferenciaProyecto preferencia : preferencias) {
                 Proyecto proyecto = buscarProyecto(preferencia.getIdProyecto());
-                if (proyecto == null) continue;
+                if (proyecto == null) {
+                    continue;
+                }
                 switch (preferencia.getPrioridad()) {
-                    case 1 -> comboBoxPrimerPrioridad.getSelectionModel().select(proyecto);
-                    case 2 -> comboBoxSegundaPrioridad.getSelectionModel().select(proyecto);
-                    case 3 -> comboBoxTerceraPrioridad.getSelectionModel().select(proyecto);
+                    case 1:
+                        comboBoxPrimerPrioridad.getSelectionModel().select(proyecto);
+                        break;
+                    case 2:
+                        comboBoxSegundaPrioridad.getSelectionModel().select(proyecto);
+                        break;
+                    case 3:
+                        comboBoxTerceraPrioridad.getSelectionModel().select(proyecto);
+                        break;
                 }
             }
         } catch (UsuariosExcepcion e) {
@@ -74,12 +82,13 @@ public class SeleccionarPreferenciasProyectoControlador {
     }
 
     private Proyecto buscarProyecto(int idProyecto) {
+        Proyecto proyectoEncontrado = null;
         for (Proyecto proyecto : todosLosProyectos) {
             if (proyecto.getIdProyecto() == idProyecto) {
-                return proyecto;
+                proyectoEncontrado = proyecto;
             }
         }
-        return null;
+        return proyectoEncontrado;
     }
 
 

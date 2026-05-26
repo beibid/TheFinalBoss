@@ -30,6 +30,7 @@ public class SubirDocumentacionPracticanteControlador {
 
     private static final Logger LOGGER = Logger.getLogger(SubirDocumentacionPracticanteControlador.class.getName());
     private static final String CARPETA_UPLOADS = "uploads/documentacion/";
+    private static final int FILAS_AFECTADAS_ESPERADAS = 1;
 
     @FXML private Label etiquetaArchivo;
     @FXML private VBox panelError;
@@ -70,11 +71,11 @@ public class SubirDocumentacionPracticanteControlador {
     }
 
     private boolean archivoSeleccionado() {
-        if (archivoSeleccionado == null) {
+        boolean hayArchivo = archivoSeleccionado != null;
+        if (!hayArchivo) {
             mostrarError("Archivo requerido", "DEBES SELECCIONAR UN ARCHIVO PDF.");
-            return false;
         }
-        return true;
+        return hayArchivo;
     }
 
     private void procesarSubida() {
@@ -107,7 +108,7 @@ public class SubirDocumentacionPracticanteControlador {
                     rutaRelativa, EstadoRevision.Pendiente, null
             );
             int idDocumentacion = documentacionDao.agregarDocumentacion(documentacion);
-            if (idDocumentacion > 0) {
+            if (idDocumentacion >= FILAS_AFECTADAS_ESPERADAS) {
                 guardarEntrega(idDocumentacion);
             } else {
                 mostrarError("Error al subir", "NO SE PUDO GUARDAR LA DOCUMENTACION.");
@@ -121,12 +122,10 @@ public class SubirDocumentacionPracticanteControlador {
         try {
             String matricula = SesionUsuario.getInstance().getUsuarioActivo().getMatricula();
             EntregaDocumentacion entrega = new EntregaDocumentacion(
-                    Date.valueOf(LocalDate.now()),
-                    matricula,
-                    idDocumentacion
+                    Date.valueOf(LocalDate.now()), matricula, idDocumentacion
             );
             int filasAfectadas = entregaDao.agregarEntrega(entrega);
-            if (filasAfectadas > 0) {
+            if (filasAfectadas >= FILAS_AFECTADAS_ESPERADAS) {
                 limpiarFormulario();
                 mostrarExito("Documentación subida", "TU DOCUMENTACION FUE ENVIADA CORRECTAMENTE.");
             } else {

@@ -1,6 +1,7 @@
 package InterfazGrafica;
 
 
+import com.sun.jdi.PrimitiveValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -40,6 +41,7 @@ public class ModificarProfesorControlador {
     @FXML private TextField campoApellidos;
     @FXML private TextField campoCorreo;
 
+    private static final int FILAS_AFECTADAS_ESPERADAS = 1;
     private Profesor profesorSeleccionado;
 
     @FXML
@@ -118,7 +120,7 @@ public class ModificarProfesorControlador {
             Profesor profesorModificado = construirProfesor();
             int filasAfectadas = profesorDao.modificarProfesor(
                     profesorSeleccionado.getNumeroDePersonalProfesor(), profesorModificado);
-            if (filasAfectadas > 0) {
+            if (filasAfectadas > FILAS_AFECTADAS_ESPERADAS) {
                 ocultarTodo();
                 comboBoxProfesores.setValue(null);
                 cargarProfesores();

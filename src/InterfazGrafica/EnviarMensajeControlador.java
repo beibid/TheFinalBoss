@@ -33,6 +33,7 @@ import java.util.logging.Logger;
 
 
 public class EnviarMensajeControlador {
+
     private static final Logger LOGGER = Logger.getLogger(EnviarMensajeControlador.class.getName());
 
     @FXML private ComboBox<Usuario> comboBoxDestinatario;
@@ -67,6 +68,7 @@ public class EnviarMensajeControlador {
         List<Usuario> destinatarios = new ArrayList<>();
         destinatarios.addAll(practicanteDao.obtenerPracticantesActivos());
         destinatarios.addAll(profesorDao.obtenerProfesoresActivos());
+
         List<Usuario> filtrados = new ArrayList<>();
         for (Usuario usuario : destinatarios) {
             if (usuario.getIdUsuario() != idUsuarioActual) {

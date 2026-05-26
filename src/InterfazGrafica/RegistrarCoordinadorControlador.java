@@ -16,11 +16,14 @@ import logica.dao.objetos.CoordinadorDao;
 import logica.dominio.Coordinador;
 import logica.dominio.enums.Estado;
 
+import java.util.List;
+
 
 public class RegistrarCoordinadorControlador {
 
     @FXML private TextField campoTextoNombres;
     @FXML private TextField campoTextoApellidos;
+    @FXML private TextField campoTextoCorreo;
     @FXML private TextField campoTextoNumeroPersonal;
     @FXML private VBox panelError;
     @FXML private Label etiquetaTituloError;
@@ -29,6 +32,7 @@ public class RegistrarCoordinadorControlador {
     @FXML private Label etiquetaTituloExito;
     @FXML private Label etiquetaMensajeExito;
 
+    private static final int FILAS_AFECTADAS_ESPERADAS = 1;
 
 
     @FXML
@@ -73,11 +77,31 @@ public class RegistrarCoordinadorControlador {
         guardarCoordinador(construirCoordinador());
     }
 
+    private boolean camposVacios(List<String> campos){
+        boolean hayCamposVacios = false;
+        for (String campo : campos){
+            if (campo.isEmpty()) {
+                hayCamposVacios = true;
+            }
+        }
+        return hayCamposVacios;
+    }
+
     private boolean camposValidos() {
         String nombre = campoTextoNombres.getText().trim();
         String apellidos = campoTextoApellidos.getText().trim();
+        String correo = campoTextoCorreo.getText().trim();
         String numeroPersonal = campoTextoNumeroPersonal.getText().trim();
-        return !nombre.isEmpty() && !apellidos.isEmpty() && !numeroPersonal.isEmpty();
+
+
+        List<String> campo = List.of(nombre, apellidos, correo, numeroPersonal);
+
+        boolean camposFormularioValido = !camposVacios(campo);
+
+        if (!camposFormularioValido){
+            mostrarError("Campos obligatorios vacios" , "POR FAVOR LLENE TODOS LOS CAMPOS");
+        }
+        return camposFormularioValido;
     }
 
     private Coordinador construirCoordinador() {
@@ -99,7 +123,7 @@ public class RegistrarCoordinadorControlador {
         CoordinadorDao coordinadorDao = new CoordinadorDao();
         try {
             int filasAfectadas = coordinadorDao.insertarCoordinador(coordinador);
-            if (filasAfectadas > 0) {
+            if (filasAfectadas >= FILAS_AFECTADAS_ESPERADAS) {
                 limpiarCamposRegistros();
                 mostrarExito("Coordinador con estado activo",
                         "COORDINADOR REGISTRADO EXITOSAMENTE.");
