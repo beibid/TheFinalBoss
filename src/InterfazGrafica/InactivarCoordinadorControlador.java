@@ -75,7 +75,8 @@ public class InactivarCoordinadorControlador {
     private void seleccionarCoordinador() {
         coordinadorSeleccionado = comboBoxCoordinadores.getValue();
         if (coordinadorSeleccionado != null) {
-            ocultarPaneles();
+            ocultarPanel(panelError);
+            ocultarPanel(panelExito);
             mostrarDatosCoordinador(coordinadorSeleccionado);
         }
     }
@@ -142,11 +143,6 @@ public class InactivarCoordinadorControlador {
         coordinadorSeleccionado = null;
         panelDatos.setVisible(false);
         panelDatos.setManaged(false);
-        ocultarPanel(panelError);
-        ocultarPanel(panelExito);
-    }
-
-    private void ocultarPaneles() {
         ocultarPanel(panelError);
         ocultarPanel(panelExito);
     }

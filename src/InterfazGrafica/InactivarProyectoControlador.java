@@ -76,7 +76,8 @@ public class InactivarProyectoControlador {
     private void seleccionarProyecto() {
         proyectoSeleccionado = comboBoxProyectos.getValue();
         if (proyectoSeleccionado != null) {
-            ocultarPaneles();
+            ocultarPanel(panelError);
+            ocultarPanel(panelExito);
             mostrarDatosProyecto(proyectoSeleccionado);
         }
     }
@@ -143,14 +144,9 @@ public class InactivarProyectoControlador {
     }
 
     private void ocultarTodo() {
-        ocultarPaneles();
-        panelDatos.setVisible(false);
-        panelDatos.setManaged(false);
-    }
-
-    private void ocultarPaneles() {
         ocultarPanel(panelError);
         ocultarPanel(panelExito);
+        ocultarPanel(panelDatos);
     }
 
     private void mostrarPanel(VBox panel, Label etiquetaTitulo, Label etiquetaMensaje,

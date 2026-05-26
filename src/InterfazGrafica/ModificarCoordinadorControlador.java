@@ -76,7 +76,8 @@ public class ModificarCoordinadorControlador {
     private void seleccionarCoordinador() {
         coordinadorSeleccionado = comboBoxCoordinadores.getValue();
         if (coordinadorSeleccionado != null) {
-            ocultarPaneles();
+            ocultarPanel(panelError);
+            ocultarPanel(panelExito);
             rellenarFormulario(coordinadorSeleccionado);
         }
     }
@@ -182,14 +183,9 @@ public class ModificarCoordinadorControlador {
     }
 
     private void ocultarTodo() {
-        ocultarPaneles();
-        panelFormulario.setVisible(false);
-        panelFormulario.setManaged(false);
-    }
-
-    private void ocultarPaneles() {
         ocultarPanel(panelError);
         ocultarPanel(panelExito);
+        ocultarPanel(panelFormulario);
     }
 
     private void mostrarPanel(VBox panel, Label etiquetaTitulo, Label etiquetaMensaje,

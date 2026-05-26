@@ -80,7 +80,8 @@ public class ModificarPracticanteControlador {
     private void seleccionarPracticante() {
         practicanteSeleccionado = comboBoxPracticantes.getValue();
         if (practicanteSeleccionado != null) {
-            ocultarPaneles();
+            ocultarPanel(panelError);
+            ocultarPanel(panelExito);
             rellenarFormulario(practicanteSeleccionado);
         }
     }
@@ -195,16 +196,9 @@ public class ModificarPracticanteControlador {
     }
 
     private void ocultarTodo() {
-        ocultarPaneles();
-        panelFormulario.setVisible(false);
-        panelFormulario.setManaged(false);
-    }
-
-    private void ocultarPaneles() {
-        panelError.setVisible(false);
-        panelError.setManaged(false);
-        panelExito.setVisible(false);
-        panelExito.setManaged(false);
+        ocultarPanel(panelError);
+        ocultarPanel(panelExito);
+        ocultarPanel(panelFormulario);
     }
 
     private void mostrarPanel(VBox panel, Label etiquetaTitulo, Label etiquetaMensaje,

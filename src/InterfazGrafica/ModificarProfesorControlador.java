@@ -24,6 +24,7 @@ import java.util.logging.Logger;
 public class ModificarProfesorControlador {
 
     private static final Logger LOGGER = Logger.getLogger(ModificarProfesorControlador.class.getName());
+    private static final int FILAS_AFECTADAS_ESPERADAS = 1;
 
     @FXML private ComboBox<Profesor> comboBoxProfesores;
     @FXML private ComboBox<Turno> comboBoxTurno;
@@ -38,7 +39,6 @@ public class ModificarProfesorControlador {
     @FXML private TextField campoApellidos;
     @FXML private TextField campoCorreo;
 
-    private static final int FILAS_AFECTADAS_ESPERADAS = 1;
     private Profesor profesorSeleccionado;
 
     @FXML
@@ -53,22 +53,21 @@ public class ModificarProfesorControlador {
             List<Profesor> lista = profesorDao.obtenerProfesoresActivos();
             ObservableList<Profesor> profesoresObservable = FXCollections.observableArrayList(lista);
             comboBoxProfesores.setItems(profesoresObservable);
-            comboBoxProfesores.setCellFactory(l -> crearCeldaProfesor(false));
-            comboBoxProfesores.setButtonCell(crearCeldaProfesor(true));
+            comboBoxProfesores.setCellFactory(listaProfesores -> crearCeldaProfesor());
+            comboBoxProfesores.setButtonCell(crearCeldaProfesor());
         } catch (UsuariosExcepcion excepcion) {
             LOGGER.log(Level.SEVERE, "Error al cargar profesores", excepcion);
-            mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
-                    "Error al cargar", excepcion.getMessage());
+            mostrarError("Error al cargar", excepcion.getMessage());
         }
     }
 
-    private ListCell<Profesor> crearCeldaProfesor(boolean esBoton) {
+    private ListCell<Profesor> crearCeldaProfesor() {
         return new ListCell<Profesor>() {
             @Override
             protected void updateItem(Profesor profesor, boolean vacio) {
                 super.updateItem(profesor, vacio);
                 if (vacio || profesor == null) {
-                    setText(esBoton ? "-- Selecciona un profesor --" : null);
+                    setText("-- Selecciona un profesor --");
                 } else {
                     setText(profesor.getNombre() + " " + profesor.getApellidos());
                 }
@@ -80,7 +79,8 @@ public class ModificarProfesorControlador {
     private void seleccionarProfesor() {
         profesorSeleccionado = comboBoxProfesores.getValue();
         if (profesorSeleccionado != null) {
-            ocultarPaneles();
+            ocultarPanel(panelError);
+            ocultarPanel(panelExito);
             rellenarFormulario(profesorSeleccionado);
         }
     }
@@ -112,20 +112,16 @@ public class ModificarProfesorControlador {
                     ocultarTodo();
                     comboBoxProfesores.setValue(null);
                     cargarProfesores();
-                    mostrarPanel(etiquetaTituloExito, etiquetaMensajeExito, panelExito,
-                            "Profesor modificado", "Profesor actualizado exitosamente.");
+                    mostrarExito("Profesor modificado", "Profesor actualizado exitosamente.");
                 } else {
-                    mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
-                            "Error al modificar", "No se pudo modificar el profesor. Intente de nuevo.");
+                    mostrarError("Error al modificar", "No se pudo modificar el profesor. Intente de nuevo.");
                 }
             } catch (UsuariosExcepcion excepcion) {
                 LOGGER.log(Level.SEVERE, "Error al modificar profesor", excepcion);
-                mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
-                        "Error inesperado", excepcion.getMessage().toUpperCase());
+                mostrarError("Error inesperado", excepcion.getMessage().toUpperCase());
             }
         } else {
-            mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
-                    "Campos obligatorios vacíos", "Verifica la información e intenta de nuevo.");
+            mostrarError("Campos obligatorios vacíos", "Verifica la información e intenta de nuevo.");
         }
     }
 
@@ -149,14 +145,13 @@ public class ModificarProfesorControlador {
         boolean turnoValido = comboBoxTurno.getValue() != null;
 
         if (!camposTextosValidos) {
-            mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
-                    "Campos obligatorios vacios", "Verifique la informacion e intente de nuevo.");
+            mostrarError("Campos obligatorios vacios", "Verifique la informacion e intente de nuevo.");
         }
         if (!turnoValido) {
-            mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
-                    "Turno no seleccionado", "Seleccione un turno para el profesor.");
+            mostrarError("Turno no seleccionado", "Seleccione un turno para el profesor.");
         }
-        return camposTextosValidos && turnoValido;
+        boolean formularioCompleto = camposTextosValidos && turnoValido;
+        return formularioCompleto;
     }
 
     private Profesor construirProfesor() {
@@ -196,16 +191,13 @@ public class ModificarProfesorControlador {
     }
 
     private void ocultarTodo() {
-        ocultarPaneles();
+        ocultarPanel(panelError);
+        ocultarPanel(panelExito);
         ocultarPanel(panelFormulario);
     }
 
-    private void ocultarPaneles() {
-        ocultarPanel(panelError);
-        ocultarPanel(panelExito);
-    }
-
-    private void mostrarPanel(Label etiquetaTitulo, Label etiquetaMensaje, VBox panel, String titulo, String mensaje) {
+    private void mostrarPanel(VBox panel, Label etiquetaTitulo, Label etiquetaMensaje,
+                              String titulo, String mensaje) {
         etiquetaTitulo.setText(titulo);
         etiquetaMensaje.setText(mensaje);
         panel.setVisible(true);
@@ -215,5 +207,15 @@ public class ModificarProfesorControlador {
     private void ocultarPanel(VBox panel) {
         panel.setVisible(false);
         panel.setManaged(false);
+    }
+
+    private void mostrarError(String titulo, String mensaje) {
+        ocultarPanel(panelExito);
+        mostrarPanel(panelError, etiquetaTituloError, etiquetaMensajeError, titulo, mensaje);
+    }
+
+    private void mostrarExito(String titulo, String mensaje) {
+        ocultarPanel(panelError);
+        mostrarPanel(panelExito, etiquetaTituloExito, etiquetaMensajeExito, titulo, mensaje);
     }
 }

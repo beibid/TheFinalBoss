@@ -75,7 +75,8 @@ public class InactivarOrganizacionVinculadaControlador {
     private void seleccionarOrganizacion() {
         organizacionSeleccionada = comboBoxOrganizacion.getValue();
         if (organizacionSeleccionada != null) {
-            ocultarPaneles();
+            ocultarPanel(panelError);
+            ocultarPanel(panelExito);
             mostrarDatosOrganizacion(organizacionSeleccionada);
         }
     }
@@ -141,11 +142,6 @@ public class InactivarOrganizacionVinculadaControlador {
         organizacionSeleccionada = null;
         panelDatos.setVisible(false);
         panelDatos.setManaged(false);
-        ocultarPanel(panelError);
-        ocultarPanel(panelExito);
-    }
-
-    private void ocultarPaneles() {
         ocultarPanel(panelError);
         ocultarPanel(panelExito);
     }

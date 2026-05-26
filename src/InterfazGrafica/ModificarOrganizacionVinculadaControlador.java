@@ -75,7 +75,8 @@ public class ModificarOrganizacionVinculadaControlador {
     private void seleccionarOrganizacion() {
         organizacionSeleccionada = comboBoxOrganizacion.getValue();
         if (organizacionSeleccionada != null) {
-            ocultarPaneles();
+            ocultarPanel(panelError);
+            ocultarPanel(panelExito);
             rellenarFormulario(organizacionSeleccionada);
         }
     }
@@ -172,14 +173,9 @@ public class ModificarOrganizacionVinculadaControlador {
     }
 
     private void ocultarTodo() {
-        ocultarPaneles();
-        panelFormulario.setVisible(false);
-        panelFormulario.setManaged(false);
-    }
-
-    private void ocultarPaneles() {
         ocultarPanel(panelError);
         ocultarPanel(panelExito);
+        ocultarPanel(panelFormulario);
     }
 
     private void mostrarPanel(VBox panel, Label etiquetaTitulo, Label etiquetaMensaje,

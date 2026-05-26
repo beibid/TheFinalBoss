@@ -75,7 +75,8 @@ public class InactivarPracticanteControlador {
     private void seleccionarPracticante() {
         practicanteSeleccionado = comboBoxPracticantes.getValue();
         if (practicanteSeleccionado != null) {
-            ocultarPaneles();
+            ocultarPanel(panelError);
+            ocultarPanel(panelExito);
             mostrarDatosPracticante(practicanteSeleccionado);
         }
     }
@@ -142,11 +143,6 @@ public class InactivarPracticanteControlador {
         practicanteSeleccionado = null;
         panelDatos.setVisible(false);
         panelDatos.setManaged(false);
-        ocultarPanel(panelError);
-        ocultarPanel(panelExito);
-    }
-
-    private void ocultarPaneles() {
         ocultarPanel(panelError);
         ocultarPanel(panelExito);
     }

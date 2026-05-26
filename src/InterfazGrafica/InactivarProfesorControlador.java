@@ -75,7 +75,8 @@ public class InactivarProfesorControlador {
     private void seleccionarProfesor() {
         profesorSeleccionado = comboBoxProfesores.getValue();
         if (profesorSeleccionado != null) {
-            ocultarPaneles();
+            ocultarPanel(panelError);
+            ocultarPanel(panelExito);
             mostrarDatosProfesor(profesorSeleccionado);
         }
     }
@@ -140,11 +141,6 @@ public class InactivarProfesorControlador {
         profesorSeleccionado = null;
         panelDatos.setVisible(false);
         panelDatos.setManaged(false);
-        ocultarPanel(panelError);
-        ocultarPanel(panelExito);
-    }
-
-    private void ocultarPaneles() {
         ocultarPanel(panelError);
         ocultarPanel(panelExito);
     }

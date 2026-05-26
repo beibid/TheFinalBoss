@@ -19,8 +19,13 @@ import logica.dominio.Proyecto;
 import logica.dominio.enums.EstadoProyecto;
 import java.sql.Date;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class ModificarProyectoControlador {
+
+    private static final Logger LOGGER = Logger.getLogger(ModificarProyectoControlador.class.getName());
+    private static final int FILAS_AFECTADAS_ESPERADAS = 1;
 
     @FXML private ComboBox<Proyecto> comboBoxProyectos;
     @FXML private ComboBox<EstadoProyecto> comboBoxEstado;
@@ -42,7 +47,6 @@ public class ModificarProyectoControlador {
     @FXML private TextField campoFechaRegistro;
 
     private Proyecto proyectoSeleccionado;
-    private static final int FILAS_AFECTADAS_ESPERADAS = 1;
 
     @FXML
     public void initialize() {
@@ -56,21 +60,21 @@ public class ModificarProyectoControlador {
             List<Proyecto> listaProyectos = proyectoDao.obtenerProyectosDisponibles();
             ObservableList<Proyecto> proyectosObservable = FXCollections.observableArrayList(listaProyectos);
             comboBoxProyectos.setItems(proyectosObservable);
-            comboBoxProyectos.setCellFactory(lista -> crearCeldaProyecto(false));
-            comboBoxProyectos.setButtonCell(crearCeldaProyecto(true));
+            comboBoxProyectos.setCellFactory(listaProyectos2 -> crearCeldaProyecto());
+            comboBoxProyectos.setButtonCell(crearCeldaProyecto());
         } catch (MensajeriaExcepcion excepcion) {
-            mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
-                    "Error al cargar proyectos", excepcion.getMessage());
+            LOGGER.log(Level.SEVERE, "Error al cargar proyectos", excepcion);
+            mostrarError("Error al cargar proyectos", excepcion.getMessage());
         }
     }
 
-    private ListCell<Proyecto> crearCeldaProyecto(boolean esBoton) {
+    private ListCell<Proyecto> crearCeldaProyecto() {
         return new ListCell<Proyecto>() {
             @Override
             protected void updateItem(Proyecto proyecto, boolean vacio) {
                 super.updateItem(proyecto, vacio);
                 if (vacio || proyecto == null) {
-                    setText(esBoton ? "-- Selecciona un proyecto --" : null);
+                    setText("-- Selecciona un proyecto --");
                 } else {
                     setText(proyecto.getNombreProyecto());
                 }
@@ -82,7 +86,8 @@ public class ModificarProyectoControlador {
     private void seleccionarProyecto() {
         proyectoSeleccionado = comboBoxProyectos.getValue();
         if (proyectoSeleccionado != null) {
-            ocultarPaneles();
+            ocultarPanel(panelError);
+            ocultarPanel(panelExito);
             rellenarFormulario(proyectoSeleccionado);
         }
     }
@@ -120,19 +125,16 @@ public class ModificarProyectoControlador {
                     ocultarTodo();
                     comboBoxProyectos.setValue(null);
                     cargarProyectosDisponibles();
-                    mostrarPanel(etiquetaTituloExito, etiquetaMensajeExito, panelExito,
-                            "Proyecto modificado", "El proyecto fue modificado exitosamente.");
+                    mostrarExito("Proyecto modificado", "El proyecto fue modificado exitosamente.");
                 } else {
-                    mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
-                            "Error al modificar", "No se pudo modificar el proyecto. Intente de nuevo.");
+                    mostrarError("Error al modificar", "No se pudo modificar el proyecto. Intente de nuevo.");
                 }
             } catch (MensajeriaExcepcion excepcion) {
-                mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
-                        "Error inesperado", excepcion.getMessage().toUpperCase());
+                LOGGER.log(Level.SEVERE, "Error al modificar proyecto", excepcion);
+                mostrarError("Error inesperado", excepcion.getMessage().toUpperCase());
             }
         } else {
-            mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
-                    "Campos obligatorios vacíos", "Verifique la información e intente de nuevo.");
+            mostrarError("Campos obligatorios vacíos", "Verifique la información e intente de nuevo.");
         }
     }
 
@@ -140,15 +142,16 @@ public class ModificarProyectoControlador {
         List<TextField> camposObligatorios = List.of(
                 campoNombreProyecto, campoDescripcion, campoResponsable,
                 campoNombreEmpresa, campoSectorEmpresa, campoDireccionEmpresa,
-                campoMatricula, campoNumPersonalCoordinador, campoFechaRegistro
-        );
+                campoMatricula, campoNumPersonalCoordinador, campoFechaRegistro);
         boolean camposTextosValidos = true;
         for (TextField campo : camposObligatorios) {
             if (campo.getText().trim().isEmpty()) {
                 camposTextosValidos = false;
             }
         }
-        return camposTextosValidos && comboBoxEstado.getValue() != null;
+        boolean estadoValido = comboBoxEstado.getValue() != null;
+        boolean formularioCompleto = camposTextosValidos && estadoValido;
+        return formularioCompleto;
     }
 
     private Proyecto construirProyecto() throws MensajeriaExcepcion {
@@ -196,16 +199,13 @@ public class ModificarProyectoControlador {
     }
 
     private void ocultarTodo() {
-        ocultarPaneles();
+        ocultarPanel(panelError);
+        ocultarPanel(panelExito);
         ocultarPanel(panelFormulario);
     }
 
-    private void ocultarPaneles() {
-        ocultarPanel(panelError);
-        ocultarPanel(panelExito);
-    }
-
-    private void mostrarPanel(Label etiquetaTitulo, Label etiquetaMensaje, VBox panel, String titulo, String mensaje) {
+    private void mostrarPanel(VBox panel, Label etiquetaTitulo, Label etiquetaMensaje,
+                              String titulo, String mensaje) {
         etiquetaTitulo.setText(titulo);
         etiquetaMensaje.setText(mensaje);
         panel.setVisible(true);
@@ -215,5 +215,15 @@ public class ModificarProyectoControlador {
     private void ocultarPanel(VBox panel) {
         panel.setVisible(false);
         panel.setManaged(false);
+    }
+
+    private void mostrarError(String titulo, String mensaje) {
+        ocultarPanel(panelExito);
+        mostrarPanel(panelError, etiquetaTituloError, etiquetaMensajeError, titulo, mensaje);
+    }
+
+    private void mostrarExito(String titulo, String mensaje) {
+        ocultarPanel(panelError);
+        mostrarPanel(panelExito, etiquetaTituloExito, etiquetaMensajeExito, titulo, mensaje);
     }
 }
