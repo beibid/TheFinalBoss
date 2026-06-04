@@ -20,7 +20,10 @@
                 <Separator><VBox.margin><Insets bottom="10.0" top="5.0" /></VBox.margin></Separator>
 
                 <Label style="-fx-text-fill: white; -fx-font-size: 11;" text="Reporte" />
-                <Button onAction="#abrirGenerarReporte" prefWidth="170.0" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-alignment: CENTER-LEFT;" text="Generar reporte">
+                <Button onAction="#abrirGenerarReporteMensual" prefWidth="170.0" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-alignment: CENTER-LEFT;" text="Generar reporte Mensual">
+                    <VBox.margin><Insets top="5.0" /></VBox.margin>
+                </Button>
+                <Button onAction="#abrirGenerarReporteParcial" prefWidth="170.0" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-alignment: CENTER-LEFT;" text="Generar reporte Parcial">
                     <VBox.margin><Insets top="5.0" /></VBox.margin>
                 </Button>
                 <Button onAction="#abrirSubirReporte" prefWidth="170.0" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-alignment: CENTER-LEFT;" text="Subir reporte">

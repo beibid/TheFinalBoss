@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<AnchorPane prefHeight="650.0" prefWidth="750.0"
+            xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="InterfazGrafica.GenerarReporteParcialControlador">
+    <children>
+
+        <VBox layoutX="0.0" layoutY="0.0" prefHeight="650.0" prefWidth="180.0"
+              style="-fx-background-color: #2ecc71; -fx-padding: 15;">
+            <children>
+                <Label text="Generar" style="-fx-text-fill: white; -fx-font-size: 16; -fx-font-weight: bold;"/>
+                <Label text="Reporte Parcial" style="-fx-text-fill: black; -fx-font-size: 12;">
+                    <VBox.margin><Insets top="4.0"/></VBox.margin>
+                </Label>
+            </children>
+        </VBox>
+
+        <ScrollPane layoutX="180.0" layoutY="0.0" prefHeight="650.0" prefWidth="570.0" fitToWidth="true">
+            <content>
+                <VBox prefWidth="550.0" spacing="8.0" style="-fx-padding: 25;">
+                    <children>
+
+                        <Label text="Generar Reporte Parcial" style="-fx-font-size: 22; -fx-font-weight: bold;"/>
+
+                        <VBox fx:id="panelError" managed="false" prefWidth="500.0" spacing="4.0"
+                              style="-fx-border-color: #8B0000; -fx-border-width: 2; -fx-background-color: #f5f5dc; -fx-padding: 10;"
+                              visible="false">
+                            <HBox alignment="CENTER_LEFT" spacing="8">
+                                <Label text="✖" style="-fx-text-fill: #8B0000; -fx-font-size: 14; -fx-font-weight: bold;"/>
+                                <Label fx:id="etiquetaTituloError" style="-fx-font-weight: bold; -fx-text-fill: #8B0000;" text=""/>
+                            </HBox>
+                            <Label fx:id="etiquetaMensajeError" style="-fx-text-fill: #8B0000; -fx-font-size: 11;" text=""/>
+                        </VBox>
+
+                        <VBox fx:id="panelExito" managed="false" prefWidth="500.0" spacing="4.0"
+                              style="-fx-border-color: #2d6a2d; -fx-border-width: 2; -fx-background-color: #f0f7f0; -fx-padding: 10;"
+                              visible="false">
+                            <HBox alignment="CENTER_LEFT" spacing="8">
+                                <Label text="✔" style="-fx-text-fill: #2d6a2d; -fx-font-size: 14; -fx-font-weight: bold;"/>
+                                <Label fx:id="etiquetaTituloExito" style="-fx-font-weight: bold; -fx-text-fill: #2d6a2d;" text=""/>
+                            </HBox>
+                            <Label fx:id="etiquetaMensajeExito" style="-fx-text-fill: #2d6a2d; -fx-font-size: 11;" text=""/>
+                        </VBox>
+
+                        <HBox spacing="10.0">
+                            <Label style="-fx-font-size: 13; -fx-font-weight: bold;" text="Matrícula:"/>
+                            <Label fx:id="etiquetaMatricula" style="-fx-font-size: 13;" text=""/>
+                        </HBox>
+                        <HBox spacing="10.0">
+                            <Label style="-fx-font-size: 13; -fx-font-weight: bold;" text="Proyecto:"/>
+                            <Label fx:id="etiquetaProyecto" style="-fx-font-size: 13;" text=""/>
+                        </HBox>
+                        <HBox spacing="10.0">
+                            <Label style="-fx-font-size: 13; -fx-font-weight: bold;" text="Organización:"/>
+                            <Label fx:id="etiquetaOrganizacion" style="-fx-font-size: 13;" text=""/>
+                        </HBox>
+
+                        <Separator><VBox.margin><Insets bottom="5.0" top="5.0"/></VBox.margin></Separator>
+
+                        <Label text="Descripción general" style="-fx-font-size: 13;"/>
+                        <TextArea fx:id="textoAreaDescripcion" prefHeight="80.0" prefWidth="500.0"
+                                  promptText="Escribe una descripción general del reporte..." wrapText="true"/>
+
+                        <Separator><VBox.margin><Insets bottom="5.0" top="5.0"/></VBox.margin></Separator>
+
+                        <Label text="Actividad 1" style="-fx-font-size: 13; -fx-font-weight: bold;"/>
+                        <Label text="Nombre de la actividad" style="-fx-font-size: 11;"/>
+                        <TextField fx:id="campoNombreActividadUno" prefWidth="500.0" promptText="Nombre de la actividad"/>
+                        <Label text="Descripción" style="-fx-font-size: 11;"/>
+                        <TextArea fx:id="campoDescripcionActividadUno" prefHeight="50.0" prefWidth="500.0" wrapText="true"/>
+                        <HBox spacing="10.0">
+                            <VBox spacing="4.0" HBox.hgrow="ALWAYS">
+                                <Label text="Tiempo planeado (hrs)" style="-fx-font-size: 11;"/>
+                                <TextField fx:id="campoTiempoPlaneadoUno" promptText="Ej: 10"/>
+                            </VBox>
+                            <VBox spacing="4.0" HBox.hgrow="ALWAYS">
+                                <Label text="Tiempo real (hrs)" style="-fx-font-size: 11;"/>
+                                <TextField fx:id="campoTiempoRealUno" promptText="Ej: 12"/>
+                            </VBox>
+                            <VBox spacing="4.0" HBox.hgrow="ALWAYS">
+                                <Label text="Mes" style="-fx-font-size: 11;"/>
+                                <TextField fx:id="campoMesUno" promptText="Ej: Enero"/>
+                            </VBox>
+                            <VBox spacing="4.0" HBox.hgrow="ALWAYS">
+                                <Label text="Semana" style="-fx-font-size: 11;"/>
+                                <TextField fx:id="campoSemanaUno" promptText="Ej: 1"/>
+                            </VBox>
+                        </HBox>
+
+                        <Separator><VBox.margin><Insets bottom="3.0" top="3.0"/></VBox.margin></Separator>
+
+                        <Label text="Actividad 2" style="-fx-font-size: 13; -fx-font-weight: bold;"/>
+                        <Label text="Nombre de la actividad" style="-fx-font-size: 11;"/>
+                        <TextField fx:id="campoNombreActividadDos" prefWidth="500.0" promptText="Nombre de la actividad"/>
+                        <Label text="Descripción" style="-fx-font-size: 11;"/>
+                        <TextArea fx:id="campoDescripcionActividadDos" prefHeight="50.0" prefWidth="500.0" wrapText="true"/>
+                        <HBox spacing="10.0">
+                            <VBox spacing="4.0" HBox.hgrow="ALWAYS">
+                                <Label text="Tiempo planeado (hrs)" style="-fx-font-size: 11;"/>
+                                <TextField fx:id="campoTiempoPlaneadoDos" promptText="Ej: 10"/>
+                            </VBox>
+                            <VBox spacing="4.0" HBox.hgrow="ALWAYS">
+                                <Label text="Tiempo real (hrs)" style="-fx-font-size: 11;"/>
+                                <TextField fx:id="campoTiempoRealDos" promptText="Ej: 12"/>
+                            </VBox>
+                            <VBox spacing="4.0" HBox.hgrow="ALWAYS">
+                                <Label text="Mes" style="-fx-font-size: 11;"/>
+                                <TextField fx:id="campoMesDos" promptText="Ej: Enero"/>
+                            </VBox>
+                            <VBox spacing="4.0" HBox.hgrow="ALWAYS">
+                                <Label text="Semana" style="-fx-font-size: 11;"/>
+                                <TextField fx:id="campoSemanaDos" promptText="Ej: 2"/>
+                            </VBox>
+                        </HBox>
+
+                        <Separator><VBox.margin><Insets bottom="3.0" top="3.0"/></VBox.margin></Separator>
+
+                        <Label text="Actividad 3" style="-fx-font-size: 13; -fx-font-weight: bold;"/>
+                        <Label text="Nombre de la actividad" style="-fx-font-size: 11;"/>
+                        <TextField fx:id="campoNombreActividadTres" prefWidth="500.0" promptText="Nombre de la actividad"/>
+                        <Label text="Descripción" style="-fx-font-size: 11;"/>
+                        <TextArea fx:id="campoDescripcionActividadTres" prefHeight="50.0" prefWidth="500.0" wrapText="true"/>
+                        <HBox spacing="10.0">
+                            <VBox spacing="4.0" HBox.hgrow="ALWAYS">
+                                <Label text="Tiempo planeado (hrs)" style="-fx-font-size: 11;"/>
+                                <TextField fx:id="campoTiempoPlaneadoTres" promptText="Ej: 10"/>
+                            </VBox>
+                            <VBox spacing="4.0" HBox.hgrow="ALWAYS">
+                                <Label text="Tiempo real (hrs)" style="-fx-font-size: 11;"/>
+                                <TextField fx:id="campoTiempoRealTres" promptText="Ej: 12"/>
+                            </VBox>
+                            <VBox spacing="4.0" HBox.hgrow="ALWAYS">
+                                <Label text="Mes" style="-fx-font-size: 11;"/>
+                                <TextField fx:id="campoMesTres" promptText="Ej: Febrero"/>
+                            </VBox>
+                            <VBox spacing="4.0" HBox.hgrow="ALWAYS">
+                                <Label text="Semana" style="-fx-font-size: 11;"/>
+                                <TextField fx:id="campoSemanaTres" promptText="Ej: 3"/>
+                            </VBox>
+                        </HBox>
+
+                        <HBox spacing="15.0">
+                            <VBox.margin><Insets top="10.0"/></VBox.margin>
+                            <Button onAction="#botonGenerar"
+                                    prefHeight="35.0" prefWidth="140.0" text="Generar PDF"
+                                    style="-fx-background-color: #2c3e50; -fx-text-fill: white; -fx-background-radius: 6;"/>
+                            <Button onAction="#botonCancelar"
+                                    prefHeight="35.0" prefWidth="140.0" text="Cancelar"
+                                    style="-fx-background-color: #c0392b; -fx-text-fill: white; -fx-background-radius: 6;"/>
+                        </HBox>
+
+                    </children>
+                </VBox>
+            </content>
+        </ScrollPane>
+
+        <Button layoutX="660.0" layoutY="10.0" onAction="#botonRegresar"
+                prefHeight="28.0" prefWidth="75.0" text="Regresar"
+                style="-fx-background-color: #7f8c8d; -fx-text-fill: white; -fx-background-radius: 6;"/>
+
+    </children>
+</AnchorPane>

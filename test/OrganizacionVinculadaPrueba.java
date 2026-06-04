@@ -1,4 +1,6 @@
 import logica.dao.excepciones.UsuariosExcepcion;
+import logica.dominio.enums.EstadoOrganizacion;
+import logica.dominio.enums.EstadoRevision;
 import org.junit.jupiter.api.Test;
 import logica.dao.objetos.OrganizacionVinculadaDao;
 import logica.dominio.OrganizacionVinculada;
@@ -9,7 +11,7 @@ public class OrganizacionVinculadaPrueba {
 
     @Test
     public void pruebaInsertarOrganizacionVinculadaExitoso() throws UsuariosExcepcion {
-        OrganizacionVinculada organizacionVinculada = new OrganizacionVinculada("Empresa Prueba 50", "Calle 50");
+        OrganizacionVinculada organizacionVinculada = new OrganizacionVinculada("Empresa Prueba 50", "Calle 50", EstadoOrganizacion.Activa);
         OrganizacionVinculadaDao organizacionVinculadaDao = new OrganizacionVinculadaDao();
         int filasAfectadas = organizacionVinculadaDao.insertarOrganizacionVinculada(organizacionVinculada);
         assertEquals(1, filasAfectadas);
@@ -17,7 +19,7 @@ public class OrganizacionVinculadaPrueba {
 
     @Test
     public void pruebaInsertarOrganizacionVinculadaAlterna() throws UsuariosExcepcion {
-        OrganizacionVinculada organizacionVinculada = new OrganizacionVinculada("Empresa Prueba 51", "");
+        OrganizacionVinculada organizacionVinculada = new OrganizacionVinculada("Empresa Prueba 51", "", EstadoOrganizacion.Activa);
         OrganizacionVinculadaDao organizacionVinculadaDao = new OrganizacionVinculadaDao();
         int filasAfectadas = organizacionVinculadaDao.insertarOrganizacionVinculada(organizacionVinculada);
         assertEquals(1, filasAfectadas);
@@ -25,21 +27,21 @@ public class OrganizacionVinculadaPrueba {
 
     @Test
     public void pruebaInsertarOrganizacionVinculadaExcepcionNombreNulo() {
-        OrganizacionVinculada organizacionVinculada = new OrganizacionVinculada(null, "Calle 50");
+        OrganizacionVinculada organizacionVinculada = new OrganizacionVinculada(null, "Calle 50", EstadoOrganizacion.Activa);
         OrganizacionVinculadaDao organizacionVinculadaDao = new OrganizacionVinculadaDao();
         assertThrows(UsuariosExcepcion.class, () -> organizacionVinculadaDao.insertarOrganizacionVinculada(organizacionVinculada));
     }
 
     @Test
     public void pruebaInsertarOrganizacionVinculadaExcepcionDireccionNula() {
-        OrganizacionVinculada organizacionVinculada = new OrganizacionVinculada("Empresa Prueba 52", null);
+        OrganizacionVinculada organizacionVinculada = new OrganizacionVinculada("Empresa Prueba 52", null, EstadoOrganizacion.Activa);
         OrganizacionVinculadaDao organizacionVinculadaDao = new OrganizacionVinculadaDao();
         assertThrows(UsuariosExcepcion.class, () -> organizacionVinculadaDao.insertarOrganizacionVinculada(organizacionVinculada));
     }
 
     @Test
     public void pruebaModificarOrganizacionVinculadaExitoso() throws UsuariosExcepcion {
-        OrganizacionVinculada organizacionVinculada = new OrganizacionVinculada("Empresa Prueba 50 Modificada", "Calle 50 Nueva");
+        OrganizacionVinculada organizacionVinculada = new OrganizacionVinculada("Empresa Prueba 50 Modificada", "Calle 50 Nueva", EstadoOrganizacion.Activa);
         OrganizacionVinculadaDao organizacionVinculadaDao = new OrganizacionVinculadaDao();
         int filasAfectadas = organizacionVinculadaDao.modificarOrganizacionVinculada(1, organizacionVinculada);
         assertEquals(1, filasAfectadas);
@@ -47,7 +49,7 @@ public class OrganizacionVinculadaPrueba {
 
     @Test
     public void pruebaModificarOrganizacionVinculadaAlternaNoExistente() throws UsuariosExcepcion {
-        OrganizacionVinculada organizacionVinculada = new OrganizacionVinculada("Empresa No Existente", "Calle 999");
+        OrganizacionVinculada organizacionVinculada = new OrganizacionVinculada("Empresa No Existente", "Calle 999", EstadoOrganizacion.Activa);
         OrganizacionVinculadaDao organizacionVinculadaDao = new OrganizacionVinculadaDao();
         int filasAfectadas = organizacionVinculadaDao.modificarOrganizacionVinculada(9999, organizacionVinculada);
         assertEquals(0, filasAfectadas);
@@ -55,14 +57,14 @@ public class OrganizacionVinculadaPrueba {
 
     @Test
     public void pruebaModificarOrganizacionVinculadaExcepcionNombreNulo() {
-        OrganizacionVinculada organizacionVinculada = new OrganizacionVinculada(null, "Calle 50");
+        OrganizacionVinculada organizacionVinculada = new OrganizacionVinculada(null, "Calle 50", EstadoOrganizacion.Activa);
         OrganizacionVinculadaDao organizacionVinculadaDao = new OrganizacionVinculadaDao();
         assertThrows(UsuariosExcepcion.class, () -> organizacionVinculadaDao.modificarOrganizacionVinculada(1, organizacionVinculada));
     }
 
     @Test
     public void pruebaModificarOrganizacionVinculadaExcepcionDireccionNula() {
-        OrganizacionVinculada organizacionVinculada = new OrganizacionVinculada("Empresa Prueba 50", null);
+        OrganizacionVinculada organizacionVinculada = new OrganizacionVinculada("Empresa Prueba 50", null, EstadoOrganizacion.Activa);
         OrganizacionVinculadaDao organizacionVinculadaDao = new OrganizacionVinculadaDao();
         assertThrows(UsuariosExcepcion.class, () -> organizacionVinculadaDao.modificarOrganizacionVinculada(1, organizacionVinculada));
     }

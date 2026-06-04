@@ -82,6 +82,9 @@ public class PracticanteDao implements PracticanteDaoInterfaz {
         if (matricula == null) {
             throw new UsuariosExcepcion("La matricula no puede ser nula");
         }
+        if (matricula.isEmpty()) {
+            throw new UsuariosExcepcion("La matricula no debe de estar vacia");
+        }
         String consulta = "UPDATE usuario SET estado = ? WHERE idUsuario = (SELECT idUsuario FROM practicante WHERE matricula = ?)";
         Connection conexionBaseDeDatos = null;
         PreparedStatement actualizacion = null;
@@ -115,6 +118,9 @@ public class PracticanteDao implements PracticanteDaoInterfaz {
     public int modificarPracticante(String matricula, Practicante practicante) throws UsuariosExcepcion {
         if (matricula == null) {
             throw new UsuariosExcepcion("La matricula no puede ser nula");
+        }
+        if (matricula.isEmpty()) {
+             throw new UsuariosExcepcion("La matricula no pueda estar vacia");
         }
         if (practicante.getNombre() == null) {
             throw new UsuariosExcepcion("El nombre del practicante no puede ser nulo");

@@ -10,7 +10,7 @@ public class DocumentacionPracticantePrueba {
 
     @Test
     public void pruebaAgregarDocumentacionExitoso() throws UsuariosExcepcion {
-        DocumentacionPracticante documentacionPracticante = new DocumentacionPracticante("/archivos/doc50.pdf", EstadoRevision.Pendiente);
+        DocumentacionPracticante documentacionPracticante = new DocumentacionPracticante("/archivos/doc50.pdf", EstadoRevision.Pendiente, "esta feo");
         DocumentacionPracticanteDao documentacionPracticanteDao = new DocumentacionPracticanteDao();
         int filasAfectadas = documentacionPracticanteDao.agregarDocumentacion(documentacionPracticante);
         assertEquals(1, filasAfectadas);
@@ -18,7 +18,7 @@ public class DocumentacionPracticantePrueba {
 
     @Test
     public void pruebaAgregarDocumentacionAlternaEstadoRevisado() throws UsuariosExcepcion {
-        DocumentacionPracticante documentacionPracticante = new DocumentacionPracticante("/archivos/doc51.pdf", EstadoRevision.Revisado);
+        DocumentacionPracticante documentacionPracticante = new DocumentacionPracticante("/archivos/doc51.pdf", EstadoRevision.Aprobado, "Esta feo");
         DocumentacionPracticanteDao documentacionPracticanteDao = new DocumentacionPracticanteDao();
         int filasAfectadas = documentacionPracticanteDao.agregarDocumentacion(documentacionPracticante);
         assertEquals(1, filasAfectadas);
@@ -26,14 +26,14 @@ public class DocumentacionPracticantePrueba {
 
     @Test
     public void pruebaAgregarDocumentacionExcepcionRutaNula() {
-        DocumentacionPracticante documentacionPracticante = new DocumentacionPracticante(null, EstadoRevision.Pendiente);
+        DocumentacionPracticante documentacionPracticante = new DocumentacionPracticante(null, EstadoRevision.Pendiente, "esta feo");
         DocumentacionPracticanteDao documentacionPracticanteDao = new DocumentacionPracticanteDao();
         assertThrows(UsuariosExcepcion.class, () -> documentacionPracticanteDao.agregarDocumentacion(documentacionPracticante));
     }
 
     @Test
     public void pruebaAgregarDocumentacionExcepcionEstadoNulo() {
-        DocumentacionPracticante documentacionPracticante = new DocumentacionPracticante("/archivos/doc52.pdf", null);
+        DocumentacionPracticante documentacionPracticante = new DocumentacionPracticante("/archivos/doc52.pdf", null, "Esta feo");
         DocumentacionPracticanteDao documentacionPracticanteDao = new DocumentacionPracticanteDao();
         assertThrows(UsuariosExcepcion.class, () -> documentacionPracticanteDao.agregarDocumentacion(documentacionPracticante));
     }

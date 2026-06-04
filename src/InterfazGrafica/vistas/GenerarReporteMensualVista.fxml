@@ -13,7 +13,7 @@
 
 <AnchorPane prefHeight="600.0" prefWidth="750.0"
             xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="InterfazGrafica.GenerarReporteControlador">
+            fx:controller="InterfazGrafica.GenerarReporteMensualControlador">
     <children>
 
         <VBox layoutX="0.0" layoutY="0.0" prefHeight="600.0" prefWidth="180.0"
@@ -67,10 +67,6 @@
                         </HBox>
 
                         <Separator><VBox.margin><Insets bottom="5.0" top="5.0"/></VBox.margin></Separator>
-
-                        <Label text="Tipo de reporte" style="-fx-font-size: 13;"/>
-                        <ComboBox fx:id="comboBoxTipoReporte" prefWidth="500.0"
-                                  promptText="-- Selecciona el tipo --"/>
 
                         <Label text="Descripción" style="-fx-font-size: 13;"/>
                         <TextArea fx:id="textoAreaDescripcion" prefHeight="120.0" prefWidth="500.0"

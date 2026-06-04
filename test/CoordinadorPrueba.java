@@ -1,16 +1,21 @@
+
+
 import org.junit.jupiter.api.Test;
 import logica.dao.objetos.CoordinadorDao;
 import logica.dominio.Coordinador;
 import logica.dominio.enums.Estado;
 import logica.dao.excepciones.UsuariosExcepcion;
+import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+
 
 public class CoordinadorPrueba {
 
     @Test
     public void pruebaInsertarCoordinadorExitoso() throws UsuariosExcepcion {
-        Coordinador coordinador = new Coordinador("C050", "Ricardo", "Fuentes",  "pass50", Estado.Activo);
+        Coordinador coordinador = new Coordinador("C050", "Ricardo", "Fuentes",  "pass50", "ric@uv.mx", Estado.Activo);
         CoordinadorDao coordinadorDao = new CoordinadorDao();
         int filasAfectadas = coordinadorDao.insertarCoordinador(coordinador);
         assertEquals(1, filasAfectadas);
@@ -18,28 +23,28 @@ public class CoordinadorPrueba {
 
     @Test
     public void pruebaInsertarCoordinadorAlternoDuplicado() {
-        Coordinador coordinador = new Coordinador("C031", "Ricardo", "Fuentes",  "pass31", Estado.Activo);
+        Coordinador coordinador = new Coordinador("C031", "Ricardo", "Fuentes",  "pass31", "ric@uv.mx", Estado.Activo);
         CoordinadorDao coordinadorDao = new CoordinadorDao();
         assertThrows(UsuariosExcepcion.class, () -> coordinadorDao.insertarCoordinador(coordinador));
     }
 
     @Test
     public void pruebaInsertarCoordinadorExcepcionNumPersonalNulo() {
-        Coordinador coordinador = new Coordinador(null, "Ricardo", "Fuentes",  "pass31", Estado.Activo);
+        Coordinador coordinador = new Coordinador(null, "Ricardo", "Fuentes",  "pass31", "ric@uv.mx", Estado.Activo);
         CoordinadorDao coordinadorDao = new CoordinadorDao();
         assertThrows(UsuariosExcepcion.class, () -> coordinadorDao.insertarCoordinador(coordinador));
     }
 
     @Test
     public void pruebaInsertarCoordinadorExcepcionNombreNulo() {
-        Coordinador coordinador = new Coordinador("C051", null, "Fuentes",  "pass31", Estado.Activo);
+        Coordinador coordinador = new Coordinador("C051", null, "Fuentes",  "pass31", "ric@uv.mx", Estado.Activo);
         CoordinadorDao coordinadorDao = new CoordinadorDao();
         assertThrows(UsuariosExcepcion.class, () -> coordinadorDao.insertarCoordinador(coordinador));
     }
 
     @Test
     public void pruebaModificarCoordinadorExitoso() throws UsuariosExcepcion {
-        Coordinador coordinador = new Coordinador("C031", "Ricardo", "Fuentes", "pass31nuevo", Estado.Activo);
+        Coordinador coordinador = new Coordinador("C031", "Ricardo", "Fuentes", "pass31nuevo", "ric@uv.mx", Estado.Activo);
         CoordinadorDao coordinadorDao = new CoordinadorDao();
         int filasAfectadas = coordinadorDao.modificarCoordinador("C031", coordinador);
         assertEquals(1, filasAfectadas);
@@ -47,7 +52,7 @@ public class CoordinadorPrueba {
 
     @Test
     public void pruebaModificarCoordinadorAlternoNoExistente() throws UsuariosExcepcion {
-        Coordinador coordinador = new Coordinador("C999", "Ricardo", "Fuentes",  "pass31", Estado.Activo);
+        Coordinador coordinador = new Coordinador("C999", "Ricardo", "Fuentes",  "pass31", "ric@uv.mx", Estado.Activo);
         CoordinadorDao coordinadorDao = new CoordinadorDao();
         int filasAfectadas = coordinadorDao.modificarCoordinador("C999", coordinador);
         assertEquals(0, filasAfectadas);
@@ -55,14 +60,14 @@ public class CoordinadorPrueba {
 
     @Test
     public void pruebaModificarCoordinadorExcepcionNombreNulo() {
-        Coordinador coordinador = new Coordinador("C031", null, "Fuentes",  "pass31", Estado.Activo);
+        Coordinador coordinador = new Coordinador("C031", null, "Fuentes",  "pass31", "ric@uv.mx", Estado.Activo);
         CoordinadorDao coordinadorDao = new CoordinadorDao();
         assertThrows(UsuariosExcepcion.class, () -> coordinadorDao.modificarCoordinador("C031", coordinador));
     }
 
     @Test
     public void pruebaModificarCoordinadorExcepcionNumPersonalNulo() {
-        Coordinador coordinador = new Coordinador("C031", "Ricardo", "Fuentes",  "pass31", Estado.Activo);
+        Coordinador coordinador = new Coordinador("C031", "Ricardo", "Fuentes",  "pass31", "ric@uv.mx", Estado.Activo);
         CoordinadorDao coordinadorDao = new CoordinadorDao();
         assertThrows(UsuariosExcepcion.class, () -> coordinadorDao.modificarCoordinador(null, coordinador));
     }
@@ -93,4 +98,19 @@ public class CoordinadorPrueba {
         int filasAfectadas = coordinadorDao.inactivarCoordinador("");
         assertEquals(0, filasAfectadas);
     }
+
+    @Test
+    public void pruebaObtenerCoordinadorActivoExitoso() throws UsuariosExcepcion {
+        CoordinadorDao coordinadorDao = new CoordinadorDao();
+        List<Coordinador> coordinadores = coordinadorDao.obtenerCoordinadoresActivos();
+        assertNotNull(coordinadores);
+    }
+
+    @Test
+    public void pruebaObtenerCoordinadorActivoNoVacio() throws UsuariosExcepcion {
+        CoordinadorDao coordinadorDao = new CoordinadorDao();
+        List<Coordinador> coordinadores = coordinadorDao.obtenerCoordinadoresActivos();
+        assertEquals(true, coordinadores.size() > 0);
+    }
+
 }

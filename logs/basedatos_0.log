@@ -8,7 +8,7 @@ may 26, 2026 2:55:46 P.M. acceso.bd.ConexionBaseDeDatos conectar
 INFO: Conexión a base de datos realizada exitosamente en 24 ms
 may 26, 2026 2:55:46 P.M. logica.dao.objetos.ProyectoDao obtenerProyectoPorPracticante
 INFO: Proyecto cargado para practicante: S24013287
-may 26, 2026 2:56:05 P.M. logica.archivos.GeneradorPdfReporte generarPdf
+may 26, 2026 2:56:05 P.M. logica.archivos.GeneradorPdfReporteMensual generarPdf
 INFO: PDF generado correctamente: reportes/Reporte_Mensual_S24013287_20260526_145605.pdf
 may 26, 2026 3:35:20 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
 INFO: Configuración de base de datos cargada correctamente
@@ -38,5 +38,155 @@ may 26, 2026 3:36:44 P.M. acceso.bd.ConexionBaseDeDatos conectar
 INFO: Conexión a base de datos realizada exitosamente en 21 ms
 may 26, 2026 3:36:44 P.M. logica.dao.objetos.ProyectoDao obtenerProyectoPorPracticante
 INFO: Proyecto cargado para practicante: S23098765
-may 26, 2026 3:37:14 P.M. logica.archivos.GeneradorPdfReporte generarPdf
+may 26, 2026 3:37:14 P.M. logica.archivos.GeneradorPdfReporteMensual generarPdf
 INFO: PDF generado correctamente: reportes/Reporte_Mensual_S23098765_20260526_153714.pdf
+may 31, 2026 9:25:55 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
+INFO: Configuración de base de datos cargada correctamente
+may 31, 2026 9:25:55 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
+CONFIG: URL de conexión: jdbc:mysql://localhost:3306/practicas_profesionales
+may 31, 2026 9:25:55 P.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexión a la base de datos...
+may 31, 2026 9:25:55 P.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexión a base de datos realizada exitosamente en 366 ms
+may 31, 2026 9:25:57 P.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexión a la base de datos...
+may 31, 2026 9:25:57 P.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexión a base de datos realizada exitosamente en 11 ms
+may 31, 2026 9:25:57 P.M. logica.dao.objetos.ProyectoDao obtenerProyectoPorPracticante
+INFO: Proyecto cargado para practicante: S24013287
+may 31, 2026 10:09:36 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
+INFO: Configuración de base de datos cargada correctamente
+may 31, 2026 10:09:36 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
+CONFIG: URL de conexión: jdbc:mysql://localhost:3306/practicas_profesionales
+may 31, 2026 10:09:36 P.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexión a la base de datos...
+may 31, 2026 10:09:36 P.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexión a base de datos realizada exitosamente en 239 ms
+may 31, 2026 10:09:37 P.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexión a la base de datos...
+may 31, 2026 10:09:37 P.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexión a base de datos realizada exitosamente en 10 ms
+may 31, 2026 10:09:37 P.M. logica.dao.objetos.ProyectoDao obtenerProyectoPorPracticante
+INFO: Proyecto cargado para practicante: S24013287
+may 31, 2026 10:10:59 P.M. logica.archivos.GeneradorPdfReporteParcial generarPdf
+INFO: PDF generado correctamente: reportes/ReporteParcial_S24013287_20260531_221058.pdf
+may 31, 2026 10:31:11 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
+INFO: Configuración de base de datos cargada correctamente
+may 31, 2026 10:31:11 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
+CONFIG: URL de conexión: jdbc:mysql://localhost:3306/practicas_profesionales
+may 31, 2026 10:31:11 P.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexión a la base de datos...
+may 31, 2026 10:31:12 P.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexión a base de datos realizada exitosamente en 248 ms
+may 31, 2026 10:31:22 P.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexión a la base de datos...
+may 31, 2026 10:31:22 P.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexión a base de datos realizada exitosamente en 11 ms
+may 31, 2026 10:31:22 P.M. logica.dao.objetos.ProyectoDao obtenerProyectoPorPracticante
+INFO: Proyecto cargado para practicante: S24013287
+may 31, 2026 10:38:05 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
+INFO: Configuración de base de datos cargada correctamente
+may 31, 2026 10:38:05 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
+CONFIG: URL de conexión: jdbc:mysql://localhost:3306/practicas_profesionales
+may 31, 2026 10:38:05 P.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexión a la base de datos...
+may 31, 2026 10:38:06 P.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexión a base de datos realizada exitosamente en 252 ms
+may 31, 2026 10:38:07 P.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexión a la base de datos...
+may 31, 2026 10:38:07 P.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexión a base de datos realizada exitosamente en 10 ms
+may 31, 2026 10:38:07 P.M. logica.dao.objetos.ProyectoDao obtenerProyectoPorPracticante
+INFO: Proyecto cargado para practicante: S24013287
+may 31, 2026 10:39:07 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
+INFO: Configuración de base de datos cargada correctamente
+may 31, 2026 10:39:07 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
+CONFIG: URL de conexión: jdbc:mysql://localhost:3306/practicas_profesionales
+may 31, 2026 10:39:07 P.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexión a la base de datos...
+may 31, 2026 10:39:07 P.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexión a base de datos realizada exitosamente en 243 ms
+may 31, 2026 10:39:08 P.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexión a la base de datos...
+may 31, 2026 10:39:08 P.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexión a base de datos realizada exitosamente en 10 ms
+may 31, 2026 10:39:08 P.M. logica.dao.objetos.ProyectoDao obtenerProyectoPorPracticante
+INFO: Proyecto cargado para practicante: S24013287
+may 31, 2026 10:39:15 P.M. logica.archivos.GeneradorPdfReporteMensual generarPdf
+INFO: PDF generado correctamente: reportes/Reporte_Mensual_S24013287_20260531_223915.pdf
+may 31, 2026 10:40:38 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
+INFO: Configuración de base de datos cargada correctamente
+may 31, 2026 10:40:39 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
+CONFIG: URL de conexión: jdbc:mysql://localhost:3306/practicas_profesionales
+may 31, 2026 10:40:39 P.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexión a la base de datos...
+may 31, 2026 10:40:39 P.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexión a base de datos realizada exitosamente en 234 ms
+may 31, 2026 10:40:40 P.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexión a la base de datos...
+may 31, 2026 10:40:40 P.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexión a base de datos realizada exitosamente en 11 ms
+may 31, 2026 10:40:40 P.M. logica.dao.objetos.ProyectoDao obtenerProyectoPorPracticante
+INFO: Proyecto cargado para practicante: S24013287
+may 31, 2026 10:41:07 P.M. logica.archivos.GeneradorPdfReporteMensual generarPdf
+INFO: PDF generado correctamente: reportes/Reporte_Mensual_S24013287_20260531_224106.pdf
+may 31, 2026 10:41:19 P.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexión a la base de datos...
+may 31, 2026 10:41:19 P.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexión a base de datos realizada exitosamente en 10 ms
+may 31, 2026 10:41:19 P.M. logica.dao.objetos.ProyectoDao obtenerProyectoPorPracticante
+INFO: Proyecto cargado para practicante: S24013287
+may 31, 2026 10:42:34 P.M. logica.archivos.GeneradorPdfReporteParcial generarPdf
+INFO: PDF generado correctamente: reportes/ReporteParcial_S24013287_20260531_224234.pdf
+jun 03, 2026 10:54:05 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
+INFO: Configuración de base de datos cargada correctamente
+jun 03, 2026 10:54:05 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
+CONFIG: URL de conexión: jdbc:mysql://localhost:3306/practicas_profesionales
+jun 03, 2026 10:54:05 P.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexión a la base de datos...
+jun 03, 2026 10:54:06 P.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexión a base de datos realizada exitosamente en 512 ms
+jun 03, 2026 10:55:38 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
+INFO: Configuración de base de datos cargada correctamente
+jun 03, 2026 10:55:38 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
+CONFIG: URL de conexión: jdbc:mysql://localhost:3306/practicas_profesionales
+jun 03, 2026 10:55:38 P.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexión a la base de datos...
+jun 03, 2026 10:55:38 P.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexión a base de datos realizada exitosamente en 318 ms
+jun 03, 2026 10:56:00 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
+INFO: Configuración de base de datos cargada correctamente
+jun 03, 2026 10:56:00 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
+CONFIG: URL de conexión: jdbc:mysql://localhost:3306/practicas_profesionales
+jun 03, 2026 10:56:00 P.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexión a la base de datos...
+jun 03, 2026 10:56:00 P.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexión a base de datos realizada exitosamente en 258 ms
+jun 03, 2026 10:56:04 P.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexión a la base de datos...
+jun 03, 2026 10:56:04 P.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexión a base de datos realizada exitosamente en 14 ms
+jun 03, 2026 10:56:04 P.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexión a la base de datos...
+jun 03, 2026 10:56:04 P.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexión a base de datos realizada exitosamente en 13 ms
+jun 03, 2026 10:56:09 P.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexión a la base de datos...
+jun 03, 2026 10:56:09 P.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexión a base de datos realizada exitosamente en 12 ms
+jun 03, 2026 10:56:09 P.M. logica.dao.objetos.MensajeDao obtenerMensajesRecibidos
+INFO: Mensajes recibidos obtenidos correctamente
+jun 03, 2026 10:56:09 P.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexión a la base de datos...
+jun 03, 2026 10:56:09 P.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexión a base de datos realizada exitosamente en 9 ms
+jun 03, 2026 10:56:09 P.M. logica.dao.objetos.MensajeDao obtenerMensajesEnviados
+INFO: Mensajes enviados obtenidos correctamente
+jun 03, 2026 10:56:35 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
+INFO: Configuración de base de datos cargada correctamente
+jun 03, 2026 10:56:36 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
+CONFIG: URL de conexión: jdbc:mysql://localhost:3306/practicas_profesionales
+jun 03, 2026 10:56:36 P.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexión a la base de datos...
+jun 03, 2026 10:56:36 P.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexión a base de datos realizada exitosamente en 320 ms

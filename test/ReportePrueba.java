@@ -13,18 +13,16 @@ public class ReportePrueba {
     @Test
     public void pruebaAgregarReporteExitoso() throws MensajeriaExcepcion {
         Reporte reporte = new Reporte(TipoReporte.Mensual, "Reporte 50",
-                Date.valueOf("2026-04-20"), 8.0, "Progreso adecuado",
-                EstadoDeCalificacion.Evaluado, "S20013461", "P005");
+                "Actividades 50", "S20013461", "/archivos/rep50.pdf", "rep50.pdf");
         ReporteDao reporteDao = new ReporteDao();
         int filasAfectadas = reporteDao.agregarReporte(reporte);
         assertEquals(1, filasAfectadas);
     }
 
     @Test
-    public void pruebaAgregarReporteAlternoCalificacionCero() throws MensajeriaExcepcion {
+    public void pruebaAgregarReporteAlternoTipoDiferente() throws MensajeriaExcepcion {
         Reporte reporte = new Reporte(TipoReporte.Parcial, "Reporte 51",
-                Date.valueOf("2026-04-20"), 0.0, "Sin calificacion",
-                EstadoDeCalificacion.Pendiente, "S20013461", "P005");
+                "Actividades 51", "S20013461", "/archivos/rep51.pdf", "rep51.pdf");
         ReporteDao reporteDao = new ReporteDao();
         int filasAfectadas = reporteDao.agregarReporte(reporte);
         assertEquals(1, filasAfectadas);
@@ -33,17 +31,15 @@ public class ReportePrueba {
     @Test
     public void pruebaAgregarReporteExcepcionMatriculaNula() {
         Reporte reporte = new Reporte(TipoReporte.Mensual, "Reporte 52",
-                Date.valueOf("2026-04-20"), 8.0, "Progreso adecuado",
-                EstadoDeCalificacion.Evaluado, null, "P005");
+                "Actividades 52", null, "/archivos/rep52.pdf", "rep52.pdf");
         ReporteDao reporteDao = new ReporteDao();
         assertThrows(MensajeriaExcepcion.class, () -> reporteDao.agregarReporte(reporte));
     }
 
     @Test
-    public void pruebaAgregarReporteExcepcionFechaNula() {
-        Reporte reporte = new Reporte(TipoReporte.Mensual, "Reporte 53",
-                null, 8.0, "Progreso adecuado",
-                EstadoDeCalificacion.Evaluado, "S20013461", "P005");
+    public void pruebaAgregarReporteExcepcionTipoNulo() {
+        Reporte reporte = new Reporte(null, "Reporte 53",
+                "Actividades 53", "S20013461", "/archivos/rep53.pdf", "rep53.pdf");
         ReporteDao reporteDao = new ReporteDao();
         assertThrows(MensajeriaExcepcion.class, () -> reporteDao.agregarReporte(reporte));
     }

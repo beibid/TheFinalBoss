@@ -1,5 +1,6 @@
 package InterfazGrafica;
 
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -19,6 +20,7 @@ import logica.dominio.OrganizacionVinculada;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 
 public class InactivarOrganizacionVinculadaControlador {
 

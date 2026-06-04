@@ -26,6 +26,7 @@ public class SubirReporteControlador {
 
     @FXML private ComboBox<TipoReporte> comboBoxTipoReporte;
     @FXML private TextField campoDescripcion;
+    @FXML private TextField campoActividades;
     @FXML private Label etiquetaArchivo;
     @FXML private VBox panelError;
     @FXML private VBox panelExito;
@@ -71,6 +72,7 @@ public class SubirReporteControlador {
             Reporte reporte = new Reporte(
                     comboBoxTipoReporte.getValue(),
                     campoDescripcion.getText().trim(),
+                    campoActividades.getText().trim(),
                     matricula,
                     rutaRelativa,
                     archivoSeleccionado.getName()

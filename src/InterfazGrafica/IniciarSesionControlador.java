@@ -17,6 +17,8 @@ import logica.dominio.UsuarioSesion;
 import logica.dominio.enums.Estado;
 import logica.dominio.enums.Rol;
 
+import java.util.List;
+
 
 public class IniciarSesionControlador {
 
@@ -34,7 +36,7 @@ public class IniciarSesionControlador {
         String correo = campoTextoIdentificador.getText().trim();
         String contrasena = campoTextoContrasena.getText().trim();
 
-        if (camposVacios(correo, contrasena)) {
+        if (camposVacios(List.of(correo, contrasena))) {
             mostrarError("Campos vacíos", "POR FAVOR INGRESA TUS CREDENCIALES.");
             return;
         }
@@ -47,8 +49,14 @@ public class IniciarSesionControlador {
         }
     }
 
-    private boolean camposVacios(String correo, String contrasena) {
-        return correo.isEmpty() || contrasena.isEmpty();
+    private boolean camposVacios(List<String> campos) {
+        boolean hayCamposVacios = false;
+        for (String campo : campos){
+            if (campo.isEmpty()){
+                hayCamposVacios = true;
+            }
+        }
+        return hayCamposVacios;
     }
 
     private void procesarResultadoLogin(UsuarioSesion usuarioSesion) {

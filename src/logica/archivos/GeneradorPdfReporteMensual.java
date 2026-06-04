@@ -1,5 +1,6 @@
 package logica.archivos;
 
+
 import com.itextpdf.kernel.font.PdfFont;
 import com.itextpdf.kernel.pdf.PdfDocument;
 import com.itextpdf.kernel.pdf.PdfWriter;
@@ -7,7 +8,6 @@ import com.itextpdf.layout.Document;
 import com.itextpdf.layout.element.Paragraph;
 import com.itextpdf.layout.element.Table;
 import com.itextpdf.layout.element.Cell;
-import com.itextpdf.layout.element.Text;
 import com.itextpdf.layout.properties.TextAlignment;
 import com.itextpdf.layout.properties.UnitValue;
 import com.itextpdf.kernel.colors.ColorConstants;
@@ -22,9 +22,10 @@ import java.util.logging.Logger;
 import com.itextpdf.kernel.font.PdfFontFactory;
 import com.itextpdf.io.font.constants.StandardFonts;
 
-public class GeneradorPdfReporte {
 
-    private static final Logger LOGGER = Logger.getLogger(GeneradorPdfReporte.class.getName());
+public class GeneradorPdfReporteMensual {
+
+    private static final Logger LOGGER = Logger.getLogger(GeneradorPdfReporteMensual.class.getName());
     private static final String CARPETA_REPORTES = "reportes/";
 
     public String generarPdf(Reporte reporte, String nombrePracticante, String nombreProyecto,
