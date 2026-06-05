@@ -6,16 +6,20 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import logica.dao.excepciones.MensajeriaExcepcion;
 import logica.dao.excepciones.UsuariosExcepcion;
 import logica.dao.objetos.PracticanteDao;
+import logica.dao.objetos.PreferenciaProyectoDao;
 import logica.dao.objetos.ProyectoDao;
 import logica.dominio.Practicante;
+import logica.dominio.PreferenciaProyecto;
 import logica.dominio.Proyecto;
 import java.util.List;
 
@@ -32,6 +36,10 @@ public class AsignarProyectoControlador {
     @FXML private Label etiquetaMensajeError;
     @FXML private Label etiquetaTituloExito;
     @FXML private Label etiquetaMensajeExito;
+    @FXML private ListView<String> listaPreferencias;
+    @FXML private VBox panelPreferencias;
+
+    private final PreferenciaProyectoDao preferenciaDao = new PreferenciaProyectoDao();
     private final PracticanteDao practicanteDao = new PracticanteDao();
     private final ProyectoDao proyectoDao = new ProyectoDao();
 
@@ -62,9 +70,30 @@ public class AsignarProyectoControlador {
     @FXML
     private void seleccionarPracticante() {
         Practicante practicante = comboBoxPracticantes.getSelectionModel().getSelectedItem();
+        ocultarPanel(panelError);
+        ocultarPanel(panelExito);
         if (practicante != null) {
-            ocultarPanel(panelError);
-            ocultarPanel(panelExito);
+            cargarPreferenciasPracticante(practicante.getMatricula());
+        }
+    }
+
+    private void cargarPreferenciasPracticante(String matricula) {
+        try {
+            List<PreferenciaProyecto> preferencias = preferenciaDao.obtenerPreferencias(matricula);
+            listaPreferencias.getItems().clear();
+            if (preferencias.isEmpty()) {
+                listaPreferencias.getItems().add("El practicante no tiene preferencias registradas");
+            } else {
+                for (PreferenciaProyecto preferencia : preferencias) {
+                    listaPreferencias.getItems().add(
+                            "Prioridad " + preferencia.getPrioridad() + ": " + preferencia.getNombreProyecto()
+                    );
+                }
+            }
+            panelPreferencias.setVisible(true);
+            panelPreferencias.setManaged(true);
+        } catch (UsuariosExcepcion excepcion) {
+            mostrarError("Error al cargar preferencias", excepcion.getMessage().toUpperCase());
         }
     }
 

@@ -1,6 +1,5 @@
 package InterfazGrafica;
 
-
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
@@ -14,6 +13,7 @@ import javafx.stage.Stage;
 import logica.archivos.GeneradorPdfReporteParcial;
 import logica.dao.excepciones.MensajeriaExcepcion;
 import logica.dao.objetos.ProyectoDao;
+import logica.dao.objetos.ReporteDao;
 import logica.dominio.Proyecto;
 import logica.dominio.Reporte;
 import logica.dominio.SesionUsuario;
@@ -22,10 +22,11 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-
 public class GenerarReporteParcialControlador {
 
     private static final Logger LOGGER = Logger.getLogger(GenerarReporteParcialControlador.class.getName());
+    private static final int MENSUALES_PARA_PRIMER_PARCIAL = 3;
+    private static final int MENSUALES_PARA_SEGUNDO_PARCIAL = 6;
 
     @FXML private Label etiquetaMatricula;
     @FXML private Label etiquetaProyecto;
@@ -152,6 +153,37 @@ public class GenerarReporteParcialControlador {
         return validos;
     }
 
+    private boolean verificarPuedeGenerarParcial() {
+        boolean puedeGenerar = false;
+        ReporteDao reporteDao = new ReporteDao();
+        try {
+            int mensualesEvaluados = reporteDao.contarReportesEvaluados(matricula, "Mensual");
+            int parcialesEvaluados = reporteDao.contarReportesEvaluados(matricula, "Parcial");
+            if (mensualesEvaluados >= MENSUALES_PARA_PRIMER_PARCIAL && parcialesEvaluados == 0) {
+                puedeGenerar = true;
+            } else if (mensualesEvaluados >= MENSUALES_PARA_SEGUNDO_PARCIAL && parcialesEvaluados == 1) {
+                puedeGenerar = true;
+            } else if (parcialesEvaluados == 0 && mensualesEvaluados < MENSUALES_PARA_PRIMER_PARCIAL) {
+                mostrarError("Reportes insuficientes",
+                        "NECESITAS " + MENSUALES_PARA_PRIMER_PARCIAL + " REPORTES MENSUALES EVALUADOS. " +
+                                "ACTUALMENTE TIENES: " + mensualesEvaluados);
+            } else if (parcialesEvaluados >= 1 && mensualesEvaluados < MENSUALES_PARA_SEGUNDO_PARCIAL) {
+                mostrarError("Reportes insuficientes",
+                        "PARA EL SEGUNDO PARCIAL NECESITAS " + MENSUALES_PARA_SEGUNDO_PARCIAL +
+                                " REPORTES MENSUALES EVALUADOS. ACTUALMENTE TIENES: " + mensualesEvaluados);
+            } else if (parcialesEvaluados >= 2) {
+                mostrarError("Parciales completos",
+                        "YA TIENES LOS DOS REPORTES PARCIALES GENERADOS.");
+            } else {
+                mostrarError("Requisitos no cumplidos",
+                        "NO CUMPLES CON LOS REQUISITOS PARA GENERAR EL REPORTE PARCIAL.");
+            }
+        } catch (MensajeriaExcepcion excepcion) {
+            mostrarError("Error inesperado", excepcion.getMessage().toUpperCase());
+        }
+        return puedeGenerar;
+    }
+
     private void generarPdf() {
         String actividades = construirActividades();
         Reporte reporte = new Reporte(TipoReporte.Parcial, textoAreaDescripcion.getText().trim(),
@@ -195,7 +227,9 @@ public class GenerarReporteParcialControlador {
 
     private void procesarGeneracion() {
         if (camposValidos()) {
-            generarPdf();
+            if (verificarPuedeGenerarParcial()) {
+                generarPdf();
+            }
         }
     }
 
@@ -257,5 +291,4 @@ public class GenerarReporteParcialControlador {
         panelExito.setVisible(false);
         panelExito.setManaged(false);
     }
-
 }

@@ -1,6 +1,5 @@
 package InterfazGrafica;
 
-
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -10,15 +9,14 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import logica.CifracionContrasena;
 import logica.dao.excepciones.UsuariosExcepcion;
 import logica.dao.objetos.UsuarioDao;
 import logica.dominio.SesionUsuario;
 import logica.dominio.UsuarioSesion;
 import logica.dominio.enums.Estado;
 import logica.dominio.enums.Rol;
-
 import java.util.List;
-
 
 public class IniciarSesionControlador {
 
@@ -42,7 +40,8 @@ public class IniciarSesionControlador {
         }
 
         try {
-            UsuarioSesion usuarioSesion = usuarioDao.buscarUsuario(correo, contrasena);
+            String contrasenaCifrada = CifracionContrasena.cifrarContrasena(contrasena);
+            UsuarioSesion usuarioSesion = usuarioDao.buscarUsuario(correo, contrasenaCifrada);
             procesarResultadoLogin(usuarioSesion);
         } catch (UsuariosExcepcion excepcion) {
             mostrarError("Error inesperado", excepcion.getMessage().toUpperCase());
@@ -51,8 +50,8 @@ public class IniciarSesionControlador {
 
     private boolean camposVacios(List<String> campos) {
         boolean hayCamposVacios = false;
-        for (String campo : campos){
-            if (campo.isEmpty()){
+        for (String campo : campos) {
+            if (campo.isEmpty()) {
                 hayCamposVacios = true;
             }
         }
@@ -61,11 +60,9 @@ public class IniciarSesionControlador {
 
     private void procesarResultadoLogin(UsuarioSesion usuarioSesion) {
         if (usuarioSesion == null) {
-            mostrarError("Credenciales incorrectas",
-                    "USUARIO O CONTRASEÑA INCORRECTOS.");
+            mostrarError("Credenciales incorrectas", "USUARIO O CONTRASEÑA INCORRECTOS.");
         } else if (usuarioSesion.getEstado() == Estado.Inactivo) {
-            mostrarError("Usuario inactivo",
-                    "TU CUENTA SE ENCUENTRA INACTIVA.");
+            mostrarError("Usuario inactivo", "TU CUENTA SE ENCUENTRA INACTIVA.");
         } else {
             redirigir(usuarioSesion);
         }
