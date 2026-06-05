@@ -18,6 +18,12 @@ public class SeccionDao implements SeccionDaoInterfaz {
 
     @Override
     public int agregarSeccion(Seccion seccion) throws UsuariosExcepcion {
+        if (seccion.getNoSeccion() == null) {
+            throw new UsuariosExcepcion("El numero de seccion no puede ser nulo");
+        }
+        if (seccion.getPeriodo() == null) {
+            throw new UsuariosExcepcion("El periodo no puede ser nulo");
+        }
         String consultaSeccion = "INSERT INTO seccion (noSeccion, periodo) VALUES (?, ?)";
         Connection conexionBaseDeDatos = null;
         PreparedStatement insertarEnBaseDeDatos = null;
@@ -85,12 +91,10 @@ public class SeccionDao implements SeccionDaoInterfaz {
         Connection conexionBaseDeDatos = null;
         PreparedStatement consultaSecciones = null;
         List<Seccion> secciones = new ArrayList<>();
-
         try {
             conexionBaseDeDatos = ConexionBaseDeDatos.getInstance().conectar();
             consultaSecciones = conexionBaseDeDatos.prepareStatement(consulta);
             ResultSet resultado = consultaSecciones.executeQuery();
-
             while (resultado.next()) {
                 Seccion seccion = new Seccion();
                 seccion.setNoSeccion(resultado.getString("noSeccion"));
@@ -114,5 +118,4 @@ public class SeccionDao implements SeccionDaoInterfaz {
         }
         return secciones;
     }
-
 }

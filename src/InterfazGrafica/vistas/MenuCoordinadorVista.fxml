@@ -101,6 +101,11 @@
                     <VBox.margin><Insets top="5.0"/></VBox.margin>
                 </Button>
 
+                <Button onAction="#abrirCerrarPeriodo" prefWidth="170.0"
+                        style="-fx-background-color: transparent; -fx-text-fill: white; -fx-alignment: CENTER-LEFT;" text="Cerrar">
+                    <VBox.margin><Insets top="3.0"/></VBox.margin>
+                </Button>
+
                 <Button fx:id="botonCerrarSesion" onAction="#cerrarSesion" prefWidth="170.0"
                         style="-fx-background-color: #c0392b; -fx-text-fill: white;" text="Cerrar Sesión">
                     <VBox.margin><Insets top="5.0"/></VBox.margin>

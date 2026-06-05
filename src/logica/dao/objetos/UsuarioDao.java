@@ -22,11 +22,22 @@ public class UsuarioDao implements UsuarioDaoInterfaz {
 
     @Override
     public int insertarUsuario(Usuario usuario) throws UsuariosExcepcion {
+        if (usuario.getNombre() == null) {
+            throw new UsuariosExcepcion("El nombre del usuario no puede ser nulo");
+        }
+        if (usuario.getNombre().isEmpty()) {
+            throw new UsuariosExcepcion("El nombre del usuario no puede estar vacio");
+        }
+        if (usuario.getApellidos() == null) {
+            throw new UsuariosExcepcion("Los apellidos del usuario no pueden ser nulos");
+        }
+        if (usuario.getContrasena() == null) {
+            throw new UsuariosExcepcion("La contrasena del usuario no puede ser nula");
+        }
         String consultaUsuario = "INSERT INTO usuario (nombre, apellidos, contrasena, estado, correo) VALUES (?, ?, ?, ?, ?)";
         Connection conexionBaseDeDatos = null;
         PreparedStatement insercionBaseDeDatos = null;
         int idGenerado = -1;
-
         try {
             conexionBaseDeDatos = ConexionBaseDeDatos.getInstance().conectar();
             insercionBaseDeDatos = conexionBaseDeDatos.prepareStatement(consultaUsuario, Statement.RETURN_GENERATED_KEYS);
@@ -36,7 +47,6 @@ public class UsuarioDao implements UsuarioDaoInterfaz {
             insercionBaseDeDatos.setString(4, usuario.getEstado().toString());
             insercionBaseDeDatos.setString(5, usuario.getCorreo());
             insercionBaseDeDatos.executeUpdate();
-
             ResultSet tomarLlave = insercionBaseDeDatos.getGeneratedKeys();
             if (tomarLlave.next()) {
                 idGenerado = tomarLlave.getInt(1);
@@ -65,13 +75,11 @@ public class UsuarioDao implements UsuarioDaoInterfaz {
         Connection conexionBaseDeDatos = null;
         CallableStatement procedimiento = null;
         UsuarioSesion usuarioSesion = null;
-
         try {
             conexionBaseDeDatos = ConexionBaseDeDatos.getInstance().conectar();
             procedimiento = conexionBaseDeDatos.prepareCall(llamadaProcedimiento);
             procedimiento.setString(1, correo);
             procedimiento.setString(2, contrasena);
-
             ResultSet resultado = procedimiento.executeQuery();
             if (resultado.next()) {
                 usuarioSesion = new UsuarioSesion();

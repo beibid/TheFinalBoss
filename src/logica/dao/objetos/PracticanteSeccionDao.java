@@ -15,6 +15,12 @@ public class PracticanteSeccionDao implements PracticanteSeccionDaoInterfaz {
 
     @Override
     public int agregarPracticanteSeccion(PracticanteSeccion practicanteSeccion) throws UsuariosExcepcion {
+        if (practicanteSeccion.getMatricula() == null) {
+            throw new UsuariosExcepcion("La matricula no puede ser nula");
+        }
+        if (practicanteSeccion.getNoSeccion() == null) {
+            throw new UsuariosExcepcion("El numero de seccion no puede ser nulo");
+        }
         String consultaPracticanteSeccion = "INSERT INTO practicante_seccion (matricula, noSeccion) VALUES (?, ?)";
         Connection conexionBaseDeDatos = null;
         PreparedStatement insercion = null;

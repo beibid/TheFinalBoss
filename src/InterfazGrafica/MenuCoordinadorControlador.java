@@ -128,6 +128,10 @@ public class MenuCoordinadorControlador {
     private void abrirRegistrarPeriodo(ActionEvent event) throws IOException {
         abrirVentana("/InterfazGrafica/vistas/RegistrarPeriodoVista.fxml", "Registrar Período");
     }
+    @FXML
+    private void abrirCerrarPeriodo(ActionEvent event) throws IOException {
+        abrirVentana("/InterfazGrafica/vistas/CerrarPeriodoVista.fxml", "Cerrar Período");
+    }
 
     @FXML
     private void cerrarSesion(ActionEvent event) throws IOException {
