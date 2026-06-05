@@ -35,6 +35,9 @@ public class ModificarOrganizacionVinculadaControlador {
     @FXML private Label etiquetaMensajeExito;
     @FXML private TextField campoNombre;
     @FXML private TextField campoDireccion;
+    @FXML private TextField campoTelefono;
+    @FXML private TextField campoCorreo;
+    @FXML private TextField campoSector;
 
     private OrganizacionVinculada organizacionSeleccionada;
 
@@ -84,6 +87,9 @@ public class ModificarOrganizacionVinculadaControlador {
     private void rellenarFormulario(OrganizacionVinculada organizacion) {
         campoNombre.setText(organizacion.getNombre());
         campoDireccion.setText(organizacion.getDireccion());
+        campoTelefono.setText(organizacion.getTelefono());
+        campoCorreo.setText(organizacion.getCorreo());
+        campoSector.setText(organizacion.getSector());
         panelFormulario.setVisible(true);
         panelFormulario.setManaged(true);
     }
@@ -130,20 +136,47 @@ public class ModificarOrganizacionVinculadaControlador {
     private boolean camposValidos() {
         String nombre = campoNombre.getText().trim();
         String direccion = campoDireccion.getText().trim();
+        String telefono = campoTelefono.getText().trim();
+        String correo = campoCorreo.getText().trim();
+        String sector = campoSector.getText().trim();
 
-        List<String> campos = List.of(nombre, direccion);
+        List<String> campos = List.of(nombre, direccion, telefono, correo, sector);
         boolean camposFormularioValidos = !camposVacios(campos);
+        boolean nombreValido = nombre.matches("^[a-zA-Z0-9áéíóúÁÉÍÓÚñÑ\\s]+$");
+        boolean direccionValida = direccion.matches("^[a-zA-Z0-9áéíóúÁÉÍÓÚñÑ\\s#.,\\-]+$");
+        boolean telefonoValido = telefono.matches("\\d{10}");
+        boolean correoValido = correo.matches("^[\\w._%+\\-]+@[\\w.\\-]+\\.[a-zA-Z]{2,}$");
+        boolean sectorValido = sector.matches("^[a-zA-ZáéíóúÁÉÍÓÚñÑ\\s]+$");
 
+        mostrarPrimerError(camposFormularioValidos, nombreValido, direccionValida, telefonoValido, correoValido, sectorValido);
+
+        boolean formularioValido = camposFormularioValidos && nombreValido && direccionValida && telefonoValido && correoValido && sectorValido;
+        return formularioValido;
+    }
+    private void mostrarPrimerError(boolean camposFormularioValidos, boolean nombreValido, boolean direccionValida,
+                                    boolean telefonoValido, boolean correoValido, boolean sectorValido) {
         if (!camposFormularioValidos) {
             mostrarError("Campos obligatorios vacíos", "Por favor llene todos los campos.");
+        } else if (!nombreValido) {
+            mostrarError("Nombre invalido", "EL NOMBRE NO DEBE CONTENER CARACTERES ESPECIALES");
+        } else if (!direccionValida) {
+            mostrarError("Direccion invalida", "LA DIRECCION CONTIENE CARACTERES NO PERMITIDOS");
+        } else if (!telefonoValido) {
+            mostrarError("Telefono invalido", "EL TELEFONO DEBE CONTENER EXACTAMENTE 10 DIGITOS NUMERICOS");
+        } else if (!correoValido) {
+            mostrarError("Correo invalido", "INGRESE UN CORREO ELECTRONICO VALIDO");
+        } else if (!sectorValido) {
+            mostrarError("Sector invalido", "EL SECTOR NO DEBE CONTENER NUMEROS NI CARACTERES ESPECIALES");
         }
-        return camposFormularioValidos;
     }
 
     private OrganizacionVinculada construirOrganizacion() {
         OrganizacionVinculada organizacion = new OrganizacionVinculada();
         organizacion.setNombre(campoNombre.getText().trim());
         organizacion.setDireccion(campoDireccion.getText().trim());
+        organizacion.setTelefono(campoTelefono.getText().trim());
+        organizacion.setCorreo(campoCorreo.getText().trim());
+        organizacion.setSector(campoSector.getText().trim());
         return organizacion;
     }
 

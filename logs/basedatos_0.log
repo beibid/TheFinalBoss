@@ -1,192 +1,365 @@
-may 26, 2026 2:55:26 P.M. acceso.bd.ConexionBaseDeDatos conectar
+may 26, 2026 6:01:08 P.M. acceso.bd.ConexionBaseDeDatos conectar
 FINE: Intentando establecer conexión a la base de datos...
-may 26, 2026 2:55:27 P.M. acceso.bd.ConexionBaseDeDatos conectar
-INFO: Conexión a base de datos realizada exitosamente en 574 ms
-may 26, 2026 2:55:46 P.M. acceso.bd.ConexionBaseDeDatos conectar
-FINE: Intentando establecer conexión a la base de datos...
-may 26, 2026 2:55:46 P.M. acceso.bd.ConexionBaseDeDatos conectar
-INFO: Conexión a base de datos realizada exitosamente en 24 ms
-may 26, 2026 2:55:46 P.M. logica.dao.objetos.ProyectoDao obtenerProyectoPorPracticante
-INFO: Proyecto cargado para practicante: S24013287
-may 26, 2026 2:56:05 P.M. logica.archivos.GeneradorPdfReporteMensual generarPdf
-INFO: PDF generado correctamente: reportes/Reporte_Mensual_S24013287_20260526_145605.pdf
-may 26, 2026 3:35:20 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
-INFO: Configuración de base de datos cargada correctamente
-may 26, 2026 3:35:20 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
-CONFIG: URL de conexión: jdbc:mysql://localhost:3306/practicas_profesionales
-may 26, 2026 3:35:20 P.M. acceso.bd.ConexionBaseDeDatos conectar
-FINE: Intentando establecer conexión a la base de datos...
-may 26, 2026 3:35:21 P.M. acceso.bd.ConexionBaseDeDatos conectar
-INFO: Conexión a base de datos realizada exitosamente en 512 ms
-may 26, 2026 3:35:24 P.M. acceso.bd.ConexionBaseDeDatos conectar
-FINE: Intentando establecer conexión a la base de datos...
-may 26, 2026 3:35:24 P.M. acceso.bd.ConexionBaseDeDatos conectar
-INFO: Conexión a base de datos realizada exitosamente en 26 ms
-may 26, 2026 3:35:24 P.M. logica.dao.objetos.ProyectoDao obtenerProyectoPorPracticante
-INFO: Proyecto cargado para practicante: S24569087
-may 26, 2026 3:36:42 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
-INFO: Configuración de base de datos cargada correctamente
-may 26, 2026 3:36:42 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
-CONFIG: URL de conexión: jdbc:mysql://localhost:3306/practicas_profesionales
-may 26, 2026 3:36:42 P.M. acceso.bd.ConexionBaseDeDatos conectar
-FINE: Intentando establecer conexión a la base de datos...
-may 26, 2026 3:36:42 P.M. acceso.bd.ConexionBaseDeDatos conectar
-INFO: Conexión a base de datos realizada exitosamente en 515 ms
-may 26, 2026 3:36:43 P.M. acceso.bd.ConexionBaseDeDatos conectar
-FINE: Intentando establecer conexión a la base de datos...
-may 26, 2026 3:36:44 P.M. acceso.bd.ConexionBaseDeDatos conectar
-INFO: Conexión a base de datos realizada exitosamente en 21 ms
-may 26, 2026 3:36:44 P.M. logica.dao.objetos.ProyectoDao obtenerProyectoPorPracticante
-INFO: Proyecto cargado para practicante: S23098765
-may 26, 2026 3:37:14 P.M. logica.archivos.GeneradorPdfReporteMensual generarPdf
-INFO: PDF generado correctamente: reportes/Reporte_Mensual_S23098765_20260526_153714.pdf
-may 31, 2026 9:25:55 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
-INFO: Configuración de base de datos cargada correctamente
-may 31, 2026 9:25:55 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
-CONFIG: URL de conexión: jdbc:mysql://localhost:3306/practicas_profesionales
-may 31, 2026 9:25:55 P.M. acceso.bd.ConexionBaseDeDatos conectar
-FINE: Intentando establecer conexión a la base de datos...
-may 31, 2026 9:25:55 P.M. acceso.bd.ConexionBaseDeDatos conectar
-INFO: Conexión a base de datos realizada exitosamente en 366 ms
-may 31, 2026 9:25:57 P.M. acceso.bd.ConexionBaseDeDatos conectar
-FINE: Intentando establecer conexión a la base de datos...
-may 31, 2026 9:25:57 P.M. acceso.bd.ConexionBaseDeDatos conectar
-INFO: Conexión a base de datos realizada exitosamente en 11 ms
-may 31, 2026 9:25:57 P.M. logica.dao.objetos.ProyectoDao obtenerProyectoPorPracticante
-INFO: Proyecto cargado para practicante: S24013287
-may 31, 2026 10:09:36 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
-INFO: Configuración de base de datos cargada correctamente
-may 31, 2026 10:09:36 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
-CONFIG: URL de conexión: jdbc:mysql://localhost:3306/practicas_profesionales
-may 31, 2026 10:09:36 P.M. acceso.bd.ConexionBaseDeDatos conectar
-FINE: Intentando establecer conexión a la base de datos...
-may 31, 2026 10:09:36 P.M. acceso.bd.ConexionBaseDeDatos conectar
-INFO: Conexión a base de datos realizada exitosamente en 239 ms
-may 31, 2026 10:09:37 P.M. acceso.bd.ConexionBaseDeDatos conectar
-FINE: Intentando establecer conexión a la base de datos...
-may 31, 2026 10:09:37 P.M. acceso.bd.ConexionBaseDeDatos conectar
-INFO: Conexión a base de datos realizada exitosamente en 10 ms
-may 31, 2026 10:09:37 P.M. logica.dao.objetos.ProyectoDao obtenerProyectoPorPracticante
-INFO: Proyecto cargado para practicante: S24013287
-may 31, 2026 10:10:59 P.M. logica.archivos.GeneradorPdfReporteParcial generarPdf
-INFO: PDF generado correctamente: reportes/ReporteParcial_S24013287_20260531_221058.pdf
-may 31, 2026 10:31:11 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
-INFO: Configuración de base de datos cargada correctamente
-may 31, 2026 10:31:11 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
-CONFIG: URL de conexión: jdbc:mysql://localhost:3306/practicas_profesionales
-may 31, 2026 10:31:11 P.M. acceso.bd.ConexionBaseDeDatos conectar
-FINE: Intentando establecer conexión a la base de datos...
-may 31, 2026 10:31:12 P.M. acceso.bd.ConexionBaseDeDatos conectar
-INFO: Conexión a base de datos realizada exitosamente en 248 ms
-may 31, 2026 10:31:22 P.M. acceso.bd.ConexionBaseDeDatos conectar
-FINE: Intentando establecer conexión a la base de datos...
-may 31, 2026 10:31:22 P.M. acceso.bd.ConexionBaseDeDatos conectar
-INFO: Conexión a base de datos realizada exitosamente en 11 ms
-may 31, 2026 10:31:22 P.M. logica.dao.objetos.ProyectoDao obtenerProyectoPorPracticante
-INFO: Proyecto cargado para practicante: S24013287
-may 31, 2026 10:38:05 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
-INFO: Configuración de base de datos cargada correctamente
-may 31, 2026 10:38:05 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
-CONFIG: URL de conexión: jdbc:mysql://localhost:3306/practicas_profesionales
-may 31, 2026 10:38:05 P.M. acceso.bd.ConexionBaseDeDatos conectar
-FINE: Intentando establecer conexión a la base de datos...
-may 31, 2026 10:38:06 P.M. acceso.bd.ConexionBaseDeDatos conectar
-INFO: Conexión a base de datos realizada exitosamente en 252 ms
-may 31, 2026 10:38:07 P.M. acceso.bd.ConexionBaseDeDatos conectar
-FINE: Intentando establecer conexión a la base de datos...
-may 31, 2026 10:38:07 P.M. acceso.bd.ConexionBaseDeDatos conectar
-INFO: Conexión a base de datos realizada exitosamente en 10 ms
-may 31, 2026 10:38:07 P.M. logica.dao.objetos.ProyectoDao obtenerProyectoPorPracticante
-INFO: Proyecto cargado para practicante: S24013287
-may 31, 2026 10:39:07 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
-INFO: Configuración de base de datos cargada correctamente
-may 31, 2026 10:39:07 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
-CONFIG: URL de conexión: jdbc:mysql://localhost:3306/practicas_profesionales
-may 31, 2026 10:39:07 P.M. acceso.bd.ConexionBaseDeDatos conectar
-FINE: Intentando establecer conexión a la base de datos...
-may 31, 2026 10:39:07 P.M. acceso.bd.ConexionBaseDeDatos conectar
-INFO: Conexión a base de datos realizada exitosamente en 243 ms
-may 31, 2026 10:39:08 P.M. acceso.bd.ConexionBaseDeDatos conectar
-FINE: Intentando establecer conexión a la base de datos...
-may 31, 2026 10:39:08 P.M. acceso.bd.ConexionBaseDeDatos conectar
-INFO: Conexión a base de datos realizada exitosamente en 10 ms
-may 31, 2026 10:39:08 P.M. logica.dao.objetos.ProyectoDao obtenerProyectoPorPracticante
-INFO: Proyecto cargado para practicante: S24013287
-may 31, 2026 10:39:15 P.M. logica.archivos.GeneradorPdfReporteMensual generarPdf
-INFO: PDF generado correctamente: reportes/Reporte_Mensual_S24013287_20260531_223915.pdf
-may 31, 2026 10:40:38 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
-INFO: Configuración de base de datos cargada correctamente
-may 31, 2026 10:40:39 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
-CONFIG: URL de conexión: jdbc:mysql://localhost:3306/practicas_profesionales
-may 31, 2026 10:40:39 P.M. acceso.bd.ConexionBaseDeDatos conectar
-FINE: Intentando establecer conexión a la base de datos...
-may 31, 2026 10:40:39 P.M. acceso.bd.ConexionBaseDeDatos conectar
-INFO: Conexión a base de datos realizada exitosamente en 234 ms
-may 31, 2026 10:40:40 P.M. acceso.bd.ConexionBaseDeDatos conectar
-FINE: Intentando establecer conexión a la base de datos...
-may 31, 2026 10:40:40 P.M. acceso.bd.ConexionBaseDeDatos conectar
-INFO: Conexión a base de datos realizada exitosamente en 11 ms
-may 31, 2026 10:40:40 P.M. logica.dao.objetos.ProyectoDao obtenerProyectoPorPracticante
-INFO: Proyecto cargado para practicante: S24013287
-may 31, 2026 10:41:07 P.M. logica.archivos.GeneradorPdfReporteMensual generarPdf
-INFO: PDF generado correctamente: reportes/Reporte_Mensual_S24013287_20260531_224106.pdf
-may 31, 2026 10:41:19 P.M. acceso.bd.ConexionBaseDeDatos conectar
-FINE: Intentando establecer conexión a la base de datos...
-may 31, 2026 10:41:19 P.M. acceso.bd.ConexionBaseDeDatos conectar
-INFO: Conexión a base de datos realizada exitosamente en 10 ms
-may 31, 2026 10:41:19 P.M. logica.dao.objetos.ProyectoDao obtenerProyectoPorPracticante
-INFO: Proyecto cargado para practicante: S24013287
-may 31, 2026 10:42:34 P.M. logica.archivos.GeneradorPdfReporteParcial generarPdf
-INFO: PDF generado correctamente: reportes/ReporteParcial_S24013287_20260531_224234.pdf
-jun 03, 2026 10:54:05 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
-INFO: Configuración de base de datos cargada correctamente
-jun 03, 2026 10:54:05 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
-CONFIG: URL de conexión: jdbc:mysql://localhost:3306/practicas_profesionales
-jun 03, 2026 10:54:05 P.M. acceso.bd.ConexionBaseDeDatos conectar
-FINE: Intentando establecer conexión a la base de datos...
-jun 03, 2026 10:54:06 P.M. acceso.bd.ConexionBaseDeDatos conectar
-INFO: Conexión a base de datos realizada exitosamente en 512 ms
-jun 03, 2026 10:55:38 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
-INFO: Configuración de base de datos cargada correctamente
-jun 03, 2026 10:55:38 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
-CONFIG: URL de conexión: jdbc:mysql://localhost:3306/practicas_profesionales
-jun 03, 2026 10:55:38 P.M. acceso.bd.ConexionBaseDeDatos conectar
-FINE: Intentando establecer conexión a la base de datos...
-jun 03, 2026 10:55:38 P.M. acceso.bd.ConexionBaseDeDatos conectar
-INFO: Conexión a base de datos realizada exitosamente en 318 ms
-jun 03, 2026 10:56:00 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
-INFO: Configuración de base de datos cargada correctamente
-jun 03, 2026 10:56:00 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
-CONFIG: URL de conexión: jdbc:mysql://localhost:3306/practicas_profesionales
-jun 03, 2026 10:56:00 P.M. acceso.bd.ConexionBaseDeDatos conectar
-FINE: Intentando establecer conexión a la base de datos...
-jun 03, 2026 10:56:00 P.M. acceso.bd.ConexionBaseDeDatos conectar
-INFO: Conexión a base de datos realizada exitosamente en 258 ms
-jun 03, 2026 10:56:04 P.M. acceso.bd.ConexionBaseDeDatos conectar
-FINE: Intentando establecer conexión a la base de datos...
-jun 03, 2026 10:56:04 P.M. acceso.bd.ConexionBaseDeDatos conectar
+may 26, 2026 6:01:08 P.M. acceso.bd.ConexionBaseDeDatos conectar
 INFO: Conexión a base de datos realizada exitosamente en 14 ms
-jun 03, 2026 10:56:04 P.M. acceso.bd.ConexionBaseDeDatos conectar
-FINE: Intentando establecer conexión a la base de datos...
-jun 03, 2026 10:56:04 P.M. acceso.bd.ConexionBaseDeDatos conectar
-INFO: Conexión a base de datos realizada exitosamente en 13 ms
-jun 03, 2026 10:56:09 P.M. acceso.bd.ConexionBaseDeDatos conectar
-FINE: Intentando establecer conexión a la base de datos...
-jun 03, 2026 10:56:09 P.M. acceso.bd.ConexionBaseDeDatos conectar
-INFO: Conexión a base de datos realizada exitosamente en 12 ms
-jun 03, 2026 10:56:09 P.M. logica.dao.objetos.MensajeDao obtenerMensajesRecibidos
-INFO: Mensajes recibidos obtenidos correctamente
-jun 03, 2026 10:56:09 P.M. acceso.bd.ConexionBaseDeDatos conectar
-FINE: Intentando establecer conexión a la base de datos...
-jun 03, 2026 10:56:09 P.M. acceso.bd.ConexionBaseDeDatos conectar
-INFO: Conexión a base de datos realizada exitosamente en 9 ms
-jun 03, 2026 10:56:09 P.M. logica.dao.objetos.MensajeDao obtenerMensajesEnviados
-INFO: Mensajes enviados obtenidos correctamente
-jun 03, 2026 10:56:35 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
+may 26, 2026 6:01:08 P.M. logica.dao.objetos.AutoevaluacionPracticanteDao obtenerAutoevaluacion
+SEVERE: Error al obtener autoevaluación
+java.sql.SQLSyntaxErrorException: Table 'practicas_profesionales.autoevaluacion' doesn't exist
+	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:112)
+	at com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:114)
+	at com.mysql.cj.jdbc.ClientPreparedStatement.executeInternal(ClientPreparedStatement.java:988)
+	at com.mysql.cj.jdbc.ClientPreparedStatement.executeQuery(ClientPreparedStatement.java:1056)
+	at logica.dao.objetos.AutoevaluacionPracticanteDao.obtenerAutoevaluacion(AutoevaluacionPracticanteDao.java:115)
+	at InterfazGrafica.GenerarAutoevaluacionPracticanteControlador.verificarAutoevaluacionExistente(GenerarAutoevaluacionPracticanteControlador.java:98)
+	at InterfazGrafica.GenerarAutoevaluacionPracticanteControlador.initialize(GenerarAutoevaluacionPracticanteControlador.java:58)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:104)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:565)
+	at com.sun.javafx.reflect.Trampoline.invoke(MethodUtil.java:65)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:104)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:565)
+	at javafx.base@26.0.1/com.sun.javafx.reflect.MethodUtil.invoke(MethodUtil.java:112)
+	at javafx.fxml@26.0.1/com.sun.javafx.fxml.MethodHelper.invoke(MethodHelper.java:78)
+	at javafx.fxml@26.0.1/javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:2658)
+	at javafx.fxml@26.0.1/javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:2533)
+	at javafx.fxml@26.0.1/javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:3304)
+	at javafx.fxml@26.0.1/javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:3264)
+	at javafx.fxml@26.0.1/javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:3235)
+	at javafx.fxml@26.0.1/javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:3211)
+	at javafx.fxml@26.0.1/javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:3191)
+	at javafx.fxml@26.0.1/javafx.fxml.FXMLLoader.load(FXMLLoader.java:3186)
+	at InterfazGrafica.MenuPracticanteControlador.abrirVentana(MenuPracticanteControlador.java:116)
+	at InterfazGrafica.MenuPracticanteControlador.abrirAutoevaluacionPracticante(MenuPracticanteControlador.java:112)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:104)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:565)
+	at com.sun.javafx.reflect.Trampoline.invoke(MethodUtil.java:65)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:104)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:565)
+	at javafx.base@26.0.1/com.sun.javafx.reflect.MethodUtil.invoke(MethodUtil.java:112)
+	at javafx.fxml@26.0.1/com.sun.javafx.fxml.MethodHelper.invoke(MethodHelper.java:78)
+	at javafx.fxml@26.0.1/javafx.fxml.FXMLLoader$MethodHandler.invoke(FXMLLoader.java:1845)
+	at javafx.fxml@26.0.1/javafx.fxml.FXMLLoader$ControllerMethodEventHandler.handle(FXMLLoader.java:1718)
+	at javafx.base@26.0.1/com.sun.javafx.event.CompositeEventHandler.dispatchBubblingEvent(CompositeEventHandler.java:86)
+	at javafx.base@26.0.1/com.sun.javafx.event.EventHandlerManager.dispatchBubblingEvent(EventHandlerManager.java:232)
+	at javafx.base@26.0.1/com.sun.javafx.event.EventHandlerManager.dispatchBubblingEvent(EventHandlerManager.java:189)
+	at javafx.base@26.0.1/com.sun.javafx.event.CompositeEventDispatcher.dispatchBubblingEvent(CompositeEventDispatcher.java:59)
+	at javafx.base@26.0.1/com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:58)
+	at javafx.base@26.0.1/com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at javafx.base@26.0.1/com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at javafx.base@26.0.1/com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at javafx.base@26.0.1/com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at javafx.base@26.0.1/com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at javafx.base@26.0.1/com.sun.javafx.event.EventUtil.fireEventImpl(EventUtil.java:74)
+	at javafx.base@26.0.1/com.sun.javafx.event.EventUtil.fireEvent(EventUtil.java:49)
+	at javafx.base@26.0.1/javafx.event.Event.fireEvent(Event.java:199)
+	at javafx.graphics@26.0.1/javafx.scene.Node.fireEvent(Node.java:9092)
+	at javafx.controls@26.0.1/javafx.scene.control.Button.fire(Button.java:203)
+	at javafx.controls@26.0.1/com.sun.javafx.scene.control.behavior.ButtonBehavior.mouseReleased(ButtonBehavior.java:207)
+	at javafx.controls@26.0.1/com.sun.javafx.scene.control.inputmap.InputMap.handle(InputMap.java:274)
+	at javafx.base@26.0.1/com.sun.javafx.event.CompositeEventHandler$NormalEventHandlerRecord.handleBubblingEvent(CompositeEventHandler.java:247)
+	at javafx.base@26.0.1/com.sun.javafx.event.CompositeEventHandler.dispatchBubblingEvent(CompositeEventHandler.java:80)
+	at javafx.base@26.0.1/com.sun.javafx.event.EventHandlerManager.dispatchBubblingEvent(EventHandlerManager.java:232)
+	at javafx.base@26.0.1/com.sun.javafx.event.EventHandlerManager.dispatchBubblingEvent(EventHandlerManager.java:189)
+	at javafx.base@26.0.1/com.sun.javafx.event.CompositeEventDispatcher.dispatchBubblingEvent(CompositeEventDispatcher.java:59)
+	at javafx.base@26.0.1/com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:58)
+	at javafx.base@26.0.1/com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at javafx.base@26.0.1/com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at javafx.base@26.0.1/com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at javafx.base@26.0.1/com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at javafx.base@26.0.1/com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at javafx.base@26.0.1/com.sun.javafx.event.EventUtil.fireEventImpl(EventUtil.java:74)
+	at javafx.base@26.0.1/com.sun.javafx.event.EventUtil.fireEvent(EventUtil.java:54)
+	at javafx.base@26.0.1/javafx.event.Event.fireEvent(Event.java:199)
+	at javafx.graphics@26.0.1/javafx.scene.Scene$MouseHandler.process(Scene.java:4134)
+	at javafx.graphics@26.0.1/javafx.scene.Scene.processMouseEvent(Scene.java:1953)
+	at javafx.graphics@26.0.1/javafx.scene.Scene$ScenePeerListener.mouseEvent(Scene.java:2802)
+	at javafx.graphics@26.0.1/com.sun.javafx.tk.quantum.GlassViewEventHandler$MouseEventNotification.get(GlassViewEventHandler.java:353)
+	at javafx.graphics@26.0.1/com.sun.javafx.tk.quantum.GlassViewEventHandler$MouseEventNotification.get(GlassViewEventHandler.java:255)
+	at javafx.graphics@26.0.1/com.sun.javafx.tk.quantum.QuantumToolkit.runWithoutRenderLock(QuantumToolkit.java:429)
+	at javafx.graphics@26.0.1/com.sun.javafx.tk.quantum.GlassViewEventHandler.handleMouseEvent(GlassViewEventHandler.java:387)
+	at javafx.graphics@26.0.1/com.sun.glass.ui.View.handleMouseEvent(View.java:573)
+	at javafx.graphics@26.0.1/com.sun.glass.ui.View.notifyMouse(View.java:970)
+	at javafx.graphics@26.0.1/com.sun.glass.ui.mac.MacView.notifyMouse(MacView.java:131)
+
+may 26, 2026 6:01:08 P.M. InterfazGrafica.GenerarAutoevaluacionPracticanteControlador verificarAutoevaluacionExistente
+SEVERE: Error al verificar autoevaluación existente
+logica.dao.excepciones.MensajeriaExcepcion: Error al obtener autoevaluación
+	at logica.dao.objetos.AutoevaluacionPracticanteDao.obtenerAutoevaluacion(AutoevaluacionPracticanteDao.java:136)
+	at InterfazGrafica.GenerarAutoevaluacionPracticanteControlador.verificarAutoevaluacionExistente(GenerarAutoevaluacionPracticanteControlador.java:98)
+	at InterfazGrafica.GenerarAutoevaluacionPracticanteControlador.initialize(GenerarAutoevaluacionPracticanteControlador.java:58)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:104)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:565)
+	at com.sun.javafx.reflect.Trampoline.invoke(MethodUtil.java:65)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:104)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:565)
+	at javafx.base@26.0.1/com.sun.javafx.reflect.MethodUtil.invoke(MethodUtil.java:112)
+	at javafx.fxml@26.0.1/com.sun.javafx.fxml.MethodHelper.invoke(MethodHelper.java:78)
+	at javafx.fxml@26.0.1/javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:2658)
+	at javafx.fxml@26.0.1/javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:2533)
+	at javafx.fxml@26.0.1/javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:3304)
+	at javafx.fxml@26.0.1/javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:3264)
+	at javafx.fxml@26.0.1/javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:3235)
+	at javafx.fxml@26.0.1/javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:3211)
+	at javafx.fxml@26.0.1/javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:3191)
+	at javafx.fxml@26.0.1/javafx.fxml.FXMLLoader.load(FXMLLoader.java:3186)
+	at InterfazGrafica.MenuPracticanteControlador.abrirVentana(MenuPracticanteControlador.java:116)
+	at InterfazGrafica.MenuPracticanteControlador.abrirAutoevaluacionPracticante(MenuPracticanteControlador.java:112)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:104)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:565)
+	at com.sun.javafx.reflect.Trampoline.invoke(MethodUtil.java:65)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:104)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:565)
+	at javafx.base@26.0.1/com.sun.javafx.reflect.MethodUtil.invoke(MethodUtil.java:112)
+	at javafx.fxml@26.0.1/com.sun.javafx.fxml.MethodHelper.invoke(MethodHelper.java:78)
+	at javafx.fxml@26.0.1/javafx.fxml.FXMLLoader$MethodHandler.invoke(FXMLLoader.java:1845)
+	at javafx.fxml@26.0.1/javafx.fxml.FXMLLoader$ControllerMethodEventHandler.handle(FXMLLoader.java:1718)
+	at javafx.base@26.0.1/com.sun.javafx.event.CompositeEventHandler.dispatchBubblingEvent(CompositeEventHandler.java:86)
+	at javafx.base@26.0.1/com.sun.javafx.event.EventHandlerManager.dispatchBubblingEvent(EventHandlerManager.java:232)
+	at javafx.base@26.0.1/com.sun.javafx.event.EventHandlerManager.dispatchBubblingEvent(EventHandlerManager.java:189)
+	at javafx.base@26.0.1/com.sun.javafx.event.CompositeEventDispatcher.dispatchBubblingEvent(CompositeEventDispatcher.java:59)
+	at javafx.base@26.0.1/com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:58)
+	at javafx.base@26.0.1/com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at javafx.base@26.0.1/com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at javafx.base@26.0.1/com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at javafx.base@26.0.1/com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at javafx.base@26.0.1/com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at javafx.base@26.0.1/com.sun.javafx.event.EventUtil.fireEventImpl(EventUtil.java:74)
+	at javafx.base@26.0.1/com.sun.javafx.event.EventUtil.fireEvent(EventUtil.java:49)
+	at javafx.base@26.0.1/javafx.event.Event.fireEvent(Event.java:199)
+	at javafx.graphics@26.0.1/javafx.scene.Node.fireEvent(Node.java:9092)
+	at javafx.controls@26.0.1/javafx.scene.control.Button.fire(Button.java:203)
+	at javafx.controls@26.0.1/com.sun.javafx.scene.control.behavior.ButtonBehavior.mouseReleased(ButtonBehavior.java:207)
+	at javafx.controls@26.0.1/com.sun.javafx.scene.control.inputmap.InputMap.handle(InputMap.java:274)
+	at javafx.base@26.0.1/com.sun.javafx.event.CompositeEventHandler$NormalEventHandlerRecord.handleBubblingEvent(CompositeEventHandler.java:247)
+	at javafx.base@26.0.1/com.sun.javafx.event.CompositeEventHandler.dispatchBubblingEvent(CompositeEventHandler.java:80)
+	at javafx.base@26.0.1/com.sun.javafx.event.EventHandlerManager.dispatchBubblingEvent(EventHandlerManager.java:232)
+	at javafx.base@26.0.1/com.sun.javafx.event.EventHandlerManager.dispatchBubblingEvent(EventHandlerManager.java:189)
+	at javafx.base@26.0.1/com.sun.javafx.event.CompositeEventDispatcher.dispatchBubblingEvent(CompositeEventDispatcher.java:59)
+	at javafx.base@26.0.1/com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:58)
+	at javafx.base@26.0.1/com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at javafx.base@26.0.1/com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at javafx.base@26.0.1/com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at javafx.base@26.0.1/com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at javafx.base@26.0.1/com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at javafx.base@26.0.1/com.sun.javafx.event.EventUtil.fireEventImpl(EventUtil.java:74)
+	at javafx.base@26.0.1/com.sun.javafx.event.EventUtil.fireEvent(EventUtil.java:54)
+	at javafx.base@26.0.1/javafx.event.Event.fireEvent(Event.java:199)
+	at javafx.graphics@26.0.1/javafx.scene.Scene$MouseHandler.process(Scene.java:4134)
+	at javafx.graphics@26.0.1/javafx.scene.Scene.processMouseEvent(Scene.java:1953)
+	at javafx.graphics@26.0.1/javafx.scene.Scene$ScenePeerListener.mouseEvent(Scene.java:2802)
+	at javafx.graphics@26.0.1/com.sun.javafx.tk.quantum.GlassViewEventHandler$MouseEventNotification.get(GlassViewEventHandler.java:353)
+	at javafx.graphics@26.0.1/com.sun.javafx.tk.quantum.GlassViewEventHandler$MouseEventNotification.get(GlassViewEventHandler.java:255)
+	at javafx.graphics@26.0.1/com.sun.javafx.tk.quantum.QuantumToolkit.runWithoutRenderLock(QuantumToolkit.java:429)
+	at javafx.graphics@26.0.1/com.sun.javafx.tk.quantum.GlassViewEventHandler.handleMouseEvent(GlassViewEventHandler.java:387)
+	at javafx.graphics@26.0.1/com.sun.glass.ui.View.handleMouseEvent(View.java:573)
+	at javafx.graphics@26.0.1/com.sun.glass.ui.View.notifyMouse(View.java:970)
+	at javafx.graphics@26.0.1/com.sun.glass.ui.mac.MacView.notifyMouse(MacView.java:131)
+Caused by: java.sql.SQLSyntaxErrorException: Table 'practicas_profesionales.autoevaluacion' doesn't exist
+	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:112)
+	at com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:114)
+	at com.mysql.cj.jdbc.ClientPreparedStatement.executeInternal(ClientPreparedStatement.java:988)
+	at com.mysql.cj.jdbc.ClientPreparedStatement.executeQuery(ClientPreparedStatement.java:1056)
+	at logica.dao.objetos.AutoevaluacionPracticanteDao.obtenerAutoevaluacion(AutoevaluacionPracticanteDao.java:115)
+	... 69 more
+
+may 31, 2026 11:06:16 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
 INFO: Configuración de base de datos cargada correctamente
-jun 03, 2026 10:56:36 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
+may 31, 2026 11:06:16 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
 CONFIG: URL de conexión: jdbc:mysql://localhost:3306/practicas_profesionales
-jun 03, 2026 10:56:36 P.M. acceso.bd.ConexionBaseDeDatos conectar
+may 31, 2026 11:06:16 P.M. acceso.bd.ConexionBaseDeDatos conectar
 FINE: Intentando establecer conexión a la base de datos...
-jun 03, 2026 10:56:36 P.M. acceso.bd.ConexionBaseDeDatos conectar
+may 31, 2026 11:06:16 P.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexión a base de datos realizada exitosamente en 340 ms
+may 31, 2026 11:07:43 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
+INFO: Configuración de base de datos cargada correctamente
+may 31, 2026 11:07:43 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
+CONFIG: URL de conexión: jdbc:mysql://localhost:3306/practicas_profesionales
+may 31, 2026 11:07:43 P.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexión a la base de datos...
+may 31, 2026 11:07:43 P.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexión a base de datos realizada exitosamente en 314 ms
+may 31, 2026 11:08:25 P.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexión a la base de datos...
+may 31, 2026 11:08:25 P.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexión a base de datos realizada exitosamente en 50 ms
+may 31, 2026 11:08:28 P.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexión a la base de datos...
+may 31, 2026 11:08:28 P.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexión a base de datos realizada exitosamente en 14 ms
+may 31, 2026 11:08:36 P.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexión a la base de datos...
+may 31, 2026 11:08:36 P.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexión a base de datos realizada exitosamente en 21 ms
+may 31, 2026 11:08:36 P.M. logica.dao.objetos.PracticanteDao inactivarPracticante
+INFO: Practicante inactivado correctamente: S20013001
+may 31, 2026 11:08:36 P.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexión a la base de datos...
+may 31, 2026 11:08:36 P.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexión a base de datos realizada exitosamente en 16 ms
+jun 05, 2026 1:21:08 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
+INFO: Configuración de base de datos cargada correctamente
+jun 05, 2026 1:21:09 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
+CONFIG: URL de conexión: jdbc:mysql://localhost:3306/practicas_profesionales
+jun 05, 2026 1:21:09 P.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexión a la base de datos...
+jun 05, 2026 1:21:09 P.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexión a base de datos realizada exitosamente en 336 ms
+jun 05, 2026 1:21:18 P.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexión a la base de datos...
+jun 05, 2026 1:21:18 P.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexión a base de datos realizada exitosamente en 17 ms
+jun 05, 2026 1:23:09 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
+INFO: Configuración de base de datos cargada correctamente
+jun 05, 2026 1:23:09 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
+CONFIG: URL de conexión: jdbc:mysql://localhost:3306/practicas_profesionales
+jun 05, 2026 1:23:09 P.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexión a la base de datos...
+jun 05, 2026 1:23:10 P.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexión a base de datos realizada exitosamente en 308 ms
+jun 05, 2026 1:23:11 P.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexión a la base de datos...
+jun 05, 2026 1:23:11 P.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexión a base de datos realizada exitosamente en 17 ms
+jun 05, 2026 1:23:18 P.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexión a la base de datos...
+jun 05, 2026 1:23:18 P.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexión a base de datos realizada exitosamente en 17 ms
+jun 05, 2026 1:39:11 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
+INFO: Configuración de base de datos cargada correctamente
+jun 05, 2026 1:39:11 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
+CONFIG: URL de conexión: jdbc:mysql://localhost:3306/practicas_profesionales
+jun 05, 2026 1:39:11 P.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexión a la base de datos...
+jun 05, 2026 1:39:12 P.M. acceso.bd.ConexionBaseDeDatos conectar
 INFO: Conexión a base de datos realizada exitosamente en 320 ms
+jun 05, 2026 3:30:46 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
+INFO: Configuración de base de datos cargada correctamente
+jun 05, 2026 3:30:46 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
+CONFIG: URL de conexión: jdbc:mysql://localhost:3306/practicas_profesionales
+jun 05, 2026 3:30:46 P.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexión a la base de datos...
+jun 05, 2026 3:30:46 P.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexión a base de datos realizada exitosamente en 323 ms
+jun 05, 2026 3:33:07 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
+INFO: Configuración de base de datos cargada correctamente
+jun 05, 2026 3:33:07 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
+CONFIG: URL de conexión: jdbc:mysql://localhost:3306/practicas_profesionales
+jun 05, 2026 3:33:07 P.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexión a la base de datos...
+jun 05, 2026 3:33:08 P.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexión a base de datos realizada exitosamente en 266 ms
+jun 05, 2026 3:33:56 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
+INFO: Configuración de base de datos cargada correctamente
+jun 05, 2026 3:33:56 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
+CONFIG: URL de conexión: jdbc:mysql://localhost:3306/practicas_profesionales
+jun 05, 2026 3:33:56 P.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexión a la base de datos...
+jun 05, 2026 3:33:56 P.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexión a base de datos realizada exitosamente en 230 ms
+jun 05, 2026 3:43:17 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
+INFO: Configuración de base de datos cargada correctamente
+jun 05, 2026 3:43:17 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
+CONFIG: URL de conexión: jdbc:mysql://localhost:3306/practicas_profesionales
+jun 05, 2026 3:43:17 P.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexión a la base de datos...
+jun 05, 2026 3:43:18 P.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexión a base de datos realizada exitosamente en 296 ms
+jun 05, 2026 3:44:11 P.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexión a la base de datos...
+jun 05, 2026 3:44:11 P.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexión a base de datos realizada exitosamente en 22 ms
+jun 05, 2026 3:44:11 P.M. logica.dao.objetos.PeriodoUniversitarioDao verificarPeriodoAbierto
+INFO: Verificacion de periodo abierto completada
+jun 05, 2026 3:44:11 P.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexión a la base de datos...
+jun 05, 2026 3:44:12 P.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexión a base de datos realizada exitosamente en 16 ms
+jun 05, 2026 3:44:12 P.M. logica.dao.objetos.PeriodoUniversitarioDao insertarPeriodo
+INFO: Periodo universitario insertado correctamente
+jun 05, 2026 4:34:33 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
+INFO: Configuración de base de datos cargada correctamente
+jun 05, 2026 4:34:33 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
+CONFIG: URL de conexión: jdbc:mysql://localhost:3306/practicas_profesionales
+jun 05, 2026 4:34:33 P.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexión a la base de datos...
+jun 05, 2026 4:34:33 P.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexión a base de datos realizada exitosamente en 295 ms
+jun 05, 2026 4:34:35 P.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexión a la base de datos...
+jun 05, 2026 4:34:35 P.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexión a base de datos realizada exitosamente en 18 ms
+jun 05, 2026 4:34:36 P.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexión a la base de datos...
+jun 05, 2026 4:34:36 P.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexión a base de datos realizada exitosamente en 24 ms
+jun 05, 2026 4:34:36 P.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexión a la base de datos...
+jun 05, 2026 4:34:37 P.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexión a base de datos realizada exitosamente en 15 ms
+jun 05, 2026 4:34:37 P.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexión a la base de datos...
+jun 05, 2026 4:34:37 P.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexión a base de datos realizada exitosamente en 18 ms
+jun 05, 2026 4:34:37 P.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexión a la base de datos...
+jun 05, 2026 4:34:37 P.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexión a base de datos realizada exitosamente en 11 ms
+jun 05, 2026 4:34:37 P.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexión a la base de datos...
+jun 05, 2026 4:34:37 P.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexión a base de datos realizada exitosamente en 18 ms
+jun 05, 2026 4:34:37 P.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexión a la base de datos...
+jun 05, 2026 4:34:37 P.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexión a base de datos realizada exitosamente en 12 ms
+jun 05, 2026 4:35:18 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
+INFO: Configuración de base de datos cargada correctamente
+jun 05, 2026 4:35:18 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
+CONFIG: URL de conexión: jdbc:mysql://localhost:3306/practicas_profesionales
+jun 05, 2026 4:35:18 P.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexión a la base de datos...
+jun 05, 2026 4:35:18 P.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexión a base de datos realizada exitosamente en 342 ms
+jun 05, 2026 4:36:14 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
+INFO: Configuración de base de datos cargada correctamente
+jun 05, 2026 4:36:14 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
+CONFIG: URL de conexión: jdbc:mysql://localhost:3306/practicas_profesionales
+jun 05, 2026 4:36:14 P.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexión a la base de datos...
+jun 05, 2026 4:36:14 P.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexión a base de datos realizada exitosamente en 236 ms
+jun 05, 2026 4:36:16 P.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexión a la base de datos...
+jun 05, 2026 4:36:16 P.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexión a base de datos realizada exitosamente en 17 ms
+jun 05, 2026 4:36:19 P.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexión a la base de datos...
+jun 05, 2026 4:36:19 P.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexión a base de datos realizada exitosamente en 23 ms
+jun 05, 2026 4:39:04 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
+INFO: Configuración de base de datos cargada correctamente
+jun 05, 2026 4:39:04 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
+CONFIG: URL de conexión: jdbc:mysql://localhost:3306/practicas_profesionales
+jun 05, 2026 4:39:04 P.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexión a la base de datos...
+jun 05, 2026 4:39:04 P.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexión a base de datos realizada exitosamente en 275 ms
+jun 05, 2026 4:39:06 P.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexión a la base de datos...
+jun 05, 2026 4:39:06 P.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexión a base de datos realizada exitosamente en 17 ms
+jun 05, 2026 4:40:19 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
+INFO: Configuración de base de datos cargada correctamente
+jun 05, 2026 4:40:19 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
+CONFIG: URL de conexión: jdbc:mysql://localhost:3306/practicas_profesionales
+jun 05, 2026 4:40:19 P.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexión a la base de datos...
+jun 05, 2026 4:40:20 P.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexión a base de datos realizada exitosamente en 293 ms
+jun 05, 2026 4:44:02 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
+INFO: Configuración de base de datos cargada correctamente
+jun 05, 2026 4:44:02 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
+CONFIG: URL de conexión: jdbc:mysql://localhost:3306/practicas_profesionales
+jun 05, 2026 4:44:02 P.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexión a la base de datos...
+jun 05, 2026 4:44:02 P.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexión a base de datos realizada exitosamente en 290 ms

@@ -3,28 +3,27 @@
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
 
-<AnchorPane prefHeight="550.0" prefWidth="700.0"
+<AnchorPane prefHeight="450.0" prefWidth="700.0"
             xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="InterfazGrafica.RegistrarOrganizacionVinculadaControlador">
+            fx:controller="InterfazGrafica.RegistrarPeriodoControlador">
     <children>
 
-        <VBox layoutX="0.0" layoutY="0.0" prefHeight="550.0" prefWidth="180.0"
+        <VBox layoutX="0.0" layoutY="0.0" prefHeight="450.0" prefWidth="180.0"
               style="-fx-background-color: #2ecc71; -fx-padding: 15;">
             <children>
                 <Label style="-fx-text-fill: white; -fx-font-size: 16; -fx-font-weight: bold;" text="Registro" />
-                <Label style="-fx-text-fill: black; -fx-font-size: 12;" text="Organización Vinculada">
+                <Label style="-fx-text-fill: black; -fx-font-size: 12;" text="Período Universitario">
                     <VBox.margin><Insets top="4.0"/></VBox.margin>
                 </Label>
             </children>
         </VBox>
 
-        <VBox layoutX="180.0" layoutY="0.0" prefHeight="550.0" prefWidth="520.0"
+        <VBox layoutX="180.0" layoutY="0.0" prefHeight="450.0" prefWidth="520.0"
               spacing="10.0" style="-fx-padding: 30;">
             <children>
 
-                <Label style="-fx-font-size: 22; -fx-font-weight: bold;" text="Registrar Organización Vinculada" />
+                <Label style="-fx-font-size: 22; -fx-font-weight: bold;" text="Registrar Período" />
 
                 <VBox fx:id="panelError" managed="false" prefWidth="450.0" spacing="4.0"
                       style="-fx-border-color: #8B0000; -fx-border-width: 2; -fx-background-color: #f5f5dc; -fx-padding: 10;"
@@ -46,34 +45,22 @@
                     <Label fx:id="etiquetaMensajeExito" style="-fx-text-fill: #2d6a2d; -fx-font-size: 11;" text="" />
                 </VBox>
 
-                <Label style="-fx-font-size: 13;" text="Nombre de la organización">
+                <Label style="-fx-font-size: 13;" text="Nombre del período">
                     <VBox.margin><Insets top="10.0"/></VBox.margin>
                 </Label>
                 <TextField fx:id="campoTextoNombre" prefHeight="30.0" prefWidth="450.0"
-                           promptText="Ej. Empresa XYZ" />
+                           promptText="Ej. Febrero-Agosto 2026" />
 
-                <Label style="-fx-font-size: 13;" text="Dirección de la organización" />
-                <TextField fx:id="campoTextoDireccion" prefHeight="30.0" prefWidth="450.0"
-                           promptText="Ej. Av. Principal 123" />
-
-                <Label style="-fx-font-size: 13;" text="Teléfono" />
-                <TextField fx:id="campoTextoTelefono" prefHeight="30.0" prefWidth="450.0"
-                           promptText="Ej. 2281234567" />
-
-                <Label style="-fx-font-size: 13;" text="Correo electrónico" />
-                <TextField fx:id="campoTextoCorreo" prefHeight="30.0" prefWidth="450.0"
-                           promptText="Ej. contacto@empresa.com" />
-
-                <Label style="-fx-font-size: 13;" text="Sector" />
-                <TextField fx:id="campoTextoSector" prefHeight="30.0" prefWidth="450.0"
-                           promptText="Ej. Tecnología" />
+                <Label style="-fx-font-size: 13;" text="Fecha de inicio" />
+                <TextField fx:id="selectorFechaInicio" prefHeight="30.0" prefWidth="450.0"
+                           promptText="Ej. 2026-06-05 (AAAA-MM-DD)" />
 
                 <HBox spacing="15.0">
                     <VBox.margin><Insets top="20.0"/></VBox.margin>
-                    <Button fx:id="botonRegistrar" onAction="#botonRegistrar" prefHeight="35.0" prefWidth="140.0"
+                    <Button onAction="#botonRegistrar" prefHeight="35.0" prefWidth="140.0"
                             style="-fx-background-color: #2c3e50; -fx-text-fill: white; -fx-background-radius: 6;"
                             text="Registrar" />
-                    <Button fx:id="botonCancelar" onAction="#botonCancelar" prefHeight="35.0" prefWidth="140.0"
+                    <Button onAction="#botonCancelar" prefHeight="35.0" prefWidth="140.0"
                             style="-fx-background-color: #c0392b; -fx-text-fill: white; -fx-background-radius: 6;"
                             text="Cancelar" />
                 </HBox>
@@ -81,7 +68,7 @@
             </children>
         </VBox>
 
-        <Button fx:id="botonRegresar" layoutX="610.0" layoutY="10.0" onAction="#botonRegresar"
+        <Button layoutX="610.0" layoutY="10.0" onAction="#botonRegresar"
                 prefHeight="28.0" prefWidth="75.0"
                 style="-fx-background-color: #7f8c8d; -fx-text-fill: white; -fx-background-radius: 6;"
                 text="Regresar" />

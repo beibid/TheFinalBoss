@@ -61,7 +61,7 @@ public class MenuProfesorControlador {
 
     @FXML
     private void abrirHistorialReportes(ActionEvent event) throws IOException {
-        abrirVentana("/InterfazGrafica/vistas/HistorialReportesVista.fxml", "Historial de Reportes");
+        abrirVentana("/InterfazGrafica/vistas/ConsultarHistorialReportesVista.fxml", "Historial de Reportes");
     }
 
     @FXML

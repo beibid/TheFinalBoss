@@ -125,6 +125,11 @@ public class MenuCoordinadorControlador {
     }
 
     @FXML
+    private void abrirRegistrarPeriodo(ActionEvent event) throws IOException {
+        abrirVentana("/InterfazGrafica/vistas/RegistrarPeriodoVista.fxml", "Registrar Período");
+    }
+
+    @FXML
     private void cerrarSesion(ActionEvent event) throws IOException {
         SesionUsuario.getInstance().cerrarSesion();
         Parent ruta = FXMLLoader.load(getClass().getResource("/InterfazGrafica/vistas/IniciarSesionVista.fxml"));

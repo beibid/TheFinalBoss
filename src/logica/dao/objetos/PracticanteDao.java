@@ -242,4 +242,48 @@ public class PracticanteDao implements PracticanteDaoInterfaz {
         }
         return filasAfectadas;
     }
+    public List<Practicante> obtenerPracticantesPorProfesor(int idProfesor) throws UsuariosExcepcion {
+        String consulta = "SELECT u.idUsuario, u.nombre, u.apellidos, u.correo, u.estado, u.contrasena, " +
+                "p.matricula, p.lenguaIndigena, p.genero " +
+                "FROM usuario u " +
+                "INNER JOIN practicante p ON u.idUsuario = p.idUsuario " +
+                "WHERE p.idProfesor = ? AND u.estado = 'Activo'";
+        Connection conexionBaseDeDatos = null;
+        PreparedStatement consultaPracticantes = null;
+        List<Practicante> practicantes = new ArrayList<>();
+        try {
+            conexionBaseDeDatos = ConexionBaseDeDatos.getInstance().conectar();
+            consultaPracticantes = conexionBaseDeDatos.prepareStatement(consulta);
+            consultaPracticantes.setInt(1, idProfesor);
+            ResultSet resultado = consultaPracticantes.executeQuery();
+            while (resultado.next()) {
+                Practicante practicante = new Practicante();
+                practicante.setIdUsuario(resultado.getInt("idUsuario"));
+                practicante.setNombre(resultado.getString("nombre"));
+                practicante.setApellidos(resultado.getString("apellidos"));
+                practicante.setCorreo(resultado.getString("correo"));
+                practicante.setEstado(Estado.valueOf(resultado.getString("estado")));
+                practicante.setContrasena(resultado.getString("contrasena"));
+                practicante.setMatricula(resultado.getString("matricula"));
+                practicante.setLenguaIndigena(resultado.getString("lenguaIndigena"));
+                practicante.setGenero(Genero.valueOf(resultado.getString("genero")));
+                practicantes.add(practicante);
+            }
+        } catch (SQLException excepcionSql) {
+            LOGGER.log(Level.SEVERE, "Error al obtener practicantes por profesor", excepcionSql);
+            throw new UsuariosExcepcion("Error al obtener practicantes por profesor", excepcionSql);
+        } finally {
+            try {
+                if (consultaPracticantes != null) {
+                    consultaPracticantes.close();
+                }
+                if (conexionBaseDeDatos != null) {
+                    conexionBaseDeDatos.close();
+                }
+            } catch (SQLException excepcionSql) {
+                LOGGER.log(Level.SEVERE, "Error al cerrar la conexión", excepcionSql);
+            }
+        }
+        return practicantes;
+    }
 }

@@ -58,6 +58,11 @@ public class DescargarDocumentacionControlador {
                 "/recursos/PRAIS-04-Evaluacion-de-la-organizacion.pdf",
                 "PRAIS-04-Evaluacion-de-la-organizacion.pdf"
         });
+        tablaDocumentos.getItems().add(new String[]{
+                "F1 Solicitud de Prácticas",
+                "/recursos/F1-Solicitud-Practicas-3.pdf",
+                "F1-Solicitud-Practicas-3.pdf"
+        });
     }
 
     private void descargarDocumento(String nombre, String rutaRecurso, String nombreArchivo) {

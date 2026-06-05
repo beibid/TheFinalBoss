@@ -134,4 +134,45 @@ public class ReporteDao implements ReporteDaoInterfaz {
         }
         return filasAfectadas;
     }
+    public List<Reporte> obtenerReportesPorMatricula(String matricula) throws MensajeriaExcepcion {
+        String consulta = "SELECT idReporte, tipoReporte, descripcion, fechaGeneracion, calificacion, " +
+                "observacionesProf, estado FROM reporte WHERE matricula = ? ORDER BY fechaGeneracion DESC";
+        Connection conexionBaseDeDatos = null;
+        PreparedStatement consultaReportes = null;
+        List<Reporte> reportes = new ArrayList<>();
+        try {
+            conexionBaseDeDatos = ConexionBaseDeDatos.getInstance().conectar();
+            consultaReportes = conexionBaseDeDatos.prepareStatement(consulta);
+            consultaReportes.setString(1, matricula);
+            ResultSet resultado = consultaReportes.executeQuery();
+            while (resultado.next()) {
+                Reporte reporte = new Reporte(
+                        TipoReporte.valueOf(resultado.getString("tipoReporte")),
+                        resultado.getString("descripcion"),
+                        null,
+                        matricula, null, null
+                );
+                reporte.setIdReporte(resultado.getInt("idReporte"));
+                reporte.setFechaGeneracion(resultado.getDate("fechaGeneracion"));
+                reporte.setCalificacion(resultado.getDouble("calificacion"));
+                reporte.setObservaciones(resultado.getString("observacionesProf"));
+                reportes.add(reporte);
+            }
+        } catch (SQLException excepcionSql) {
+            LOGGER.log(Level.SEVERE, "Error al obtener reportes por matricula", excepcionSql);
+            throw new MensajeriaExcepcion("Error al obtener reportes por matricula", excepcionSql);
+        } finally {
+            try {
+                if (consultaReportes != null) {
+                    consultaReportes.close();
+                }
+                if (conexionBaseDeDatos != null) {
+                    conexionBaseDeDatos.close();
+                }
+            } catch (SQLException excepcionSql) {
+                LOGGER.log(Level.SEVERE, "Error al cerrar la conexión", excepcionSql);
+            }
+        }
+        return reportes;
+    }
 }

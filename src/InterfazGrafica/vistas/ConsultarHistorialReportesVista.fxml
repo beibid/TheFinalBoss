@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="500.0" prefWidth="800.0"
+            xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="InterfazGrafica.ConsultarHistorialReportesControlador">
+    <children>
+
+        <VBox layoutX="0.0" layoutY="0.0" prefHeight="500.0" prefWidth="180.0"
+              style="-fx-background-color: #2ecc71; -fx-padding: 15;">
+            <children>
+                <Label style="-fx-text-fill: white; -fx-font-size: 16; -fx-font-weight: bold;" text="Historial" />
+                <Label style="-fx-text-fill: black; -fx-font-size: 12;" text="Reportes del Practicante">
+                    <VBox.margin><Insets top="4.0"/></VBox.margin>
+                </Label>
+            </children>
+        </VBox>
+
+        <VBox layoutX="180.0" layoutY="0.0" prefHeight="500.0" prefWidth="620.0"
+              spacing="10.0" style="-fx-padding: 30;">
+            <children>
+
+                <Label style="-fx-font-size: 22; -fx-font-weight: bold;" text="Historial de Reportes" />
+
+                <VBox fx:id="panelError" managed="false" prefWidth="550.0" spacing="4.0"
+                      style="-fx-border-color: #8B0000; -fx-border-width: 2; -fx-background-color: #f5f5dc; -fx-padding: 10;"
+                      visible="false">
+                    <HBox alignment="CENTER_LEFT" spacing="8">
+                        <Label style="-fx-text-fill: #8B0000; -fx-font-size: 14; -fx-font-weight: bold;" text="✖" />
+                        <Label fx:id="etiquetaTituloError" style="-fx-font-weight: bold; -fx-text-fill: #8B0000;" text="" />
+                    </HBox>
+                    <Label fx:id="etiquetaMensajeError" style="-fx-text-fill: #8B0000; -fx-font-size: 11;" text="" />
+                </VBox>
+
+                <Label style="-fx-font-size: 13;" text="Selecciona un practicante">
+                    <VBox.margin><Insets top="10.0"/></VBox.margin>
+                </Label>
+                <ComboBox fx:id="comboBoxPracticante" onAction="#seleccionarPracticante"
+                          prefHeight="30.0" prefWidth="550.0"
+                          promptText="-- Selecciona un practicante --" />
+
+                <TableView fx:id="tablaReportes" prefHeight="300.0" prefWidth="550.0">
+                    <VBox.margin><Insets top="10.0"/></VBox.margin>
+                    <columns>
+                        <TableColumn fx:id="columnaTipo" prefWidth="100.0" text="Tipo" resizable="false" />
+                        <TableColumn fx:id="columnaDescripcion" prefWidth="150.0" text="Descripción" resizable="false" />
+                        <TableColumn fx:id="columnaFecha" prefWidth="100.0" text="Fecha" resizable="false" />
+                        <TableColumn fx:id="columnaCalificacion" prefWidth="100.0" text="Calificación" resizable="false" />
+                        <TableColumn fx:id="columnaObservaciones" prefWidth="100.0" text="Observaciones" resizable="false" />
+                    </columns>
+                </TableView>
+
+            </children>
+        </VBox>
+
+        <Button layoutX="710.0" layoutY="10.0" onAction="#botonRegresar"
+                prefHeight="28.0" prefWidth="75.0"
+                style="-fx-background-color: #7f8c8d; -fx-text-fill: white; -fx-background-radius: 6;"
+                text="Regresar" />
+
+    </children>
+</AnchorPane>

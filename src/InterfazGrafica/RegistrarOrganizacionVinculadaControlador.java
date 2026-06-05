@@ -19,6 +19,9 @@ public class RegistrarOrganizacionVinculadaControlador {
 
     @FXML private TextField campoTextoNombre;
     @FXML private TextField campoTextoDireccion;
+    @FXML private TextField campoTextoTelefono;
+    @FXML private TextField campoTextoCorreo;
+    @FXML private TextField campoTextoSector;
     @FXML private VBox panelError;
     @FXML private Label etiquetaTituloError;
     @FXML private Label etiquetaMensajeError;
@@ -28,13 +31,91 @@ public class RegistrarOrganizacionVinculadaControlador {
 
     private static final int FILAS_AFECTADAS_ESPERADAS = 1;
 
+    @FXML
+    private void botonRegistrar() {
+        ocultarPanel(panelError);
+        ocultarPanel(panelExito);
+        if (confirmarAccion("¿Seguro que desea registrar la organizacion?")) {
+            procesarRegistro();
+        }
+    }
+
+    @FXML
+    private void botonCancelar() {
+        if (confirmarAccion("¿Seguro que desea cancelar?")) {
+            limpiarCampos();
+        }
+    }
+
+    @FXML
+    private void botonRegresar(ActionEvent evento) {
+        Stage escenario = (Stage) ((Node) evento.getSource()).getScene().getWindow();
+        escenario.close();
+    }
+
+    private void procesarRegistro() {
+        if (camposValidos()) {
+            guardarOrganizacion(construirOrganizacion());
+        }
+    }
+
+    private boolean camposValidos() {
+        String nombre = campoTextoNombre.getText().trim();
+        String direccion = campoTextoDireccion.getText().trim();
+        String telefono = campoTextoTelefono.getText().trim();
+        String correo = campoTextoCorreo.getText().trim();
+        String sector = campoTextoSector.getText().trim();
+
+        List<String> campos = List.of(nombre, direccion, telefono, correo, sector);
+        boolean camposFormularioValido = !camposVacios(campos);
+        boolean nombreValido = nombre.matches("^[a-zA-Z0-9áéíóúÁÉÍÓÚñÑ\\s]+$");
+        boolean direccionValida = direccion.matches("^[a-zA-Z0-9áéíóúÁÉÍÓÚñÑ\\s#.,\\-]+$");
+        boolean telefonoValido = telefono.matches("\\d{10}");
+        boolean correoValido = correo.matches("^[\\w._%+\\-]+@[\\w.\\-]+\\.[a-zA-Z]{2,}$");
+        boolean sectorValido = sector.matches("^[a-zA-ZáéíóúÁÉÍÓÚñÑ\\s]+$");
+
+        mostrarPrimerError(camposFormularioValido, nombreValido, direccionValida, telefonoValido, correoValido, sectorValido);
+
+        boolean formularioValido = camposFormularioValido && nombreValido && direccionValida && telefonoValido && correoValido && sectorValido;
+        return formularioValido;
+    }
+
+    private void mostrarPrimerError(boolean camposFormularioValido, boolean nombreValido, boolean direccionValida,
+                                    boolean telefonoValido, boolean correoValido, boolean sectorValido) {
+        if (!camposFormularioValido) {
+            mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
+                    "Campos obligatorios vacios", "POR FAVOR LLENE TODOS LOS CAMPOS");
+        } else if (!nombreValido) {
+            mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
+                    "Nombre invalido", "EL NOMBRE NO DEBE CONTENER CARACTERES ESPECIALES");
+        } else if (!direccionValida) {
+            mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
+                    "Direccion invalida", "LA DIRECCION CONTIENE CARACTERES NO PERMITIDOS");
+        } else if (!telefonoValido) {
+            mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
+                    "Telefono invalido", "EL TELEFONO DEBE CONTENER EXACTAMENTE 10 DIGITOS NUMERICOS");
+        } else if (!correoValido) {
+            mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
+                    "Correo invalido", "INGRESE UN CORREO ELECTRONICO VALIDO");
+        } else if (!sectorValido) {
+            mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
+                    "Sector invalido", "EL SECTOR NO DEBE CONTENER NUMEROS NI CARACTERES ESPECIALES");
+        }
+    }
+
     private OrganizacionVinculada construirOrganizacion() {
         String nombre = campoTextoNombre.getText().trim();
         String direccion = campoTextoDireccion.getText().trim();
+        String telefono = campoTextoTelefono.getText().trim();
+        String correo = campoTextoCorreo.getText().trim();
+        String sector = campoTextoSector.getText().trim();
 
         OrganizacionVinculada organizacionVinculada = new OrganizacionVinculada();
-        organizacionVinculada.setNombre(limitarTexto(nombre, 55));
-        organizacionVinculada.setDireccion(limitarTexto(direccion, 55));
+        organizacionVinculada.setNombre(limitarTexto(nombre, 80));
+        organizacionVinculada.setDireccion(limitarTexto(direccion, 80));
+        organizacionVinculada.setTelefono(limitarTexto(telefono, 15));
+        organizacionVinculada.setCorreo(limitarTexto(correo, 100));
+        organizacionVinculada.setSector(limitarTexto(sector, 50));
         organizacionVinculada.setEstadoOrganizacion(EstadoOrganizacion.Activa);
         return organizacionVinculada;
     }
@@ -67,48 +148,6 @@ public class RegistrarOrganizacionVinculadaControlador {
         return hayCamposVacios;
     }
 
-    private boolean camposValidos() {
-        String nombre = campoTextoNombre.getText().trim();
-        String direccion = campoTextoDireccion.getText().trim();
-
-        List<String> campos = List.of(nombre, direccion);
-        boolean camposFormularioValido = !camposVacios(campos);
-
-        if (!camposFormularioValido) {
-            mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
-                    "Campos obligatorios vacios", "POR FAVOR LLENE TODOS LOS CAMPOS");
-        }
-        return camposFormularioValido;
-    }
-
-    private void procesarRegistro() {
-        if (camposValidos()) {
-            guardarOrganizacion(construirOrganizacion());
-        }
-    }
-
-    @FXML
-    private void botonRegistrar() {
-        ocultarPanel(panelError);
-        ocultarPanel(panelExito);
-        if (confirmarAccion("¿Seguro que desea registrar la organizacion?")) {
-            procesarRegistro();
-        }
-    }
-
-    @FXML
-    private void botonCancelar() {
-        if (confirmarAccion("¿Seguro que desea cancelar?")) {
-            limpiarCampos();
-        }
-    }
-
-    @FXML
-    private void botonRegresar(ActionEvent evento) {
-        Stage escenario = (Stage) ((Node) evento.getSource()).getScene().getWindow();
-        escenario.close();
-    }
-
     private boolean confirmarAccion(String mensaje) {
         Alert alerta = new Alert(Alert.AlertType.CONFIRMATION);
         alerta.setTitle("Confirmación");
@@ -129,6 +168,9 @@ public class RegistrarOrganizacionVinculadaControlador {
         ocultarPanel(panelExito);
         campoTextoNombre.clear();
         campoTextoDireccion.clear();
+        campoTextoTelefono.clear();
+        campoTextoCorreo.clear();
+        campoTextoSector.clear();
     }
 
     private void mostrarPanel(Label etiquetaTitulo, Label etiquetaMensaje, VBox panel, String titulo, String mensaje) {

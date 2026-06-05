@@ -95,6 +95,12 @@
 
                 <Separator><VBox.margin><Insets top="10.0" bottom="10.0"/></VBox.margin></Separator>
 
+                <Label text="Período" style="-fx-text-fill: white; -fx-font-size: 11;"/>
+                <Button fx:id="botonRegistrarPeriodo" onAction="#abrirRegistrarPeriodo" prefWidth="170.0"
+                        style="-fx-background-color: transparent; -fx-text-fill: white; -fx-alignment: CENTER-LEFT;" text="Registrar">
+                    <VBox.margin><Insets top="5.0"/></VBox.margin>
+                </Button>
+
                 <Button fx:id="botonCerrarSesion" onAction="#cerrarSesion" prefWidth="170.0"
                         style="-fx-background-color: #c0392b; -fx-text-fill: white;" text="Cerrar Sesión">
                     <VBox.margin><Insets top="5.0"/></VBox.margin>

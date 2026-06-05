@@ -21,7 +21,7 @@ public class OrganizacionVinculadaDao implements OrganizacionVinculadaDaoInterfa
 
     @Override
     public int insertarOrganizacionVinculada(OrganizacionVinculada organizacionVinculada) throws UsuariosExcepcion {
-        String consultaOrganizacion = "insert into organizacion_vinculada (nombre, direccion) values (?, ?)";
+        String consultaOrganizacion = "INSERT INTO organizacion_vinculada (nombre, direccion, telefono, correo, sector) VALUES (?, ?, ?, ?, ?)";
         Connection conexionBaseDeDatos = null;
         PreparedStatement insertarEnBaseDeDatos = null;
         int filasAfectadas = 0;
@@ -30,6 +30,9 @@ public class OrganizacionVinculadaDao implements OrganizacionVinculadaDaoInterfa
             insertarEnBaseDeDatos = conexionBaseDeDatos.prepareStatement(consultaOrganizacion);
             insertarEnBaseDeDatos.setString(1, organizacionVinculada.getNombre());
             insertarEnBaseDeDatos.setString(2, organizacionVinculada.getDireccion());
+            insertarEnBaseDeDatos.setString(3, organizacionVinculada.getTelefono());
+            insertarEnBaseDeDatos.setString(4, organizacionVinculada.getCorreo());
+            insertarEnBaseDeDatos.setString(5, organizacionVinculada.getSector());
             filasAfectadas = insertarEnBaseDeDatos.executeUpdate();
             LOGGER.info("Organización vinculada insertada correctamente");
         } catch (SQLException excepcionSql) {
@@ -51,13 +54,7 @@ public class OrganizacionVinculadaDao implements OrganizacionVinculadaDaoInterfa
     }
 
     public int modificarOrganizacionVinculada(int idOrganizacion, OrganizacionVinculada organizacionVinculada) throws UsuariosExcepcion {
-        if (organizacionVinculada.getNombre() == null) {
-            throw new UsuariosExcepcion("El nombre de la organizacion no puede ser nulo");
-        }
-        if (organizacionVinculada.getDireccion() == null) {
-            throw new UsuariosExcepcion("La direccion de la organizacion no puede ser nula");
-        }
-        String consulta = "UPDATE organizacion_vinculada SET nombre = ?, direccion = ? WHERE idOrganizacion = ?";
+        String consulta = "UPDATE organizacion_vinculada SET nombre = ?, direccion = ?, telefono = ?, correo = ?, sector = ? WHERE idOrganizacion = ?";
         Connection conexionBaseDeDatos = null;
         PreparedStatement actualizacion = null;
         int filasAfectadas = 0;
@@ -66,7 +63,10 @@ public class OrganizacionVinculadaDao implements OrganizacionVinculadaDaoInterfa
             actualizacion = conexionBaseDeDatos.prepareStatement(consulta);
             actualizacion.setString(1, organizacionVinculada.getNombre());
             actualizacion.setString(2, organizacionVinculada.getDireccion());
-            actualizacion.setInt(3, idOrganizacion);
+            actualizacion.setString(3, organizacionVinculada.getTelefono());
+            actualizacion.setString(4, organizacionVinculada.getCorreo());
+            actualizacion.setString(5, organizacionVinculada.getSector());
+            actualizacion.setInt(6, idOrganizacion);
             filasAfectadas = actualizacion.executeUpdate();
             LOGGER.info("OrganizacionVinculada modificada correctamente: " + idOrganizacion);
         } catch (SQLException excepcionSql) {
@@ -88,7 +88,7 @@ public class OrganizacionVinculadaDao implements OrganizacionVinculadaDaoInterfa
     }
 
     public List<OrganizacionVinculada> obtenerOrganizacionesActivas() throws UsuariosExcepcion {
-        String consulta = "SELECT idOrganizacion, nombre, direccion FROM organizacion_vinculada";
+        String consulta = "SELECT idOrganizacion, nombre, direccion, telefono, correo, sector FROM organizacion_vinculada";
         Connection conexionBaseDeDatos = null;
         PreparedStatement consultaOrganizaciones = null;
         List<OrganizacionVinculada> organizaciones = new ArrayList<>();
@@ -101,6 +101,9 @@ public class OrganizacionVinculadaDao implements OrganizacionVinculadaDaoInterfa
                 organizacion.setIdOrganizacion(resultado.getInt("idOrganizacion"));
                 organizacion.setNombre(resultado.getString("nombre"));
                 organizacion.setDireccion(resultado.getString("direccion"));
+                organizacion.setTelefono(resultado.getString("telefono"));
+                organizacion.setCorreo(resultado.getString("correo"));
+                organizacion.setSector(resultado.getString("sector"));
                 organizaciones.add(organizacion);
             }
         } catch (SQLException excepcionSql) {
@@ -120,6 +123,7 @@ public class OrganizacionVinculadaDao implements OrganizacionVinculadaDaoInterfa
         }
         return organizaciones;
     }
+
     public int inactivarOrganizacionVinculada(int idOrganizacion) throws MensajeriaExcepcion {
         String consulta = "UPDATE organizacion_vinculada SET estado = ? WHERE idOrganizacion = ?";
         Connection conexionBaseDeDatos = null;
