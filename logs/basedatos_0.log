@@ -607,3 +607,47 @@ jun 05, 2026 5:23:54 P.M. acceso.bd.ConexionBaseDeDatos conectar
 FINE: Intentando establecer conexión a la base de datos...
 jun 05, 2026 5:23:54 P.M. acceso.bd.ConexionBaseDeDatos conectar
 INFO: Conexión a base de datos realizada exitosamente en 17 ms
+jun 05, 2026 5:24:53 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
+INFO: Configuración de base de datos cargada correctamente
+jun 05, 2026 5:24:53 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
+CONFIG: URL de conexión: jdbc:mysql://localhost:3306/practicas_profesionales
+jun 05, 2026 5:24:53 P.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexión a la base de datos...
+jun 05, 2026 5:24:53 P.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexión a base de datos realizada exitosamente en 535 ms
+jun 05, 2026 5:25:07 P.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexión a la base de datos...
+jun 05, 2026 5:25:07 P.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexión a base de datos realizada exitosamente en 42 ms
+jun 05, 2026 5:27:19 P.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexión a la base de datos...
+jun 05, 2026 5:27:19 P.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexión a base de datos realizada exitosamente en 36 ms
+jun 05, 2026 5:27:47 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
+INFO: Configuración de base de datos cargada correctamente
+jun 05, 2026 5:27:47 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
+CONFIG: URL de conexión: jdbc:mysql://localhost:3306/practicas_profesionales
+jun 05, 2026 5:27:47 P.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexión a la base de datos...
+jun 05, 2026 5:27:47 P.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexión a base de datos realizada exitosamente en 516 ms
+jun 05, 2026 5:28:56 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
+INFO: Configuración de base de datos cargada correctamente
+jun 05, 2026 5:28:56 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
+CONFIG: URL de conexión: jdbc:mysql://localhost:3306/practicas_profesionales
+jun 05, 2026 5:28:56 P.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexión a la base de datos...
+jun 05, 2026 5:28:56 P.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexión a base de datos realizada exitosamente en 511 ms
+jun 05, 2026 5:30:45 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
+INFO: Configuración de base de datos cargada correctamente
+jun 05, 2026 5:30:45 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
+CONFIG: URL de conexión: jdbc:mysql://localhost:3306/practicas_profesionales
+jun 05, 2026 5:30:45 P.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexión a la base de datos...
+jun 05, 2026 5:30:45 P.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexión a base de datos realizada exitosamente en 522 ms
+jun 05, 2026 5:31:09 P.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexión a la base de datos...
+jun 05, 2026 5:31:09 P.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexión a base de datos realizada exitosamente en 38 ms

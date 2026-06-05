@@ -31,6 +31,7 @@ public class RegistrarAdministradorControlador {
     @FXML private Label etiquetaMensajeExito;
 
     private static final int FILAS_AFECTADAS_ESPERADAS = 1;
+    private String contrasenaGenerada;
 
     @FXML
     private void botonRegistrar() {
@@ -77,7 +78,6 @@ public class RegistrarAdministradorControlador {
             if (campo.isEmpty()) {
                 hayCamposVacios = true;
             }
-            
         }
         return hayCamposVacios;
     }
@@ -88,7 +88,7 @@ public class RegistrarAdministradorControlador {
         String correo = campoTextoCorreo.getText().trim();
         String numeroPersonal = campoTextoNumeroPersonal.getText().trim();
 
-        List<String> campos = List.of(nombre, apellidos, numeroPersonal);
+        List<String> campos = List.of(nombre, apellidos, correo, numeroPersonal);
         boolean camposFormularioValido = !camposVacios(campos);
         boolean nombreValido = nombre.matches("[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+");
         boolean apellidosValido = apellidos.matches("[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+");
@@ -99,10 +99,10 @@ public class RegistrarAdministradorControlador {
 
         boolean formularioValido = camposFormularioValido && nombreValido && apellidosValido && correoValido && numeroPersonalValido;
         return formularioValido;
-
     }
 
-    private void verificarCaracteresPermitidos(boolean camposFormularioValido, boolean nombreValido, boolean apellidosValido,boolean correoValido, boolean numeroPersonalValido) {
+    private void verificarCaracteresPermitidos(boolean camposFormularioValido, boolean nombreValido,
+                                               boolean apellidosValido, boolean correoValido, boolean numeroPersonalValido) {
         if (!camposFormularioValido) {
             mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
                     "campos obligatorios vacios", "POR FAVOR LLENE TODOS LOS CAMPOS");
@@ -115,10 +115,9 @@ public class RegistrarAdministradorControlador {
         } else if (!correoValido) {
             mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
                     "correo invalido", "POR FAVOR INGRESE UN CORREO VALIDO");
-
         } else if (!numeroPersonalValido) {
             mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
-                    "numero de personal invalido", "EL NUMERO DE PERSONAL SOLO PUEDE TENER NUMEROS");
+                    "numero de personal invalido", "EL NUMERO DE PERSONAL SOLO PUEDE TENER LETRAS Y NUMEROS");
         }
     }
 
@@ -126,8 +125,8 @@ public class RegistrarAdministradorControlador {
         String nombre = campoTextoNombres.getText().trim();
         String apellidos = campoTextoApellidos.getText().trim();
         String numeroPersonal = campoTextoNumeroPersonal.getText().trim();
-        String contrasena = generarContrasena(nombre, numeroPersonal);
-        String contrasenaCifrada = CifracionContrasena.cifrarContrasena(contrasena);
+        contrasenaGenerada = generarContrasena(nombre, numeroPersonal);
+        String contrasenaCifrada = CifracionContrasena.cifrarContrasena(contrasenaGenerada);
 
         Administrador administrador = new Administrador();
         administrador.setNombre(limitarTexto(nombre, 55));
@@ -145,7 +144,8 @@ public class RegistrarAdministradorControlador {
             if (filasAfectadas >= FILAS_AFECTADAS_ESPERADAS) {
                 limpiarCampos();
                 mostrarPanel(etiquetaTituloExito, etiquetaMensajeExito, panelExito,
-                        "Administrador registrado", "EL ADMINISTRADOR FUE REGISTRADO EXITOSAMENTE.");
+                        "Administrador registrado exitosamente",
+                        "Contraseña temporal: " + contrasenaGenerada);
             } else {
                 mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
                         "Error al registrar", "NO SE PUDO REGISTRAR EL ADMINISTRADOR. INTENTE DE NUEVO.");
@@ -161,8 +161,8 @@ public class RegistrarAdministradorControlador {
     }
 
     private String generarContrasena(String nombre, String numeroPersonal) {
-        String contrasenaGenerada = nombre.toLowerCase() + numeroPersonal;
-        return contrasenaGenerada;
+        String contrasena = nombre.toLowerCase() + numeroPersonal;
+        return contrasena;
     }
 
     private String limitarTexto(String texto, int limite) {

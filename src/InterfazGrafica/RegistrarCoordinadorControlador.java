@@ -19,29 +19,20 @@ import java.util.List;
 
 public class RegistrarCoordinadorControlador {
 
-    @FXML
-    private TextField campoTextoNombres;
-    @FXML
-    private TextField campoTextoApellidos;
-    @FXML
-    private TextField campoTextoCorreo;
-    @FXML
-    private TextField campoTextoNumeroPersonal;
-    @FXML
-    private VBox panelError;
-    @FXML
-    private Label etiquetaTituloError;
-    @FXML
-    private Label etiquetaMensajeError;
-    @FXML
-    private VBox panelExito;
-    @FXML
-    private Label etiquetaTituloExito;
-    @FXML
-    private Label etiquetaMensajeExito;
+    @FXML private TextField campoTextoNombres;
+    @FXML private TextField campoTextoApellidos;
+    @FXML private TextField campoTextoCorreo;
+    @FXML private TextField campoTextoNumeroPersonal;
+    @FXML private VBox panelError;
+    @FXML private Label etiquetaTituloError;
+    @FXML private Label etiquetaMensajeError;
+    @FXML private VBox panelExito;
+    @FXML private Label etiquetaTituloExito;
+    @FXML private Label etiquetaMensajeExito;
 
     private static final int FILAS_AFECTADAS_ESPERADAS = 1;
     private static final int COORDINADORES_ACTIVOS_PERMITIDOS = 0;
+    private String contrasenaGenerada;
 
     @FXML
     private void botonRegistrar() {
@@ -97,7 +88,6 @@ public class RegistrarCoordinadorControlador {
     private boolean verificarCoordinadorActivo() {
         boolean registrarCoordinador = true;
         CoordinadorDao coordinadorDao = new CoordinadorDao();
-
         try {
             int coordinadoresActivos = coordinadorDao.existeCoordinadorActivo();
             if (coordinadoresActivos > COORDINADORES_ACTIVOS_PERMITIDOS) {
@@ -132,7 +122,8 @@ public class RegistrarCoordinadorControlador {
         return formularioValido;
     }
 
-    private void verficarCaracteresNoPermitidos(boolean camposFormularioValido, boolean nombreValido, boolean apellidosValido, boolean correoValido, boolean numeroPersonalValido) {
+    private void verficarCaracteresNoPermitidos(boolean camposFormularioValido, boolean nombreValido,
+                                                boolean apellidosValido, boolean correoValido, boolean numeroPersonalValido) {
         if (!camposFormularioValido) {
             mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
                     "campos obligatorios vacios", "POR FAVOR LLENE TODOS LOS CAMPOS");
@@ -147,7 +138,7 @@ public class RegistrarCoordinadorControlador {
                     "correo invalido", "INGRESE UN CORREO ELECTRONICO VALIDO");
         } else if (!numeroPersonalValido) {
             mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
-                    "numero de personal invalido", "EL NUMERO DE PERSONAL SOLO PUEDE NUMEROS");
+                    "numero de personal invalido", "EL NUMERO DE PERSONAL SOLO PUEDE CONTENER LETRAS Y NUMEROS");
         }
     }
 
@@ -156,8 +147,8 @@ public class RegistrarCoordinadorControlador {
         String apellidos = campoTextoApellidos.getText().trim();
         String numeroPersonal = campoTextoNumeroPersonal.getText().trim();
         String correo = campoTextoCorreo.getText().trim();
-        String contrasena = generarContrasena(nombre, numeroPersonal);
-        String contrasenaCifrada = CifracionContrasena.cifrarContrasena(contrasena);
+        contrasenaGenerada = generarContrasena(nombre, numeroPersonal);
+        String contrasenaCifrada = CifracionContrasena.cifrarContrasena(contrasenaGenerada);
 
         Coordinador coordinador = new Coordinador();
         coordinador.setNombre(limitarTexto(nombre, 55));
@@ -176,7 +167,8 @@ public class RegistrarCoordinadorControlador {
             if (filasAfectadas >= FILAS_AFECTADAS_ESPERADAS) {
                 limpiarCamposRegistros();
                 mostrarPanel(etiquetaTituloExito, etiquetaMensajeExito, panelExito,
-                        "Coordinador con estado activo", "COORDINADOR REGISTRADO EXITOSAMENTE.");
+                        "Coordinador registrado exitosamente",
+                        "Contraseña temporal: " + contrasenaGenerada);
             } else {
                 mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
                         "Error al registrar", "NO SE PUDO REGISTRAR EL COORDINADOR. INTENTE DE NUEVO.");
@@ -192,8 +184,8 @@ public class RegistrarCoordinadorControlador {
     }
 
     private String generarContrasena(String nombre, String numeroPersonal) {
-        String contrasenaGenerada = nombre.toLowerCase() + numeroPersonal;
-        return contrasenaGenerada;
+        String contrasena = nombre.toLowerCase() + numeroPersonal;
+        return contrasena;
     }
 
     private String limitarTexto(String texto, int limite) {
