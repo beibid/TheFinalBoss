@@ -38,8 +38,8 @@ public class RegistrarProfesorControlador {
 
     private static final int FILAS_AFECTADAS_ESPERADAS = 1;
     private static final int PROFESORES_ACTIVOS_PERMITIDOS = 2;
-
     private ToggleGroup grupoTurno = new ToggleGroup();
+    private String contrasenaGenerada;
 
     @FXML
     public void initialize() {
@@ -84,7 +84,6 @@ public class RegistrarProfesorControlador {
     private void procesarRegistro() {
         if (camposValidos()) {
             if (verificarProfesorActivo()) {
-
                 Profesor profesor = construirProfesor();
                 guardarProfesor(profesor);
             }
@@ -108,25 +107,45 @@ public class RegistrarProfesorControlador {
         String numeroPersonal = campoTextoNumeroPersonal.getText().trim();
 
         List<String> campos = List.of(nombre, apellidos, correo, numeroPersonal);
-        boolean nombreValido = !camposVacios(campos);
+        boolean camposFormularioValido = !camposVacios(campos);
         boolean turnoValido = grupoTurno.getSelectedToggle() != null;
+        boolean nombreValido = nombre.matches("[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+");
+        boolean apellidosValido = apellidos.matches("[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+");
+        boolean correoValido = correo.matches("^[\\w.-]+@[\\w.-]+\\.[a-zA-Z]{2,}$");
+        boolean numeroPersonalValido = numeroPersonal.matches("[a-zA-Z0-9]+");
 
-        if (!nombreValido) {
+        verificarCaracteresPermitidos(camposFormularioValido, turnoValido, nombreValido, apellidosValido, correoValido, numeroPersonalValido);
+
+        boolean formularioCompletoValidado = camposFormularioValido && turnoValido && nombreValido && apellidosValido && correoValido && numeroPersonalValido;
+        return formularioCompletoValidado;
+    }
+
+    private void verificarCaracteresPermitidos(boolean camposFormularioValido, boolean turnoValido,
+                                               boolean nombreValido, boolean apellidosValido, boolean correoValido, boolean numeroPersonalValido) {
+        if (!camposFormularioValido) {
             mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
                     "Campos obligatorios vacios", "Verifique la informacion e intente de nuevo");
-        }
-        if (!turnoValido) {
+        } else if (!turnoValido) {
             mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
                     "Turno no seleccionado", "Seleccione un turno para el profesor.");
+        } else if (!nombreValido) {
+            mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
+                    "Nombre invalido", "EL NOMBRE SOLO PUEDE CONTENER LETRAS");
+        } else if (!apellidosValido) {
+            mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
+                    "Apellidos invalidos", "LOS APELLIDOS SOLO PUEDEN CONTENER LETRAS");
+        } else if (!correoValido) {
+            mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
+                    "Correo invalido", "INGRESE UN CORREO ELECTRONICO VALIDO");
+        } else if (!numeroPersonalValido) {
+            mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
+                    "Numero de personal invalido", "EL NUMERO DE PERSONAL SOLO PUEDE CONTENER LETRAS Y NUMEROS");
         }
-        boolean formularioCompletoValidado = nombreValido && turnoValido;
-        return formularioCompletoValidado;
     }
 
     private boolean verificarProfesorActivo() {
         boolean registrarProfesor = true;
         ProfesorDao profesorDao = new ProfesorDao();
-
         try {
             int profesoresActivos = profesorDao.existeProfesorActivo();
             if (profesoresActivos > PROFESORES_ACTIVOS_PERMITIDOS) {
@@ -148,8 +167,8 @@ public class RegistrarProfesorControlador {
         String correo = campoTextoCorreo.getText().trim();
         String numeroPersonal = campoTextoNumeroPersonal.getText().trim();
         Turno turno = obtenerTurnoSeleccionado();
-        String contrasena = generarContrasena(nombre, numeroPersonal);
-        String contrasenaCifrada = CifracionContrasena.cifrarContrasena(contrasena);
+        contrasenaGenerada = generarContrasena(nombre, numeroPersonal);
+        String contrasenaCifrada = CifracionContrasena.cifrarContrasena(contrasenaGenerada);
 
         Profesor profesor = new Profesor();
         profesor.setNombre(limitarTexto(nombre, 55));
@@ -181,7 +200,8 @@ public class RegistrarProfesorControlador {
             if (filasAfectadas >= FILAS_AFECTADAS_ESPERADAS) {
                 limpiarCamposRegistros();
                 mostrarPanel(etiquetaTituloExito, etiquetaMensajeExito, panelExito,
-                        "Profesor en estado activo", "El profesor fue registrado exitosamente");
+                        "Profesor registrado exitosamente",
+                        "Contraseña temporal: " + contrasenaGenerada);
             } else {
                 mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
                         "Error al registrar", "No fue posible registrar al profesor, intente mas tarde");
@@ -197,8 +217,8 @@ public class RegistrarProfesorControlador {
     }
 
     private String generarContrasena(String nombre, String numeroPersonal) {
-        String contrasenaGenerada = nombre.toLowerCase() + numeroPersonal;
-        return contrasenaGenerada;
+        String contrasena = nombre.toLowerCase() + numeroPersonal;
+        return contrasena;
     }
 
     private String limitarTexto(String texto, int limite) {

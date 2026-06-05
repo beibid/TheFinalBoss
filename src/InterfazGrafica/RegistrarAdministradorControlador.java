@@ -22,6 +22,7 @@ public class RegistrarAdministradorControlador {
     @FXML private TextField campoTextoNombres;
     @FXML private TextField campoTextoApellidos;
     @FXML private TextField campoTextoNumeroPersonal;
+    @FXML private TextField campoTextoCorreo;
     @FXML private VBox panelError;
     @FXML private Label etiquetaTituloError;
     @FXML private Label etiquetaMensajeError;
@@ -84,16 +85,41 @@ public class RegistrarAdministradorControlador {
     private boolean camposValidos() {
         String nombre = campoTextoNombres.getText().trim();
         String apellidos = campoTextoApellidos.getText().trim();
+        String correo = campoTextoCorreo.getText().trim();
         String numeroPersonal = campoTextoNumeroPersonal.getText().trim();
 
         List<String> campos = List.of(nombre, apellidos, numeroPersonal);
         boolean camposFormularioValido = !camposVacios(campos);
+        boolean nombreValido = nombre.matches("[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+");
+        boolean apellidosValido = apellidos.matches("[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+");
+        boolean correoValido = correo.matches("^[\\w.-]+@[\\w.-]+\\.[a-zA-Z]{2,}$");
+        boolean numeroPersonalValido = numeroPersonal.matches("[a-zA-Z0-9]+");
 
+        verificarCaracteresPermitidos(camposFormularioValido, nombreValido, apellidosValido, correoValido, numeroPersonalValido);
+
+        boolean formularioValido = camposFormularioValido && nombreValido && apellidosValido && correoValido && numeroPersonalValido;
+        return formularioValido;
+
+    }
+
+    private void verificarCaracteresPermitidos(boolean camposFormularioValido, boolean nombreValido, boolean apellidosValido,boolean correoValido, boolean numeroPersonalValido) {
         if (!camposFormularioValido) {
             mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
-                    "Campos obligatorios vacios", "POR FAVOR LLENE TODOS LOS CAMPOS");
+                    "campos obligatorios vacios", "POR FAVOR LLENE TODOS LOS CAMPOS");
+        } else if (!nombreValido) {
+            mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
+                    "nombre invalido", "EL NOMBRE SOLO PUEDE TENER LETRAS");
+        } else if (!apellidosValido) {
+            mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
+                    "apellidos invalidos", "LOS APELLIDOS SOLO PUEDEN TENER LETRAS");
+        } else if (!correoValido) {
+            mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
+                    "correo invalido", "POR FAVOR INGRESE UN CORREO VALIDO");
+
+        } else if (!numeroPersonalValido) {
+            mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
+                    "numero de personal invalido", "EL NUMERO DE PERSONAL SOLO PUEDE TENER NUMEROS");
         }
-        return camposFormularioValido;
     }
 
     private Administrador construirAdministrador() {

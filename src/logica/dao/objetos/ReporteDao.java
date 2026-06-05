@@ -175,4 +175,71 @@ public class ReporteDao implements ReporteDaoInterfaz {
         }
         return reportes;
     }
+
+    public int contarReportesEvaluados(String matricula, String tipoReporte) throws MensajeriaExcepcion {
+        String consulta = "SELECT COUNT(*) FROM reporte " +
+                "WHERE matricula = ? AND tipoReporte = ? AND estado = 'Evaluado'";
+        Connection conexionBaseDeDatos = null;
+        PreparedStatement sentencia = null;
+        int totalReportes = 0;
+        try {
+            conexionBaseDeDatos = ConexionBaseDeDatos.getInstance().conectar();
+            sentencia = conexionBaseDeDatos.prepareStatement(consulta);
+            sentencia.setString(1, matricula);
+            sentencia.setString(2, tipoReporte);
+            ResultSet resultado = sentencia.executeQuery();
+            if (resultado.next()) {
+                totalReportes = resultado.getInt(1);
+            }
+        } catch (SQLException excepcionSql) {
+            LOGGER.log(Level.SEVERE, "Error al contar reportes evaluados", excepcionSql);
+            throw new MensajeriaExcepcion("Error al contar reportes evaluados", excepcionSql);
+        } finally {
+            try {
+                if (sentencia != null) {
+                    sentencia.close();
+                }
+                if (conexionBaseDeDatos != null) {
+                    conexionBaseDeDatos.close();
+                }
+            } catch (SQLException excepcionSql) {
+                LOGGER.log(Level.SEVERE, "Error al cerrar la conexion", excepcionSql);
+            }
+        }
+        return totalReportes;
+    }
+
+    public boolean existeReporteMensualEnMesActual(String matricula) throws MensajeriaExcepcion {
+        String consulta = "SELECT COUNT(*) FROM reporte " +
+                "WHERE matricula = ? AND tipoReporte = 'Mensual' " +
+                "AND MONTH(fechaGeneracion) = MONTH(NOW()) " +
+                "AND YEAR(fechaGeneracion) = YEAR(NOW())";
+        Connection conexionBaseDeDatos = null;
+        PreparedStatement sentencia = null;
+        boolean existeReporte = false;
+        try {
+            conexionBaseDeDatos = ConexionBaseDeDatos.getInstance().conectar();
+            sentencia = conexionBaseDeDatos.prepareStatement(consulta);
+            sentencia.setString(1, matricula);
+            ResultSet resultado = sentencia.executeQuery();
+            if (resultado.next()) {
+                existeReporte = resultado.getInt(1) > 0;
+            }
+        } catch (SQLException excepcionSql) {
+            LOGGER.log(Level.SEVERE, "Error al verificar reporte mensual", excepcionSql);
+            throw new MensajeriaExcepcion("Error al verificar reporte mensual", excepcionSql);
+        } finally {
+            try {
+                if (sentencia != null) {
+                    sentencia.close();
+                }
+                if (conexionBaseDeDatos != null) {
+                    conexionBaseDeDatos.close();
+                }
+            } catch (SQLException excepcionSql) {
+                LOGGER.log(Level.SEVERE, "Error al cerrar la conexion", excepcionSql);
+            }
+        }
+        return existeReporte;
+    }
 }

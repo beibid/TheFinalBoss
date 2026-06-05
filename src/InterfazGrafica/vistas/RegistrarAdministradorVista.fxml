@@ -47,6 +47,11 @@
                 <Label style="-fx-font-size: 13;" text="Apellidos" />
                 <TextField fx:id="campoTextoApellidos" prefHeight="30.0" prefWidth="450.0" promptText="Ej. Bonilla Pérez" />
 
+                <Label style="-fx-font-size: 13;" text="Correo">
+                    <VBox.margin><Insets top="10.0" /></VBox.margin>
+                </Label>
+                <TextField fx:id="campoTextoCorreo" prefHeight="30.0" prefWidth="450.0" promptText="Ej. juan@uv.mx" />
+
                 <Label style="-fx-font-size: 13;" text="Número de personal" />
                 <TextField fx:id="campoTextoNumeroPersonal" prefHeight="30.0" prefWidth="450.0" promptText="Ej. 2232456" />
 

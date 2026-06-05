@@ -1,14 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
 
 <AnchorPane prefHeight="535.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="InterfazGrafica.RegistrarPracticanteControlador">
     <children>
 
-
-        <VBox layoutX="0.0" layoutY="0.0" prefHeight="635.0" prefWidth="180.0" style="-fx-background-color: #2ecc71; -fx-padding: 15;">
+        <VBox layoutX="0.0" layoutY="0.0" prefHeight="535.0" prefWidth="180.0" style="-fx-background-color: #2ecc71; -fx-padding: 15;">
             <children>
                 <Label style="-fx-text-fill: white; -fx-font-size: 16; -fx-font-weight: bold;" text="Registro" />
                 <Label style="-fx-text-fill: black; -fx-font-size: 12;" text="Practicante">
@@ -17,63 +23,63 @@
             </children>
         </VBox>
 
+        <ScrollPane fitToWidth="true" layoutX="180.0" layoutY="0.0" prefHeight="535.0" prefWidth="520.0">
+            <content>
+                <VBox prefWidth="520.0" spacing="10.0" style="-fx-padding: 30;">
+                    <children>
 
-        <VBox layoutX="180.0" layoutY="0.0" prefHeight="500.0" prefWidth="520.0" spacing="10.0" style="-fx-padding: 30;">
-            <children>
+                        <Label style="-fx-font-size: 22; -fx-font-weight: bold;" text="Registro de Practicante" />
 
-                <Label style="-fx-font-size: 22; -fx-font-weight: bold;" text="Registro de Practicante" />
+                        <VBox fx:id="panelError" managed="false" prefWidth="450.0" spacing="4.0" style="-fx-border-color: #8B0000; -fx-border-width: 2; -fx-background-color: #f5f5dc; -fx-padding: 10;" visible="false">
+                            <HBox alignment="CENTER_LEFT" spacing="8">
+                                <Label style="-fx-text-fill: #8B0000; -fx-font-size: 14; -fx-font-weight: bold;" text="✖" />
+                                <Label fx:id="etiquetaTituloError" style="-fx-font-weight: bold; -fx-text-fill: #8B0000;" text="" />
+                            </HBox>
+                            <Label fx:id="etiquetaMensajeError" style="-fx-text-fill: #8B0000; -fx-font-size: 11;" text="" />
+                        </VBox>
 
+                        <VBox fx:id="panelExito" managed="false" prefWidth="450.0" spacing="4.0" style="-fx-border-color: #2d6a2d; -fx-border-width: 2; -fx-background-color: #f0f7f0; -fx-padding: 10;" visible="false">
+                            <HBox alignment="CENTER_LEFT" spacing="8">
+                                <Label style="-fx-text-fill: #2d6a2d; -fx-font-size: 14; -fx-font-weight: bold;" text="✔" />
+                                <Label fx:id="etiquetaTituloExito" style="-fx-font-weight: bold; -fx-text-fill: #2d6a2d;" text="" />
+                            </HBox>
+                            <Label fx:id="etiquetaMensajeExito" style="-fx-text-fill: #2d6a2d; -fx-font-size: 11;" text="" />
+                        </VBox>
 
-                <VBox fx:id="panelError" managed="false" prefWidth="450.0" spacing="4.0" style="-fx-border-color: #8B0000; -fx-border-width: 2; -fx-background-color: #f5f5dc; -fx-padding: 10;" visible="false">
-                    <HBox alignment="CENTER_LEFT" spacing="8">
-                        <Label style="-fx-text-fill: #8B0000; -fx-font-size: 14; -fx-font-weight: bold;" text="✖" />
-                        <Label fx:id="etiquetaTituloError" style="-fx-font-weight: bold; -fx-text-fill: #8B0000;" text="" />
-                    </HBox>
-                    <Label fx:id="etiquetaMensajeError" style="-fx-text-fill: #8B0000; -fx-font-size: 11;" text="" />
+                        <Label style="-fx-font-size: 13;" text="Matricula" />
+                        <TextField fx:id="campoTextoMatricula" prefHeight="30.0" prefWidth="450.0" promptText="Ej. 2232456" />
+
+                        <Label style="-fx-font-size: 13;" text="Nombre(s)">
+                            <VBox.margin><Insets top="10.0" /></VBox.margin>
+                        </Label>
+                        <TextField fx:id="campoTextoNombres" prefHeight="30.0" prefWidth="450.0" promptText="Ej. Juan Carlos" />
+
+                        <Label style="-fx-font-size: 13;" text="Apellidos" />
+                        <TextField fx:id="campoTextoApellidos" prefHeight="30.0" prefWidth="450.0" promptText="Ej. Bonilla Pérez" />
+
+                        <Label style="-fx-font-size: 13;" text="Correo" />
+                        <TextField fx:id="campoTextoCorreo" prefHeight="30.0" prefWidth="450.0" promptText="Ej. daviCin@uv.mx" />
+
+                        <Label text="Lengua Indigena (En caso de hablar alguna)" />
+                        <TextField fx:id="campoTextoLenguaIndigena" promptText="Ej. Nahuatl" />
+
+                        <Label text="Genero" />
+                        <RadioButton fx:id="radioBotonMasculino" mnemonicParsing="false" text="Masculino" />
+                        <RadioButton fx:id="radioBotonFemenino" mnemonicParsing="false" text="Femenino" />
+
+                        <Label text="Profesor asignado" />
+                        <ComboBox fx:id="comboBoxProfesor" maxWidth="Infinity" promptText="Seleccione un profesor" />
+
+                        <HBox spacing="15.0">
+                            <VBox.margin><Insets top="20.0" /></VBox.margin>
+                            <Button fx:id="botonRegistrar" onAction="#botonRegistrar" prefHeight="35.0" prefWidth="140.0" style="-fx-background-color: #27ae60; -fx-text-fill: white; -fx-background-radius: 6;" text="Registrar" />
+                            <Button fx:id="botonCancelarRegistro" onAction="#botonCancelar" prefHeight="35.0" prefWidth="140.0" style="-fx-background-color: #c0392b; -fx-text-fill: white; -fx-background-radius: 6;" text="Cancelar" />
+                        </HBox>
+
+                    </children>
                 </VBox>
-
-
-                <VBox fx:id="panelExito" managed="false" prefWidth="450.0" spacing="4.0" style="-fx-border-color: #2d6a2d; -fx-border-width: 2; -fx-background-color: #f0f7f0; -fx-padding: 10;" visible="false">
-                    <HBox alignment="CENTER_LEFT" spacing="8">
-                        <Label style="-fx-text-fill: #2d6a2d; -fx-font-size: 14; -fx-font-weight: bold;" text="✔" />
-                        <Label fx:id="etiquetaTituloExito" style="-fx-font-weight: bold; -fx-text-fill: #2d6a2d;" text="" />
-                    </HBox>
-                    <Label fx:id="etiquetaMensajeExito" style="-fx-text-fill: #2d6a2d; -fx-font-size: 11;" text="" />
-                </VBox>
-
-                <Label style="-fx-font-size: 13;" text="Matricula" />
-                <TextField fx:id="campoTextoMatricula" prefHeight="30.0" prefWidth="450.0" promptText="Ej. 2232456" />
-
-
-                <Label style="-fx-font-size: 13;" text="Nombre(s)">
-                    <VBox.margin><Insets top="10.0" /></VBox.margin>
-                </Label>
-                <TextField fx:id="campoTextoNombres" prefHeight="30.0" prefWidth="450.0" promptText="Ej. Juan Carlos" />
-
-                <Label style="-fx-font-size: 13;" text="Apellidos" />
-                <TextField fx:id="campoTextoApellidos" prefHeight="30.0" prefWidth="450.0" promptText="Ej. Bonilla Pérez" />
-
-                <Label style="-fx-font-size: 13;" text="Correo" />
-                <TextField fx:id="campoTextoCorreo" prefHeight="30.0" prefWidth="450.0" promptText="Ej. daviCin@uv.mx" />
-
-            <Label text="Lengua Indigena (En caso de hablar alguna)" />
-            <TextField fx:id="campoTextoLenguaIndigena" promptText="Ej. Nahuatl" />
-            <Label text="Genero " />
-            <RadioButton fx:id="radioBotonMasculino" mnemonicParsing="false" text="Masculino" />
-            <RadioButton fx:id="radioBotonFemenino" mnemonicParsing="false" text="Femenino" />
-
-                <ComboBox fx:id="comboBoxProfesor" maxWidth="Infinity" promptText="Seleccione un profesor" />
-
-
-                <HBox spacing="15.0">
-                    <VBox.margin><Insets top="45.0" /></VBox.margin>
-                    <Button fx:id="botonRegistrar" onAction="#botonRegistrar" prefHeight="35.0" prefWidth="140.0" style="-fx-background-color: #27ae60; -fx-text-fill: white; -fx-background-radius: 6;" text="Registrar" />
-                    <Button fx:id="botonCancelarRegistro" onAction="#botonCancelar" prefHeight="35.0" prefWidth="140.0" style="-fx-background-color: #c0392b; -fx-text-fill: white; -fx-background-radius: 6;" text="Cancelar" />
-                </HBox>
-
-            </children>
-        </VBox>
-
+            </content>
+        </ScrollPane>
 
         <Button fx:id="btnRegresar" layoutX="610.0" layoutY="10.0" onAction="#botonRegresar" prefHeight="28.0" prefWidth="75.0" style="-fx-background-color: #7f8c8d; -fx-text-fill: white; -fx-background-radius: 6;" text="Regresar" />
 

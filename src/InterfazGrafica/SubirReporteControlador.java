@@ -23,6 +23,7 @@ import java.nio.file.StandardCopyOption;
 public class SubirReporteControlador {
 
     private static final int FILAS_AFECTADAS_ESPERADAS = 1;
+    private static final int REPORTES_MENSUALES_PARA_PARCIAL = 3;
 
     @FXML private ComboBox<TipoReporte> comboBoxTipoReporte;
     @FXML private TextField campoDescripcion;
@@ -37,9 +38,11 @@ public class SubirReporteControlador {
 
     private static final String CARPETA_UPLOADS = "uploads/";
     private File archivoSeleccionado = null;
+    private String matricula;
 
     @FXML
     public void initialize() {
+        matricula = SesionUsuario.getInstance().getUsuarioActivo().getMatricula();
         comboBoxTipoReporte.getItems().addAll(TipoReporte.values());
     }
 
@@ -66,9 +69,17 @@ public class SubirReporteControlador {
         if (!validarFormulario()) {
             return;
         }
+        if (comboBoxTipoReporte.getValue() == TipoReporte.Mensual) {
+            if (verificarReporteMensualMesActual()) {
+                return;
+            }
+        } else if (comboBoxTipoReporte.getValue() == TipoReporte.Parcial) {
+            if (!verificarPuedeGenerarParcial()) {
+                return;
+            }
+        }
         try {
             String rutaRelativa = copiarPDF(archivoSeleccionado);
-            String matricula = SesionUsuario.getInstance().getUsuarioActivo().getMatricula();
             Reporte reporte = new Reporte(
                     comboBoxTipoReporte.getValue(),
                     campoDescripcion.getText().trim(),
@@ -102,6 +113,44 @@ public class SubirReporteControlador {
             formularioValido = false;
         }
         return formularioValido;
+    }
+
+    private boolean verificarReporteMensualMesActual() {
+        boolean yaExiste = false;
+        ReporteDao reporteDao = new ReporteDao();
+        try {
+            if (reporteDao.existeReporteMensualEnMesActual(matricula)) {
+                mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
+                        "Reporte duplicado", "YA ENTREGASTE UN REPORTE MENSUAL ESTE MES");
+                yaExiste = true;
+            }
+        } catch (MensajeriaExcepcion excepcion) {
+            mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
+                    "Error inesperado", excepcion.getMessage().toUpperCase());
+            yaExiste = true;
+        }
+        return yaExiste;
+    }
+
+    private boolean verificarPuedeGenerarParcial() {
+        boolean puedeGenerar = false;
+        ReporteDao reporteDao = new ReporteDao();
+        try {
+            int mensualesEvaluados = reporteDao.contarReportesEvaluados(matricula, "Mensual");
+            int parcialesEvaluados = reporteDao.contarReportesEvaluados(matricula, "Parcial");
+            if (mensualesEvaluados >= REPORTES_MENSUALES_PARA_PARCIAL && parcialesEvaluados == 0) {
+                puedeGenerar = true;
+            } else if (mensualesEvaluados >= REPORTES_MENSUALES_PARA_PARCIAL * 2 && parcialesEvaluados == 1) {
+                puedeGenerar = true;
+            } else {
+                mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
+                        "Reportes incompletos", "NO CUMPLES CON LOS REQUISITOS PARA GENERAR EL REPORTE PARCIAL");
+            }
+        } catch (MensajeriaExcepcion excepcion) {
+            mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
+                    "Error inesperado", excepcion.getMessage().toUpperCase());
+        }
+        return puedeGenerar;
     }
 
     private String copiarPDF(File archivo) throws IOException {

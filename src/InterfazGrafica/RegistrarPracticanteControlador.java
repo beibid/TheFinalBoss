@@ -37,12 +37,13 @@ public class RegistrarPracticanteControlador {
 
     private static final int FILAS_AFECTADAS_ESPERADAS = 1;
     private ToggleGroup grupoGenero = new ToggleGroup();
+    private String contrasenaGenerada;
 
     @FXML
     public void initialize() {
         radioBotonMasculino.setToggleGroup(grupoGenero);
         radioBotonFemenino.setToggleGroup(grupoGenero);
-
+        cargarProfesoresActivos();
     }
 
     @FXML
@@ -95,11 +96,11 @@ public class RegistrarPracticanteControlador {
         return hayCamposVacios;
     }
 
-    private Genero obtenerGeneroPracticante () {
+    private Genero obtenerGeneroPracticante() {
         Genero generoSeleccionado = null;
-        if (radioBotonMasculino.isSelected()){
+        if (radioBotonMasculino.isSelected()) {
             generoSeleccionado = Genero.Masculino;
-        } else if (radioBotonFemenino.isSelected()){
+        } else if (radioBotonFemenino.isSelected()) {
             generoSeleccionado = Genero.Femenino;
         }
         return generoSeleccionado;
@@ -115,23 +116,40 @@ public class RegistrarPracticanteControlador {
         boolean camposFormularioValido = !camposVacios(campos);
         boolean generoValido = grupoGenero.getSelectedToggle() != null;
         boolean profesorValido = comboBoxProfesor.getValue() != null;
+        boolean nombreValido = nombre.matches("[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+");
+        boolean apellidosValidos = apellidos.matches("[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+");
+        boolean correoValido = correo.matches("^[\\w.-]+@[\\w.-]+\\.[a-zA-Z]{2,}$");
+        boolean matriculaValida = matricula.matches("[a-zA-Z0-9]+");
 
+        verificarCaracteresPermitidos(camposFormularioValido, nombreValido, apellidosValidos, correoValido, matriculaValida, generoValido, profesorValido);
+
+        boolean formularioValido = camposFormularioValido && generoValido && profesorValido && nombreValido && apellidosValidos && correoValido && matriculaValida;
+        return formularioValido;
+    }
+
+    private void verificarCaracteresPermitidos(boolean camposFormularioValido, boolean nombreValido, boolean apellidosValido, boolean correoValido, boolean matriculaValida, boolean generoValido, boolean profesorValido) {
         if (!camposFormularioValido) {
             mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
-                    "Campos obligatorios vacios", "POR FAVOR LLENE TODOS LOS CAMPOS");
-        }
-        if (!generoValido) {
-            mostrarPanel(etiquetaTituloError,etiquetaMensajeError, panelError,
-                    "Genero no seleccionado", "Seleccione un genero para el practicante");
-        }
-        if (!profesorValido) {
+                    "campos obligatorios vacios", "POR FAVOR LLENE TODOS LOS CAMPOS");
+        } else if (!generoValido) {
             mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
-                    "Profesor no seleccionado", "Seleccione un profesor para asignarlo al practicante");
+                    "genero no seleccionado", "SELECCIONE UN GENERO PARA EL PRACTICANTE");
+        } else if (!profesorValido) {
+            mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
+                    "profesor no seleccionado", "ASIGNE UN PROFESOR AL PRACTICANTE");
+        } else if (!nombreValido) {
+            mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
+                    "nombre invalido", "EL NOMBRE SOLO PUEDE TENER LETRAS");
+        } else if (!apellidosValido) {
+            mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
+                    "apellidos invalidos", "LOS APELLIDOS SOLO PUEDEN TENER LETRAS");
+        } else if (!correoValido) {
+            mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
+                    "correo invalido", "INGRESE UN CORREO VALIDO");
+        } else if (!matriculaValida) {
+            mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
+                    "matricula invalida", "INGRESE UNA MATRICULA VALIDA");
         }
-
-        boolean formularioCompletoValido = camposFormularioValido && generoValido && profesorValido;
-
-        return formularioCompletoValido;
     }
 
     private Practicante construirPracticante() {
@@ -141,8 +159,8 @@ public class RegistrarPracticanteControlador {
         String correo = campoTextoCorreo.getText().trim();
         String lenguaIndigena = campoTextoLenguaIndigena.getText().trim();
         Genero genero = obtenerGeneroPracticante();
-        String contrasena = generarContrasena(nombre, matricula);
-        String contrasenaCifrada = CifracionContrasena.cifrarContrasena(contrasena);
+        contrasenaGenerada = generarContrasena(nombre, matricula);
+        String contrasenaCifrada = CifracionContrasena.cifrarContrasena(contrasenaGenerada);
         Profesor profesorSeleccionado = comboBoxProfesor.getValue();
 
         Practicante practicante = new Practicante();
@@ -166,11 +184,11 @@ public class RegistrarPracticanteControlador {
             comboBoxProfesor.setConverter(new StringConverter<Profesor>() {
                 @Override
                 public String toString(Profesor profesor) {
-                    String profesorActivo = null;
+                    String nombreCompleto = null;
                     if (profesor != null) {
-                        profesorActivo = profesor.getNombre() + " " + profesor.getApellidos();
+                        nombreCompleto = profesor.getNombre() + " " + profesor.getApellidos();
                     }
-                    return profesorActivo;
+                    return nombreCompleto;
                 }
                 @Override
                 public Profesor fromString(String texto) {
@@ -190,14 +208,15 @@ public class RegistrarPracticanteControlador {
             if (filasAfectadas >= FILAS_AFECTADAS_ESPERADAS) {
                 limpiarCamposRegistrados();
                 mostrarPanel(etiquetaTituloExito, etiquetaMensajeExito, panelExito,
-                        "Practicante en estado activo", "El practicante fue registrado exitosamente");
+                        "Practicante registrado exitosamente",
+                        "Contraseña temporal: " + contrasenaGenerada);
             } else {
                 mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
                         "Error al registrar", "No fue posible registrar al practicante, intente mas tarde");
             }
         } catch (RegistroDuplicadoExcepcion excepcion) {
             mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
-                    "Matricula repetida", "La matricula ya existe en el sistema, verifique la informacion");
+                    "Dato repetido", excepcion.getMessage().toUpperCase());
         } catch (UsuariosExcepcion excepcion) {
             mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
                     "Error inesperado", excepcion.getMessage().toUpperCase());
@@ -205,8 +224,8 @@ public class RegistrarPracticanteControlador {
     }
 
     private String generarContrasena(String nombre, String matricula) {
-        String contrasenaGenerada = nombre.toLowerCase() + matricula;
-        return contrasenaGenerada;
+        String contrasena = nombre.toLowerCase() + matricula;
+        return contrasena;
     }
 
     private String limitarTexto(String texto, int limite) {

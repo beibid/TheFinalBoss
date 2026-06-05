@@ -19,16 +19,26 @@ import java.util.List;
 
 public class RegistrarCoordinadorControlador {
 
-    @FXML private TextField campoTextoNombres;
-    @FXML private TextField campoTextoApellidos;
-    @FXML private TextField campoTextoCorreo;
-    @FXML private TextField campoTextoNumeroPersonal;
-    @FXML private VBox panelError;
-    @FXML private Label etiquetaTituloError;
-    @FXML private Label etiquetaMensajeError;
-    @FXML private VBox panelExito;
-    @FXML private Label etiquetaTituloExito;
-    @FXML private Label etiquetaMensajeExito;
+    @FXML
+    private TextField campoTextoNombres;
+    @FXML
+    private TextField campoTextoApellidos;
+    @FXML
+    private TextField campoTextoCorreo;
+    @FXML
+    private TextField campoTextoNumeroPersonal;
+    @FXML
+    private VBox panelError;
+    @FXML
+    private Label etiquetaTituloError;
+    @FXML
+    private Label etiquetaMensajeError;
+    @FXML
+    private VBox panelExito;
+    @FXML
+    private Label etiquetaTituloExito;
+    @FXML
+    private Label etiquetaMensajeExito;
 
     private static final int FILAS_AFECTADAS_ESPERADAS = 1;
     private static final int COORDINADORES_ACTIVOS_PERMITIDOS = 0;
@@ -111,12 +121,34 @@ public class RegistrarCoordinadorControlador {
 
         List<String> campos = List.of(nombre, apellidos, correo, numeroPersonal);
         boolean camposFormularioValido = !camposVacios(campos);
+        boolean nombreValido = nombre.matches("[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+");
+        boolean apellidosValido = apellidos.matches("[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+");
+        boolean correoValido = correo.matches("^[\\w.-]+@[\\w.-]+\\.[a-zA-Z]{2,}$");
+        boolean numeroDePersonalValido = numeroPersonal.matches("[a-zA-Z0-9]+");
 
+        verficarCaracteresNoPermitidos(camposFormularioValido, nombreValido, apellidosValido, correoValido, numeroDePersonalValido);
+
+        boolean formularioValido = camposFormularioValido && nombreValido && apellidosValido && correoValido && numeroDePersonalValido;
+        return formularioValido;
+    }
+
+    private void verficarCaracteresNoPermitidos(boolean camposFormularioValido, boolean nombreValido, boolean apellidosValido, boolean correoValido, boolean numeroPersonalValido) {
         if (!camposFormularioValido) {
             mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
-                    "Campos obligatorios vacios", "POR FAVOR LLENE TODOS LOS CAMPOS");
+                    "campos obligatorios vacios", "POR FAVOR LLENE TODOS LOS CAMPOS");
+        } else if (!nombreValido) {
+            mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
+                    "nombre invalido", "EL NOMBRE SOLO PUEDE CONTENER LETRAS");
+        } else if (!apellidosValido) {
+            mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
+                    "apellidos invalidos", "LOS APELLIDOS SOLO PUEDEN CONTENER LETRAS");
+        } else if (!correoValido) {
+            mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
+                    "correo invalido", "INGRESE UN CORREO ELECTRONICO VALIDO");
+        } else if (!numeroPersonalValido) {
+            mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
+                    "numero de personal invalido", "EL NUMERO DE PERSONAL SOLO PUEDE NUMEROS");
         }
-        return camposFormularioValido;
     }
 
     private Coordinador construirCoordinador() {

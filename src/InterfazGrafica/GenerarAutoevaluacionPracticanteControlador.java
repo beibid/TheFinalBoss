@@ -11,6 +11,7 @@ import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import logica.dao.objetos.ReporteDao;
 import logica.dominio.AutoevaluacionPracticante;
 import logica.dao.excepciones.MensajeriaExcepcion;
 import logica.dominio.SesionUsuario;
@@ -23,6 +24,8 @@ public class GenerarAutoevaluacionPracticanteControlador {
 
     private static final Logger LOGGER = Logger.getLogger(GenerarAutoevaluacionPracticanteControlador.class.getName());
     private static final int FILAS_AFECTADAS_ESPERADAS = 1;
+    private static final int MENSUALES_REQUERIDOS = 6;
+    private static final int PARCIALES_REQUERIDOS = 2;
 
     @FXML private Label etiquetaMatricula;
     @FXML private Label etiquetaOrganizacion;
@@ -71,11 +74,13 @@ public class GenerarAutoevaluacionPracticanteControlador {
     private void botonGenerarPDF() {
         ocultarPanel(panelError);
         ocultarPanel(panelExito);
-        if (!respuestasValidas()) {
-            mostrarError("Respuestas incompletas",
-                    "Debes responder todas las afirmaciones antes de generar el PDF.");
-        } else if (confirmarAccion("¿Desea generar el PDF de la autoevaluación?")) {
-            generarPdf();
+        if (verificarReportesCompletos()) {
+            if (!respuestasValidas()) {
+                mostrarError("Respuestas incompletas",
+                        "Debes responder todas las afirmaciones antes de generar el PDF.");
+            } else if (confirmarAccion("¿Desea generar el PDF de la autoevaluación?")) {
+                generarPdf();
+            }
         }
     }
 
@@ -151,10 +156,12 @@ public class GenerarAutoevaluacionPracticanteControlador {
     }
 
     private void procesarRegistro() {
-        if (!respuestasValidas()) {
-            mostrarError("Respuestas incompletas", "Debes responder todo antes de guardar.");
-        } else {
-            guardarAutoevaluacion(construirAutoevaluacion());
+        if (verificarReportesCompletos()) {
+            if (!respuestasValidas()) {
+                mostrarError("Respuestas incompletas", "Debes responder todo antes de guardar.");
+            } else {
+                guardarAutoevaluacion(construirAutoevaluacion());
+            }
         }
     }
 
@@ -220,6 +227,24 @@ public class GenerarAutoevaluacionPracticanteControlador {
             LOGGER.log(Level.SEVERE, "Error al guardar autoevaluación", excepcion);
             mostrarError("Error inesperado", excepcion.getMessage().toUpperCase());
         }
+    }
+
+    private boolean verificarReportesCompletos() {
+        boolean puedeGenerar = false;
+        ReporteDao reporteDao = new ReporteDao();
+        try {
+            int mensualesEvaluados = reporteDao.contarReportesEvaluados(matricula, "Mensual");
+            int parcialesEvaluados = reporteDao.contarReportesEvaluados(matricula, "Parcial");
+            if (mensualesEvaluados >= MENSUALES_REQUERIDOS && parcialesEvaluados >= PARCIALES_REQUERIDOS) {
+                puedeGenerar = true;
+            } else {
+                mostrarError("Reportes incompletos",
+                        "DEBES TENER 6 REPORTES MENSUALES Y 2 PARCIALES EVALUADOS PARA GENERAR LA AUTOEVALUACION");
+            }
+        } catch (MensajeriaExcepcion excepcion) {
+            mostrarError("Error inesperado", excepcion.getMessage().toUpperCase());
+        }
+        return puedeGenerar;
     }
 
     private void limpiarRespuestas() {

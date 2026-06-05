@@ -1,5 +1,6 @@
 package logica.dao.objetos;
 
+
 import acceso.bd.ConexionBaseDeDatos;
 import logica.dao.excepciones.RegistroDuplicadoExcepcion;
 import logica.dao.excepciones.UsuariosExcepcion;
@@ -18,6 +19,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+
 public class PracticanteDao implements PracticanteDaoInterfaz {
 
     private static final Logger LOGGER = Logger.getLogger(PracticanteDao.class.getName());
@@ -25,7 +27,7 @@ public class PracticanteDao implements PracticanteDaoInterfaz {
     @Override
     public int insertarPracticante(Practicante practicante) throws UsuariosExcepcion {
         String consultaUsuario = "INSERT INTO usuario (nombre, apellidos, contrasena, estado, rol, correo) VALUES (?, ?, ?, ?, 'Practicante', ?)";
-        String consultaPracticante = "INSERT INTO practicante (matricula, lenguaIndigena, genero, idUsuario) VALUES (?, ?, ?, ?)";
+        String consultaPracticante = "INSERT INTO practicante (matricula, lenguaIndigena, genero, idUsuario, idProfesor) VALUES (?, ?, ?, ?, ?)";
         Connection conexionBaseDeDatos = null;
         PreparedStatement insercionUsuario = null;
         PreparedStatement insercionPracticante = null;
@@ -52,6 +54,7 @@ public class PracticanteDao implements PracticanteDaoInterfaz {
             insercionPracticante.setString(2, practicante.getLenguaIndigena());
             insercionPracticante.setString(3, practicante.getGenero().toString());
             insercionPracticante.setInt(4, idUsuarioGenerado);
+            insercionPracticante.setInt(5, practicante.getNumeroPersonalProfesor());
             filasAfectadas = insercionPracticante.executeUpdate();
             LOGGER.info("Practicante insertado correctamente con ID de usuario: " + idUsuarioGenerado);
         } catch (SQLException excepcionSql) {
