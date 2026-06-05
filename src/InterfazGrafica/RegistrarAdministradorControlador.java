@@ -9,6 +9,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import logica.CifracionContrasena;
 import logica.dao.excepciones.RegistroDuplicadoExcepcion;
 import logica.dao.excepciones.UsuariosExcepcion;
 import logica.dao.objetos.AdministradorDao;
@@ -100,12 +101,13 @@ public class RegistrarAdministradorControlador {
         String apellidos = campoTextoApellidos.getText().trim();
         String numeroPersonal = campoTextoNumeroPersonal.getText().trim();
         String contrasena = generarContrasena(nombre, numeroPersonal);
+        String contrasenaCifrada = CifracionContrasena.cifrarContrasena(contrasena);
 
         Administrador administrador = new Administrador();
         administrador.setNombre(limitarTexto(nombre, 55));
         administrador.setApellidos(limitarTexto(apellidos, 55));
         administrador.setNumeroDePersonalAdministrador(limitarTexto(numeroPersonal, 20));
-        administrador.setContrasena(limitarTexto(contrasena, 12));
+        administrador.setContrasena(contrasenaCifrada);
         administrador.setEstado(Estado.Activo);
         return administrador;
     }
@@ -133,7 +135,8 @@ public class RegistrarAdministradorControlador {
     }
 
     private String generarContrasena(String nombre, String numeroPersonal) {
-        return nombre.toLowerCase() + numeroPersonal;
+        String contrasenaGenerada = nombre.toLowerCase() + numeroPersonal;
+        return contrasenaGenerada;
     }
 
     private String limitarTexto(String texto, int limite) {

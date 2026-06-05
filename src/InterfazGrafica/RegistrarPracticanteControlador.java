@@ -3,18 +3,17 @@ package InterfazGrafica;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.Label;
-import javafx.scene.control.RadioButton;
-import javafx.scene.control.TextField;
-import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import javafx.util.StringConverter;
+import logica.CifracionContrasena;
 import logica.dao.excepciones.RegistroDuplicadoExcepcion;
 import logica.dao.excepciones.UsuariosExcepcion;
 import logica.dao.objetos.PracticanteDao;
+import logica.dao.objetos.ProfesorDao;
 import logica.dominio.Practicante;
+import logica.dominio.Profesor;
 import logica.dominio.enums.Estado;
 import logica.dominio.enums.Genero;
 import java.util.List;
@@ -28,6 +27,7 @@ public class RegistrarPracticanteControlador {
     @FXML private RadioButton radioBotonFemenino;
     @FXML private RadioButton radioBotonMasculino;
     @FXML private TextField campoTextoLenguaIndigena;
+    @FXML private ComboBox<Profesor> comboBoxProfesor;
     @FXML private VBox panelError;
     @FXML private Label etiquetaTituloError;
     @FXML private Label etiquetaMensajeError;
@@ -42,6 +42,7 @@ public class RegistrarPracticanteControlador {
     public void initialize() {
         radioBotonMasculino.setToggleGroup(grupoGenero);
         radioBotonFemenino.setToggleGroup(grupoGenero);
+
     }
 
     @FXML
@@ -113,17 +114,24 @@ public class RegistrarPracticanteControlador {
         List<String> campos = List.of(nombre, apellidos, correo, matricula);
         boolean camposFormularioValido = !camposVacios(campos);
         boolean generoValido = grupoGenero.getSelectedToggle() != null;
+        boolean profesorValido = comboBoxProfesor.getValue() != null;
 
         if (!camposFormularioValido) {
             mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
                     "Campos obligatorios vacios", "POR FAVOR LLENE TODOS LOS CAMPOS");
         }
-        if (!generoValido){
+        if (!generoValido) {
             mostrarPanel(etiquetaTituloError,etiquetaMensajeError, panelError,
                     "Genero no seleccionado", "Seleccione un genero para el practicante");
         }
+        if (!profesorValido) {
+            mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
+                    "Profesor no seleccionado", "Seleccione un profesor para asignarlo al practicante");
+        }
 
-        return camposFormularioValido && generoValido;
+        boolean formularioCompletoValido = camposFormularioValido && generoValido && profesorValido;
+
+        return formularioCompletoValido;
     }
 
     private Practicante construirPracticante() {
@@ -134,6 +142,8 @@ public class RegistrarPracticanteControlador {
         String lenguaIndigena = campoTextoLenguaIndigena.getText().trim();
         Genero genero = obtenerGeneroPracticante();
         String contrasena = generarContrasena(nombre, matricula);
+        String contrasenaCifrada = CifracionContrasena.cifrarContrasena(contrasena);
+        Profesor profesorSeleccionado = comboBoxProfesor.getValue();
 
         Practicante practicante = new Practicante();
         practicante.setNombre(limitarTexto(nombre, 50));
@@ -142,9 +152,35 @@ public class RegistrarPracticanteControlador {
         practicante.setMatricula(limitarTexto(matricula, 12));
         practicante.setCorreo(limitarTexto(correo, 100));
         practicante.setLenguaIndigena(limitarTexto(lenguaIndigena, 50));
-        practicante.setContrasena(limitarTexto(contrasena, 12));
+        practicante.setContrasena(contrasenaCifrada);
         practicante.setEstado(Estado.Activo);
+        practicante.setNumeroPersonalProfesor(profesorSeleccionado.getIdUsuario());
         return practicante;
+    }
+
+    private void cargarProfesoresActivos() {
+        ProfesorDao profesorDao = new ProfesorDao();
+        try {
+            List<Profesor> profesoresActivos = profesorDao.obtenerProfesoresActivos();
+            comboBoxProfesor.getItems().addAll(profesoresActivos);
+            comboBoxProfesor.setConverter(new StringConverter<Profesor>() {
+                @Override
+                public String toString(Profesor profesor) {
+                    String profesorActivo = null;
+                    if (profesor != null) {
+                        profesorActivo = profesor.getNombre() + " " + profesor.getApellidos();
+                    }
+                    return profesorActivo;
+                }
+                @Override
+                public Profesor fromString(String texto) {
+                    return null;
+                }
+            });
+        } catch (UsuariosExcepcion excepcion) {
+            mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError, "Error al cargar profesores",
+                    "No ha sido posible recuperar a los profesores activos");
+        }
     }
 
     private void guardarPracticante(Practicante practicante) {
@@ -169,7 +205,8 @@ public class RegistrarPracticanteControlador {
     }
 
     private String generarContrasena(String nombre, String matricula) {
-        return nombre.toLowerCase() + matricula;
+        String contrasenaGenerada = nombre.toLowerCase() + matricula;
+        return contrasenaGenerada;
     }
 
     private String limitarTexto(String texto, int limite) {
@@ -184,6 +221,7 @@ public class RegistrarPracticanteControlador {
         campoTextoMatricula.clear();
         campoTextoLenguaIndigena.clear();
         grupoGenero.selectToggle(null);
+        comboBoxProfesor.setValue(null);
     }
 
     private void mostrarPanel(Label etiquetaTitulo, Label etiquetaMensaje, VBox panel, String titulo, String mensaje) {

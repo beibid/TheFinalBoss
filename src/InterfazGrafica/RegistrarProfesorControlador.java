@@ -11,6 +11,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import logica.CifracionContrasena;
 import logica.dao.excepciones.RegistroDuplicadoExcepcion;
 import logica.dao.excepciones.UsuariosExcepcion;
 import logica.dao.objetos.ProfesorDao;
@@ -20,8 +21,6 @@ import logica.dominio.enums.Turno;
 import java.util.List;
 
 public class RegistrarProfesorControlador {
-
-    private static final int FILAS_AFECTADAS_ESPERADAS = 1;
 
     @FXML private TextField campoTextoNombres;
     @FXML private TextField campoTextoApellidos;
@@ -36,6 +35,9 @@ public class RegistrarProfesorControlador {
     @FXML private VBox panelExito;
     @FXML private Label etiquetaTituloExito;
     @FXML private Label etiquetaMensajeExito;
+
+    private static final int FILAS_AFECTADAS_ESPERADAS = 1;
+    private static final int PROFESORES_ACTIVOS_PERMITIDOS = 2;
 
     private ToggleGroup grupoTurno = new ToggleGroup();
 
@@ -81,8 +83,11 @@ public class RegistrarProfesorControlador {
 
     private void procesarRegistro() {
         if (camposValidos()) {
-            Profesor profesor = construirProfesor();
-            guardarProfesor(profesor);
+            if (verificarProfesorActivo()) {
+
+                Profesor profesor = construirProfesor();
+                guardarProfesor(profesor);
+            }
         }
     }
 
@@ -114,7 +119,27 @@ public class RegistrarProfesorControlador {
             mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
                     "Turno no seleccionado", "Seleccione un turno para el profesor.");
         }
-        return nombreValido && turnoValido;
+        boolean formularioCompletoValidado = nombreValido && turnoValido;
+        return formularioCompletoValidado;
+    }
+
+    private boolean verificarProfesorActivo() {
+        boolean registrarProfesor = true;
+        ProfesorDao profesorDao = new ProfesorDao();
+
+        try {
+            int profesoresActivos = profesorDao.existeProfesorActivo();
+            if (profesoresActivos > PROFESORES_ACTIVOS_PERMITIDOS) {
+                mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
+                        "Error profesores activos existentes", "Ya existen mas de dos profesores activos en el sistema");
+                registrarProfesor = false;
+            }
+        } catch (UsuariosExcepcion excepcion) {
+            mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
+                    "Error", excepcion.getMessage().toUpperCase());
+            registrarProfesor = false;
+        }
+        return registrarProfesor;
     }
 
     private Profesor construirProfesor() {
@@ -124,6 +149,7 @@ public class RegistrarProfesorControlador {
         String numeroPersonal = campoTextoNumeroPersonal.getText().trim();
         Turno turno = obtenerTurnoSeleccionado();
         String contrasena = generarContrasena(nombre, numeroPersonal);
+        String contrasenaCifrada = CifracionContrasena.cifrarContrasena(contrasena);
 
         Profesor profesor = new Profesor();
         profesor.setNombre(limitarTexto(nombre, 55));
@@ -131,7 +157,7 @@ public class RegistrarProfesorControlador {
         profesor.setTurno(turno);
         profesor.setCorreo(limitarTexto(correo, 100));
         profesor.setNumeroDePersonalProfesor(limitarTexto(numeroPersonal, 12));
-        profesor.setContrasena(limitarTexto(contrasena, 12));
+        profesor.setContrasena(contrasenaCifrada);
         profesor.setEstado(Estado.Activo);
         return profesor;
     }
@@ -171,7 +197,8 @@ public class RegistrarProfesorControlador {
     }
 
     private String generarContrasena(String nombre, String numeroPersonal) {
-        return nombre.toLowerCase() + numeroPersonal;
+        String contrasenaGenerada = nombre.toLowerCase() + numeroPersonal;
+        return contrasenaGenerada;
     }
 
     private String limitarTexto(String texto, int limite) {

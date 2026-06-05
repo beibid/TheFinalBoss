@@ -35,6 +35,7 @@ import java.util.logging.Logger;
 public class EnviarMensajeControlador {
 
     private static final Logger LOGGER = Logger.getLogger(EnviarMensajeControlador.class.getName());
+    private static final int LIMITE_CARACTERES_MENSAJE = 500;
 
     @FXML private ComboBox<Usuario> comboBoxDestinatario;
     @FXML private TextArea areaTextoMensaje;
@@ -122,7 +123,15 @@ public class EnviarMensajeControlador {
             mostrarError("Mensaje vacío", "POR FAVOR ESCRIBE UN MENSAJE.");
             return;
         }
+        if (contenido.length() > LIMITE_CARACTERES_MENSAJE) {
+            mostrarError("Mensaje largo", "EL MENSAJE NO DEBE SUPERAR LOS 500 CARACATERES");
+            return;
+        }
         if (!confirmarAccion("¿Seguro que desea enviar el mensaje?")) {
+            return;
+        }
+        if (destinatario.getIdUsuario() == SesionUsuario.getInstance().getIdUsuario()) {
+            mostrarError("Destinatario invalido", "NO PUEDES MANDARTE UN MENSAJE A TI MISMO");
             return;
         }
         ejecutarEnvio(destinatario, contenido);

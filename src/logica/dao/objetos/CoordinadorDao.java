@@ -189,4 +189,39 @@ public class CoordinadorDao implements CoordinadorDaoInterfaz {
         }
         return coordinadores;
     }
+
+    public int existeCoordinadorActivo() throws UsuariosExcepcion {
+        String consulta = "SELECT COUNT(*) " +
+                "FROM usuario u " +
+                "INNER JOIN coordinador c ON u.idUsuario = c.idUsuario " +
+                "WHERE u.estado = 'Activo'";
+        Connection conexionBaseDeDatos = null;
+        PreparedStatement consultaCoordinadorActivo = null;
+        int filasAfectadas = 0;
+
+        try {
+            conexionBaseDeDatos = ConexionBaseDeDatos.getInstance().conectar();
+            consultaCoordinadorActivo = conexionBaseDeDatos.prepareStatement(consulta);
+            ResultSet resultado = consultaCoordinadorActivo.executeQuery();
+
+            if (resultado.next()) {
+                filasAfectadas = resultado.getInt(1);
+            }
+        } catch (SQLException exceptionSql) {
+            LOGGER.log(Level.SEVERE, "Error al verificar coordinadores activos", exceptionSql);
+            throw new UsuariosExcepcion("Error al verificar coordinadores activos", exceptionSql);
+        } finally {
+            try {
+                if (consultaCoordinadorActivo != null) {
+                    consultaCoordinadorActivo.close();
+                }
+                if (conexionBaseDeDatos != null) {
+                    conexionBaseDeDatos.close();
+                }
+            }catch (SQLException exceptionSql) {
+                LOGGER.log(Level.SEVERE, "Error al cerrar la conexion", exceptionSql);
+            }
+        }
+        return filasAfectadas;
+    }
 }

@@ -9,6 +9,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import logica.CifracionContrasena;
 import logica.dao.excepciones.RegistroDuplicadoExcepcion;
 import logica.dao.excepciones.UsuariosExcepcion;
 import logica.dao.objetos.CoordinadorDao;
@@ -30,6 +31,7 @@ public class RegistrarCoordinadorControlador {
     @FXML private Label etiquetaMensajeExito;
 
     private static final int FILAS_AFECTADAS_ESPERADAS = 1;
+    private static final int COORDINADORES_ACTIVOS_PERMITIDOS = 0;
 
     @FXML
     private void botonRegistrar() {
@@ -66,7 +68,9 @@ public class RegistrarCoordinadorControlador {
 
     private void procesarRegistro() {
         if (camposValidos()) {
-            guardarCoordinador(construirCoordinador());
+            if (verificarCoordinadorActivo()) {
+                guardarCoordinador(construirCoordinador());
+            }
         }
     }
 
@@ -78,6 +82,25 @@ public class RegistrarCoordinadorControlador {
             }
         }
         return hayCamposVacios;
+    }
+
+    private boolean verificarCoordinadorActivo() {
+        boolean registrarCoordinador = true;
+        CoordinadorDao coordinadorDao = new CoordinadorDao();
+
+        try {
+            int coordinadoresActivos = coordinadorDao.existeCoordinadorActivo();
+            if (coordinadoresActivos > COORDINADORES_ACTIVOS_PERMITIDOS) {
+                mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
+                        "Error coordinador activo existente", "Ya existe un coordinador activo en el sistema");
+                registrarCoordinador = false;
+            }
+        } catch (UsuariosExcepcion excepcion) {
+            mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
+                    "Error", excepcion.getMessage().toUpperCase());
+            registrarCoordinador = false;
+        }
+        return registrarCoordinador;
     }
 
     private boolean camposValidos() {
@@ -100,13 +123,16 @@ public class RegistrarCoordinadorControlador {
         String nombre = campoTextoNombres.getText().trim();
         String apellidos = campoTextoApellidos.getText().trim();
         String numeroPersonal = campoTextoNumeroPersonal.getText().trim();
+        String correo = campoTextoCorreo.getText().trim();
         String contrasena = generarContrasena(nombre, numeroPersonal);
+        String contrasenaCifrada = CifracionContrasena.cifrarContrasena(contrasena);
 
         Coordinador coordinador = new Coordinador();
         coordinador.setNombre(limitarTexto(nombre, 55));
         coordinador.setApellidos(limitarTexto(apellidos, 55));
         coordinador.setNumeroDePersonalCoordinador(limitarTexto(numeroPersonal, 12));
-        coordinador.setContrasena(limitarTexto(contrasena, 12));
+        coordinador.setCorreo(limitarTexto(correo, 100));
+        coordinador.setContrasena(contrasenaCifrada);
         coordinador.setEstado(Estado.Activo);
         return coordinador;
     }
@@ -134,7 +160,8 @@ public class RegistrarCoordinadorControlador {
     }
 
     private String generarContrasena(String nombre, String numeroPersonal) {
-        return nombre.toLowerCase() + numeroPersonal;
+        String contrasenaGenerada = nombre.toLowerCase() + numeroPersonal;
+        return contrasenaGenerada;
     }
 
     private String limitarTexto(String texto, int limite) {

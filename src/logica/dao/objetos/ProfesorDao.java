@@ -241,4 +241,39 @@ public class ProfesorDao implements ProfesorDaoInterfaz {
         }
         return practicantes;
     }
+
+    public int existeProfesorActivo() throws UsuariosExcepcion {
+        String consulta = "SELECT COUNT(*) " +
+                "FROM usuario u " +
+                "INNER JOIN profesor p ON u.idUsuario = p.idUsuario " +
+                "WHERE u.estado = 'Activo'";
+        Connection conexionBaseDeDatos = null;
+        PreparedStatement consultaProfesorActivo = null;
+        int filasAfectadas = 0;
+
+        try {
+            conexionBaseDeDatos = ConexionBaseDeDatos.getInstance().conectar();
+            consultaProfesorActivo = conexionBaseDeDatos.prepareStatement(consulta);
+            ResultSet resultado = consultaProfesorActivo.executeQuery();
+
+            if (resultado.next()) {
+                filasAfectadas = resultado.getInt(1);
+            }
+        } catch (SQLException exceptionSql) {
+            LOGGER.log(Level.SEVERE, "Error al verificar profesores activos", exceptionSql);
+            throw new UsuariosExcepcion("Error al verificar profesores activos", exceptionSql);
+        } finally {
+            try {
+                if (consultaProfesorActivo != null) {
+                    consultaProfesorActivo.close();
+                }
+                if (conexionBaseDeDatos != null) {
+                    conexionBaseDeDatos.close();
+                }
+            }catch (SQLException exceptionSql) {
+                LOGGER.log(Level.SEVERE, "Error al cerrar la conexion", exceptionSql);
+            }
+        }
+        return filasAfectadas;
+    }
 }

@@ -7,12 +7,17 @@ public class Practicante extends Usuario {
     private String matricula;
     private String lenguaIndigena;
     private Genero genero;
+    private int numeroPersonalProfesor;
 
-    public Practicante(String matricula, String lenguaIndigena, Genero genero, String nombre, String apellidos, String contrasena, String correo, Estado estado) {
+
+    public Practicante(String matricula, String lenguaIndigena, Genero genero, String nombre,
+                       String apellidos, String contrasena, String correo, Estado estado,
+                       int numeroPersonalProfesor) {
         super(nombre, apellidos, contrasena, correo, estado);
         this.matricula = matricula;
         this.lenguaIndigena = lenguaIndigena;
         this.genero = genero;
+        this.numeroPersonalProfesor = numeroPersonalProfesor;
     }
 
     public Practicante() {
@@ -31,6 +36,10 @@ public class Practicante extends Usuario {
         return genero;
     }
 
+    public int getNumeroPersonalProfesor() {
+        return numeroPersonalProfesor;
+    }
+
     public void setMatricula(String matricula) {
         this.matricula = matricula;
     }
@@ -41,6 +50,10 @@ public class Practicante extends Usuario {
 
     public void setGenero(Genero genero) {
         this.genero = genero;
+    }
+
+    public void setNumeroPersonalProfesor (int numeroPersonalProfesor) {
+        this.numeroPersonalProfesor = numeroPersonalProfesor;
     }
 
     @Override
