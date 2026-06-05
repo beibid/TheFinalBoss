@@ -1,5 +1,6 @@
 package logica.dao.objetos;
 
+
 import acceso.bd.ConexionBaseDeDatos;
 import logica.dao.excepciones.UsuariosExcepcion;
 import logica.dao.excepciones.RegistroDuplicadoExcepcion;
@@ -15,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 
 public class CoordinadorDao implements CoordinadorDaoInterfaz {
 
@@ -50,12 +52,12 @@ public class CoordinadorDao implements CoordinadorDaoInterfaz {
             insercionCoordinador.setInt(2, idUsuarioGenerado);
             filasAfectadas = insercionCoordinador.executeUpdate();
             LOGGER.info("Coordinador insertado correctamente con ID de usuario: " + idUsuarioGenerado);
-        } catch (SQLException excepcionSQL) {
-            LOGGER.log(Level.SEVERE, "Error al insertar Coordinador", excepcionSQL);
-            if (excepcionSQL.getMessage().contains("Duplicate entry")) {
-                throw new RegistroDuplicadoExcepcion("El numero del personal ya existe", excepcionSQL);
+        } catch (SQLException excepcionSql) {
+            LOGGER.log(Level.SEVERE, "Error al insertar Coordinador", excepcionSql);
+            if (excepcionSql.getMessage().contains("Duplicate entry")) {
+                throw new RegistroDuplicadoExcepcion("El numero del personal ya existe", excepcionSql);
             }
-            throw new UsuariosExcepcion("Error al insertar coordinador", excepcionSQL);
+            throw new UsuariosExcepcion("Error al insertar coordinador", excepcionSql);
         } finally {
             try {
                 if (insercionCoordinador != null) {
@@ -67,8 +69,8 @@ public class CoordinadorDao implements CoordinadorDaoInterfaz {
                 if (conexionBaseDeDatos != null) {
                     conexionBaseDeDatos.close();
                 }
-            } catch (SQLException excepcionSQL) {
-                LOGGER.log(Level.SEVERE, "Error al cerrar la conexión", excepcionSQL);
+            } catch (SQLException excepcionSql) {
+                LOGGER.log(Level.SEVERE, "Error al cerrar la conexión", excepcionSql);
             }
         }
         return filasAfectadas;
@@ -90,9 +92,9 @@ public class CoordinadorDao implements CoordinadorDaoInterfaz {
             actualizacion.setString(2, numPersonalCoordinador);
             filasAfectadas = actualizacion.executeUpdate();
             LOGGER.info("Coordinador inactivado correctamente: " + numPersonalCoordinador);
-        } catch (SQLException excepcionSQL) {
-            LOGGER.log(Level.SEVERE, "Error al inactivar coordinador", excepcionSQL);
-            throw new UsuariosExcepcion("Error al inactivar coordinador", excepcionSQL);
+        } catch (SQLException excepcionSql) {
+            LOGGER.log(Level.SEVERE, "Error al inactivar coordinador", excepcionSql);
+            throw new UsuariosExcepcion("Error al inactivar coordinador", excepcionSql);
         } finally {
             try {
                 if (actualizacion != null) {
@@ -101,8 +103,8 @@ public class CoordinadorDao implements CoordinadorDaoInterfaz {
                 if (conexionBaseDeDatos != null) {
                     conexionBaseDeDatos.close();
                 }
-            } catch (SQLException excepcionSQL) {
-                LOGGER.log(Level.SEVERE, "Error al cerrar la conexión", excepcionSQL);
+            } catch (SQLException excepcionSql) {
+                LOGGER.log(Level.SEVERE, "Error al cerrar la conexión", excepcionSql);
             }
         }
         return filasAfectadas;
@@ -131,9 +133,9 @@ public class CoordinadorDao implements CoordinadorDaoInterfaz {
             actualizacion.setString(6, numPersonalCoordinador);
             filasAfectadas = actualizacion.executeUpdate();
             LOGGER.info("Coordinador modificado correctamente: " + numPersonalCoordinador);
-        } catch (SQLException excepcionSQL) {
-            LOGGER.log(Level.SEVERE, "Error al modificar coordinador", excepcionSQL);
-            throw new UsuariosExcepcion("Error al modificar coordinador", excepcionSQL);
+        } catch (SQLException excepcionSql) {
+            LOGGER.log(Level.SEVERE, "Error al modificar coordinador", excepcionSql);
+            throw new UsuariosExcepcion("Error al modificar coordinador", excepcionSql);
         } finally {
             try {
                 if (actualizacion != null) {
@@ -172,9 +174,9 @@ public class CoordinadorDao implements CoordinadorDaoInterfaz {
                 coordinador.setContrasena(resultado.getString("contrasena"));
                 coordinadores.add(coordinador);
             }
-        } catch (SQLException excepcionSQL) {
-            LOGGER.log(Level.SEVERE, "Error al obtener coordinadores activos", excepcionSQL);
-            throw new UsuariosExcepcion("Error al obtener coordinadores activos", excepcionSQL);
+        } catch (SQLException excepcionSql) {
+            LOGGER.log(Level.SEVERE, "Error al obtener coordinadores activos", excepcionSql);
+            throw new UsuariosExcepcion("Error al obtener coordinadores activos", excepcionSql);
         } finally {
             try {
                 if (consultaCoordinadores != null) {
@@ -183,8 +185,8 @@ public class CoordinadorDao implements CoordinadorDaoInterfaz {
                 if (conexionBaseDeDatos != null) {
                     conexionBaseDeDatos.close();
                 }
-            } catch (SQLException excepcionSQL) {
-                LOGGER.log(Level.SEVERE, "Error al cerrar la conexión", excepcionSQL);
+            } catch (SQLException excepcionSql) {
+                LOGGER.log(Level.SEVERE, "Error al cerrar la conexión", excepcionSql);
             }
         }
         return coordinadores;

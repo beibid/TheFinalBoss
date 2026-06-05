@@ -16,6 +16,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class DocumentacionPracticanteDao implements DocumentacionPracticanteDaoInterfaz {
+
     private static final Logger LOGGER = Logger.getLogger(DocumentacionPracticanteDao.class.getName());
 
     @Override
@@ -43,8 +44,8 @@ public class DocumentacionPracticanteDao implements DocumentacionPracticanteDaoI
                 idGenerado = tomarLlave.getInt(1);
                 LOGGER.info("DocumentacionPracticante insertada correctamente con ID: " + idGenerado);
             }
-        } catch (SQLException excepcionSQL) {
-            LOGGER.log(Level.SEVERE, "Error al insertar documentacion", excepcionSQL);
+        } catch (SQLException excepcionSql) {
+            LOGGER.log(Level.SEVERE, "Error al insertar documentacion", excepcionSql);
             throw new UsuariosExcepcion("Error al agregar documentacion");
         } finally {
             try {
@@ -54,8 +55,8 @@ public class DocumentacionPracticanteDao implements DocumentacionPracticanteDaoI
                 if (conexion != null) {
                     conexion.close();
                 }
-            } catch (SQLException excepcionSQL) {
-                LOGGER.log(Level.SEVERE, "Error al cerrar la conexión", excepcionSQL);
+            } catch (SQLException excepcionSql) {
+                LOGGER.log(Level.SEVERE, "Error al cerrar la conexión", excepcionSql);
             }
         }
         return idGenerado;
@@ -84,8 +85,8 @@ public class DocumentacionPracticanteDao implements DocumentacionPracticanteDaoI
                 documentos.add(documento);
             }
             LOGGER.info("Documentos pendientes obtenidos para: " + matricula);
-        } catch (SQLException excepcion) {
-            LOGGER.log(Level.SEVERE, "Error al obtener documentos pendientes", excepcion);
+        } catch (SQLException excepcionSql) {
+            LOGGER.log(Level.SEVERE, "Error al obtener documentos pendientes", excepcionSql);
             throw new UsuariosExcepcion("Error al obtener documentos pendientes");
         } finally {
             try {
@@ -95,8 +96,8 @@ public class DocumentacionPracticanteDao implements DocumentacionPracticanteDaoI
                 if (conexion != null) {
                     conexion.close();
                 }
-            } catch (SQLException excepcion) {
-                LOGGER.log(Level.SEVERE, "Error al cerrar conexión", excepcion);
+            } catch (SQLException excepcionSql) {
+                LOGGER.log(Level.SEVERE, "Error al cerrar conexión", excepcionSql);
             }
         }
         return documentos;
@@ -116,8 +117,8 @@ public class DocumentacionPracticanteDao implements DocumentacionPracticanteDaoI
             sentencia.setInt(3, idDocumento);
             filasAfectadas = sentencia.executeUpdate();
             LOGGER.info("Documento validado correctamente: " + idDocumento);
-        } catch (SQLException excepcion) {
-            LOGGER.log(Level.SEVERE, "Error al validar documento", excepcion);
+        } catch (SQLException excepcionSql) {
+            LOGGER.log(Level.SEVERE, "Error al validar documento", excepcionSql);
             throw new UsuariosExcepcion("Error al validar documento");
         } finally {
             try {
@@ -127,8 +128,8 @@ public class DocumentacionPracticanteDao implements DocumentacionPracticanteDaoI
                 if (conexion != null) {
                     conexion.close();
                 }
-            } catch (SQLException excepcion) {
-                LOGGER.log(Level.SEVERE, "Error al cerrar conexión", excepcion);
+            } catch (SQLException excepcionSql) {
+                LOGGER.log(Level.SEVERE, "Error al cerrar conexión", excepcionSql);
             }
         }
         return filasAfectadas;

@@ -46,9 +46,9 @@ public class AdministradorDao implements AdministradorDaoInterfaz {
             insercionAdministrador.setInt(2, idUsuarioGenerado);
             filasAfectadas = insercionAdministrador.executeUpdate();
             LOGGER.info("Administrador insertado correctamente con ID de usuario: " + idUsuarioGenerado);
-        } catch (SQLException excepcionSQL) {
-            LOGGER.log(Level.SEVERE, "Error al insertar Administrador", excepcionSQL);
-            throw new UsuariosExcepcion("Error al insertar administrador", excepcionSQL);
+        } catch (SQLException excepcionSql) {
+            LOGGER.log(Level.SEVERE, "Error al insertar Administrador", excepcionSql);
+            throw new UsuariosExcepcion("Error al insertar administrador", excepcionSql);
         } finally {
             try {
                 if (insercionAdministrador != null) {
@@ -60,8 +60,8 @@ public class AdministradorDao implements AdministradorDaoInterfaz {
                 if (conexionBaseDeDatos != null) {
                     conexionBaseDeDatos.close();
                 }
-            } catch (SQLException excepcionSQL) {
-                LOGGER.log(Level.SEVERE, "Error al cerrar la conexión", excepcionSQL);
+            } catch (SQLException excepcionSql) {
+                LOGGER.log(Level.SEVERE, "Error al cerrar la conexión", excepcionSql);
             }
         }
         return filasAfectadas;

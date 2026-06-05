@@ -45,9 +45,9 @@ public class AutoevaluacionPracticanteDao implements AutoevaluacionPracticanteDa
             registro.execute();
             String mensaje = registro.getString(13);
             LOGGER.info(mensaje);
-        } catch (SQLException excepcion) {
-            LOGGER.log(Level.SEVERE, "Error al registrar la autoevaluación", excepcion);
-            throw new MensajeriaExcepcion("Error al registrar la autoevaluación", excepcion);
+        } catch (SQLException excepcionSql) {
+            LOGGER.log(Level.SEVERE, "Error al registrar la autoevaluación", excepcionSql);
+            throw new MensajeriaExcepcion("Error al registrar la autoevaluación", excepcionSql);
         } finally {
             try {
                 if (registro != null) {
@@ -56,8 +56,8 @@ public class AutoevaluacionPracticanteDao implements AutoevaluacionPracticanteDa
                 if (conexionBaseDeDatos != null) {
                     conexionBaseDeDatos.close();
                 }
-            } catch (SQLException excepcion) {
-                LOGGER.log(Level.SEVERE, "Error al cerrar conexión", excepcion);
+            } catch (SQLException excepcionSql) {
+                LOGGER.log(Level.SEVERE, "Error al cerrar conexión", excepcionSql);
             }
         }
         return filasAfectadas;
@@ -83,9 +83,9 @@ public class AutoevaluacionPracticanteDao implements AutoevaluacionPracticanteDa
                 informacionParaAutoevaluacion.setNombreOrganizacion(resultado.getString("nombreOrganizacion"));
             }
             LOGGER.info(sentencia.getString(2));
-        } catch (SQLException excepcion) {
-            LOGGER.log(Level.SEVERE, "Error al obtener info de autoevaluación", excepcion);
-            throw new MensajeriaExcepcion("Error al obtener info de autoevaluación", excepcion);
+        } catch (SQLException excepcionSql) {
+            LOGGER.log(Level.SEVERE, "Error al obtener info de autoevaluación", excepcionSql);
+            throw new MensajeriaExcepcion("Error al obtener info de autoevaluación", excepcionSql);
         } finally {
             try {
                 if (sentencia != null) {
@@ -94,8 +94,8 @@ public class AutoevaluacionPracticanteDao implements AutoevaluacionPracticanteDa
                 if (conexionBaseDeDatos != null) {
                     conexionBaseDeDatos.close();
                 }
-            } catch (SQLException excepcion) {
-                LOGGER.log(Level.SEVERE, "Error al cerrar conexión", excepcion);
+            } catch (SQLException excepcionSql) {
+                LOGGER.log(Level.SEVERE, "Error al cerrar conexión", excepcionSql);
             }
         }
         return informacionParaAutoevaluacion;
@@ -131,9 +131,9 @@ public class AutoevaluacionPracticanteDao implements AutoevaluacionPracticanteDa
                 autoevaluacion.setIdAutoevaluacion(resultado.getInt("idAutoevaluacion"));
             }
             LOGGER.info("Autoevaluación obtenida para: " + matricula);
-        } catch (SQLException excepcion) {
-            LOGGER.log(Level.SEVERE, "Error al obtener autoevaluación", excepcion);
-            throw new MensajeriaExcepcion("Error al obtener autoevaluación", excepcion);
+        } catch (SQLException excepcionSql) {
+            LOGGER.log(Level.SEVERE, "Error al obtener autoevaluación", excepcionSql);
+            throw new MensajeriaExcepcion("Error al obtener autoevaluación", excepcionSql);
         } finally {
             try {
                 if (sentencia != null) {
@@ -142,8 +142,8 @@ public class AutoevaluacionPracticanteDao implements AutoevaluacionPracticanteDa
                 if (conexionBaseDeDatos != null) {
                     conexionBaseDeDatos.close();
                 }
-            } catch (SQLException excepcion) {
-                LOGGER.log(Level.SEVERE, "Error al cerrar conexión", excepcion);
+            } catch (SQLException excepcionSql) {
+                LOGGER.log(Level.SEVERE, "Error al cerrar conexión", excepcionSql);
             }
         }
         return autoevaluacion;

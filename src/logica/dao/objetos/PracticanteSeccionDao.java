@@ -26,9 +26,9 @@ public class PracticanteSeccionDao implements PracticanteSeccionDaoInterfaz {
             insercion.setString(2, practicanteSeccion.getNoSeccion());
             filasAfectadas = insercion.executeUpdate();
             LOGGER.info("PracticanteSeccion insertada correctamente");
-        } catch (SQLException e) {
-            LOGGER.log(Level.SEVERE, "Error al insertar practicante_seccion", e);
-            throw new UsuariosExcepcion("Error al agregar practicante seccion", e);
+        } catch (SQLException excepcionSql) {
+            LOGGER.log(Level.SEVERE, "Error al insertar practicante_seccion", excepcionSql);
+            throw new UsuariosExcepcion("Error al agregar practicante seccion", excepcionSql);
         } finally {
             try {
                 if (insercion != null) {
@@ -37,8 +37,8 @@ public class PracticanteSeccionDao implements PracticanteSeccionDaoInterfaz {
                 if (conexionBaseDeDatos != null) {
                     conexionBaseDeDatos.close();
                 }
-            } catch (SQLException e) {
-                LOGGER.log(Level.SEVERE, "Error al cerrar la conexión", e);
+            } catch (SQLException excepcionSql) {
+                LOGGER.log(Level.SEVERE, "Error al cerrar la conexión", excepcionSql);
             }
         }
         return filasAfectadas;
@@ -64,9 +64,9 @@ public class PracticanteSeccionDao implements PracticanteSeccionDaoInterfaz {
             actualizacion.setString(4, noSeccion);
             filasAfectadas = actualizacion.executeUpdate();
             LOGGER.info("PracticanteSeccion modificada correctamente: " + matricula + " - " + noSeccion);
-        } catch (SQLException e) {
-            LOGGER.log(Level.SEVERE, "Error al modificar practicante_seccion", e);
-            throw new UsuariosExcepcion("Error al modificar practicante seccion", e);
+        } catch (SQLException excepcionSql) {
+            LOGGER.log(Level.SEVERE, "Error al modificar practicante_seccion", excepcionSql);
+            throw new UsuariosExcepcion("Error al modificar practicante seccion", excepcionSql);
         } finally {
             try {
                 if (actualizacion != null) {
@@ -75,8 +75,8 @@ public class PracticanteSeccionDao implements PracticanteSeccionDaoInterfaz {
                 if (conexionBaseDeDatos != null) {
                     conexionBaseDeDatos.close();
                 }
-            } catch (SQLException e) {
-                LOGGER.log(Level.SEVERE, "Error al cerrar la conexión", e);
+            } catch (SQLException excepcionSql) {
+                LOGGER.log(Level.SEVERE, "Error al cerrar la conexión", excepcionSql);
             }
         }
         return filasAfectadas;

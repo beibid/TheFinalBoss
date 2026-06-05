@@ -1,5 +1,6 @@
 package logica.dao.objetos;
 
+
 import acceso.bd.ConexionBaseDeDatos;
 import logica.dominio.Buzon;
 import logica.dao.excepciones.MensajeriaExcepcion;
@@ -9,6 +10,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 
 public class BuzonDao implements BuzonDaoInterfaz {
     private static final Logger LOGGER = Logger.getLogger(BuzonDao.class.getName());
@@ -27,9 +29,9 @@ public class BuzonDao implements BuzonDaoInterfaz {
             insercion.setInt(3, buzon.getIdUsuario());
             filasAfectadas = insercion.executeUpdate();
             LOGGER.info("Buzon insertado correctamente");
-        } catch (SQLException e) {
-            LOGGER.log(Level.SEVERE, "Error al insertar buzon", e);
-            throw new MensajeriaExcepcion("Error al agregar buzon", e);
+        } catch (SQLException excepcionSql) {
+            LOGGER.log(Level.SEVERE, "Error al insertar buzon", excepcionSql);
+            throw new MensajeriaExcepcion("Error al agregar buzon", excepcionSql);
         } finally {
             try {
                 if (insercion != null) {
@@ -38,8 +40,8 @@ public class BuzonDao implements BuzonDaoInterfaz {
                 if (conexionBaseDeDatos != null) {
                     conexionBaseDeDatos.close();
                 }
-            } catch (SQLException e) {
-                LOGGER.log(Level.SEVERE, "Error al cerrar la conexión", e);
+            } catch (SQLException excepcionSql) {
+                LOGGER.log(Level.SEVERE, "Error al cerrar la conexión", excepcionSql);
             }
         }
         return filasAfectadas;

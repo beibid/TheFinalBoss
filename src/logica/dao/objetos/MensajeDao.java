@@ -36,19 +36,24 @@ public class MensajeDao implements MensajeDaoInterfaz {
                 idGenerado = llave.getInt(1);
             }
             LOGGER.info("Mensaje insertado correctamente con id: " + idGenerado);
-        } catch (SQLException e) {
-            LOGGER.log(Level.SEVERE, "Error al insertar mensaje", e);
-            throw new MensajeriaExcepcion("Error al agregar mensaje", e);
+        } catch (SQLException excepcionSql) {
+            LOGGER.log(Level.SEVERE, "Error al insertar mensaje", excepcionSql);
+            throw new MensajeriaExcepcion("Error al agregar mensaje", excepcionSql);
         } finally {
             try {
-                if (insercion != null) insercion.close();
-                if (conexionBaseDeDatos != null) conexionBaseDeDatos.close();
-            } catch (SQLException e) {
-                LOGGER.log(Level.SEVERE, "Error al cerrar la conexión", e);
+                if (insercion != null) {
+                    insercion.close();
+                }
+                if (conexionBaseDeDatos != null) {
+                    conexionBaseDeDatos.close();
+                }
+            } catch (SQLException excepcionSql) {
+                LOGGER.log(Level.SEVERE, "Error al cerrar la conexión", excepcionSql);
             }
         }
         return idGenerado;
     }
+
     public List<MensajeVista> obtenerMensajesRecibidos(int idUsuario) throws MensajeriaExcepcion {
         String consulta = "SELECT m.idMensaje, m.contenido, m.fechaEnvio, u.nombre, u.apellidos " +
                 "FROM mensaje m " +

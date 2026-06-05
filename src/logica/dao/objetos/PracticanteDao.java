@@ -54,12 +54,12 @@ public class PracticanteDao implements PracticanteDaoInterfaz {
             insercionPracticante.setInt(4, idUsuarioGenerado);
             filasAfectadas = insercionPracticante.executeUpdate();
             LOGGER.info("Practicante insertado correctamente con ID de usuario: " + idUsuarioGenerado);
-        } catch (SQLException excepcionSQL) {
-            LOGGER.log(Level.SEVERE, "Error al insertar practicante", excepcionSQL);
-            if (excepcionSQL.getMessage().contains("Duplicate entry")) {
-                throw new RegistroDuplicadoExcepcion("La matricula ingresada ya existe", excepcionSQL);
+        } catch (SQLException excepcionSql) {
+            LOGGER.log(Level.SEVERE, "Error al insertar practicante", excepcionSql);
+            if (excepcionSql.getMessage().contains("Duplicate entry")) {
+                throw new RegistroDuplicadoExcepcion("La matricula ingresada ya existe", excepcionSql);
             }
-            throw new UsuariosExcepcion("Error al insertar practicante", excepcionSQL);
+            throw new UsuariosExcepcion("Error al insertar practicante", excepcionSql);
         } finally {
             try {
                 if (insercionPracticante != null) {
@@ -71,8 +71,8 @@ public class PracticanteDao implements PracticanteDaoInterfaz {
                 if (conexionBaseDeDatos != null) {
                     conexionBaseDeDatos.close();
                 }
-            } catch (SQLException excepcionSQL) {
-                LOGGER.log(Level.SEVERE, "Error al cerrar la conexión", excepcionSQL);
+            } catch (SQLException excepcionSql) {
+                LOGGER.log(Level.SEVERE, "Error al cerrar la conexión", excepcionSql);
             }
         }
         return filasAfectadas;
@@ -97,9 +97,9 @@ public class PracticanteDao implements PracticanteDaoInterfaz {
             actualizacion.setString(2, matricula);
             filasAfectadas = actualizacion.executeUpdate();
             LOGGER.info("Practicante inactivado correctamente: " + matricula);
-        } catch (SQLException excepcionSQL) {
-            LOGGER.log(Level.SEVERE, "Error al inactivar practicante", excepcionSQL);
-            throw new UsuariosExcepcion("Error al inactivar practicante", excepcionSQL);
+        } catch (SQLException excepcionSql) {
+            LOGGER.log(Level.SEVERE, "Error al inactivar practicante", excepcionSql);
+            throw new UsuariosExcepcion("Error al inactivar practicante", excepcionSql);
         } finally {
             try {
                 if (actualizacion != null) {
@@ -149,9 +149,9 @@ public class PracticanteDao implements PracticanteDaoInterfaz {
             actualizacionPracticante.setString(3, matricula);
             filasAfectadas = actualizacionPracticante.executeUpdate();
             LOGGER.info("Practicante modificado correctamente: " + matricula);
-        } catch (SQLException excepcionSQL) {
-            LOGGER.log(Level.SEVERE, "Error al modificar practicante", excepcionSQL);
-            throw new UsuariosExcepcion("Error al modificar practicante", excepcionSQL);
+        } catch (SQLException excepcionSql) {
+            LOGGER.log(Level.SEVERE, "Error al modificar practicante", excepcionSql);
+            throw new UsuariosExcepcion("Error al modificar practicante", excepcionSql);
         } finally {
             try {
                 if (actualizacionPracticante != null) {
@@ -163,8 +163,8 @@ public class PracticanteDao implements PracticanteDaoInterfaz {
                 if (conexionBaseDeDatos != null) {
                     conexionBaseDeDatos.close();
                 }
-            } catch (SQLException excepcionSQL) {
-                LOGGER.log(Level.SEVERE, "Error al cerrar la conexión", excepcionSQL);
+            } catch (SQLException excepcionSql) {
+                LOGGER.log(Level.SEVERE, "Error al cerrar la conexión", excepcionSql);
             }
         }
         return filasAfectadas;
@@ -197,9 +197,9 @@ public class PracticanteDao implements PracticanteDaoInterfaz {
                 practicante.setGenero(Genero.valueOf(resultado.getString("genero")));
                 practicantes.add(practicante);
             }
-        } catch (SQLException excepcionSQL) {
-            LOGGER.log(Level.SEVERE, "Error al obtener practicantes activos", excepcionSQL);
-            throw new UsuariosExcepcion("Error al obtener practicantes activos", excepcionSQL);
+        } catch (SQLException excepcionSql) {
+            LOGGER.log(Level.SEVERE, "Error al obtener practicantes activos", excepcionSql);
+            throw new UsuariosExcepcion("Error al obtener practicantes activos", excepcionSql);
         } finally {
             try {
                 if (consultaPracticantes != null) {
@@ -208,8 +208,8 @@ public class PracticanteDao implements PracticanteDaoInterfaz {
                 if (conexionBaseDeDatos != null) {
                     conexionBaseDeDatos.close();
                 }
-            } catch (SQLException excepcionSQL) {
-                LOGGER.log(Level.SEVERE, "Error al cerrar la conexión", excepcionSQL);
+            } catch (SQLException excepcionSql) {
+                LOGGER.log(Level.SEVERE, "Error al cerrar la conexión", excepcionSql);
             }
         }
         return practicantes;
@@ -228,14 +228,16 @@ public class PracticanteDao implements PracticanteDaoInterfaz {
             procedimientoAsignaProyecto.execute();
             filasAfectadas = 1;
             LOGGER.info("Proyecto asignado correctamente al practicante: " + matricula);
-        } catch (SQLException excepcionSQL) {
-            LOGGER.log(Level.SEVERE, "Error al asignar proyecto", excepcionSQL);
-            throw new UsuariosExcepcion(excepcionSQL.getMessage(), excepcionSQL);
+        } catch (SQLException excepcionSql) {
+            LOGGER.log(Level.SEVERE, "Error al asignar proyecto", excepcionSql);
+            throw new UsuariosExcepcion(excepcionSql.getMessage(), excepcionSql);
         } finally {
             try {
-                if (conexionBaseDeDatos != null) conexionBaseDeDatos.close();
-            } catch (SQLException excepcionSQL) {
-                LOGGER.log(Level.SEVERE, "Error al cerrar la conexión", excepcionSQL);
+                if (conexionBaseDeDatos != null) {
+                    conexionBaseDeDatos.close();
+                }
+            } catch (SQLException excepcionSql) {
+                LOGGER.log(Level.SEVERE, "Error al cerrar la conexión", excepcionSql);
             }
         }
         return filasAfectadas;

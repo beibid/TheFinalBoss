@@ -4,7 +4,6 @@ import acceso.bd.ConexionBaseDeDatos;
 import logica.dao.excepciones.UsuariosExcepcion;
 import logica.dominio.Seccion;
 import logica.dao.interfaces.SeccionDaoInterfaz;
-
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Connection;
@@ -30,9 +29,9 @@ public class SeccionDao implements SeccionDaoInterfaz {
             insertarEnBaseDeDatos.setString(2, seccion.getPeriodo());
             filasAfectadas = insertarEnBaseDeDatos.executeUpdate();
             LOGGER.info("Seccion insertada correctamente");
-        } catch (SQLException e) {
-            LOGGER.log(Level.SEVERE, "Error al insertar la seccion", e);
-            throw new UsuariosExcepcion("Error al agregar la sección", e);
+        } catch (SQLException excepcionSql) {
+            LOGGER.log(Level.SEVERE, "Error al insertar la seccion", excepcionSql);
+            throw new UsuariosExcepcion("Error al agregar la sección", excepcionSql);
         } finally {
             try {
                 if (insertarEnBaseDeDatos != null) {
@@ -41,8 +40,8 @@ public class SeccionDao implements SeccionDaoInterfaz {
                 if (conexionBaseDeDatos != null) {
                     conexionBaseDeDatos.close();
                 }
-            } catch (SQLException e) {
-                LOGGER.log(Level.SEVERE, "Error al cerrar la conexión", e);
+            } catch (SQLException excepcionSql) {
+                LOGGER.log(Level.SEVERE, "Error al cerrar la conexión", excepcionSql);
             }
         }
         return filasAfectadas;
@@ -63,9 +62,9 @@ public class SeccionDao implements SeccionDaoInterfaz {
             actualizacion.setString(2, noSeccion);
             filasAfectadas = actualizacion.executeUpdate();
             LOGGER.info("Seccion modificada correctamente: " + noSeccion);
-        } catch (SQLException e) {
-            LOGGER.log(Level.SEVERE, "Error al modificar la seccion", e);
-            throw new UsuariosExcepcion("Error al modificar la sección", e);
+        } catch (SQLException excepcionSql) {
+            LOGGER.log(Level.SEVERE, "Error al modificar la seccion", excepcionSql);
+            throw new UsuariosExcepcion("Error al modificar la sección", excepcionSql);
         } finally {
             try {
                 if (actualizacion != null) {
@@ -74,8 +73,8 @@ public class SeccionDao implements SeccionDaoInterfaz {
                 if (conexionBaseDeDatos != null) {
                     conexionBaseDeDatos.close();
                 }
-            } catch (SQLException e) {
-                LOGGER.log(Level.SEVERE, "Error al cerrar la conexión", e);
+            } catch (SQLException excepcionSql) {
+                LOGGER.log(Level.SEVERE, "Error al cerrar la conexión", excepcionSql);
             }
         }
         return filasAfectadas;
@@ -98,15 +97,19 @@ public class SeccionDao implements SeccionDaoInterfaz {
                 seccion.setPeriodo(resultado.getString("periodo"));
                 secciones.add(seccion);
             }
-        } catch (SQLException e) {
-            LOGGER.log(Level.SEVERE, "Error al obtener secciones", e);
-            throw new UsuariosExcepcion("Error al obtener secciones", e);
+        } catch (SQLException excepcionSql) {
+            LOGGER.log(Level.SEVERE, "Error al obtener secciones", excepcionSql);
+            throw new UsuariosExcepcion("Error al obtener secciones", excepcionSql);
         } finally {
             try {
-                if (consultaSecciones != null) consultaSecciones.close();
-                if (conexionBaseDeDatos != null) conexionBaseDeDatos.close();
-            } catch (SQLException e) {
-                LOGGER.log(Level.SEVERE, "Error al cerrar la conexión", e);
+                if (consultaSecciones != null) {
+                    consultaSecciones.close();
+                }
+                if (conexionBaseDeDatos != null) {
+                    conexionBaseDeDatos.close();
+                }
+            } catch (SQLException excepcionSql) {
+                LOGGER.log(Level.SEVERE, "Error al cerrar la conexión", excepcionSql);
             }
         }
         return secciones;

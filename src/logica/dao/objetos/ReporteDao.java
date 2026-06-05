@@ -42,9 +42,9 @@ public class ReporteDao implements ReporteDaoInterfaz {
             insertarEnBaseDeDatos.setString(5, reporte.getNombreArchivo());
             filasAfectadas = insertarEnBaseDeDatos.executeUpdate();
             LOGGER.info("Reporte insertado correctamente");
-        } catch (SQLException excepcionSQL) {
-            LOGGER.log(Level.SEVERE, "Error al insertar el reporte", excepcionSQL);
-            throw new MensajeriaExcepcion("Error al agregar el reporte", excepcionSQL);
+        } catch (SQLException excepcionSql) {
+            LOGGER.log(Level.SEVERE, "Error al insertar el reporte", excepcionSql);
+            throw new MensajeriaExcepcion("Error al agregar el reporte", excepcionSql);
         } finally {
             try {
                 if (insertarEnBaseDeDatos != null) {
@@ -53,8 +53,8 @@ public class ReporteDao implements ReporteDaoInterfaz {
                 if (conexionBaseDeDatos != null) {
                     conexionBaseDeDatos.close();
                 }
-            } catch (SQLException excepcionSQL) {
-                LOGGER.log(Level.SEVERE, "Error al cerrar la conexión", excepcionSQL);
+            } catch (SQLException excepcionSql) {
+                LOGGER.log(Level.SEVERE, "Error al cerrar la conexión", excepcionSql);
             }
         }
         return filasAfectadas;
@@ -83,9 +83,9 @@ public class ReporteDao implements ReporteDaoInterfaz {
                 reporte.setFechaGeneracion(resultado.getDate("fechaGeneracion"));
                 reportes.add(reporte);
             }
-        } catch (SQLException excepcionSQL) {
-            LOGGER.log(Level.SEVERE, "Error al obtener reportes", excepcionSQL);
-            throw new MensajeriaExcepcion("Error al obtener reportes", excepcionSQL);
+        } catch (SQLException excepcionSql) {
+            LOGGER.log(Level.SEVERE, "Error al obtener reportes", excepcionSql);
+            throw new MensajeriaExcepcion("Error al obtener reportes", excepcionSql);
         } finally {
             try {
                 if (consultaReportes != null) {
@@ -94,8 +94,8 @@ public class ReporteDao implements ReporteDaoInterfaz {
                 if (conexionBaseDeDatos != null) {
                     conexionBaseDeDatos.close();
                 }
-            } catch (SQLException excepcionSQL) {
-                LOGGER.log(Level.SEVERE, "Error al cerrar la conexión", excepcionSQL);
+            } catch (SQLException excepcionSql) {
+                LOGGER.log(Level.SEVERE, "Error al cerrar la conexión", excepcionSql);
             }
         }
         return reportes;
@@ -117,9 +117,9 @@ public class ReporteDao implements ReporteDaoInterfaz {
             actualizacion.setInt(4, idReporte);
             filasAfectadas = actualizacion.executeUpdate();
             LOGGER.info("Reporte evaluado correctamente: " + idReporte);
-        } catch (SQLException excepcionSQL) {
-            LOGGER.log(Level.SEVERE, "Error al evaluar reporte", excepcionSQL);
-            throw new MensajeriaExcepcion("Error al evaluar reporte", excepcionSQL);
+        } catch (SQLException excepcionSql) {
+            LOGGER.log(Level.SEVERE, "Error al evaluar reporte", excepcionSql);
+            throw new MensajeriaExcepcion("Error al evaluar reporte", excepcionSql);
         } finally {
             try {
                 if (actualizacion != null) {
@@ -128,8 +128,8 @@ public class ReporteDao implements ReporteDaoInterfaz {
                 if (conexionBaseDeDatos != null) {
                     conexionBaseDeDatos.close();
                 }
-            } catch (SQLException excepcionSQL) {
-                LOGGER.log(Level.SEVERE, "Error al cerrar la conexión", excepcionSQL);
+            } catch (SQLException excepcionSql) {
+                LOGGER.log(Level.SEVERE, "Error al cerrar la conexión", excepcionSql);
             }
         }
         return filasAfectadas;

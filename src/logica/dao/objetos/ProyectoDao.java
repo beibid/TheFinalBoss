@@ -41,15 +41,15 @@ public class ProyectoDao implements ProyectoDaoInterfaz {
             insertarEnBaseDeDatos.setInt(12, proyecto.getCapacidad());
             filasAfectadas = insertarEnBaseDeDatos.executeUpdate();
             LOGGER.info("Proyecto insertado correctamente");
-        } catch (SQLException e) {
-            LOGGER.log(Level.SEVERE, "Error al insertar proyecto", e);
-            throw new MensajeriaExcepcion("Error al agregar el proyecto", e);
+        } catch (SQLException excepcionSql) {
+            LOGGER.log(Level.SEVERE, "Error al insertar proyecto", excepcionSql);
+            throw new MensajeriaExcepcion("Error al agregar el proyecto", excepcionSql);
         } finally {
             try {
                 if (insertarEnBaseDeDatos != null) insertarEnBaseDeDatos.close();
                 if (conexionBaseDeDatos != null) conexionBaseDeDatos.close();
-            } catch (SQLException e) {
-                LOGGER.log(Level.SEVERE, "Error al cerrar la conexión", e);
+            } catch (SQLException excepcionSql) {
+                LOGGER.log(Level.SEVERE, "Error al cerrar la conexión", excepcionSql);
             }
         }
         return filasAfectadas;
@@ -84,15 +84,15 @@ public class ProyectoDao implements ProyectoDaoInterfaz {
             actualizacion.setInt(13, idProyecto);
             filasAfectadas = actualizacion.executeUpdate();
             LOGGER.info("Proyecto modificado correctamente: " + idProyecto);
-        } catch (SQLException e) {
-            LOGGER.log(Level.SEVERE, "Error al modificar proyecto", e);
+        } catch (SQLException excepcionSql) {
+            LOGGER.log(Level.SEVERE, "Error al modificar proyecto", excepcionSql);
             throw new MensajeriaExcepcion("Error al modificar proyecto");
         } finally {
             try {
                 if (actualizacion != null) actualizacion.close();
                 if (conexionBaseDeDatos != null) conexionBaseDeDatos.close();
-            } catch (SQLException e) {
-                LOGGER.log(Level.SEVERE, "Error al cerrar la conexión", e);
+            } catch (SQLException excepcionSql) {
+                LOGGER.log(Level.SEVERE, "Error al cerrar la conexión", excepcionSql);
             }
         }
         return filasAfectadas;
@@ -117,9 +117,9 @@ public class ProyectoDao implements ProyectoDaoInterfaz {
                 proyecto.setNombreEmpresa(resultados.getString("nombreOrganizacion"));
                 listaProyectos.add(proyecto);
             }
-        } catch (SQLException excepcion) {
-            LOGGER.log(Level.SEVERE, "Error al obtener proyectos disponibles", excepcion);
-            throw new MensajeriaExcepcion("Error al obtener proyectos disponibles", excepcion);
+        } catch (SQLException excepcionSql) {
+            LOGGER.log(Level.SEVERE, "Error al obtener proyectos disponibles", excepcionSql);
+            throw new MensajeriaExcepcion("Error al obtener proyectos disponibles", excepcionSql);
         } finally {
             try {
                 if (sentencia != null) {
@@ -128,8 +128,8 @@ public class ProyectoDao implements ProyectoDaoInterfaz {
                 if (conexionBaseDeDatos != null) {
                     conexionBaseDeDatos.close();
                 }
-            } catch (SQLException excepcion) {
-                LOGGER.log(Level.SEVERE, "Error al cerrar conexión", excepcion);
+            } catch (SQLException excepcionSql) {
+                LOGGER.log(Level.SEVERE, "Error al cerrar conexión", excepcionSql);
             }
         }
         return listaProyectos;
@@ -147,9 +147,9 @@ public class ProyectoDao implements ProyectoDaoInterfaz {
             actualizacion.setInt(2, idProyecto);
             filasAfectadas = actualizacion.executeUpdate();
             LOGGER.info("Proyecto inactivado correctamente: " + idProyecto);
-        } catch (SQLException excepcion) {
-            LOGGER.log(Level.SEVERE, "Error al inactivar proyecto", excepcion);
-            throw new MensajeriaExcepcion("Error al inactivar proyecto", excepcion);
+        } catch (SQLException excepcionSql) {
+            LOGGER.log(Level.SEVERE, "Error al inactivar proyecto", excepcionSql);
+            throw new MensajeriaExcepcion("Error al inactivar proyecto", excepcionSql);
         } finally {
             try {
                 if (actualizacion != null) {
@@ -158,8 +158,8 @@ public class ProyectoDao implements ProyectoDaoInterfaz {
                 if (conexionBaseDeDatos != null) {
                     conexionBaseDeDatos.close();
                 }
-            } catch (SQLException excepcion) {
-                LOGGER.log(Level.SEVERE, "Error al cerrar conexión", excepcion);
+            } catch (SQLException excepcionSql) {
+                LOGGER.log(Level.SEVERE, "Error al cerrar conexión", excepcionSql);
             }
         }
         return filasAfectadas;
@@ -188,9 +188,9 @@ public class ProyectoDao implements ProyectoDaoInterfaz {
                 proyecto.setNombreOrganizacion(resultado.getString("nombreOrganizacion"));
             }
             LOGGER.info("Proyecto cargado para practicante: " + matricula);
-        } catch (SQLException excepcion) {
-            LOGGER.log(Level.SEVERE, "Error al obtener proyecto del practicante", excepcion);
-            throw new MensajeriaExcepcion("Error al obtener proyecto del practicante", excepcion);
+        } catch (SQLException excepcionSql) {
+            LOGGER.log(Level.SEVERE, "Error al obtener proyecto del practicante", excepcionSql);
+            throw new MensajeriaExcepcion("Error al obtener proyecto del practicante", excepcionSql);
         } finally {
             try {
                 if (sentencia != null) {
@@ -199,8 +199,8 @@ public class ProyectoDao implements ProyectoDaoInterfaz {
                 if (conexionBaseDeDatos != null) {
                     conexionBaseDeDatos.close();
                 }
-            } catch (SQLException excepcion) {
-                LOGGER.log(Level.SEVERE, "Error al cerrar conexión", excepcion);
+            } catch (SQLException excepcionSql) {
+                LOGGER.log(Level.SEVERE, "Error al cerrar conexión", excepcionSql);
             }
         }
         return proyecto;

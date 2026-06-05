@@ -42,9 +42,9 @@ public class UsuarioDao implements UsuarioDaoInterfaz {
                 idGenerado = tomarLlave.getInt(1);
                 LOGGER.info("Usuario insertado correctamente con ID: " + idGenerado);
             }
-        } catch (SQLException excepcionSQL) {
-            LOGGER.log(Level.SEVERE, "Error al insertar el usuario", excepcionSQL);
-            throw new UsuariosExcepcion("Error al insertar usuario", excepcionSQL);
+        } catch (SQLException excepcionSql) {
+            LOGGER.log(Level.SEVERE, "Error al insertar el usuario", excepcionSql);
+            throw new UsuariosExcepcion("Error al insertar usuario", excepcionSql);
         } finally {
             try {
                 if (insercionBaseDeDatos != null) {
@@ -53,8 +53,8 @@ public class UsuarioDao implements UsuarioDaoInterfaz {
                 if (conexionBaseDeDatos != null) {
                     conexionBaseDeDatos.close();
                 }
-            } catch (SQLException excepcionSQL) {
-                LOGGER.log(Level.SEVERE, "Error al cerrar la conexión", excepcionSQL);
+            } catch (SQLException excepcionSql) {
+                LOGGER.log(Level.SEVERE, "Error al cerrar la conexión", excepcionSql);
             }
         }
         return idGenerado;
@@ -83,9 +83,9 @@ public class UsuarioDao implements UsuarioDaoInterfaz {
                 usuarioSesion.setIdentificador(resultado.getString("identificador"));
                 usuarioSesion.setIdUsuario(resultado.getInt("idUsuario"));
             }
-        } catch (SQLException excepcionSQL) {
-            LOGGER.log(Level.SEVERE, "Error al buscar usuario", excepcionSQL);
-            throw new UsuariosExcepcion("Error al buscar usuario", excepcionSQL);
+        } catch (SQLException excepcionSql) {
+            LOGGER.log(Level.SEVERE, "Error al buscar usuario", excepcionSql);
+            throw new UsuariosExcepcion("Error al buscar usuario", excepcionSql);
         } finally {
             try {
                 if (procedimiento != null) {
@@ -94,8 +94,8 @@ public class UsuarioDao implements UsuarioDaoInterfaz {
                 if (conexionBaseDeDatos != null) {
                     conexionBaseDeDatos.close();
                 }
-            } catch (SQLException excepcionSQL) {
-                LOGGER.log(Level.SEVERE, "Error al cerrar la conexión", excepcionSQL);
+            } catch (SQLException excepcionSql) {
+                LOGGER.log(Level.SEVERE, "Error al cerrar la conexión", excepcionSql);
             }
         }
         return usuarioSesion;
