@@ -1,10 +1,12 @@
 package InterfazGrafica;
+
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import java.io.File;
@@ -16,12 +18,19 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class DescargarDocumentacionControlador {
+
+    private static final Logger LOGGER = Logger.getLogger(DescargarDocumentacionControlador.class.getName());
+
     @FXML private TableView<String[]> tablaDocumentos;
     @FXML private TableColumn<String[], String> columnaDocumento;
     @FXML private TableColumn<String[], Void> columnaAccion;
     @FXML private Label etiquetaMensaje;
-
-    private static final Logger LOGGER = Logger.getLogger(DescargarDocumentacionControlador.class.getName());
+    @FXML private VBox panelError;
+    @FXML private Label etiquetaTituloError;
+    @FXML private Label etiquetaMensajeError;
+    @FXML private VBox panelExito;
+    @FXML private Label etiquetaTituloExito;
+    @FXML private Label etiquetaMensajeExito;
 
     @FXML
     public void initialize() {
@@ -30,7 +39,8 @@ public class DescargarDocumentacionControlador {
     }
 
     private void configurarColumnas() {
-        columnaDocumento.setCellValueFactory(dato -> new javafx.beans.property.SimpleStringProperty(dato.getValue()[0]));
+        columnaDocumento.setCellValueFactory(dato ->
+                new javafx.beans.property.SimpleStringProperty(dato.getValue()[0]));
         columnaAccion.setCellFactory(columna -> new TableCell<>() {
             private final Button botonDescargar = new Button("Descargar");
             {
@@ -65,7 +75,17 @@ public class DescargarDocumentacionControlador {
         });
     }
 
+    public boolean archivoExisteEnRecursos(String rutaRecurso) {
+        return getClass().getResourceAsStream(rutaRecurso) != null;
+    }
+
     private void descargarDocumento(String nombre, String rutaRecurso, String nombreArchivo) {
+        ocultarPanel(panelError);
+        ocultarPanel(panelExito);
+        if (!archivoExisteEnRecursos(rutaRecurso)) {
+            mostrarError("Archivo no encontrado", "EL ARCHIVO NO EXISTE EN LOS RECURSOS DEL SISTEMA.");
+            return;
+        }
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Guardar documento");
         fileChooser.setInitialFileName(nombreArchivo);
@@ -82,19 +102,11 @@ public class DescargarDocumentacionControlador {
     private void copiarArchivo(String rutaRecurso, File destino) {
         try (InputStream origen = getClass().getResourceAsStream(rutaRecurso);
              OutputStream salida = new FileOutputStream(destino)) {
-            if (origen == null) {
-                LOGGER.log(Level.SEVERE, "No se encontró el archivo en recursos");
-                etiquetaMensaje.setStyle("-fx-text-fill: red;");
-                etiquetaMensaje.setText("No se encontró el archivo");
-                return;
-            }
             origen.transferTo(salida);
-            etiquetaMensaje.setStyle("-fx-text-fill: green;");
-            etiquetaMensaje.setText("Archivo descargado correctamente");
+            mostrarExito("Descarga exitosa", "EL ARCHIVO FUE DESCARGADO CORRECTAMENTE.");
         } catch (IOException excepcion) {
             LOGGER.log(Level.SEVERE, "Error al descargar el archivo", excepcion);
-            etiquetaMensaje.setStyle("-fx-text-fill: red;");
-            etiquetaMensaje.setText("Error al descargar el archivo");
+            mostrarError("Error al descargar", "NO SE PUDO DESCARGAR EL ARCHIVO.");
         }
     }
 
@@ -102,5 +114,26 @@ public class DescargarDocumentacionControlador {
     private void cerrar() {
         Stage escenario = (Stage) tablaDocumentos.getScene().getWindow();
         escenario.close();
+    }
+
+    private void mostrarError(String titulo, String mensaje) {
+        ocultarPanel(panelExito);
+        etiquetaTituloError.setText(titulo);
+        etiquetaMensajeError.setText(mensaje);
+        panelError.setVisible(true);
+        panelError.setManaged(true);
+    }
+
+    private void mostrarExito(String titulo, String mensaje) {
+        ocultarPanel(panelError);
+        etiquetaTituloExito.setText(titulo);
+        etiquetaMensajeExito.setText(mensaje);
+        panelExito.setVisible(true);
+        panelExito.setManaged(true);
+    }
+
+    private void ocultarPanel(VBox panel) {
+        panel.setVisible(false);
+        panel.setManaged(false);
     }
 }

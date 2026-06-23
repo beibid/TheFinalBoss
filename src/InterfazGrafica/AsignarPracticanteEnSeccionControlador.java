@@ -1,6 +1,5 @@
 package InterfazGrafica;
 
-
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -13,13 +12,14 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import logica.dao.excepciones.UsuariosExcepcion;
 import logica.dao.objetos.PracticanteDao;
-import logica.dao.objetos.SeccionDao;
 import logica.dao.objetos.PracticanteSeccionDao;
+import logica.dao.objetos.SeccionDao;
 import logica.dominio.Practicante;
-import logica.dominio.Seccion;
 import logica.dominio.PracticanteSeccion;
+import logica.dominio.Seccion;
 import java.util.List;
-
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class AsignarPracticanteEnSeccionControlador {
 
@@ -31,6 +31,10 @@ public class AsignarPracticanteEnSeccionControlador {
     @FXML private Label etiquetaMensajeError;
     @FXML private Label etiquetaTituloExito;
     @FXML private Label etiquetaMensajeExito;
+
+    private static final Logger LOGGER = Logger.getLogger(AsignarPracticanteEnSeccionControlador.class.getName());
+    private static final int FILAS_AFECTADAS_ESPERADAS = 1;
+
     private final PracticanteDao practicanteDao = new PracticanteDao();
     private final SeccionDao seccionDao = new SeccionDao();
     private final PracticanteSeccionDao practicanteSeccionDao = new PracticanteSeccionDao();
@@ -45,8 +49,10 @@ public class AsignarPracticanteEnSeccionControlador {
         try {
             List<Practicante> practicantes = practicanteDao.obtenerPracticantesActivos();
             comboBoxPracticantes.setItems(FXCollections.observableArrayList(practicantes));
-        } catch (UsuariosExcepcion e) {
-            mostrarError("Error al cargar", "NO SE PUDIERON CARGAR LOS PRACTICANTES.");
+        } catch (UsuariosExcepcion excepcion) {
+            LOGGER.log(Level.SEVERE, "Error al cargar practicantes", excepcion);
+            mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
+                    "Error al cargar", "NO SE PUDIERON CARGAR LOS PRACTICANTES.");
         }
     }
 
@@ -54,8 +60,10 @@ public class AsignarPracticanteEnSeccionControlador {
         try {
             List<Seccion> secciones = seccionDao.obtenerSecciones();
             comboBoxSecciones.setItems(FXCollections.observableArrayList(secciones));
-        } catch (UsuariosExcepcion e) {
-            mostrarError("Error al cargar", "NO SE PUDIERON CARGAR LAS SECCIONES.");
+        } catch (UsuariosExcepcion excepcion) {
+            LOGGER.log(Level.SEVERE, "Error al cargar secciones", excepcion);
+            mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
+                    "Error al cargar", "NO SE PUDIERON CARGAR LAS SECCIONES.");
         }
     }
 
@@ -63,46 +71,63 @@ public class AsignarPracticanteEnSeccionControlador {
     private void seleccionarProfesor() {
         Practicante practicante = comboBoxPracticantes.getSelectionModel().getSelectedItem();
         if (practicante != null) {
-            ocultarError();
-            ocultarExito();
+            ocultarPanel(panelError);
+            ocultarPanel(panelExito);
         }
     }
 
     @FXML
     private void botonAsignar() {
-        Practicante practicante = comboBoxPracticantes.getSelectionModel().getSelectedItem();
-        Seccion seccion = comboBoxSecciones.getSelectionModel().getSelectedItem();
-
-        if (practicante == null) {
-            mostrarError("Sin selección", "POR FAVOR SELECCIONA UN PRACTICANTE.");
-            return;
+        ocultarPanel(panelError);
+        ocultarPanel(panelExito);
+        if (seleccionValida()) {
+            if (confirmarAccion("¿Seguro que desea asignar a "
+                    + comboBoxPracticantes.getSelectionModel().getSelectedItem().getNombre()
+                    + " a la sección "
+                    + comboBoxSecciones.getSelectionModel().getSelectedItem().getNoSeccion() + "?")) {
+                ejecutarAsignacion();
+            }
         }
-        if (seccion == null) {
-            mostrarError("Sin selección", "POR FAVOR SELECCIONA UNA SECCIÓN.");
-            return;
-        }
-        if (!confirmarAccion("¿Seguro que desea asignar a " + practicante.getNombre() + " a la sección " + seccion.getNoSeccion() + "?")) {
-            return;
-        }
-        ejecutarAsignacion(practicante, seccion);
     }
 
-    private void ejecutarAsignacion(Practicante practicante, Seccion seccion) {
+    private boolean seleccionValida() {
+        Practicante practicante = comboBoxPracticantes.getSelectionModel().getSelectedItem();
+        Seccion seccion = comboBoxSecciones.getSelectionModel().getSelectedItem();
+        boolean seleccionCorrecta = practicante != null && seccion != null;
+        verificarSeleccion(practicante, seccion);
+        return seleccionCorrecta;
+    }
+
+    private void verificarSeleccion(Practicante practicante, Seccion seccion) {
+        if (practicante == null) {
+            mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
+                    "Sin selección", "POR FAVOR SELECCIONA UN PRACTICANTE.");
+        } else if (seccion == null) {
+            mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
+                    "Sin selección", "POR FAVOR SELECCIONA UNA SECCIÓN.");
+        }
+    }
+
+    private void ejecutarAsignacion() {
+        Practicante practicante = comboBoxPracticantes.getSelectionModel().getSelectedItem();
+        Seccion seccion = comboBoxSecciones.getSelectionModel().getSelectedItem();
         try {
             PracticanteSeccion practicanteEnSeccion = new PracticanteSeccion();
             practicanteEnSeccion.setMatricula(practicante.getMatricula());
             practicanteEnSeccion.setNoSeccion(seccion.getNoSeccion());
-
             int filasAfectadas = practicanteSeccionDao.agregarPracticanteSeccion(practicanteEnSeccion);
-
-            if (filasAfectadas > 0) {
+            if (filasAfectadas >= FILAS_AFECTADAS_ESPERADAS) {
                 limpiarSeleccion();
-                mostrarExito("Asignación exitosa", "EL PRACTICANTE FUE ASIGNADO A LA SECCIÓN EXITOSAMENTE.");
+                mostrarPanel(etiquetaTituloExito, etiquetaMensajeExito, panelExito,
+                        "Asignación exitosa", "EL PRACTICANTE FUE ASIGNADO A LA SECCIÓN EXITOSAMENTE.");
             } else {
-                mostrarError("Error", "NO SE PUDO REALIZAR LA ASIGNACIÓN.");
+                mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
+                        "Error", "NO SE PUDO REALIZAR LA ASIGNACIÓN.");
             }
-        } catch (UsuariosExcepcion e) {
-            mostrarError("Error inesperado", e.getMessage().toUpperCase());
+        } catch (UsuariosExcepcion excepcion) {
+            LOGGER.log(Level.SEVERE, "Error al asignar practicante a seccion", excepcion);
+            mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
+                    "Error inesperado", excepcion.getMessage().toUpperCase());
         }
     }
 
@@ -133,34 +158,19 @@ public class AsignarPracticanteEnSeccionControlador {
     private void limpiarSeleccion() {
         comboBoxPracticantes.getSelectionModel().clearSelection();
         comboBoxSecciones.getSelectionModel().clearSelection();
-        ocultarError();
-        ocultarExito();
+        ocultarPanel(panelError);
+        ocultarPanel(panelExito);
     }
 
-    private void mostrarError(String titulo, String mensaje) {
-        etiquetaTituloError.setText(titulo);
-        etiquetaMensajeError.setText(mensaje);
-        panelError.setVisible(true);
-        panelError.setManaged(true);
-        ocultarExito();
+    private void mostrarPanel(Label etiquetaTitulo, Label etiquetaMensaje, VBox panel, String titulo, String mensaje) {
+        etiquetaTitulo.setText(titulo);
+        etiquetaMensaje.setText(mensaje);
+        panel.setVisible(true);
+        panel.setManaged(true);
     }
 
-    private void ocultarError() {
-        panelError.setVisible(false);
-        panelError.setManaged(false);
+    private void ocultarPanel(VBox panel) {
+        panel.setVisible(false);
+        panel.setManaged(false);
     }
-
-    private void mostrarExito(String titulo, String mensaje) {
-        etiquetaTituloExito.setText(titulo);
-        etiquetaMensajeExito.setText(mensaje);
-        panelExito.setVisible(true);
-        panelExito.setManaged(true);
-        ocultarError();
-    }
-
-    private void ocultarExito() {
-        panelExito.setVisible(false);
-        panelExito.setManaged(false);
-    }
-
 }

@@ -17,7 +17,7 @@
                 <Label style="-fx-font-size: 22; -fx-font-weight: bold;"
                        text="Selección de Proyectos Preferidos" />
 
-                <!-- Panel error -->
+
                 <VBox fx:id="panelError" managed="false" prefWidth="500.0" spacing="4.0"
                       style="-fx-border-color: #8B0000; -fx-border-width: 2; -fx-background-color: #f5f5dc; -fx-padding: 10;"
                       visible="false">

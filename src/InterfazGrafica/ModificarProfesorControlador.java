@@ -51,18 +51,24 @@ public class ModificarProfesorControlador {
         ProfesorDao profesorDao = new ProfesorDao();
         try {
             List<Profesor> lista = profesorDao.obtenerProfesoresActivos();
-            ObservableList<Profesor> profesoresObservable = FXCollections.observableArrayList(lista);
-            comboBoxProfesores.setItems(profesoresObservable);
-            comboBoxProfesores.setCellFactory(listaProfesores -> crearCeldaProfesor());
-            comboBoxProfesores.setButtonCell(crearCeldaProfesor());
+            if (lista.isEmpty()) {
+                mostrarError("Sin profesores", "NO HAY PROFESORES ACTIVOS EN EL SISTEMA.");
+                comboBoxProfesores.setDisable(true);
+            } else {
+                ObservableList<Profesor> profesoresObservable = FXCollections.observableArrayList(lista);
+                comboBoxProfesores.setItems(profesoresObservable);
+                comboBoxProfesores.setCellFactory(listaProfesores -> crearCeldaProfesor());
+                comboBoxProfesores.setButtonCell(crearCeldaProfesor());
+            }
         } catch (UsuariosExcepcion excepcion) {
             LOGGER.log(Level.SEVERE, "Error al cargar profesores", excepcion);
-            mostrarError("Error al cargar", excepcion.getMessage());
+            mostrarError("Error al cargar", "NO SE PUDIERON CARGAR LOS PROFESORES.");
+            comboBoxProfesores.setDisable(true);
         }
     }
 
     private ListCell<Profesor> crearCeldaProfesor() {
-        return new ListCell<Profesor>() {
+        return new ListCell<>() {
             @Override
             protected void updateItem(Profesor profesor, boolean vacio) {
                 super.updateItem(profesor, vacio);
@@ -111,17 +117,16 @@ public class ModificarProfesorControlador {
                 if (filasAfectadas >= FILAS_AFECTADAS_ESPERADAS) {
                     ocultarTodo();
                     comboBoxProfesores.setValue(null);
+                    comboBoxProfesores.setDisable(false);
                     cargarProfesores();
-                    mostrarExito("Profesor modificado", "Profesor actualizado exitosamente.");
+                    mostrarExito("Profesor modificado", "PROFESOR ACTUALIZADO EXITOSAMENTE.");
                 } else {
-                    mostrarError("Error al modificar", "No se pudo modificar el profesor. Intente de nuevo.");
+                    mostrarError("Error al modificar", "NO SE PUDO MODIFICAR EL PROFESOR. INTENTE DE NUEVO.");
                 }
             } catch (UsuariosExcepcion excepcion) {
                 LOGGER.log(Level.SEVERE, "Error al modificar profesor", excepcion);
                 mostrarError("Error inesperado", excepcion.getMessage().toUpperCase());
             }
-        } else {
-            mostrarError("Campos obligatorios vacíos", "Verifica la información e intenta de nuevo.");
         }
     }
 
@@ -141,17 +146,30 @@ public class ModificarProfesorControlador {
         String correo = campoCorreo.getText().trim();
 
         List<String> campos = List.of(nombre, apellidos, correo);
-        boolean camposTextosValidos = !camposVacios(campos);
+        boolean camposFormularioValidos = !camposVacios(campos);
+        boolean nombreValido = nombre.matches("[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+");
+        boolean apellidosValidos = apellidos.matches("[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+");
+        boolean correoValido = correo.matches("^[\\w.-]+@[\\w.-]+\\.[a-zA-Z]{2,}$");
         boolean turnoValido = comboBoxTurno.getValue() != null;
 
-        if (!camposTextosValidos) {
-            mostrarError("Campos obligatorios vacios", "Verifique la informacion e intente de nuevo.");
+        verificarCampos(camposFormularioValidos, nombreValido, apellidosValidos, correoValido, turnoValido);
+
+        return camposFormularioValidos && nombreValido && apellidosValidos && correoValido && turnoValido;
+    }
+
+    private void verificarCampos(boolean camposFormularioValidos, boolean nombreValido,
+                                 boolean apellidosValidos, boolean correoValido, boolean turnoValido) {
+        if (!camposFormularioValidos) {
+            mostrarError("Campos obligatorios vacíos", "POR FAVOR LLENE TODOS LOS CAMPOS.");
+        } else if (!nombreValido) {
+            mostrarError("Nombre inválido", "EL NOMBRE SOLO PUEDE CONTENER LETRAS.");
+        } else if (!apellidosValidos) {
+            mostrarError("Apellidos inválidos", "LOS APELLIDOS SOLO PUEDEN CONTENER LETRAS.");
+        } else if (!correoValido) {
+            mostrarError("Correo inválido", "INGRESE UN CORREO ELECTRÓNICO VÁLIDO.");
+        } else if (!turnoValido) {
+            mostrarError("Turno no seleccionado", "SELECCIONE UN TURNO PARA EL PROFESOR.");
         }
-        if (!turnoValido) {
-            mostrarError("Turno no seleccionado", "Seleccione un turno para el profesor.");
-        }
-        boolean formularioCompleto = camposTextosValidos && turnoValido;
-        return formularioCompleto;
     }
 
     private Profesor construirProfesor() {

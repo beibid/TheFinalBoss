@@ -1,4 +1,4 @@
-package logica;
+package logica.dominio;
 
 
 import java.nio.charset.StandardCharsets;

@@ -5,11 +5,11 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
-import javafx.scene.control.ListCell;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListCell;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import logica.dao.excepciones.MensajeriaExcepcion;
@@ -47,19 +47,25 @@ public class InactivarProyectoControlador {
     private void cargarProyectosDisponibles() {
         ProyectoDao proyectoDao = new ProyectoDao();
         try {
-            List<Proyecto> listaProyectos = proyectoDao.obtenerProyectosDisponibles();
-            ObservableList<Proyecto> proyectosObservable = FXCollections.observableArrayList(listaProyectos);
-            comboBoxProyectos.setItems(proyectosObservable);
-            comboBoxProyectos.setCellFactory(listaProyectos2 -> crearCeldaProyecto());
-            comboBoxProyectos.setButtonCell(crearCeldaProyecto());
+            List<Proyecto> proyectos = proyectoDao.obtenerProyectosDisponibles();
+            if (proyectos.isEmpty()) {
+                mostrarError("Sin proyectos", "NO HAY PROYECTOS DISPONIBLES EN EL SISTEMA.");
+                comboBoxProyectos.setDisable(true);
+            } else {
+                ObservableList<Proyecto> proyectosObservable = FXCollections.observableArrayList(proyectos);
+                comboBoxProyectos.setItems(proyectosObservable);
+                comboBoxProyectos.setCellFactory(listaProyectos -> crearCeldaProyecto());
+                comboBoxProyectos.setButtonCell(crearCeldaProyecto());
+            }
         } catch (MensajeriaExcepcion excepcion) {
             LOGGER.log(Level.SEVERE, "Error al cargar proyectos", excepcion);
-            mostrarError("Error al cargar proyectos", excepcion.getMessage());
+            mostrarError("Error al cargar proyectos", excepcion.getMessage().toUpperCase());
+            comboBoxProyectos.setDisable(true);
         }
     }
 
     private ListCell<Proyecto> crearCeldaProyecto() {
-        return new ListCell<Proyecto>() {
+        return new ListCell<>() {
             @Override
             protected void updateItem(Proyecto proyecto, boolean vacio) {
                 super.updateItem(proyecto, vacio);
@@ -94,7 +100,7 @@ public class InactivarProyectoControlador {
     @FXML
     private void botonInactivar() {
         if (proyectoSeleccionado == null) {
-            mostrarError("Sin selección", "Selecciona un proyecto de la lista.");
+            mostrarError("Sin selección", "SELECCIONA UN PROYECTO DE LA LISTA.");
         } else if (confirmarAccion("¿Seguro que desea inactivar este proyecto?")) {
             procesarInactivacion();
         }
@@ -107,10 +113,11 @@ public class InactivarProyectoControlador {
             if (filasAfectadas >= FILAS_AFECTADAS_ESPERADAS) {
                 ocultarTodo();
                 comboBoxProyectos.setValue(null);
+                comboBoxProyectos.setDisable(false);
                 cargarProyectosDisponibles();
-                mostrarExito("Proyecto inactivado", "El proyecto fue inactivado exitosamente.");
+                mostrarExito("Proyecto inactivado", "EL PROYECTO FUE INACTIVADO EXITOSAMENTE.");
             } else {
-                mostrarError("Error al inactivar", "No se pudo inactivar el proyecto. Intente de nuevo.");
+                mostrarError("Error al inactivar", "NO SE PUDO INACTIVAR EL PROYECTO. INTENTE DE NUEVO.");
             }
         } catch (MensajeriaExcepcion excepcion) {
             LOGGER.log(Level.SEVERE, "Error al inactivar proyecto", excepcion);

@@ -39,10 +39,16 @@ public class CerrarPeriodoControlador {
         PeriodoUniversitarioDao periodoUniversitarioDao = new PeriodoUniversitarioDao();
         try {
             List<PeriodoUniversitario> periodos = periodoUniversitarioDao.obtenerPeriodosAbiertos();
-            comboBoxPeriodo.setItems(FXCollections.observableArrayList(periodos));
+            if (periodos.isEmpty()) {
+                mostrarError("Sin periodos", "NO HAY PERIODOS ABIERTOS EN EL SISTEMA.");
+                comboBoxPeriodo.setDisable(true);
+            } else {
+                comboBoxPeriodo.setItems(FXCollections.observableArrayList(periodos));
+            }
         } catch (UsuariosExcepcion excepcion) {
             LOGGER.log(Level.SEVERE, "Error al cargar periodos", excepcion);
-            mostrarError("Error al cargar", "NO SE PUDIERON CARGAR LOS PERIODOS");
+            mostrarError("Error al cargar", "NO SE PUDIERON CARGAR LOS PERIODOS.");
+            comboBoxPeriodo.setDisable(true);
         }
     }
 
@@ -52,12 +58,29 @@ public class CerrarPeriodoControlador {
         ocultarExito();
         PeriodoUniversitario periodoSeleccionado = comboBoxPeriodo.getValue();
         if (periodoSeleccionado == null) {
-            mostrarError("Periodo no seleccionado", "POR FAVOR SELECCIONA UN PERIODO PARA CERRAR");
+            mostrarError("Periodo no seleccionado", "POR FAVOR SELECCIONA UN PERIODO PARA CERRAR.");
             return;
         }
         if (confirmarAccion("¿Seguro que desea cerrar el periodo " + periodoSeleccionado.getNombre() + "?")) {
-            ejecutarCierre(periodoSeleccionado.getIdPeriodo());
+            if (hayPeriodoAbierto()) {
+                ejecutarCierre(periodoSeleccionado.getIdPeriodo());
+            }
         }
+    }
+
+    private boolean hayPeriodoAbierto() {
+        PeriodoUniversitarioDao periodoUniversitarioDao = new PeriodoUniversitarioDao();
+        boolean periodoValido = false;
+        try {
+            periodoValido = periodoUniversitarioDao.verificarPeriodoAbierto();
+            if (!periodoValido) {
+                mostrarError("Sin periodo activo", "NO EXISTE UN PERIODO ABIERTO ACTUALMENTE EN EL SISTEMA.");
+            }
+        } catch (UsuariosExcepcion excepcion) {
+            LOGGER.log(Level.SEVERE, "Error al verificar periodo abierto", excepcion);
+            mostrarError("Error inesperado", "NO SE PUDO VERIFICAR EL ESTADO DEL PERIODO.");
+        }
+        return periodoValido;
     }
 
     private void ejecutarCierre(int idPeriodo) {
@@ -66,10 +89,11 @@ public class CerrarPeriodoControlador {
             int filasAfectadas = periodoUniversitarioDao.cerrarPeriodo(idPeriodo);
             if (filasAfectadas >= FILAS_AFECTADAS_ESPERADAS) {
                 comboBoxPeriodo.setValue(null);
+                comboBoxPeriodo.setDisable(false);
                 cargarPeriodos();
-                mostrarExito("Periodo cerrado", "EL PERIODO FUE CERRADO EXITOSAMENTE");
+                mostrarExito("Periodo cerrado", "EL PERIODO FUE CERRADO EXITOSAMENTE.");
             } else {
-                mostrarError("Error al cerrar", "NO SE PUDO CERRAR EL PERIODO. INTENTE DE NUEVO");
+                mostrarError("Error al cerrar", "NO SE PUDO CERRAR EL PERIODO. INTENTE DE NUEVO.");
             }
         } catch (UsuariosExcepcion excepcion) {
             LOGGER.log(Level.SEVERE, "Error al cerrar periodo", excepcion);

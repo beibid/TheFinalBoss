@@ -52,18 +52,24 @@ public class ModificarPracticanteControlador {
         PracticanteDao practicanteDao = new PracticanteDao();
         try {
             List<Practicante> lista = practicanteDao.obtenerPracticantesActivos();
-            ObservableList<Practicante> practicantesObservable = FXCollections.observableArrayList(lista);
-            comboBoxPracticantes.setItems(practicantesObservable);
-            comboBoxPracticantes.setCellFactory(listaPracticantes -> crearCeldaPracticante());
-            comboBoxPracticantes.setButtonCell(crearCeldaPracticante());
+            if (lista.isEmpty()) {
+                mostrarError("Sin practicantes", "NO HAY PRACTICANTES ACTIVOS EN EL SISTEMA.");
+                comboBoxPracticantes.setDisable(true);
+            } else {
+                ObservableList<Practicante> practicantesObservable = FXCollections.observableArrayList(lista);
+                comboBoxPracticantes.setItems(practicantesObservable);
+                comboBoxPracticantes.setCellFactory(listaPracticantes -> crearCeldaPracticante());
+                comboBoxPracticantes.setButtonCell(crearCeldaPracticante());
+            }
         } catch (UsuariosExcepcion excepcion) {
             LOGGER.log(Level.SEVERE, "Error al cargar practicantes", excepcion);
-            mostrarError("Error al cargar", excepcion.getMessage());
+            mostrarError("Error al cargar", "NO SE PUDIERON CARGAR LOS PRACTICANTES.");
+            comboBoxPracticantes.setDisable(true);
         }
     }
 
     private ListCell<Practicante> crearCeldaPracticante() {
-        return new ListCell<Practicante>() {
+        return new ListCell<>() {
             @Override
             protected void updateItem(Practicante practicante, boolean vacio) {
                 super.updateItem(practicante, vacio);
@@ -90,11 +96,7 @@ public class ModificarPracticanteControlador {
         campoNombre.setText(practicante.getNombre());
         campoApellidos.setText(practicante.getApellidos());
         campoCorreo.setText(practicante.getCorreo());
-        if (practicante.getLenguaIndigena() != null) {
-            campoLenguaIndigena.setText(practicante.getLenguaIndigena());
-        } else {
-            campoLenguaIndigena.setText("");
-        }
+        campoLenguaIndigena.setText(practicante.getLenguaIndigena() != null ? practicante.getLenguaIndigena() : "");
         comboBoxGenero.setValue(practicante.getGenero());
         panelFormulario.setVisible(true);
         panelFormulario.setManaged(true);
@@ -117,10 +119,11 @@ public class ModificarPracticanteControlador {
                 if (filasAfectadas >= FILAS_AFECTADAS_ESPERADAS) {
                     ocultarTodo();
                     comboBoxPracticantes.setValue(null);
+                    comboBoxPracticantes.setDisable(false);
                     cargarPracticantes();
-                    mostrarExito("Practicante modificado", "Practicante actualizado exitosamente.");
+                    mostrarExito("Practicante modificado", "PRACTICANTE ACTUALIZADO EXITOSAMENTE.");
                 } else {
-                    mostrarError("Error al modificar", "No se pudo modificar el practicante. Intente de nuevo.");
+                    mostrarError("Error al modificar", "NO SE PUDO MODIFICAR EL PRACTICANTE. INTENTE DE NUEVO.");
                 }
             } catch (UsuariosExcepcion excepcion) {
                 LOGGER.log(Level.SEVERE, "Error al modificar practicante", excepcion);
@@ -145,17 +148,30 @@ public class ModificarPracticanteControlador {
         String correo = campoCorreo.getText().trim();
 
         List<String> campos = List.of(nombre, apellidos, correo);
-        boolean camposTextosValidos = !camposVacios(campos);
+        boolean camposFormularioValidos = !camposVacios(campos);
+        boolean nombreValido = nombre.matches("[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+");
+        boolean apellidosValidos = apellidos.matches("[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+");
+        boolean correoValido = correo.matches("^[\\w.-]+@[\\w.-]+\\.[a-zA-Z]{2,}$");
         boolean generoValido = comboBoxGenero.getValue() != null;
 
-        if (!camposTextosValidos) {
-            mostrarError("Campos obligatorios vacíos", "Verifica la información e intenta de nuevo.");
+        verificarCampos(camposFormularioValidos, nombreValido, apellidosValidos, correoValido, generoValido);
+
+        return camposFormularioValidos && nombreValido && apellidosValidos && correoValido && generoValido;
+    }
+
+    private void verificarCampos(boolean camposFormularioValidos, boolean nombreValido,
+                                 boolean apellidosValidos, boolean correoValido, boolean generoValido) {
+        if (!camposFormularioValidos) {
+            mostrarError("Campos obligatorios vacíos", "POR FAVOR LLENE TODOS LOS CAMPOS.");
+        } else if (!nombreValido) {
+            mostrarError("Nombre inválido", "EL NOMBRE SOLO PUEDE CONTENER LETRAS.");
+        } else if (!apellidosValidos) {
+            mostrarError("Apellidos inválidos", "LOS APELLIDOS SOLO PUEDEN CONTENER LETRAS.");
+        } else if (!correoValido) {
+            mostrarError("Correo inválido", "INGRESE UN CORREO ELECTRÓNICO VÁLIDO.");
+        } else if (!generoValido) {
+            mostrarError("Género no seleccionado", "SELECCIONA UN GÉNERO PARA EL PRACTICANTE.");
         }
-        if (!generoValido) {
-            mostrarError("Género no seleccionado", "Selecciona un género para el practicante.");
-        }
-        boolean formularioCompleto = camposTextosValidos && generoValido;
-        return formularioCompleto;
     }
 
     private Practicante construirPracticante() {

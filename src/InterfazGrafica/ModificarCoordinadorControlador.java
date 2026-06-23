@@ -48,18 +48,24 @@ public class ModificarCoordinadorControlador {
         CoordinadorDao coordinadorDao = new CoordinadorDao();
         try {
             List<Coordinador> lista = coordinadorDao.obtenerCoordinadoresActivos();
-            ObservableList<Coordinador> coordinadoresObservable = FXCollections.observableArrayList(lista);
-            comboBoxCoordinadores.setItems(coordinadoresObservable);
-            comboBoxCoordinadores.setCellFactory(listaCoordinadores -> crearCeldaCoordinador());
-            comboBoxCoordinadores.setButtonCell(crearCeldaCoordinador());
+            if (lista.isEmpty()) {
+                mostrarError("Sin coordinadores", "NO HAY COORDINADORES ACTIVOS EN EL SISTEMA.");
+                comboBoxCoordinadores.setDisable(true);
+            } else {
+                ObservableList<Coordinador> coordinadoresObservable = FXCollections.observableArrayList(lista);
+                comboBoxCoordinadores.setItems(coordinadoresObservable);
+                comboBoxCoordinadores.setCellFactory(listaCoordinadores -> crearCeldaCoordinador());
+                comboBoxCoordinadores.setButtonCell(crearCeldaCoordinador());
+            }
         } catch (UsuariosExcepcion excepcion) {
             LOGGER.log(Level.SEVERE, "Error al cargar coordinadores", excepcion);
-            mostrarError("Error al cargar", excepcion.getMessage());
+            mostrarError("Error al cargar", "NO SE PUDIERON CARGAR LOS COORDINADORES.");
+            comboBoxCoordinadores.setDisable(true);
         }
     }
 
     private ListCell<Coordinador> crearCeldaCoordinador() {
-        return new ListCell<Coordinador>() {
+        return new ListCell<>() {
             @Override
             protected void updateItem(Coordinador coordinador, boolean vacio) {
                 super.updateItem(coordinador, vacio);
@@ -85,11 +91,7 @@ public class ModificarCoordinadorControlador {
     private void rellenarFormulario(Coordinador coordinador) {
         campoNombre.setText(coordinador.getNombre());
         campoApellidos.setText(coordinador.getApellidos());
-        if (coordinador.getCorreo() != null) {
-            campoCorreo.setText(coordinador.getCorreo());
-        } else {
-            campoCorreo.setText("");
-        }
+        campoCorreo.setText(coordinador.getCorreo() != null ? coordinador.getCorreo() : "");
         panelFormulario.setVisible(true);
         panelFormulario.setManaged(true);
     }
@@ -111,10 +113,11 @@ public class ModificarCoordinadorControlador {
                 if (filasAfectadas >= FILAS_AFECTADAS_ESPERADAS) {
                     ocultarTodo();
                     comboBoxCoordinadores.setValue(null);
+                    comboBoxCoordinadores.setDisable(false);
                     cargarCoordinadores();
-                    mostrarExito("Coordinador modificado", "Coordinador actualizado exitosamente.");
+                    mostrarExito("Coordinador modificado", "COORDINADOR ACTUALIZADO EXITOSAMENTE.");
                 } else {
-                    mostrarError("Error al modificar", "No se pudo modificar el coordinador. Intente de nuevo.");
+                    mostrarError("Error al modificar", "NO SE PUDO MODIFICAR EL COORDINADOR. INTENTE DE NUEVO.");
                 }
             } catch (UsuariosExcepcion excepcion) {
                 LOGGER.log(Level.SEVERE, "Error al modificar coordinador", excepcion);
@@ -140,11 +143,26 @@ public class ModificarCoordinadorControlador {
 
         List<String> campos = List.of(nombre, apellidos, correo);
         boolean camposFormularioValidos = !camposVacios(campos);
+        boolean nombreValido = nombre.matches("[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+");
+        boolean apellidosValidos = apellidos.matches("[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+");
+        boolean correoValido = correo.matches("^[\\w.-]+@[\\w.-]+\\.[a-zA-Z]{2,}$");
 
+        verificarCampos(camposFormularioValidos, nombreValido, apellidosValidos, correoValido);
+
+        return camposFormularioValidos && nombreValido && apellidosValidos && correoValido;
+    }
+
+    private void verificarCampos(boolean camposFormularioValidos, boolean nombreValido,
+                                 boolean apellidosValidos, boolean correoValido) {
         if (!camposFormularioValidos) {
-            mostrarError("Campos obligatorios vacíos", "Verifica la información e intenta de nuevo.");
+            mostrarError("Campos obligatorios vacíos", "POR FAVOR LLENE TODOS LOS CAMPOS.");
+        } else if (!nombreValido) {
+            mostrarError("Nombre inválido", "EL NOMBRE SOLO PUEDE CONTENER LETRAS.");
+        } else if (!apellidosValidos) {
+            mostrarError("Apellidos inválidos", "LOS APELLIDOS SOLO PUEDEN CONTENER LETRAS.");
+        } else if (!correoValido) {
+            mostrarError("Correo inválido", "INGRESE UN CORREO ELECTRÓNICO VÁLIDO.");
         }
-        return camposFormularioValidos;
     }
 
     private Coordinador construirCoordinador() {

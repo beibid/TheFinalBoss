@@ -50,26 +50,32 @@ public class ModificarProyectoControlador {
 
     @FXML
     public void initialize() {
-        cargarProyectosDisponibles();
         comboBoxEstado.setItems(FXCollections.observableArrayList(EstadoProyecto.values()));
+        cargarProyectosDisponibles();
     }
 
     private void cargarProyectosDisponibles() {
         ProyectoDao proyectoDao = new ProyectoDao();
         try {
             List<Proyecto> listaProyectos = proyectoDao.obtenerProyectosDisponibles();
-            ObservableList<Proyecto> proyectosObservable = FXCollections.observableArrayList(listaProyectos);
-            comboBoxProyectos.setItems(proyectosObservable);
-            comboBoxProyectos.setCellFactory(listaProyectos2 -> crearCeldaProyecto());
-            comboBoxProyectos.setButtonCell(crearCeldaProyecto());
+            if (listaProyectos.isEmpty()) {
+                mostrarError("Sin proyectos", "NO HAY PROYECTOS DISPONIBLES EN EL SISTEMA.");
+                comboBoxProyectos.setDisable(true);
+            } else {
+                ObservableList<Proyecto> proyectosObservable = FXCollections.observableArrayList(listaProyectos);
+                comboBoxProyectos.setItems(proyectosObservable);
+                comboBoxProyectos.setCellFactory(listaProyectos2 -> crearCeldaProyecto());
+                comboBoxProyectos.setButtonCell(crearCeldaProyecto());
+            }
         } catch (MensajeriaExcepcion excepcion) {
             LOGGER.log(Level.SEVERE, "Error al cargar proyectos", excepcion);
-            mostrarError("Error al cargar proyectos", excepcion.getMessage());
+            mostrarError("Error al cargar proyectos", "NO SE PUDIERON CARGAR LOS PROYECTOS.");
+            comboBoxProyectos.setDisable(true);
         }
     }
 
     private ListCell<Proyecto> crearCeldaProyecto() {
-        return new ListCell<Proyecto>() {
+        return new ListCell<>() {
             @Override
             protected void updateItem(Proyecto proyecto, boolean vacio) {
                 super.updateItem(proyecto, vacio);
@@ -101,8 +107,7 @@ public class ModificarProyectoControlador {
         campoSectorEmpresa.setText(proyecto.getSectorEmpresa());
         campoDireccionEmpresa.setText(proyecto.getDireccionEmpresa());
         campoNumPersonalCoordinador.setText(proyecto.getNumPersonalCoordinador());
-        campoFechaRegistro.setText(proyecto.getFechaRegistro() != null ?
-                proyecto.getFechaRegistro().toString() : "");
+        campoFechaRegistro.setText(proyecto.getFechaRegistro() != null ? proyecto.getFechaRegistro().toString() : "");
         panelFormulario.setVisible(true);
         panelFormulario.setManaged(true);
     }
@@ -124,18 +129,27 @@ public class ModificarProyectoControlador {
                 if (filasAfectadas >= FILAS_AFECTADAS_ESPERADAS) {
                     ocultarTodo();
                     comboBoxProyectos.setValue(null);
+                    comboBoxProyectos.setDisable(false);
                     cargarProyectosDisponibles();
-                    mostrarExito("Proyecto modificado", "El proyecto fue modificado exitosamente.");
+                    mostrarExito("Proyecto modificado", "EL PROYECTO FUE MODIFICADO EXITOSAMENTE.");
                 } else {
-                    mostrarError("Error al modificar", "No se pudo modificar el proyecto. Intente de nuevo.");
+                    mostrarError("Error al modificar", "NO SE PUDO MODIFICAR EL PROYECTO. INTENTE DE NUEVO.");
                 }
             } catch (MensajeriaExcepcion excepcion) {
                 LOGGER.log(Level.SEVERE, "Error al modificar proyecto", excepcion);
                 mostrarError("Error inesperado", excepcion.getMessage().toUpperCase());
             }
-        } else {
-            mostrarError("Campos obligatorios vacíos", "Verifique la información e intente de nuevo.");
         }
+    }
+
+    private boolean camposVacios(List<TextField> campos) {
+        boolean hayCamposVacios = false;
+        for (TextField campo : campos) {
+            if (campo.getText().trim().isEmpty()) {
+                hayCamposVacios = true;
+            }
+        }
+        return hayCamposVacios;
     }
 
     private boolean camposValidos() {
@@ -143,18 +157,37 @@ public class ModificarProyectoControlador {
                 campoNombreProyecto, campoDescripcion, campoResponsable,
                 campoNombreEmpresa, campoSectorEmpresa, campoDireccionEmpresa,
                 campoMatricula, campoNumPersonalCoordinador, campoFechaRegistro);
-        boolean camposTextosValidos = true;
-        for (TextField campo : camposObligatorios) {
-            if (campo.getText().trim().isEmpty()) {
-                camposTextosValidos = false;
-            }
-        }
+        boolean camposTextosValidos = !camposVacios(camposObligatorios);
         boolean estadoValido = comboBoxEstado.getValue() != null;
-        boolean formularioCompleto = camposTextosValidos && estadoValido;
-        return formularioCompleto;
+        boolean fechaValida = esFechaValida(campoFechaRegistro.getText().trim());
+
+        verificarCampos(camposTextosValidos, estadoValido, fechaValida);
+
+        return camposTextosValidos && estadoValido && fechaValida;
     }
 
-    private Proyecto construirProyecto() throws MensajeriaExcepcion {
+    private void verificarCampos(boolean camposTextosValidos, boolean estadoValido, boolean fechaValida) {
+        if (!camposTextosValidos) {
+            mostrarError("Campos obligatorios vacíos", "POR FAVOR LLENE TODOS LOS CAMPOS.");
+        } else if (!estadoValido) {
+            mostrarError("Estado no seleccionado", "SELECCIONE UN ESTADO PARA EL PROYECTO.");
+        } else if (!fechaValida) {
+            mostrarError("Fecha inválida", "EL FORMATO DE FECHA DEBE SER YYYY-MM-DD.");
+        }
+    }
+
+    private boolean esFechaValida(String fecha) {
+        boolean valida = true;
+        try {
+            Date.valueOf(fecha);
+        } catch (IllegalArgumentException excepcion) {
+            LOGGER.log(Level.WARNING, "Formato de fecha inválido", excepcion);
+            valida = false;
+        }
+        return valida;
+    }
+
+    private Proyecto construirProyecto() {
         Proyecto proyectoModificado = new Proyecto();
         proyectoModificado.setNombreProyecto(campoNombreProyecto.getText().trim());
         proyectoModificado.setDescripcion(campoDescripcion.getText().trim());
@@ -165,11 +198,7 @@ public class ModificarProyectoControlador {
         proyectoModificado.setDireccionEmpresa(campoDireccionEmpresa.getText().trim());
         proyectoModificado.setIdOrganizacion(proyectoSeleccionado.getIdOrganizacion());
         proyectoModificado.setNumPersonalCoordinador(campoNumPersonalCoordinador.getText().trim());
-        try {
-            proyectoModificado.setFechaRegistro(Date.valueOf(campoFechaRegistro.getText().trim()));
-        } catch (IllegalArgumentException excepcion) {
-            throw new MensajeriaExcepcion("Formato de fecha inválido. Use YYYY-MM-DD.");
-        }
+        proyectoModificado.setFechaRegistro(Date.valueOf(campoFechaRegistro.getText().trim()));
         return proyectoModificado;
     }
 

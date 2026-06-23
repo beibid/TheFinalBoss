@@ -1,6 +1,5 @@
 package InterfazGrafica;
 
-
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -21,7 +20,6 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-
 public class InactivarOrganizacionVinculadaControlador {
 
     private static final Logger LOGGER = Logger.getLogger(InactivarOrganizacionVinculadaControlador.class.getName());
@@ -38,7 +36,7 @@ public class InactivarOrganizacionVinculadaControlador {
     @FXML private Label etiquetaNombre;
     @FXML private Label etiquetaIdentificadorOrganizacion;
 
-    private OrganizacionVinculadaDao organizacionDao = new OrganizacionVinculadaDao();
+    private final OrganizacionVinculadaDao organizacionDao = new OrganizacionVinculadaDao();
     private OrganizacionVinculada organizacionSeleccionada;
 
     @FXML
@@ -49,18 +47,24 @@ public class InactivarOrganizacionVinculadaControlador {
     private void cargarOrganizacionesActivas() {
         try {
             List<OrganizacionVinculada> organizaciones = organizacionDao.obtenerOrganizacionesActivas();
-            ObservableList<OrganizacionVinculada> organizacionesObservable = FXCollections.observableArrayList(organizaciones);
-            comboBoxOrganizacion.setItems(organizacionesObservable);
-            comboBoxOrganizacion.setCellFactory(listaOrganizaciones -> crearCeldaOrganizacion());
-            comboBoxOrganizacion.setButtonCell(crearCeldaOrganizacion());
+            if (organizaciones.isEmpty()) {
+                mostrarError("Sin organizaciones", "NO HAY ORGANIZACIONES VINCULADAS ACTIVAS EN EL SISTEMA.");
+                comboBoxOrganizacion.setDisable(true);
+            } else {
+                ObservableList<OrganizacionVinculada> organizacionesObservable = FXCollections.observableArrayList(organizaciones);
+                comboBoxOrganizacion.setItems(organizacionesObservable);
+                comboBoxOrganizacion.setCellFactory(listaOrganizaciones -> crearCeldaOrganizacion());
+                comboBoxOrganizacion.setButtonCell(crearCeldaOrganizacion());
+            }
         } catch (UsuariosExcepcion excepcion) {
             LOGGER.log(Level.SEVERE, "Error al cargar organizaciones", excepcion);
             mostrarError("Error al cargar", "NO SE PUDIERON CARGAR LAS ORGANIZACIONES VINCULADAS.");
+            comboBoxOrganizacion.setDisable(true);
         }
     }
 
     private ListCell<OrganizacionVinculada> crearCeldaOrganizacion() {
-        return new ListCell<OrganizacionVinculada>() {
+        return new ListCell<>() {
             @Override
             protected void updateItem(OrganizacionVinculada organizacion, boolean vacio) {
                 super.updateItem(organizacion, vacio);
@@ -104,6 +108,7 @@ public class InactivarOrganizacionVinculadaControlador {
             int filasAfectadas = organizacionDao.inactivarOrganizacionVinculada(organizacion.getIdOrganizacion());
             if (filasAfectadas >= FILAS_AFECTADAS_ESPERADAS) {
                 limpiar();
+                comboBoxOrganizacion.setDisable(false);
                 cargarOrganizacionesActivas();
                 mostrarExito("Organización inactivada", "LA ORGANIZACIÓN FUE INACTIVADA EXITOSAMENTE.");
             } else {

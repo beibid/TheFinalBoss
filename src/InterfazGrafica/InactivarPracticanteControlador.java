@@ -36,7 +36,7 @@ public class InactivarPracticanteControlador {
     @FXML private Label etiquetaApellidos;
     @FXML private Label etiquetaNumeroPersonal;
 
-    private PracticanteDao practicanteDao = new PracticanteDao();
+    private final PracticanteDao practicanteDao = new PracticanteDao();
     private Practicante practicanteSeleccionado;
 
     @FXML
@@ -47,18 +47,24 @@ public class InactivarPracticanteControlador {
     private void cargarPracticantesActivos() {
         try {
             List<Practicante> practicantes = practicanteDao.obtenerPracticantesActivos();
-            ObservableList<Practicante> practicantesObservable = FXCollections.observableArrayList(practicantes);
-            comboBoxPracticantes.setItems(practicantesObservable);
-            comboBoxPracticantes.setCellFactory(listaPracticantes -> crearCeldaPracticante());
-            comboBoxPracticantes.setButtonCell(crearCeldaPracticante());
+            if (practicantes.isEmpty()) {
+                mostrarError("Sin practicantes", "NO HAY PRACTICANTES ACTIVOS EN EL SISTEMA.");
+                comboBoxPracticantes.setDisable(true);
+            } else {
+                ObservableList<Practicante> practicantesObservable = FXCollections.observableArrayList(practicantes);
+                comboBoxPracticantes.setItems(practicantesObservable);
+                comboBoxPracticantes.setCellFactory(listaPracticantes -> crearCeldaPracticante());
+                comboBoxPracticantes.setButtonCell(crearCeldaPracticante());
+            }
         } catch (UsuariosExcepcion excepcion) {
             LOGGER.log(Level.SEVERE, "Error al cargar practicantes", excepcion);
             mostrarError("Error al cargar", "NO SE PUDIERON CARGAR LOS PRACTICANTES.");
+            comboBoxPracticantes.setDisable(true);
         }
     }
 
     private ListCell<Practicante> crearCeldaPracticante() {
-        return new ListCell<Practicante>() {
+        return new ListCell<>() {
             @Override
             protected void updateItem(Practicante practicante, boolean vacio) {
                 super.updateItem(practicante, vacio);
@@ -103,6 +109,7 @@ public class InactivarPracticanteControlador {
             int filasAfectadas = practicanteDao.inactivarPracticante(practicante.getMatricula());
             if (filasAfectadas >= FILAS_AFECTADAS_ESPERADAS) {
                 limpiar();
+                comboBoxPracticantes.setDisable(false);
                 cargarPracticantesActivos();
                 mostrarExito("Practicante inactivado", "EL PRACTICANTE FUE INACTIVADO EXITOSAMENTE.");
             } else {

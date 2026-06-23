@@ -1,6 +1,5 @@
 package InterfazGrafica;
 
-
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -21,16 +20,15 @@ import logica.dao.objetos.PracticanteDao;
 import logica.dao.objetos.ProfesorDao;
 import logica.dominio.Buzon;
 import logica.dominio.Mensaje;
-import logica.dominio.SesionUsuario;
-import logica.dominio.Usuario;
 import logica.dominio.Practicante;
 import logica.dominio.Profesor;
+import logica.dominio.SesionUsuario;
+import logica.dominio.Usuario;
 import logica.dominio.enums.RolMensaje;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
 
 public class EnviarMensajeControlador {
 
@@ -54,11 +52,17 @@ public class EnviarMensajeControlador {
     private void cargarDestinatarios() {
         try {
             List<Usuario> destinatarios = obtenerDestinatariosFiltrados();
-            comboBoxDestinatario.setItems(FXCollections.observableArrayList(destinatarios));
-            configurarCeldasComboBox();
+            if (destinatarios.isEmpty()) {
+                mostrarError("Sin destinatarios", "NO HAY DESTINATARIOS DISPONIBLES EN EL SISTEMA.");
+                comboBoxDestinatario.setDisable(true);
+            } else {
+                comboBoxDestinatario.setItems(FXCollections.observableArrayList(destinatarios));
+                configurarCeldasComboBox();
+            }
         } catch (UsuariosExcepcion excepcion) {
             LOGGER.log(Level.SEVERE, "Error al cargar destinatarios", excepcion);
             mostrarError("Error al cargar", "NO SE PUDIERON CARGAR LOS DESTINATARIOS.");
+            comboBoxDestinatario.setDisable(true);
         }
     }
 
@@ -69,7 +73,6 @@ public class EnviarMensajeControlador {
         List<Usuario> destinatarios = new ArrayList<>();
         destinatarios.addAll(practicanteDao.obtenerPracticantesActivos());
         destinatarios.addAll(profesorDao.obtenerProfesoresActivos());
-
         List<Usuario> filtrados = new ArrayList<>();
         for (Usuario usuario : destinatarios) {
             if (usuario.getIdUsuario() != idUsuarioActual) {
@@ -86,18 +89,15 @@ public class EnviarMensajeControlador {
                 super.updateItem(usuario, estaVacio);
                 if (estaVacio || usuario == null) {
                     setText(null);
+                } else if (usuario instanceof Practicante) {
+                    setText("[Practicante] " + usuario.getNombre() + " " + usuario.getApellidos());
+                } else if (usuario instanceof Profesor) {
+                    setText("[Profesor] " + usuario.getNombre() + " " + usuario.getApellidos());
                 } else {
-                    if (usuario instanceof Practicante) {
-                        setText("[Practicante] " + usuario.getNombre() + " " + usuario.getApellidos());
-                    } else if (usuario instanceof Profesor) {
-                        setText("[Profesor] " + usuario.getNombre() + " " + usuario.getApellidos());
-                    } else {
-                        setText(usuario.getNombre() + " " + usuario.getApellidos());
-                    }
+                    setText(usuario.getNombre() + " " + usuario.getApellidos());
                 }
             }
         });
-
         comboBoxDestinatario.setButtonCell(new ListCell<>() {
             @Override
             protected void updateItem(Usuario usuario, boolean estaVacio) {
@@ -113,28 +113,36 @@ public class EnviarMensajeControlador {
 
     @FXML
     private void botonEnviar() {
+        ocultarError();
+        ocultarExito();
+        if (datosValidos()) {
+            if (confirmarAccion("¿Seguro que desea enviar el mensaje?")) {
+                ejecutarEnvio(
+                        comboBoxDestinatario.getSelectionModel().getSelectedItem(),
+                        areaTextoMensaje.getText().trim()
+                );
+            }
+        }
+    }
+
+    private boolean datosValidos() {
         Usuario destinatario = comboBoxDestinatario.getSelectionModel().getSelectedItem();
         String contenido = areaTextoMensaje.getText().trim();
+        boolean valido = destinatario != null
+                && !contenido.isEmpty()
+                && contenido.length() <= LIMITE_CARACTERES_MENSAJE;
+        verificarDatos(destinatario, contenido);
+        return valido;
+    }
+
+    private void verificarDatos(Usuario destinatario, String contenido) {
         if (destinatario == null) {
             mostrarError("Sin destinatario", "POR FAVOR SELECCIONA UN DESTINATARIO.");
-            return;
-        }
-        if (contenido.isEmpty()) {
+        } else if (contenido.isEmpty()) {
             mostrarError("Mensaje vacío", "POR FAVOR ESCRIBE UN MENSAJE.");
-            return;
+        } else if (contenido.length() > LIMITE_CARACTERES_MENSAJE) {
+            mostrarError("Mensaje largo", "EL MENSAJE NO DEBE SUPERAR LOS " + LIMITE_CARACTERES_MENSAJE + " CARACTERES.");
         }
-        if (contenido.length() > LIMITE_CARACTERES_MENSAJE) {
-            mostrarError("Mensaje largo", "EL MENSAJE NO DEBE SUPERAR LOS 500 CARACATERES");
-            return;
-        }
-        if (!confirmarAccion("¿Seguro que desea enviar el mensaje?")) {
-            return;
-        }
-        if (destinatario.getIdUsuario() == SesionUsuario.getInstance().getIdUsuario()) {
-            mostrarError("Destinatario invalido", "NO PUEDES MANDARTE UN MENSAJE A TI MISMO");
-            return;
-        }
-        ejecutarEnvio(destinatario, contenido);
     }
 
     private void ejecutarEnvio(Usuario destinatario, String contenido) {
@@ -144,10 +152,8 @@ public class EnviarMensajeControlador {
             Mensaje mensaje = new Mensaje(contenido);
             int idMensaje = mensajeDao.agregarMensaje(mensaje);
             int idRemitente = SesionUsuario.getInstance().getIdUsuario();
-            Buzon buzonRemitente = new Buzon(RolMensaje.Remitente, idMensaje, idRemitente);
-            buzonDao.agregarBuzon(buzonRemitente);
-            Buzon buzonDestinatario = new Buzon(RolMensaje.destinatario, idMensaje, destinatario.getIdUsuario());
-            buzonDao.agregarBuzon(buzonDestinatario);
+            buzonDao.agregarBuzon(new Buzon(RolMensaje.Remitente, idMensaje, idRemitente));
+            buzonDao.agregarBuzon(new Buzon(RolMensaje.destinatario, idMensaje, destinatario.getIdUsuario()));
             limpiar();
             mostrarExito("Mensaje enviado", "EL MENSAJE FUE ENVIADO EXITOSAMENTE.");
         } catch (MensajeriaExcepcion excepcion) {
@@ -213,4 +219,3 @@ public class EnviarMensajeControlador {
         panelExito.setManaged(false);
     }
 }
-

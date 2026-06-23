@@ -50,18 +50,24 @@ public class ModificarOrganizacionVinculadaControlador {
         OrganizacionVinculadaDao organizacionDao = new OrganizacionVinculadaDao();
         try {
             List<OrganizacionVinculada> lista = organizacionDao.obtenerOrganizacionesActivas();
-            ObservableList<OrganizacionVinculada> organizacionesObservable = FXCollections.observableArrayList(lista);
-            comboBoxOrganizacion.setItems(organizacionesObservable);
-            comboBoxOrganizacion.setCellFactory(listaOrganizaciones -> crearCeldaOrganizacion());
-            comboBoxOrganizacion.setButtonCell(crearCeldaOrganizacion());
+            if (lista.isEmpty()) {
+                mostrarError("Sin organizaciones", "NO HAY ORGANIZACIONES VINCULADAS ACTIVAS EN EL SISTEMA.");
+                comboBoxOrganizacion.setDisable(true);
+            } else {
+                ObservableList<OrganizacionVinculada> organizacionesObservable = FXCollections.observableArrayList(lista);
+                comboBoxOrganizacion.setItems(organizacionesObservable);
+                comboBoxOrganizacion.setCellFactory(listaOrganizaciones -> crearCeldaOrganizacion());
+                comboBoxOrganizacion.setButtonCell(crearCeldaOrganizacion());
+            }
         } catch (UsuariosExcepcion excepcion) {
             LOGGER.log(Level.SEVERE, "Error al cargar organizaciones", excepcion);
-            mostrarError("Error al cargar", excepcion.getMessage());
+            mostrarError("Error al cargar", "NO SE PUDIERON CARGAR LAS ORGANIZACIONES VINCULADAS.");
+            comboBoxOrganizacion.setDisable(true);
         }
     }
 
     private ListCell<OrganizacionVinculada> crearCeldaOrganizacion() {
-        return new ListCell<OrganizacionVinculada>() {
+        return new ListCell<>() {
             @Override
             protected void updateItem(OrganizacionVinculada organizacion, boolean vacio) {
                 super.updateItem(organizacion, vacio);
@@ -111,10 +117,11 @@ public class ModificarOrganizacionVinculadaControlador {
                 if (filasAfectadas >= FILAS_AFECTADAS_ESPERADAS) {
                     ocultarTodo();
                     comboBoxOrganizacion.setValue(null);
+                    comboBoxOrganizacion.setDisable(false);
                     cargarOrganizaciones();
-                    mostrarExito("Organización modificada", "Organización actualizada exitosamente.");
+                    mostrarExito("Organización modificada", "ORGANIZACIÓN ACTUALIZADA EXITOSAMENTE.");
                 } else {
-                    mostrarError("Error al modificar", "No se pudo modificar la organización. Intente de nuevo.");
+                    mostrarError("Error al modificar", "NO SE PUDO MODIFICAR LA ORGANIZACIÓN. INTENTE DE NUEVO.");
                 }
             } catch (UsuariosExcepcion excepcion) {
                 LOGGER.log(Level.SEVERE, "Error al modificar organización", excepcion);
@@ -150,23 +157,23 @@ public class ModificarOrganizacionVinculadaControlador {
 
         mostrarPrimerError(camposFormularioValidos, nombreValido, direccionValida, telefonoValido, correoValido, sectorValido);
 
-        boolean formularioValido = camposFormularioValidos && nombreValido && direccionValida && telefonoValido && correoValido && sectorValido;
-        return formularioValido;
+        return camposFormularioValidos && nombreValido && direccionValida && telefonoValido && correoValido && sectorValido;
     }
+
     private void mostrarPrimerError(boolean camposFormularioValidos, boolean nombreValido, boolean direccionValida,
                                     boolean telefonoValido, boolean correoValido, boolean sectorValido) {
         if (!camposFormularioValidos) {
-            mostrarError("Campos obligatorios vacíos", "Por favor llene todos los campos.");
+            mostrarError("Campos obligatorios vacíos", "POR FAVOR LLENE TODOS LOS CAMPOS.");
         } else if (!nombreValido) {
-            mostrarError("Nombre invalido", "EL NOMBRE NO DEBE CONTENER CARACTERES ESPECIALES");
+            mostrarError("Nombre inválido", "EL NOMBRE NO DEBE CONTENER CARACTERES ESPECIALES.");
         } else if (!direccionValida) {
-            mostrarError("Direccion invalida", "LA DIRECCION CONTIENE CARACTERES NO PERMITIDOS");
+            mostrarError("Dirección inválida", "LA DIRECCIÓN CONTIENE CARACTERES NO PERMITIDOS.");
         } else if (!telefonoValido) {
-            mostrarError("Telefono invalido", "EL TELEFONO DEBE CONTENER EXACTAMENTE 10 DIGITOS NUMERICOS");
+            mostrarError("Teléfono inválido", "EL TELÉFONO DEBE CONTENER EXACTAMENTE 10 DÍGITOS NUMÉRICOS.");
         } else if (!correoValido) {
-            mostrarError("Correo invalido", "INGRESE UN CORREO ELECTRONICO VALIDO");
+            mostrarError("Correo inválido", "INGRESE UN CORREO ELECTRÓNICO VÁLIDO.");
         } else if (!sectorValido) {
-            mostrarError("Sector invalido", "EL SECTOR NO DEBE CONTENER NUMEROS NI CARACTERES ESPECIALES");
+            mostrarError("Sector inválido", "EL SECTOR NO DEBE CONTENER NÚMEROS NI CARACTERES ESPECIALES.");
         }
     }
 

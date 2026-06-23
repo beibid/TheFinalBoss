@@ -36,7 +36,7 @@ public class InactivarProfesorControlador {
     @FXML private Label etiquetaApellidos;
     @FXML private Label etiquetaNumeroPersonal;
 
-    private ProfesorDao profesorDao = new ProfesorDao();
+    private final ProfesorDao profesorDao = new ProfesorDao();
     private Profesor profesorSeleccionado;
 
     @FXML
@@ -46,19 +46,25 @@ public class InactivarProfesorControlador {
 
     private void cargarProfesoresActivos() {
         try {
-            List<Profesor> listaProfesores = profesorDao.obtenerProfesoresActivos();
-            ObservableList<Profesor> profesoresObservable = FXCollections.observableArrayList(listaProfesores);
-            comboBoxProfesores.setItems(profesoresObservable);
-            comboBoxProfesores.setCellFactory(listaProfesores2 -> crearCeldaProfesor());
-            comboBoxProfesores.setButtonCell(crearCeldaProfesor());
+            List<Profesor> profesores = profesorDao.obtenerProfesoresActivos();
+            if (profesores.isEmpty()) {
+                mostrarError("Sin profesores", "NO HAY PROFESORES ACTIVOS EN EL SISTEMA.");
+                comboBoxProfesores.setDisable(true);
+            } else {
+                ObservableList<Profesor> profesoresObservable = FXCollections.observableArrayList(profesores);
+                comboBoxProfesores.setItems(profesoresObservable);
+                comboBoxProfesores.setCellFactory(listaProfesores -> crearCeldaProfesor());
+                comboBoxProfesores.setButtonCell(crearCeldaProfesor());
+            }
         } catch (UsuariosExcepcion excepcion) {
             LOGGER.log(Level.SEVERE, "Error al cargar profesores", excepcion);
             mostrarError("Error al cargar", "NO SE PUDIERON CARGAR LOS PROFESORES.");
+            comboBoxProfesores.setDisable(true);
         }
     }
 
     private ListCell<Profesor> crearCeldaProfesor() {
-        return new ListCell<Profesor>() {
+        return new ListCell<>() {
             @Override
             protected void updateItem(Profesor profesor, boolean vacio) {
                 super.updateItem(profesor, vacio);
@@ -103,6 +109,7 @@ public class InactivarProfesorControlador {
             int filasAfectadas = profesorDao.inactivarProfesor(profesor.getNumeroDePersonalProfesor());
             if (filasAfectadas >= FILAS_AFECTADAS_ESPERADAS) {
                 limpiar();
+                comboBoxProfesores.setDisable(false);
                 cargarProfesoresActivos();
                 mostrarExito("Profesor inactivado", "EL PROFESOR FUE INACTIVADO EXITOSAMENTE.");
             } else {

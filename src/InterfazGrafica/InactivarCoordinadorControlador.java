@@ -36,7 +36,7 @@ public class InactivarCoordinadorControlador {
     @FXML private Label etiquetaApellidos;
     @FXML private Label etiquetaNumeroPersonal;
 
-    private CoordinadorDao coordinadorDao = new CoordinadorDao();
+    private final CoordinadorDao coordinadorDao = new CoordinadorDao();
     private Coordinador coordinadorSeleccionado;
 
     @FXML
@@ -47,18 +47,24 @@ public class InactivarCoordinadorControlador {
     private void cargarCoordinadoresActivos() {
         try {
             List<Coordinador> coordinadores = coordinadorDao.obtenerCoordinadoresActivos();
-            ObservableList<Coordinador> coordinadoresObservable = FXCollections.observableArrayList(coordinadores);
-            comboBoxCoordinadores.setItems(coordinadoresObservable);
-            comboBoxCoordinadores.setCellFactory(listaCoordinadores -> crearCeldaCoordinador());
-            comboBoxCoordinadores.setButtonCell(crearCeldaCoordinador());
+            if (coordinadores.isEmpty()) {
+                mostrarError("Sin coordinadores", "NO HAY COORDINADORES ACTIVOS EN EL SISTEMA.");
+                comboBoxCoordinadores.setDisable(true);
+            } else {
+                ObservableList<Coordinador> coordinadoresObservable = FXCollections.observableArrayList(coordinadores);
+                comboBoxCoordinadores.setItems(coordinadoresObservable);
+                comboBoxCoordinadores.setCellFactory(listaCoordinadores -> crearCeldaCoordinador());
+                comboBoxCoordinadores.setButtonCell(crearCeldaCoordinador());
+            }
         } catch (UsuariosExcepcion excepcion) {
             LOGGER.log(Level.SEVERE, "Error al cargar coordinadores", excepcion);
             mostrarError("Error al cargar", "NO SE PUDIERON CARGAR LOS COORDINADORES.");
+            comboBoxCoordinadores.setDisable(true);
         }
     }
 
     private ListCell<Coordinador> crearCeldaCoordinador() {
-        return new ListCell<Coordinador>() {
+        return new ListCell<>() {
             @Override
             protected void updateItem(Coordinador coordinador, boolean vacio) {
                 super.updateItem(coordinador, vacio);
@@ -103,6 +109,7 @@ public class InactivarCoordinadorControlador {
             int filasAfectadas = coordinadorDao.inactivarCoordinador(coordinador.getNumeroDePersonalCoordinador());
             if (filasAfectadas >= FILAS_AFECTADAS_ESPERADAS) {
                 limpiar();
+                comboBoxCoordinadores.setDisable(false);
                 cargarCoordinadoresActivos();
                 mostrarExito("Coordinador inactivado", "EL COORDINADOR FUE INACTIVADO EXITOSAMENTE.");
             } else {

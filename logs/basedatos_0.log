@@ -1,158 +1,76 @@
-may 26, 2026 6:01:08 P.M. acceso.bd.ConexionBaseDeDatos conectar
-FINE: Intentando establecer conexión a la base de datos...
-may 26, 2026 6:01:08 P.M. acceso.bd.ConexionBaseDeDatos conectar
-INFO: Conexión a base de datos realizada exitosamente en 14 ms
-may 26, 2026 6:01:08 P.M. logica.dao.objetos.AutoevaluacionPracticanteDao obtenerAutoevaluacion
-SEVERE: Error al obtener autoevaluación
-java.sql.SQLSyntaxErrorException: Table 'practicas_profesionales.autoevaluacion' doesn't exist
-	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:112)
-	at com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:114)
-	at com.mysql.cj.jdbc.ClientPreparedStatement.executeInternal(ClientPreparedStatement.java:988)
-	at com.mysql.cj.jdbc.ClientPreparedStatement.executeQuery(ClientPreparedStatement.java:1056)
-	at logica.dao.objetos.AutoevaluacionPracticanteDao.obtenerAutoevaluacion(AutoevaluacionPracticanteDao.java:115)
-	at InterfazGrafica.GenerarAutoevaluacionPracticanteControlador.verificarAutoevaluacionExistente(GenerarAutoevaluacionPracticanteControlador.java:98)
-	at InterfazGrafica.GenerarAutoevaluacionPracticanteControlador.initialize(GenerarAutoevaluacionPracticanteControlador.java:58)
-	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:104)
-	at java.base/java.lang.reflect.Method.invoke(Method.java:565)
-	at com.sun.javafx.reflect.Trampoline.invoke(MethodUtil.java:65)
-	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:104)
-	at java.base/java.lang.reflect.Method.invoke(Method.java:565)
-	at javafx.base@26.0.1/com.sun.javafx.reflect.MethodUtil.invoke(MethodUtil.java:112)
-	at javafx.fxml@26.0.1/com.sun.javafx.fxml.MethodHelper.invoke(MethodHelper.java:78)
-	at javafx.fxml@26.0.1/javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:2658)
-	at javafx.fxml@26.0.1/javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:2533)
-	at javafx.fxml@26.0.1/javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:3304)
-	at javafx.fxml@26.0.1/javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:3264)
-	at javafx.fxml@26.0.1/javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:3235)
-	at javafx.fxml@26.0.1/javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:3211)
-	at javafx.fxml@26.0.1/javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:3191)
-	at javafx.fxml@26.0.1/javafx.fxml.FXMLLoader.load(FXMLLoader.java:3186)
-	at InterfazGrafica.MenuPracticanteControlador.abrirVentana(MenuPracticanteControlador.java:116)
-	at InterfazGrafica.MenuPracticanteControlador.abrirAutoevaluacionPracticante(MenuPracticanteControlador.java:112)
-	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:104)
-	at java.base/java.lang.reflect.Method.invoke(Method.java:565)
-	at com.sun.javafx.reflect.Trampoline.invoke(MethodUtil.java:65)
-	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:104)
-	at java.base/java.lang.reflect.Method.invoke(Method.java:565)
-	at javafx.base@26.0.1/com.sun.javafx.reflect.MethodUtil.invoke(MethodUtil.java:112)
-	at javafx.fxml@26.0.1/com.sun.javafx.fxml.MethodHelper.invoke(MethodHelper.java:78)
-	at javafx.fxml@26.0.1/javafx.fxml.FXMLLoader$MethodHandler.invoke(FXMLLoader.java:1845)
-	at javafx.fxml@26.0.1/javafx.fxml.FXMLLoader$ControllerMethodEventHandler.handle(FXMLLoader.java:1718)
-	at javafx.base@26.0.1/com.sun.javafx.event.CompositeEventHandler.dispatchBubblingEvent(CompositeEventHandler.java:86)
-	at javafx.base@26.0.1/com.sun.javafx.event.EventHandlerManager.dispatchBubblingEvent(EventHandlerManager.java:232)
-	at javafx.base@26.0.1/com.sun.javafx.event.EventHandlerManager.dispatchBubblingEvent(EventHandlerManager.java:189)
-	at javafx.base@26.0.1/com.sun.javafx.event.CompositeEventDispatcher.dispatchBubblingEvent(CompositeEventDispatcher.java:59)
-	at javafx.base@26.0.1/com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:58)
-	at javafx.base@26.0.1/com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
-	at javafx.base@26.0.1/com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
-	at javafx.base@26.0.1/com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
-	at javafx.base@26.0.1/com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
-	at javafx.base@26.0.1/com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
-	at javafx.base@26.0.1/com.sun.javafx.event.EventUtil.fireEventImpl(EventUtil.java:74)
-	at javafx.base@26.0.1/com.sun.javafx.event.EventUtil.fireEvent(EventUtil.java:49)
-	at javafx.base@26.0.1/javafx.event.Event.fireEvent(Event.java:199)
-	at javafx.graphics@26.0.1/javafx.scene.Node.fireEvent(Node.java:9092)
-	at javafx.controls@26.0.1/javafx.scene.control.Button.fire(Button.java:203)
-	at javafx.controls@26.0.1/com.sun.javafx.scene.control.behavior.ButtonBehavior.mouseReleased(ButtonBehavior.java:207)
-	at javafx.controls@26.0.1/com.sun.javafx.scene.control.inputmap.InputMap.handle(InputMap.java:274)
-	at javafx.base@26.0.1/com.sun.javafx.event.CompositeEventHandler$NormalEventHandlerRecord.handleBubblingEvent(CompositeEventHandler.java:247)
-	at javafx.base@26.0.1/com.sun.javafx.event.CompositeEventHandler.dispatchBubblingEvent(CompositeEventHandler.java:80)
-	at javafx.base@26.0.1/com.sun.javafx.event.EventHandlerManager.dispatchBubblingEvent(EventHandlerManager.java:232)
-	at javafx.base@26.0.1/com.sun.javafx.event.EventHandlerManager.dispatchBubblingEvent(EventHandlerManager.java:189)
-	at javafx.base@26.0.1/com.sun.javafx.event.CompositeEventDispatcher.dispatchBubblingEvent(CompositeEventDispatcher.java:59)
-	at javafx.base@26.0.1/com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:58)
-	at javafx.base@26.0.1/com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
-	at javafx.base@26.0.1/com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
-	at javafx.base@26.0.1/com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
-	at javafx.base@26.0.1/com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
-	at javafx.base@26.0.1/com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
-	at javafx.base@26.0.1/com.sun.javafx.event.EventUtil.fireEventImpl(EventUtil.java:74)
-	at javafx.base@26.0.1/com.sun.javafx.event.EventUtil.fireEvent(EventUtil.java:54)
-	at javafx.base@26.0.1/javafx.event.Event.fireEvent(Event.java:199)
-	at javafx.graphics@26.0.1/javafx.scene.Scene$MouseHandler.process(Scene.java:4134)
-	at javafx.graphics@26.0.1/javafx.scene.Scene.processMouseEvent(Scene.java:1953)
-	at javafx.graphics@26.0.1/javafx.scene.Scene$ScenePeerListener.mouseEvent(Scene.java:2802)
-	at javafx.graphics@26.0.1/com.sun.javafx.tk.quantum.GlassViewEventHandler$MouseEventNotification.get(GlassViewEventHandler.java:353)
-	at javafx.graphics@26.0.1/com.sun.javafx.tk.quantum.GlassViewEventHandler$MouseEventNotification.get(GlassViewEventHandler.java:255)
-	at javafx.graphics@26.0.1/com.sun.javafx.tk.quantum.QuantumToolkit.runWithoutRenderLock(QuantumToolkit.java:429)
-	at javafx.graphics@26.0.1/com.sun.javafx.tk.quantum.GlassViewEventHandler.handleMouseEvent(GlassViewEventHandler.java:387)
-	at javafx.graphics@26.0.1/com.sun.glass.ui.View.handleMouseEvent(View.java:573)
-	at javafx.graphics@26.0.1/com.sun.glass.ui.View.notifyMouse(View.java:970)
-	at javafx.graphics@26.0.1/com.sun.glass.ui.mac.MacView.notifyMouse(MacView.java:131)
-
-may 26, 2026 6:01:08 P.M. InterfazGrafica.GenerarAutoevaluacionPracticanteControlador verificarAutoevaluacionExistente
+jun 16, 2026 10:43:36 A.M. InterfazGrafica.GenerarAutoevaluacionPracticanteControlador verificarAutoevaluacionExistente
 SEVERE: Error al verificar autoevaluación existente
 logica.dao.excepciones.MensajeriaExcepcion: Error al obtener autoevaluación
 	at logica.dao.objetos.AutoevaluacionPracticanteDao.obtenerAutoevaluacion(AutoevaluacionPracticanteDao.java:136)
-	at InterfazGrafica.GenerarAutoevaluacionPracticanteControlador.verificarAutoevaluacionExistente(GenerarAutoevaluacionPracticanteControlador.java:98)
-	at InterfazGrafica.GenerarAutoevaluacionPracticanteControlador.initialize(GenerarAutoevaluacionPracticanteControlador.java:58)
+	at InterfazGrafica.GenerarAutoevaluacionPracticanteControlador.verificarAutoevaluacionExistente(GenerarAutoevaluacionPracticanteControlador.java:103)
+	at InterfazGrafica.GenerarAutoevaluacionPracticanteControlador.initialize(GenerarAutoevaluacionPracticanteControlador.java:61)
 	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:104)
 	at java.base/java.lang.reflect.Method.invoke(Method.java:565)
 	at com.sun.javafx.reflect.Trampoline.invoke(MethodUtil.java:65)
 	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:104)
 	at java.base/java.lang.reflect.Method.invoke(Method.java:565)
-	at javafx.base@26.0.1/com.sun.javafx.reflect.MethodUtil.invoke(MethodUtil.java:112)
-	at javafx.fxml@26.0.1/com.sun.javafx.fxml.MethodHelper.invoke(MethodHelper.java:78)
-	at javafx.fxml@26.0.1/javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:2658)
-	at javafx.fxml@26.0.1/javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:2533)
-	at javafx.fxml@26.0.1/javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:3304)
-	at javafx.fxml@26.0.1/javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:3264)
-	at javafx.fxml@26.0.1/javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:3235)
-	at javafx.fxml@26.0.1/javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:3211)
-	at javafx.fxml@26.0.1/javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:3191)
-	at javafx.fxml@26.0.1/javafx.fxml.FXMLLoader.load(FXMLLoader.java:3186)
-	at InterfazGrafica.MenuPracticanteControlador.abrirVentana(MenuPracticanteControlador.java:116)
-	at InterfazGrafica.MenuPracticanteControlador.abrirAutoevaluacionPracticante(MenuPracticanteControlador.java:112)
+	at com.sun.javafx.reflect.MethodUtil.invoke(MethodUtil.java:112)
+	at com.sun.javafx.fxml.MethodHelper.invoke(MethodHelper.java:78)
+	at javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:2658)
+	at javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:2533)
+	at javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:3304)
+	at javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:3264)
+	at javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:3235)
+	at javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:3211)
+	at javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:3191)
+	at javafx.fxml.FXMLLoader.load(FXMLLoader.java:3186)
+	at InterfazGrafica.MenuPracticanteControlador.abrirVentana(MenuPracticanteControlador.java:121)
+	at InterfazGrafica.MenuPracticanteControlador.abrirAutoevaluacionPracticante(MenuPracticanteControlador.java:117)
 	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:104)
 	at java.base/java.lang.reflect.Method.invoke(Method.java:565)
 	at com.sun.javafx.reflect.Trampoline.invoke(MethodUtil.java:65)
 	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:104)
 	at java.base/java.lang.reflect.Method.invoke(Method.java:565)
-	at javafx.base@26.0.1/com.sun.javafx.reflect.MethodUtil.invoke(MethodUtil.java:112)
-	at javafx.fxml@26.0.1/com.sun.javafx.fxml.MethodHelper.invoke(MethodHelper.java:78)
-	at javafx.fxml@26.0.1/javafx.fxml.FXMLLoader$MethodHandler.invoke(FXMLLoader.java:1845)
-	at javafx.fxml@26.0.1/javafx.fxml.FXMLLoader$ControllerMethodEventHandler.handle(FXMLLoader.java:1718)
-	at javafx.base@26.0.1/com.sun.javafx.event.CompositeEventHandler.dispatchBubblingEvent(CompositeEventHandler.java:86)
-	at javafx.base@26.0.1/com.sun.javafx.event.EventHandlerManager.dispatchBubblingEvent(EventHandlerManager.java:232)
-	at javafx.base@26.0.1/com.sun.javafx.event.EventHandlerManager.dispatchBubblingEvent(EventHandlerManager.java:189)
-	at javafx.base@26.0.1/com.sun.javafx.event.CompositeEventDispatcher.dispatchBubblingEvent(CompositeEventDispatcher.java:59)
-	at javafx.base@26.0.1/com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:58)
-	at javafx.base@26.0.1/com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
-	at javafx.base@26.0.1/com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
-	at javafx.base@26.0.1/com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
-	at javafx.base@26.0.1/com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
-	at javafx.base@26.0.1/com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
-	at javafx.base@26.0.1/com.sun.javafx.event.EventUtil.fireEventImpl(EventUtil.java:74)
-	at javafx.base@26.0.1/com.sun.javafx.event.EventUtil.fireEvent(EventUtil.java:49)
-	at javafx.base@26.0.1/javafx.event.Event.fireEvent(Event.java:199)
-	at javafx.graphics@26.0.1/javafx.scene.Node.fireEvent(Node.java:9092)
-	at javafx.controls@26.0.1/javafx.scene.control.Button.fire(Button.java:203)
-	at javafx.controls@26.0.1/com.sun.javafx.scene.control.behavior.ButtonBehavior.mouseReleased(ButtonBehavior.java:207)
-	at javafx.controls@26.0.1/com.sun.javafx.scene.control.inputmap.InputMap.handle(InputMap.java:274)
-	at javafx.base@26.0.1/com.sun.javafx.event.CompositeEventHandler$NormalEventHandlerRecord.handleBubblingEvent(CompositeEventHandler.java:247)
-	at javafx.base@26.0.1/com.sun.javafx.event.CompositeEventHandler.dispatchBubblingEvent(CompositeEventHandler.java:80)
-	at javafx.base@26.0.1/com.sun.javafx.event.EventHandlerManager.dispatchBubblingEvent(EventHandlerManager.java:232)
-	at javafx.base@26.0.1/com.sun.javafx.event.EventHandlerManager.dispatchBubblingEvent(EventHandlerManager.java:189)
-	at javafx.base@26.0.1/com.sun.javafx.event.CompositeEventDispatcher.dispatchBubblingEvent(CompositeEventDispatcher.java:59)
-	at javafx.base@26.0.1/com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:58)
-	at javafx.base@26.0.1/com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
-	at javafx.base@26.0.1/com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
-	at javafx.base@26.0.1/com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
-	at javafx.base@26.0.1/com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
-	at javafx.base@26.0.1/com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
-	at javafx.base@26.0.1/com.sun.javafx.event.EventUtil.fireEventImpl(EventUtil.java:74)
-	at javafx.base@26.0.1/com.sun.javafx.event.EventUtil.fireEvent(EventUtil.java:54)
-	at javafx.base@26.0.1/javafx.event.Event.fireEvent(Event.java:199)
-	at javafx.graphics@26.0.1/javafx.scene.Scene$MouseHandler.process(Scene.java:4134)
-	at javafx.graphics@26.0.1/javafx.scene.Scene.processMouseEvent(Scene.java:1953)
-	at javafx.graphics@26.0.1/javafx.scene.Scene$ScenePeerListener.mouseEvent(Scene.java:2802)
-	at javafx.graphics@26.0.1/com.sun.javafx.tk.quantum.GlassViewEventHandler$MouseEventNotification.get(GlassViewEventHandler.java:353)
-	at javafx.graphics@26.0.1/com.sun.javafx.tk.quantum.GlassViewEventHandler$MouseEventNotification.get(GlassViewEventHandler.java:255)
-	at javafx.graphics@26.0.1/com.sun.javafx.tk.quantum.QuantumToolkit.runWithoutRenderLock(QuantumToolkit.java:429)
-	at javafx.graphics@26.0.1/com.sun.javafx.tk.quantum.GlassViewEventHandler.handleMouseEvent(GlassViewEventHandler.java:387)
-	at javafx.graphics@26.0.1/com.sun.glass.ui.View.handleMouseEvent(View.java:573)
-	at javafx.graphics@26.0.1/com.sun.glass.ui.View.notifyMouse(View.java:970)
-	at javafx.graphics@26.0.1/com.sun.glass.ui.mac.MacView.notifyMouse(MacView.java:131)
+	at com.sun.javafx.reflect.MethodUtil.invoke(MethodUtil.java:112)
+	at com.sun.javafx.fxml.MethodHelper.invoke(MethodHelper.java:78)
+	at javafx.fxml.FXMLLoader$MethodHandler.invoke(FXMLLoader.java:1845)
+	at javafx.fxml.FXMLLoader$ControllerMethodEventHandler.handle(FXMLLoader.java:1718)
+	at com.sun.javafx.event.CompositeEventHandler.dispatchBubblingEvent(CompositeEventHandler.java:86)
+	at com.sun.javafx.event.EventHandlerManager.dispatchBubblingEvent(EventHandlerManager.java:232)
+	at com.sun.javafx.event.EventHandlerManager.dispatchBubblingEvent(EventHandlerManager.java:189)
+	at com.sun.javafx.event.CompositeEventDispatcher.dispatchBubblingEvent(CompositeEventDispatcher.java:59)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:58)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.EventUtil.fireEventImpl(EventUtil.java:74)
+	at com.sun.javafx.event.EventUtil.fireEvent(EventUtil.java:49)
+	at javafx.event.Event.fireEvent(Event.java:199)
+	at javafx.scene.Node.fireEvent(Node.java:9092)
+	at javafx.scene.control.Button.fire(Button.java:203)
+	at com.sun.javafx.scene.control.behavior.ButtonBehavior.mouseReleased(ButtonBehavior.java:207)
+	at com.sun.javafx.scene.control.inputmap.InputMap.handle(InputMap.java:274)
+	at com.sun.javafx.event.CompositeEventHandler$NormalEventHandlerRecord.handleBubblingEvent(CompositeEventHandler.java:247)
+	at com.sun.javafx.event.CompositeEventHandler.dispatchBubblingEvent(CompositeEventHandler.java:80)
+	at com.sun.javafx.event.EventHandlerManager.dispatchBubblingEvent(EventHandlerManager.java:232)
+	at com.sun.javafx.event.EventHandlerManager.dispatchBubblingEvent(EventHandlerManager.java:189)
+	at com.sun.javafx.event.CompositeEventDispatcher.dispatchBubblingEvent(CompositeEventDispatcher.java:59)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:58)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.EventUtil.fireEventImpl(EventUtil.java:74)
+	at com.sun.javafx.event.EventUtil.fireEvent(EventUtil.java:54)
+	at javafx.event.Event.fireEvent(Event.java:199)
+	at javafx.scene.Scene$MouseHandler.process(Scene.java:4134)
+	at javafx.scene.Scene.processMouseEvent(Scene.java:1953)
+	at javafx.scene.Scene$ScenePeerListener.mouseEvent(Scene.java:2802)
+	at com.sun.javafx.tk.quantum.GlassViewEventHandler$MouseEventNotification.get(GlassViewEventHandler.java:353)
+	at com.sun.javafx.tk.quantum.GlassViewEventHandler$MouseEventNotification.get(GlassViewEventHandler.java:255)
+	at com.sun.javafx.tk.quantum.QuantumToolkit.runWithoutRenderLock(QuantumToolkit.java:429)
+	at com.sun.javafx.tk.quantum.GlassViewEventHandler.handleMouseEvent(GlassViewEventHandler.java:387)
+	at com.sun.glass.ui.View.handleMouseEvent(View.java:573)
+	at com.sun.glass.ui.View.notifyMouse(View.java:970)
+	at com.sun.glass.ui.mac.MacView.notifyMouse(MacView.java:131)
 Caused by: java.sql.SQLSyntaxErrorException: Table 'practicas_profesionales.autoevaluacion' doesn't exist
 	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:112)
 	at com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:114)
@@ -161,213 +79,347 @@ Caused by: java.sql.SQLSyntaxErrorException: Table 'practicas_profesionales.auto
 	at logica.dao.objetos.AutoevaluacionPracticanteDao.obtenerAutoevaluacion(AutoevaluacionPracticanteDao.java:115)
 	... 69 more
 
-may 31, 2026 11:06:16 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
+jun 16, 2026 10:43:45 A.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexión a la base de datos...
+jun 16, 2026 10:43:45 A.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexión a base de datos realizada exitosamente en 32 ms
+jun 16, 2026 10:43:47 A.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexión a la base de datos...
+jun 16, 2026 10:43:47 A.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexión a base de datos realizada exitosamente en 13 ms
+jun 16, 2026 10:43:47 A.M. logica.dao.objetos.AutoevaluacionPracticanteDao obtenerInfoAutoevaluacion
+SEVERE: Error al obtener info de autoevaluación
+java.sql.SQLException: Parameter number 2 is not an OUT parameter
+	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:121)
+	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:89)
+	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:81)
+	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:55)
+	at com.mysql.cj.jdbc.CallableStatement.checkIsOutputParam(CallableStatement.java:651)
+	at com.mysql.cj.jdbc.CallableStatement.registerOutParameter(CallableStatement.java:2000)
+	at com.mysql.cj.jdbc.CallableStatement.registerOutParameter(CallableStatement.java:2008)
+	at logica.dao.objetos.AutoevaluacionPracticanteDao.obtenerInfoAutoevaluacion(AutoevaluacionPracticanteDao.java:76)
+	at InterfazGrafica.GenerarAutoevaluacionPracticanteControlador.cargarInformacionProyecto(GenerarAutoevaluacionPracticanteControlador.java:142)
+	at InterfazGrafica.GenerarAutoevaluacionPracticanteControlador.initialize(GenerarAutoevaluacionPracticanteControlador.java:60)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:104)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:565)
+	at com.sun.javafx.reflect.Trampoline.invoke(MethodUtil.java:65)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:104)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:565)
+	at com.sun.javafx.reflect.MethodUtil.invoke(MethodUtil.java:112)
+	at com.sun.javafx.fxml.MethodHelper.invoke(MethodHelper.java:78)
+	at javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:2658)
+	at javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:2533)
+	at javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:3304)
+	at javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:3264)
+	at javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:3235)
+	at javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:3211)
+	at javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:3191)
+	at javafx.fxml.FXMLLoader.load(FXMLLoader.java:3186)
+	at InterfazGrafica.MenuPracticanteControlador.abrirVentana(MenuPracticanteControlador.java:121)
+	at InterfazGrafica.MenuPracticanteControlador.abrirAutoevaluacionPracticante(MenuPracticanteControlador.java:117)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:104)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:565)
+	at com.sun.javafx.reflect.Trampoline.invoke(MethodUtil.java:65)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:104)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:565)
+	at com.sun.javafx.reflect.MethodUtil.invoke(MethodUtil.java:112)
+	at com.sun.javafx.fxml.MethodHelper.invoke(MethodHelper.java:78)
+	at javafx.fxml.FXMLLoader$MethodHandler.invoke(FXMLLoader.java:1845)
+	at javafx.fxml.FXMLLoader$ControllerMethodEventHandler.handle(FXMLLoader.java:1718)
+	at com.sun.javafx.event.CompositeEventHandler.dispatchBubblingEvent(CompositeEventHandler.java:86)
+	at com.sun.javafx.event.EventHandlerManager.dispatchBubblingEvent(EventHandlerManager.java:232)
+	at com.sun.javafx.event.EventHandlerManager.dispatchBubblingEvent(EventHandlerManager.java:189)
+	at com.sun.javafx.event.CompositeEventDispatcher.dispatchBubblingEvent(CompositeEventDispatcher.java:59)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:58)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.EventUtil.fireEventImpl(EventUtil.java:74)
+	at com.sun.javafx.event.EventUtil.fireEvent(EventUtil.java:49)
+	at javafx.event.Event.fireEvent(Event.java:199)
+	at javafx.scene.Node.fireEvent(Node.java:9092)
+	at javafx.scene.control.Button.fire(Button.java:203)
+	at com.sun.javafx.scene.control.behavior.ButtonBehavior.mouseReleased(ButtonBehavior.java:207)
+	at com.sun.javafx.scene.control.inputmap.InputMap.handle(InputMap.java:274)
+	at com.sun.javafx.event.CompositeEventHandler$NormalEventHandlerRecord.handleBubblingEvent(CompositeEventHandler.java:247)
+	at com.sun.javafx.event.CompositeEventHandler.dispatchBubblingEvent(CompositeEventHandler.java:80)
+	at com.sun.javafx.event.EventHandlerManager.dispatchBubblingEvent(EventHandlerManager.java:232)
+	at com.sun.javafx.event.EventHandlerManager.dispatchBubblingEvent(EventHandlerManager.java:189)
+	at com.sun.javafx.event.CompositeEventDispatcher.dispatchBubblingEvent(CompositeEventDispatcher.java:59)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:58)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.EventUtil.fireEventImpl(EventUtil.java:74)
+	at com.sun.javafx.event.EventUtil.fireEvent(EventUtil.java:54)
+	at javafx.event.Event.fireEvent(Event.java:199)
+	at javafx.scene.Scene$MouseHandler.process(Scene.java:4134)
+	at javafx.scene.Scene.processMouseEvent(Scene.java:1953)
+	at javafx.scene.Scene$ScenePeerListener.mouseEvent(Scene.java:2802)
+	at com.sun.javafx.tk.quantum.GlassViewEventHandler$MouseEventNotification.get(GlassViewEventHandler.java:353)
+	at com.sun.javafx.tk.quantum.GlassViewEventHandler$MouseEventNotification.get(GlassViewEventHandler.java:255)
+	at com.sun.javafx.tk.quantum.QuantumToolkit.runWithoutRenderLock(QuantumToolkit.java:429)
+	at com.sun.javafx.tk.quantum.GlassViewEventHandler.handleMouseEvent(GlassViewEventHandler.java:387)
+	at com.sun.glass.ui.View.handleMouseEvent(View.java:573)
+	at com.sun.glass.ui.View.notifyMouse(View.java:970)
+	at com.sun.glass.ui.mac.MacView.notifyMouse(MacView.java:131)
+
+jun 16, 2026 10:43:47 A.M. InterfazGrafica.GenerarAutoevaluacionPracticanteControlador cargarInformacionProyecto
+SEVERE: Error al cargar información del proyecto
+logica.dao.excepciones.MensajeriaExcepcion: Error al obtener info de autoevaluación
+	at logica.dao.objetos.AutoevaluacionPracticanteDao.obtenerInfoAutoevaluacion(AutoevaluacionPracticanteDao.java:88)
+	at InterfazGrafica.GenerarAutoevaluacionPracticanteControlador.cargarInformacionProyecto(GenerarAutoevaluacionPracticanteControlador.java:142)
+	at InterfazGrafica.GenerarAutoevaluacionPracticanteControlador.initialize(GenerarAutoevaluacionPracticanteControlador.java:60)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:104)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:565)
+	at com.sun.javafx.reflect.Trampoline.invoke(MethodUtil.java:65)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:104)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:565)
+	at com.sun.javafx.reflect.MethodUtil.invoke(MethodUtil.java:112)
+	at com.sun.javafx.fxml.MethodHelper.invoke(MethodHelper.java:78)
+	at javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:2658)
+	at javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:2533)
+	at javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:3304)
+	at javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:3264)
+	at javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:3235)
+	at javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:3211)
+	at javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:3191)
+	at javafx.fxml.FXMLLoader.load(FXMLLoader.java:3186)
+	at InterfazGrafica.MenuPracticanteControlador.abrirVentana(MenuPracticanteControlador.java:121)
+	at InterfazGrafica.MenuPracticanteControlador.abrirAutoevaluacionPracticante(MenuPracticanteControlador.java:117)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:104)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:565)
+	at com.sun.javafx.reflect.Trampoline.invoke(MethodUtil.java:65)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:104)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:565)
+	at com.sun.javafx.reflect.MethodUtil.invoke(MethodUtil.java:112)
+	at com.sun.javafx.fxml.MethodHelper.invoke(MethodHelper.java:78)
+	at javafx.fxml.FXMLLoader$MethodHandler.invoke(FXMLLoader.java:1845)
+	at javafx.fxml.FXMLLoader$ControllerMethodEventHandler.handle(FXMLLoader.java:1718)
+	at com.sun.javafx.event.CompositeEventHandler.dispatchBubblingEvent(CompositeEventHandler.java:86)
+	at com.sun.javafx.event.EventHandlerManager.dispatchBubblingEvent(EventHandlerManager.java:232)
+	at com.sun.javafx.event.EventHandlerManager.dispatchBubblingEvent(EventHandlerManager.java:189)
+	at com.sun.javafx.event.CompositeEventDispatcher.dispatchBubblingEvent(CompositeEventDispatcher.java:59)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:58)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.EventUtil.fireEventImpl(EventUtil.java:74)
+	at com.sun.javafx.event.EventUtil.fireEvent(EventUtil.java:49)
+	at javafx.event.Event.fireEvent(Event.java:199)
+	at javafx.scene.Node.fireEvent(Node.java:9092)
+	at javafx.scene.control.Button.fire(Button.java:203)
+	at com.sun.javafx.scene.control.behavior.ButtonBehavior.mouseReleased(ButtonBehavior.java:207)
+	at com.sun.javafx.scene.control.inputmap.InputMap.handle(InputMap.java:274)
+	at com.sun.javafx.event.CompositeEventHandler$NormalEventHandlerRecord.handleBubblingEvent(CompositeEventHandler.java:247)
+	at com.sun.javafx.event.CompositeEventHandler.dispatchBubblingEvent(CompositeEventHandler.java:80)
+	at com.sun.javafx.event.EventHandlerManager.dispatchBubblingEvent(EventHandlerManager.java:232)
+	at com.sun.javafx.event.EventHandlerManager.dispatchBubblingEvent(EventHandlerManager.java:189)
+	at com.sun.javafx.event.CompositeEventDispatcher.dispatchBubblingEvent(CompositeEventDispatcher.java:59)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:58)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.EventUtil.fireEventImpl(EventUtil.java:74)
+	at com.sun.javafx.event.EventUtil.fireEvent(EventUtil.java:54)
+	at javafx.event.Event.fireEvent(Event.java:199)
+	at javafx.scene.Scene$MouseHandler.process(Scene.java:4134)
+	at javafx.scene.Scene.processMouseEvent(Scene.java:1953)
+	at javafx.scene.Scene$ScenePeerListener.mouseEvent(Scene.java:2802)
+	at com.sun.javafx.tk.quantum.GlassViewEventHandler$MouseEventNotification.get(GlassViewEventHandler.java:353)
+	at com.sun.javafx.tk.quantum.GlassViewEventHandler$MouseEventNotification.get(GlassViewEventHandler.java:255)
+	at com.sun.javafx.tk.quantum.QuantumToolkit.runWithoutRenderLock(QuantumToolkit.java:429)
+	at com.sun.javafx.tk.quantum.GlassViewEventHandler.handleMouseEvent(GlassViewEventHandler.java:387)
+	at com.sun.glass.ui.View.handleMouseEvent(View.java:573)
+	at com.sun.glass.ui.View.notifyMouse(View.java:970)
+	at com.sun.glass.ui.mac.MacView.notifyMouse(MacView.java:131)
+Caused by: java.sql.SQLException: Parameter number 2 is not an OUT parameter
+	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:121)
+	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:89)
+	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:81)
+	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:55)
+	at com.mysql.cj.jdbc.CallableStatement.checkIsOutputParam(CallableStatement.java:651)
+	at com.mysql.cj.jdbc.CallableStatement.registerOutParameter(CallableStatement.java:2000)
+	at com.mysql.cj.jdbc.CallableStatement.registerOutParameter(CallableStatement.java:2008)
+	at logica.dao.objetos.AutoevaluacionPracticanteDao.obtenerInfoAutoevaluacion(AutoevaluacionPracticanteDao.java:76)
+	... 69 more
+
+jun 16, 2026 10:43:47 A.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexión a la base de datos...
+jun 16, 2026 10:43:47 A.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexión a base de datos realizada exitosamente en 9 ms
+jun 16, 2026 10:43:47 A.M. logica.dao.objetos.AutoevaluacionPracticanteDao obtenerAutoevaluacion
+SEVERE: Error al obtener autoevaluación
+java.sql.SQLSyntaxErrorException: Table 'practicas_profesionales.autoevaluacion' doesn't exist
+	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:112)
+	at com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:114)
+	at com.mysql.cj.jdbc.ClientPreparedStatement.executeInternal(ClientPreparedStatement.java:988)
+	at com.mysql.cj.jdbc.ClientPreparedStatement.executeQuery(ClientPreparedStatement.java:1056)
+	at logica.dao.objetos.AutoevaluacionPracticanteDao.obtenerAutoevaluacion(AutoevaluacionPracticanteDao.java:115)
+	at InterfazGrafica.GenerarAutoevaluacionPracticanteControlador.verificarAutoevaluacionExistente(GenerarAutoevaluacionPracticanteControlador.java:103)
+	at InterfazGrafica.GenerarAutoevaluacionPracticanteControlador.initialize(GenerarAutoevaluacionPracticanteControlador.java:61)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:104)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:565)
+	at com.sun.javafx.reflect.Trampoline.invoke(MethodUtil.java:65)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:104)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:565)
+	at com.sun.javafx.reflect.MethodUtil.invoke(MethodUtil.java:112)
+	at com.sun.javafx.fxml.MethodHelper.invoke(MethodHelper.java:78)
+	at javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:2658)
+	at javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:2533)
+	at javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:3304)
+	at javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:3264)
+	at javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:3235)
+	at javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:3211)
+	at javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:3191)
+	at javafx.fxml.FXMLLoader.load(FXMLLoader.java:3186)
+	at InterfazGrafica.MenuPracticanteControlador.abrirVentana(MenuPracticanteControlador.java:121)
+	at InterfazGrafica.MenuPracticanteControlador.abrirAutoevaluacionPracticante(MenuPracticanteControlador.java:117)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:104)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:565)
+	at com.sun.javafx.reflect.Trampoline.invoke(MethodUtil.java:65)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:104)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:565)
+	at com.sun.javafx.reflect.MethodUtil.invoke(MethodUtil.java:112)
+	at com.sun.javafx.fxml.MethodHelper.invoke(MethodHelper.java:78)
+	at javafx.fxml.FXMLLoader$MethodHandler.invoke(FXMLLoader.java:1845)
+	at javafx.fxml.FXMLLoader$ControllerMethodEventHandler.handle(FXMLLoader.java:1718)
+	at com.sun.javafx.event.CompositeEventHandler.dispatchBubblingEvent(CompositeEventHandler.java:86)
+	at com.sun.javafx.event.EventHandlerManager.dispatchBubblingEvent(EventHandlerManager.java:232)
+	at com.sun.javafx.event.EventHandlerManager.dispatchBubblingEvent(EventHandlerManager.java:189)
+	at com.sun.javafx.event.CompositeEventDispatcher.dispatchBubblingEvent(CompositeEventDispatcher.java:59)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:58)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.EventUtil.fireEventImpl(EventUtil.java:74)
+	at com.sun.javafx.event.EventUtil.fireEvent(EventUtil.java:49)
+	at javafx.event.Event.fireEvent(Event.java:199)
+	at javafx.scene.Node.fireEvent(Node.java:9092)
+	at javafx.scene.control.Button.fire(Button.java:203)
+	at com.sun.javafx.scene.control.behavior.ButtonBehavior.mouseReleased(ButtonBehavior.java:207)
+	at com.sun.javafx.scene.control.inputmap.InputMap.handle(InputMap.java:274)
+	at com.sun.javafx.event.CompositeEventHandler$NormalEventHandlerRecord.handleBubblingEvent(CompositeEventHandler.java:247)
+	at com.sun.javafx.event.CompositeEventHandler.dispatchBubblingEvent(CompositeEventHandler.java:80)
+	at com.sun.javafx.event.EventHandlerManager.dispatchBubblingEvent(EventHandlerManager.java:232)
+	at com.sun.javafx.event.EventHandlerManager.dispatchBubblingEvent(EventHandlerManager.java:189)
+	at com.sun.javafx.event.CompositeEventDispatcher.dispatchBubblingEvent(CompositeEventDispatcher.java:59)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:58)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.EventUtil.fireEventImpl(EventUtil.java:74)
+	at com.sun.javafx.event.EventUtil.fireEvent(EventUtil.java:54)
+	at javafx.event.Event.fireEvent(Event.java:199)
+	at javafx.scene.Scene$MouseHandler.process(Scene.java:4134)
+	at javafx.scene.Scene.processMouseEvent(Scene.java:1953)
+	at javafx.scene.Scene$ScenePeerListener.mouseEvent(Scene.java:2802)
+	at com.sun.javafx.tk.quantum.GlassViewEventHandler$MouseEventNotification.get(GlassViewEventHandler.java:353)
+	at com.sun.javafx.tk.quantum.GlassViewEventHandler$MouseEventNotification.get(GlassViewEventHandler.java:255)
+	at com.sun.javafx.tk.quantum.QuantumToolkit.runWithoutRenderLock(QuantumToolkit.java:429)
+	at com.sun.javafx.tk.quantum.GlassViewEventHandler.handleMouseEvent(GlassViewEventHandler.java:387)
+	at com.sun.glass.ui.View.handleMouseEvent(View.java:573)
+	at com.sun.glass.ui.View.notifyMouse(View.java:970)
+	at com.sun.glass.ui.mac.MacView.notifyMouse(MacView.java:131)
+
+jun 16, 2026 10:43:47 A.M. InterfazGrafica.GenerarAutoevaluacionPracticanteControlador verificarAutoevaluacionExistente
+SEVERE: Error al verificar autoevaluación existente
+logica.dao.excepciones.MensajeriaExcepcion: Error al obtener autoevaluación
+	at logica.dao.objetos.AutoevaluacionPracticanteDao.obtenerAutoevaluacion(AutoevaluacionPracticanteDao.java:136)
+	at InterfazGrafica.GenerarAutoevaluacionPracticanteControlador.verificarAutoevaluacionExistente(GenerarAutoevaluacionPracticanteControlador.java:103)
+	at InterfazGrafica.GenerarAutoevaluacionPracticanteControlador.initialize(GenerarAutoevaluacionPracticanteControlador.java:61)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:104)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:565)
+	at com.sun.javafx.reflect.Trampoline.invoke(MethodUtil.java:65)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:104)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:565)
+	at com.sun.javafx.reflect.MethodUtil.invoke(MethodUtil.java:112)
+	at com.sun.javafx.fxml.MethodHelper.invoke(MethodHelper.java:78)
+	at javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:2658)
+	at javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:2533)
+	at javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:3304)
+	at javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:3264)
+	at javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:3235)
+	at javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:3211)
+	at javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:3191)
+	at javafx.fxml.FXMLLoader.load(FXMLLoader.java:3186)
+	at InterfazGrafica.MenuPracticanteControlador.abrirVentana(MenuPracticanteControlador.java:121)
+	at InterfazGrafica.MenuPracticanteControlador.abrirAutoevaluacionPracticante(MenuPracticanteControlador.java:117)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:104)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:565)
+	at com.sun.javafx.reflect.Trampoline.invoke(MethodUtil.java:65)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:104)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:565)
+	at com.sun.javafx.reflect.MethodUtil.invoke(MethodUtil.java:112)
+	at com.sun.javafx.fxml.MethodHelper.invoke(MethodHelper.java:78)
+	at javafx.fxml.FXMLLoader$MethodHandler.invoke(FXMLLoader.java:1845)
+	at javafx.fxml.FXMLLoader$ControllerMethodEventHandler.handle(FXMLLoader.java:1718)
+	at com.sun.javafx.event.CompositeEventHandler.dispatchBubblingEvent(CompositeEventHandler.java:86)
+	at com.sun.javafx.event.EventHandlerManager.dispatchBubblingEvent(EventHandlerManager.java:232)
+	at com.sun.javafx.event.EventHandlerManager.dispatchBubblingEvent(EventHandlerManager.java:189)
+	at com.sun.javafx.event.CompositeEventDispatcher.dispatchBubblingEvent(CompositeEventDispatcher.java:59)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:58)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.EventUtil.fireEventImpl(EventUtil.java:74)
+	at com.sun.javafx.event.EventUtil.fireEvent(EventUtil.java:49)
+	at javafx.event.Event.fireEvent(Event.java:199)
+	at javafx.scene.Node.fireEvent(Node.java:9092)
+	at javafx.scene.control.Button.fire(Button.java:203)
+	at com.sun.javafx.scene.control.behavior.ButtonBehavior.mouseReleased(ButtonBehavior.java:207)
+	at com.sun.javafx.scene.control.inputmap.InputMap.handle(InputMap.java:274)
+	at com.sun.javafx.event.CompositeEventHandler$NormalEventHandlerRecord.handleBubblingEvent(CompositeEventHandler.java:247)
+	at com.sun.javafx.event.CompositeEventHandler.dispatchBubblingEvent(CompositeEventHandler.java:80)
+	at com.sun.javafx.event.EventHandlerManager.dispatchBubblingEvent(EventHandlerManager.java:232)
+	at com.sun.javafx.event.EventHandlerManager.dispatchBubblingEvent(EventHandlerManager.java:189)
+	at com.sun.javafx.event.CompositeEventDispatcher.dispatchBubblingEvent(CompositeEventDispatcher.java:59)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:58)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.EventUtil.fireEventImpl(EventUtil.java:74)
+	at com.sun.javafx.event.EventUtil.fireEvent(EventUtil.java:54)
+	at javafx.event.Event.fireEvent(Event.java:199)
+	at javafx.scene.Scene$MouseHandler.process(Scene.java:4134)
+	at javafx.scene.Scene.processMouseEvent(Scene.java:1953)
+	at javafx.scene.Scene$ScenePeerListener.mouseEvent(Scene.java:2802)
+	at com.sun.javafx.tk.quantum.GlassViewEventHandler$MouseEventNotification.get(GlassViewEventHandler.java:353)
+	at com.sun.javafx.tk.quantum.GlassViewEventHandler$MouseEventNotification.get(GlassViewEventHandler.java:255)
+	at com.sun.javafx.tk.quantum.QuantumToolkit.runWithoutRenderLock(QuantumToolkit.java:429)
+	at com.sun.javafx.tk.quantum.GlassViewEventHandler.handleMouseEvent(GlassViewEventHandler.java:387)
+	at com.sun.glass.ui.View.handleMouseEvent(View.java:573)
+	at com.sun.glass.ui.View.notifyMouse(View.java:970)
+	at com.sun.glass.ui.mac.MacView.notifyMouse(MacView.java:131)
+Caused by: java.sql.SQLSyntaxErrorException: Table 'practicas_profesionales.autoevaluacion' doesn't exist
+	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:112)
+	at com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:114)
+	at com.mysql.cj.jdbc.ClientPreparedStatement.executeInternal(ClientPreparedStatement.java:988)
+	at com.mysql.cj.jdbc.ClientPreparedStatement.executeQuery(ClientPreparedStatement.java:1056)
+	at logica.dao.objetos.AutoevaluacionPracticanteDao.obtenerAutoevaluacion(AutoevaluacionPracticanteDao.java:115)
+	... 69 more
+
+jun 16, 2026 10:45:11 A.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
 INFO: Configuración de base de datos cargada correctamente
-may 31, 2026 11:06:16 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
+jun 16, 2026 10:45:11 A.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
 CONFIG: URL de conexión: jdbc:mysql://localhost:3306/practicas_profesionales
-may 31, 2026 11:06:16 P.M. acceso.bd.ConexionBaseDeDatos conectar
+jun 16, 2026 10:45:11 A.M. acceso.bd.ConexionBaseDeDatos conectar
 FINE: Intentando establecer conexión a la base de datos...
-may 31, 2026 11:06:16 P.M. acceso.bd.ConexionBaseDeDatos conectar
-INFO: Conexión a base de datos realizada exitosamente en 340 ms
-may 31, 2026 11:07:43 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
-INFO: Configuración de base de datos cargada correctamente
-may 31, 2026 11:07:43 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
-CONFIG: URL de conexión: jdbc:mysql://localhost:3306/practicas_profesionales
-may 31, 2026 11:07:43 P.M. acceso.bd.ConexionBaseDeDatos conectar
-FINE: Intentando establecer conexión a la base de datos...
-may 31, 2026 11:07:43 P.M. acceso.bd.ConexionBaseDeDatos conectar
-INFO: Conexión a base de datos realizada exitosamente en 314 ms
-may 31, 2026 11:08:25 P.M. acceso.bd.ConexionBaseDeDatos conectar
-FINE: Intentando establecer conexión a la base de datos...
-may 31, 2026 11:08:25 P.M. acceso.bd.ConexionBaseDeDatos conectar
-INFO: Conexión a base de datos realizada exitosamente en 50 ms
-may 31, 2026 11:08:28 P.M. acceso.bd.ConexionBaseDeDatos conectar
-FINE: Intentando establecer conexión a la base de datos...
-may 31, 2026 11:08:28 P.M. acceso.bd.ConexionBaseDeDatos conectar
-INFO: Conexión a base de datos realizada exitosamente en 14 ms
-may 31, 2026 11:08:36 P.M. acceso.bd.ConexionBaseDeDatos conectar
-FINE: Intentando establecer conexión a la base de datos...
-may 31, 2026 11:08:36 P.M. acceso.bd.ConexionBaseDeDatos conectar
-INFO: Conexión a base de datos realizada exitosamente en 21 ms
-may 31, 2026 11:08:36 P.M. logica.dao.objetos.PracticanteDao inactivarPracticante
-INFO: Practicante inactivado correctamente: S20013001
-may 31, 2026 11:08:36 P.M. acceso.bd.ConexionBaseDeDatos conectar
-FINE: Intentando establecer conexión a la base de datos...
-may 31, 2026 11:08:36 P.M. acceso.bd.ConexionBaseDeDatos conectar
-INFO: Conexión a base de datos realizada exitosamente en 16 ms
-jun 05, 2026 1:21:08 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
-INFO: Configuración de base de datos cargada correctamente
-jun 05, 2026 1:21:09 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
-CONFIG: URL de conexión: jdbc:mysql://localhost:3306/practicas_profesionales
-jun 05, 2026 1:21:09 P.M. acceso.bd.ConexionBaseDeDatos conectar
-FINE: Intentando establecer conexión a la base de datos...
-jun 05, 2026 1:21:09 P.M. acceso.bd.ConexionBaseDeDatos conectar
-INFO: Conexión a base de datos realizada exitosamente en 336 ms
-jun 05, 2026 1:21:18 P.M. acceso.bd.ConexionBaseDeDatos conectar
-FINE: Intentando establecer conexión a la base de datos...
-jun 05, 2026 1:21:18 P.M. acceso.bd.ConexionBaseDeDatos conectar
-INFO: Conexión a base de datos realizada exitosamente en 17 ms
-jun 05, 2026 1:23:09 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
-INFO: Configuración de base de datos cargada correctamente
-jun 05, 2026 1:23:09 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
-CONFIG: URL de conexión: jdbc:mysql://localhost:3306/practicas_profesionales
-jun 05, 2026 1:23:09 P.M. acceso.bd.ConexionBaseDeDatos conectar
-FINE: Intentando establecer conexión a la base de datos...
-jun 05, 2026 1:23:10 P.M. acceso.bd.ConexionBaseDeDatos conectar
-INFO: Conexión a base de datos realizada exitosamente en 308 ms
-jun 05, 2026 1:23:11 P.M. acceso.bd.ConexionBaseDeDatos conectar
-FINE: Intentando establecer conexión a la base de datos...
-jun 05, 2026 1:23:11 P.M. acceso.bd.ConexionBaseDeDatos conectar
-INFO: Conexión a base de datos realizada exitosamente en 17 ms
-jun 05, 2026 1:23:18 P.M. acceso.bd.ConexionBaseDeDatos conectar
-FINE: Intentando establecer conexión a la base de datos...
-jun 05, 2026 1:23:18 P.M. acceso.bd.ConexionBaseDeDatos conectar
-INFO: Conexión a base de datos realizada exitosamente en 17 ms
-jun 05, 2026 1:39:11 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
-INFO: Configuración de base de datos cargada correctamente
-jun 05, 2026 1:39:11 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
-CONFIG: URL de conexión: jdbc:mysql://localhost:3306/practicas_profesionales
-jun 05, 2026 1:39:11 P.M. acceso.bd.ConexionBaseDeDatos conectar
-FINE: Intentando establecer conexión a la base de datos...
-jun 05, 2026 1:39:12 P.M. acceso.bd.ConexionBaseDeDatos conectar
-INFO: Conexión a base de datos realizada exitosamente en 320 ms
-jun 05, 2026 3:30:46 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
-INFO: Configuración de base de datos cargada correctamente
-jun 05, 2026 3:30:46 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
-CONFIG: URL de conexión: jdbc:mysql://localhost:3306/practicas_profesionales
-jun 05, 2026 3:30:46 P.M. acceso.bd.ConexionBaseDeDatos conectar
-FINE: Intentando establecer conexión a la base de datos...
-jun 05, 2026 3:30:46 P.M. acceso.bd.ConexionBaseDeDatos conectar
-INFO: Conexión a base de datos realizada exitosamente en 323 ms
-jun 05, 2026 3:33:07 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
-INFO: Configuración de base de datos cargada correctamente
-jun 05, 2026 3:33:07 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
-CONFIG: URL de conexión: jdbc:mysql://localhost:3306/practicas_profesionales
-jun 05, 2026 3:33:07 P.M. acceso.bd.ConexionBaseDeDatos conectar
-FINE: Intentando establecer conexión a la base de datos...
-jun 05, 2026 3:33:08 P.M. acceso.bd.ConexionBaseDeDatos conectar
-INFO: Conexión a base de datos realizada exitosamente en 266 ms
-jun 05, 2026 3:33:56 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
-INFO: Configuración de base de datos cargada correctamente
-jun 05, 2026 3:33:56 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
-CONFIG: URL de conexión: jdbc:mysql://localhost:3306/practicas_profesionales
-jun 05, 2026 3:33:56 P.M. acceso.bd.ConexionBaseDeDatos conectar
-FINE: Intentando establecer conexión a la base de datos...
-jun 05, 2026 3:33:56 P.M. acceso.bd.ConexionBaseDeDatos conectar
-INFO: Conexión a base de datos realizada exitosamente en 230 ms
-jun 05, 2026 3:43:17 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
-INFO: Configuración de base de datos cargada correctamente
-jun 05, 2026 3:43:17 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
-CONFIG: URL de conexión: jdbc:mysql://localhost:3306/practicas_profesionales
-jun 05, 2026 3:43:17 P.M. acceso.bd.ConexionBaseDeDatos conectar
-FINE: Intentando establecer conexión a la base de datos...
-jun 05, 2026 3:43:18 P.M. acceso.bd.ConexionBaseDeDatos conectar
-INFO: Conexión a base de datos realizada exitosamente en 296 ms
-jun 05, 2026 3:44:11 P.M. acceso.bd.ConexionBaseDeDatos conectar
-FINE: Intentando establecer conexión a la base de datos...
-jun 05, 2026 3:44:11 P.M. acceso.bd.ConexionBaseDeDatos conectar
-INFO: Conexión a base de datos realizada exitosamente en 22 ms
-jun 05, 2026 3:44:11 P.M. logica.dao.objetos.PeriodoUniversitarioDao verificarPeriodoAbierto
-INFO: Verificacion de periodo abierto completada
-jun 05, 2026 3:44:11 P.M. acceso.bd.ConexionBaseDeDatos conectar
-FINE: Intentando establecer conexión a la base de datos...
-jun 05, 2026 3:44:12 P.M. acceso.bd.ConexionBaseDeDatos conectar
-INFO: Conexión a base de datos realizada exitosamente en 16 ms
-jun 05, 2026 3:44:12 P.M. logica.dao.objetos.PeriodoUniversitarioDao insertarPeriodo
-INFO: Periodo universitario insertado correctamente
-jun 05, 2026 4:34:33 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
-INFO: Configuración de base de datos cargada correctamente
-jun 05, 2026 4:34:33 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
-CONFIG: URL de conexión: jdbc:mysql://localhost:3306/practicas_profesionales
-jun 05, 2026 4:34:33 P.M. acceso.bd.ConexionBaseDeDatos conectar
-FINE: Intentando establecer conexión a la base de datos...
-jun 05, 2026 4:34:33 P.M. acceso.bd.ConexionBaseDeDatos conectar
-INFO: Conexión a base de datos realizada exitosamente en 295 ms
-jun 05, 2026 4:34:35 P.M. acceso.bd.ConexionBaseDeDatos conectar
-FINE: Intentando establecer conexión a la base de datos...
-jun 05, 2026 4:34:35 P.M. acceso.bd.ConexionBaseDeDatos conectar
-INFO: Conexión a base de datos realizada exitosamente en 18 ms
-jun 05, 2026 4:34:36 P.M. acceso.bd.ConexionBaseDeDatos conectar
-FINE: Intentando establecer conexión a la base de datos...
-jun 05, 2026 4:34:36 P.M. acceso.bd.ConexionBaseDeDatos conectar
-INFO: Conexión a base de datos realizada exitosamente en 24 ms
-jun 05, 2026 4:34:36 P.M. acceso.bd.ConexionBaseDeDatos conectar
-FINE: Intentando establecer conexión a la base de datos...
-jun 05, 2026 4:34:37 P.M. acceso.bd.ConexionBaseDeDatos conectar
-INFO: Conexión a base de datos realizada exitosamente en 15 ms
-jun 05, 2026 4:34:37 P.M. acceso.bd.ConexionBaseDeDatos conectar
-FINE: Intentando establecer conexión a la base de datos...
-jun 05, 2026 4:34:37 P.M. acceso.bd.ConexionBaseDeDatos conectar
-INFO: Conexión a base de datos realizada exitosamente en 18 ms
-jun 05, 2026 4:34:37 P.M. acceso.bd.ConexionBaseDeDatos conectar
-FINE: Intentando establecer conexión a la base de datos...
-jun 05, 2026 4:34:37 P.M. acceso.bd.ConexionBaseDeDatos conectar
-INFO: Conexión a base de datos realizada exitosamente en 11 ms
-jun 05, 2026 4:34:37 P.M. acceso.bd.ConexionBaseDeDatos conectar
-FINE: Intentando establecer conexión a la base de datos...
-jun 05, 2026 4:34:37 P.M. acceso.bd.ConexionBaseDeDatos conectar
-INFO: Conexión a base de datos realizada exitosamente en 18 ms
-jun 05, 2026 4:34:37 P.M. acceso.bd.ConexionBaseDeDatos conectar
-FINE: Intentando establecer conexión a la base de datos...
-jun 05, 2026 4:34:37 P.M. acceso.bd.ConexionBaseDeDatos conectar
-INFO: Conexión a base de datos realizada exitosamente en 12 ms
-jun 05, 2026 4:35:18 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
-INFO: Configuración de base de datos cargada correctamente
-jun 05, 2026 4:35:18 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
-CONFIG: URL de conexión: jdbc:mysql://localhost:3306/practicas_profesionales
-jun 05, 2026 4:35:18 P.M. acceso.bd.ConexionBaseDeDatos conectar
-FINE: Intentando establecer conexión a la base de datos...
-jun 05, 2026 4:35:18 P.M. acceso.bd.ConexionBaseDeDatos conectar
-INFO: Conexión a base de datos realizada exitosamente en 342 ms
-jun 05, 2026 4:36:14 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
-INFO: Configuración de base de datos cargada correctamente
-jun 05, 2026 4:36:14 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
-CONFIG: URL de conexión: jdbc:mysql://localhost:3306/practicas_profesionales
-jun 05, 2026 4:36:14 P.M. acceso.bd.ConexionBaseDeDatos conectar
-FINE: Intentando establecer conexión a la base de datos...
-jun 05, 2026 4:36:14 P.M. acceso.bd.ConexionBaseDeDatos conectar
-INFO: Conexión a base de datos realizada exitosamente en 236 ms
-jun 05, 2026 4:36:16 P.M. acceso.bd.ConexionBaseDeDatos conectar
-FINE: Intentando establecer conexión a la base de datos...
-jun 05, 2026 4:36:16 P.M. acceso.bd.ConexionBaseDeDatos conectar
-INFO: Conexión a base de datos realizada exitosamente en 17 ms
-jun 05, 2026 4:36:19 P.M. acceso.bd.ConexionBaseDeDatos conectar
-FINE: Intentando establecer conexión a la base de datos...
-jun 05, 2026 4:36:19 P.M. acceso.bd.ConexionBaseDeDatos conectar
-INFO: Conexión a base de datos realizada exitosamente en 23 ms
-jun 05, 2026 4:39:04 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
-INFO: Configuración de base de datos cargada correctamente
-jun 05, 2026 4:39:04 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
-CONFIG: URL de conexión: jdbc:mysql://localhost:3306/practicas_profesionales
-jun 05, 2026 4:39:04 P.M. acceso.bd.ConexionBaseDeDatos conectar
-FINE: Intentando establecer conexión a la base de datos...
-jun 05, 2026 4:39:04 P.M. acceso.bd.ConexionBaseDeDatos conectar
-INFO: Conexión a base de datos realizada exitosamente en 275 ms
-jun 05, 2026 4:39:06 P.M. acceso.bd.ConexionBaseDeDatos conectar
-FINE: Intentando establecer conexión a la base de datos...
-jun 05, 2026 4:39:06 P.M. acceso.bd.ConexionBaseDeDatos conectar
-INFO: Conexión a base de datos realizada exitosamente en 17 ms
-jun 05, 2026 4:40:19 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
-INFO: Configuración de base de datos cargada correctamente
-jun 05, 2026 4:40:19 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
-CONFIG: URL de conexión: jdbc:mysql://localhost:3306/practicas_profesionales
-jun 05, 2026 4:40:19 P.M. acceso.bd.ConexionBaseDeDatos conectar
-FINE: Intentando establecer conexión a la base de datos...
-jun 05, 2026 4:40:20 P.M. acceso.bd.ConexionBaseDeDatos conectar
-INFO: Conexión a base de datos realizada exitosamente en 293 ms
-jun 05, 2026 4:44:02 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
-INFO: Configuración de base de datos cargada correctamente
-jun 05, 2026 4:44:02 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
-CONFIG: URL de conexión: jdbc:mysql://localhost:3306/practicas_profesionales
-jun 05, 2026 4:44:02 P.M. acceso.bd.ConexionBaseDeDatos conectar
-FINE: Intentando establecer conexión a la base de datos...
-jun 05, 2026 4:44:02 P.M. acceso.bd.ConexionBaseDeDatos conectar
-INFO: Conexión a base de datos realizada exitosamente en 290 ms
-jun 05, 2026 5:32:40 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
-INFO: Configuración de base de datos cargada correctamente
-jun 05, 2026 5:32:40 P.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
-CONFIG: URL de conexión: jdbc:mysql://localhost:3306/practicas_profesionales
-jun 05, 2026 5:32:40 P.M. acceso.bd.ConexionBaseDeDatos conectar
-FINE: Intentando establecer conexión a la base de datos...
-jun 05, 2026 5:32:40 P.M. acceso.bd.ConexionBaseDeDatos conectar
-INFO: Conexión a base de datos realizada exitosamente en 302 ms
+jun 16, 2026 10:45:11 A.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexión a base de datos realizada exitosamente en 254 ms

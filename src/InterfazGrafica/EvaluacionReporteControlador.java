@@ -21,6 +21,7 @@ import logica.dao.objetos.ReporteDao;
 import logica.dominio.Practicante;
 import logica.dominio.Reporte;
 import logica.dominio.SesionUsuario;
+import logica.dominio.enums.EstadoDeCalificacion;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -47,8 +48,8 @@ public class EvaluacionReporteControlador {
     @FXML private Label etiquetaTituloExito;
     @FXML private Label etiquetaMensajeExito;
 
-    private ReporteDao reporteDao = new ReporteDao();
-    private PracticanteDao practicanteDao = new PracticanteDao();
+    private final ReporteDao reporteDao = new ReporteDao();
+    private final PracticanteDao practicanteDao = new PracticanteDao();
 
     @FXML
     public void initialize() {
@@ -66,18 +67,24 @@ public class EvaluacionReporteControlador {
     private void cargarPracticantes() {
         try {
             List<Practicante> practicantes = practicanteDao.obtenerPracticantesActivos();
-            ObservableList<Practicante> practicantesObservable = FXCollections.observableArrayList(practicantes);
-            comboBoxPracticante.setItems(practicantesObservable);
-            comboBoxPracticante.setCellFactory(listaPracticantes -> crearCeldaPracticante());
-            comboBoxPracticante.setButtonCell(crearCeldaPracticante());
+            if (practicantes.isEmpty()) {
+                mostrarError("Sin practicantes", "NO HAY PRACTICANTES ACTIVOS EN EL SISTEMA.");
+                comboBoxPracticante.setDisable(true);
+            } else {
+                ObservableList<Practicante> practicantesObservable = FXCollections.observableArrayList(practicantes);
+                comboBoxPracticante.setItems(practicantesObservable);
+                comboBoxPracticante.setCellFactory(listaPracticantes -> crearCeldaPracticante());
+                comboBoxPracticante.setButtonCell(crearCeldaPracticante());
+            }
         } catch (UsuariosExcepcion excepcion) {
             LOGGER.log(Level.SEVERE, "Error al cargar practicantes", excepcion);
             mostrarError("Error al cargar practicantes", excepcion.getMessage().toUpperCase());
+            comboBoxPracticante.setDisable(true);
         }
     }
 
     private ListCell<Practicante> crearCeldaPracticante() {
-        return new ListCell<Practicante>() {
+        return new ListCell<>() {
             @Override
             protected void updateItem(Practicante practicante, boolean vacio) {
                 super.updateItem(practicante, vacio);
@@ -101,7 +108,12 @@ public class EvaluacionReporteControlador {
     private void cargarReportes(String matricula) {
         try {
             List<Reporte> reportes = reporteDao.obtenerReportesPorPracticante(matricula);
-            tablaReportes.setItems(FXCollections.observableArrayList(reportes));
+            if (reportes.isEmpty()) {
+                mostrarError("Sin reportes", "ESTE PRACTICANTE AÚN NO TIENE REPORTES REGISTRADOS.");
+                tablaReportes.getItems().clear();
+            } else {
+                tablaReportes.setItems(FXCollections.observableArrayList(reportes));
+            }
         } catch (MensajeriaExcepcion excepcion) {
             LOGGER.log(Level.SEVERE, "Error al cargar reportes", excepcion);
             mostrarError("Error al cargar reportes", excepcion.getMessage().toUpperCase());
@@ -118,36 +130,61 @@ public class EvaluacionReporteControlador {
     }
 
     private boolean evaluacionValida() {
-        boolean reporteSeleccionado = tablaReportes.getSelectionModel().getSelectedItem() != null;
+        Reporte reporte = tablaReportes.getSelectionModel().getSelectedItem();
         String calificacionTexto = campoCalificacion.getText().trim();
         String observaciones = campoObservaciones.getText().trim();
-        boolean camposCompletos = !calificacionTexto.isEmpty() && !observaciones.isEmpty();
-        boolean calificacionValida = camposCompletos && esCalificacionValida(calificacionTexto);
+        boolean valido = reporte != null
+                && !calificacionTexto.isEmpty()
+                && !observaciones.isEmpty()
+                && reporteNoevaluado(reporte)
+                && esCalificacionValida(calificacionTexto);
+        verificarCampos(reporte, calificacionTexto, observaciones);
+        return valido;
+    }
 
-        if (!reporteSeleccionado) {
+    private void verificarCampos(Reporte reporte, String calificacionTexto, String observaciones) {
+        if (reporte == null) {
             mostrarError("Reporte no seleccionado", "SELECCIONA UN REPORTE DE LA TABLA.");
+        } else if (reporte.getEstadoDeCalificacion() == EstadoDeCalificacion.Evaluado) {
+            mostrarError("Reporte ya evaluado", "ESTE REPORTE YA FUE EVALUADO ANTERIORMENTE.");
+        } else if (calificacionTexto.isEmpty() || observaciones.isEmpty()) {
+            mostrarError("Campos vacíos", "INGRESA LA CALIFICACION Y LAS OBSERVACIONES.");
+        } else if (!esCalificacionNumerica(calificacionTexto)) {
+            mostrarError("Calificación inválida", "LA CALIFICACION DEBE SER UN NÚMERO.");
+        } else if (!calificacionEnRango(calificacionTexto)) {
+            mostrarError("Calificación inválida", "LA CALIFICACION DEBE ESTAR ENTRE 0 Y 100.");
         }
-        if (!camposCompletos) {
-            mostrarError("Campos vacios", "INGRESA LA CALIFICACION Y LAS OBSERVACIONES.");
-        }
-        boolean formularioValido = reporteSeleccionado && calificacionValida;
-        return formularioValido;
+    }
+
+    private boolean reporteNoevaluado(Reporte reporte) {
+        return reporte.getEstadoDeCalificacion() != EstadoDeCalificacion.Evaluado;
     }
 
     private boolean esCalificacionValida(String calificacionTexto) {
-        boolean esValida = false;
+        boolean valida = false;
         try {
             double calificacion = Double.parseDouble(calificacionTexto);
-            boolean dentroDeRango = calificacion >= CALIFICACION_MINIMA && calificacion <= CALIFICACION_MAXIMA;
-            if (!dentroDeRango) {
-                mostrarError("Calificacion invalida", "LA CALIFICACION DEBE ESTAR ENTRE 0 Y 100.");
-            }
-            esValida = dentroDeRango;
+            valida = calificacion >= CALIFICACION_MINIMA && calificacion <= CALIFICACION_MAXIMA;
         } catch (NumberFormatException excepcion) {
-            LOGGER.log(Level.SEVERE, "Calificación con formato inválido", excepcion);
-            mostrarError("Calificacion invalida", "LA CALIFICACION DEBE SER UN NUMERO.");
+            LOGGER.log(Level.WARNING, "Calificación con formato inválido", excepcion);
         }
-        return esValida;
+        return valida;
+    }
+
+    private boolean esCalificacionNumerica(String calificacionTexto) {
+        boolean numerica = true;
+        try {
+            Double.parseDouble(calificacionTexto);
+        } catch (NumberFormatException excepcion) {
+            LOGGER.log(Level.WARNING, "Calificación no numérica", excepcion);
+            numerica = false;
+        }
+        return numerica;
+    }
+
+    private boolean calificacionEnRango(String calificacionTexto) {
+        double calificacion = Double.parseDouble(calificacionTexto);
+        return calificacion >= CALIFICACION_MINIMA && calificacion <= CALIFICACION_MAXIMA;
     }
 
     private void procesarEvaluacion() {
