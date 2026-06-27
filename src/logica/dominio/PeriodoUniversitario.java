@@ -55,6 +55,6 @@ public class PeriodoUniversitario {
 
     @Override
     public String toString() {
-        return idPeriodo + " " + nombre;
+        return nombre;
     }
 }

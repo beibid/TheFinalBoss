@@ -1,6 +1,7 @@
 package logica.dao.objetos;
 
 import acceso.bd.ConexionBaseDeDatos;
+import logica.dao.excepciones.RegistroDuplicadoExcepcion;
 import logica.dao.excepciones.UsuariosExcepcion;
 import logica.dominio.PracticanteSeccion;
 import logica.dao.interfaces.PracticanteSeccionDaoInterfaz;
@@ -12,16 +13,21 @@ import java.util.logging.Logger;
 
 public class PracticanteSeccionDao implements PracticanteSeccionDaoInterfaz {
     private static final Logger LOGGER = Logger.getLogger(PracticanteSeccionDao.class.getName());
+    private static final int ID_PERIODO_MINIMO_VALIDO = 1;
+    private static final int ERROR_DUPLICADO_MYSQL = 1062;
 
     @Override
-    public int agregarPracticanteSeccion(PracticanteSeccion practicanteSeccion) throws UsuariosExcepcion {
+    public int agregarPracticanteSeccion(PracticanteSeccion practicanteSeccion) throws UsuariosExcepcion, RegistroDuplicadoExcepcion {
         if (practicanteSeccion.getMatricula() == null) {
             throw new UsuariosExcepcion("La matricula no puede ser nula");
         }
         if (practicanteSeccion.getNoSeccion() == null) {
             throw new UsuariosExcepcion("El numero de seccion no puede ser nulo");
         }
-        String consultaPracticanteSeccion = "INSERT INTO practicante_seccion (matricula, noSeccion) VALUES (?, ?)";
+        if (practicanteSeccion.getIdPeriodo() < ID_PERIODO_MINIMO_VALIDO) {
+            throw new UsuariosExcepcion("El periodo no puede ser nulo");
+        }
+        String consultaPracticanteSeccion = "INSERT INTO practicante_seccion (matricula, noSeccion, idPeriodo) VALUES (?, ?, ?)";
         Connection conexionBaseDeDatos = null;
         PreparedStatement insercion = null;
         int filasAfectadas = 0;
@@ -30,10 +36,14 @@ public class PracticanteSeccionDao implements PracticanteSeccionDaoInterfaz {
             insercion = conexionBaseDeDatos.prepareStatement(consultaPracticanteSeccion);
             insercion.setString(1, practicanteSeccion.getMatricula());
             insercion.setString(2, practicanteSeccion.getNoSeccion());
+            insercion.setInt(3, practicanteSeccion.getIdPeriodo());
             filasAfectadas = insercion.executeUpdate();
             LOGGER.info("PracticanteSeccion insertada correctamente");
         } catch (SQLException excepcionSql) {
             LOGGER.log(Level.SEVERE, "Error al insertar practicante_seccion", excepcionSql);
+            if (excepcionSql.getErrorCode() == ERROR_DUPLICADO_MYSQL) {
+                throw new RegistroDuplicadoExcepcion("El practicante ya esta asignado a una seccion en este periodo");
+            }
             throw new UsuariosExcepcion("Error al agregar practicante seccion", excepcionSql);
         } finally {
             try {
@@ -44,20 +54,23 @@ public class PracticanteSeccionDao implements PracticanteSeccionDaoInterfaz {
                     conexionBaseDeDatos.close();
                 }
             } catch (SQLException excepcionSql) {
-                LOGGER.log(Level.SEVERE, "Error al cerrar la conexión", excepcionSql);
+                LOGGER.log(Level.SEVERE, "Error al cerrar la conexion", excepcionSql);
             }
         }
         return filasAfectadas;
     }
 
-    public int modificarPracticanteSeccion(String matricula, String noSeccion, PracticanteSeccion practicanteSeccion) throws UsuariosExcepcion {
+    public int modificarPracticanteSeccion(String matricula, String noSeccion, int idPeriodo, PracticanteSeccion practicanteSeccion) throws UsuariosExcepcion {
         if (matricula == null) {
             throw new UsuariosExcepcion("La matricula no puede ser nula");
         }
         if (noSeccion == null) {
             throw new UsuariosExcepcion("El numero de seccion no puede ser nulo");
         }
-        String consulta = "UPDATE practicante_seccion SET matricula = ?, noSeccion = ? WHERE matricula = ? AND noSeccion = ?";
+        if (idPeriodo < ID_PERIODO_MINIMO_VALIDO) {
+            throw new UsuariosExcepcion("El periodo no puede ser nulo");
+        }
+        String consulta = "UPDATE practicante_seccion SET matricula = ?, noSeccion = ?, idPeriodo = ? WHERE matricula = ? AND noSeccion = ? AND idPeriodo = ?";
         Connection conexionBaseDeDatos = null;
         PreparedStatement actualizacion = null;
         int filasAfectadas = 0;
@@ -66,8 +79,10 @@ public class PracticanteSeccionDao implements PracticanteSeccionDaoInterfaz {
             actualizacion = conexionBaseDeDatos.prepareStatement(consulta);
             actualizacion.setString(1, practicanteSeccion.getMatricula());
             actualizacion.setString(2, practicanteSeccion.getNoSeccion());
-            actualizacion.setString(3, matricula);
-            actualizacion.setString(4, noSeccion);
+            actualizacion.setInt(3, practicanteSeccion.getIdPeriodo());
+            actualizacion.setString(4, matricula);
+            actualizacion.setString(5, noSeccion);
+            actualizacion.setInt(6, idPeriodo);
             filasAfectadas = actualizacion.executeUpdate();
             LOGGER.info("PracticanteSeccion modificada correctamente: " + matricula + " - " + noSeccion);
         } catch (SQLException excepcionSql) {
@@ -82,7 +97,7 @@ public class PracticanteSeccionDao implements PracticanteSeccionDaoInterfaz {
                     conexionBaseDeDatos.close();
                 }
             } catch (SQLException excepcionSql) {
-                LOGGER.log(Level.SEVERE, "Error al cerrar la conexión", excepcionSql);
+                LOGGER.log(Level.SEVERE, "Error al cerrar la conexion", excepcionSql);
             }
         }
         return filasAfectadas;

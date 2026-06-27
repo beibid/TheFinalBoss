@@ -134,6 +134,11 @@ public class MenuCoordinadorControlador {
     }
 
     @FXML
+    private void abrirRegistrarSeccion(ActionEvent event) throws IOException {
+        abrirVentana("/InterfazGrafica/vistas/RegistrarSeccionVista.fxml", "Registrar Seccion");
+    }
+
+    @FXML
     private void cerrarSesion(ActionEvent event) throws IOException {
         SesionUsuario.getInstance().cerrarSesion();
         Parent ruta = FXMLLoader.load(getClass().getResource("/InterfazGrafica/vistas/IniciarSesionVista.fxml"));

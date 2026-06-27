@@ -10,6 +10,7 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import logica.dao.excepciones.RegistroDuplicadoExcepcion;
 import logica.dao.excepciones.UsuariosExcepcion;
 import logica.dao.objetos.PracticanteDao;
 import logica.dao.objetos.PracticanteSeccionDao;
@@ -83,7 +84,7 @@ public class AsignarPracticanteEnSeccionControlador {
         if (seleccionValida()) {
             if (confirmarAccion("¿Seguro que desea asignar a "
                     + comboBoxPracticantes.getSelectionModel().getSelectedItem().getNombre()
-                    + " a la sección "
+                    + " a la seccion "
                     + comboBoxSecciones.getSelectionModel().getSelectedItem().getNoSeccion() + "?")) {
                 ejecutarAsignacion();
             }
@@ -101,10 +102,10 @@ public class AsignarPracticanteEnSeccionControlador {
     private void verificarSeleccion(Practicante practicante, Seccion seccion) {
         if (practicante == null) {
             mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
-                    "Sin selección", "POR FAVOR SELECCIONA UN PRACTICANTE.");
+                    "Sin seleccion", "POR FAVOR SELECCIONA UN PRACTICANTE.");
         } else if (seccion == null) {
             mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
-                    "Sin selección", "POR FAVOR SELECCIONA UNA SECCIÓN.");
+                    "Sin seleccion", "POR FAVOR SELECCIONA UNA SECCION.");
         }
     }
 
@@ -115,20 +116,25 @@ public class AsignarPracticanteEnSeccionControlador {
             PracticanteSeccion practicanteEnSeccion = new PracticanteSeccion();
             practicanteEnSeccion.setMatricula(practicante.getMatricula());
             practicanteEnSeccion.setNoSeccion(seccion.getNoSeccion());
+            practicanteEnSeccion.setIdPeriodo(seccion.getIdPeriodo());
             int filasAfectadas = practicanteSeccionDao.agregarPracticanteSeccion(practicanteEnSeccion);
             if (filasAfectadas >= FILAS_AFECTADAS_ESPERADAS) {
                 limpiarSeleccion();
                 mostrarPanel(etiquetaTituloExito, etiquetaMensajeExito, panelExito,
-                        "Asignación exitosa", "EL PRACTICANTE FUE ASIGNADO A LA SECCIÓN EXITOSAMENTE.");
+                        "Asignacion exitosa", "EL PRACTICANTE FUE ASIGNADO A LA SECCION EXITOSAMENTE.");
             } else {
                 mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
-                        "Error", "NO SE PUDO REALIZAR LA ASIGNACIÓN.");
+                        "Error", "NO SE PUDO REALIZAR LA ASIGNACION.");
             }
         } catch (UsuariosExcepcion excepcion) {
             LOGGER.log(Level.SEVERE, "Error al asignar practicante a seccion", excepcion);
             mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
                     "Error inesperado", excepcion.getMessage().toUpperCase());
-        }
+        } catch(RegistroDuplicadoExcepcion excepcion) {
+        LOGGER.log(Level.WARNING, "Practicante ya asignado", excepcion);
+        mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
+                "Practicante ya asignado", "ESE PRACTICANTE YA ESTA ASIGNADO A UNA SECCION EN EL PERIODO ACTUAL.");
+    }
     }
 
     @FXML
@@ -146,10 +152,10 @@ public class AsignarPracticanteEnSeccionControlador {
 
     private boolean confirmarAccion(String mensaje) {
         Alert alerta = new Alert(Alert.AlertType.CONFIRMATION);
-        alerta.setTitle("Confirmación");
+        alerta.setTitle("Confirmacion");
         alerta.setHeaderText(mensaje);
         alerta.setContentText("");
-        ButtonType botonSi = new ButtonType("Sí");
+        ButtonType botonSi = new ButtonType("Si");
         ButtonType botonNo = new ButtonType("No");
         alerta.getButtonTypes().setAll(botonSi, botonNo);
         return alerta.showAndWait().filter(botonPresionado -> botonPresionado == botonSi).isPresent();
