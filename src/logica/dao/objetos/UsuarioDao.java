@@ -94,6 +94,7 @@ public class UsuarioDao implements UsuarioDaoInterfaz {
                 usuarioSesion.setMatricula(resultado.getString("matricula"));
                 usuarioSesion.setIdentificador(resultado.getString("identificador"));
                 usuarioSesion.setIdUsuario(resultado.getInt("idUsuario"));
+                usuarioSesion.setDebeCambiarContrasena(resultado.getBoolean("debeCambiarContrasena"));
             }
         } catch (SQLException excepcionSql) {
             LOGGER.log(Level.SEVERE, "Error al buscar usuario", excepcionSql);
@@ -110,5 +111,34 @@ public class UsuarioDao implements UsuarioDaoInterfaz {
             }
         }
         return usuarioSesion;
+    }
+
+    public int actualizarContrasena(int idUsuario, String contrasenaCifrada) throws UsuariosExcepcion {
+        String consulta = "UPDATE usuario SET contrasena = ?, debeCambiarContrasena = 0 WHERE idUsuario = ?";
+        Connection conexionBaseDeDatos = null;
+        PreparedStatement actualizacion = null;
+        int filasAfectadas = 0;
+        try {
+            conexionBaseDeDatos = ConexionBaseDeDatos.getInstance().conectar();
+            actualizacion = conexionBaseDeDatos.prepareStatement(consulta);
+            actualizacion.setString(1, contrasenaCifrada);
+            actualizacion.setInt(2, idUsuario);
+            filasAfectadas = actualizacion.executeUpdate();
+            LOGGER.info("Contrasena actualizada para usuario: " + idUsuario);
+        } catch (SQLException excepcionSql) {
+            LOGGER.log(Level.SEVERE, "Error al actualizar contrasena", excepcionSql);
+            if (esErrorDeConexion(excepcionSql)) {
+                throw new UsuariosExcepcion("No se pudo conectar al servidor. Verifique que la base de datos este encendida");
+            }
+            throw new UsuariosExcepcion("Error al actualizar la contrasena", excepcionSql);
+        } finally {
+            try {
+                if (actualizacion != null) actualizacion.close();
+                if (conexionBaseDeDatos != null) conexionBaseDeDatos.close();
+            } catch (SQLException excepcionSql) {
+                LOGGER.log(Level.SEVERE, "Error al cerrar la conexion", excepcionSql);
+            }
+        }
+        return filasAfectadas;
     }
 }

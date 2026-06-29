@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="420.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="InterfazGrafica.CambiarContrasenaControlador">
+    <children>
+        <Label layoutX="120.0" layoutY="30.0" text="Cambiar Contraseña">
+            <font>
+                <Font size="24.0" />
+            </font>
+        </Label>
+        <Label layoutX="100.0" layoutY="80.0" text="Debes cambiar tu contraseña antes de continuar." style="-fx-text-fill: #555555; -fx-font-size: 11;" />
+        <VBox fx:id="panelError" layoutX="100.0" layoutY="105.0" maxWidth="300.0" prefWidth="300.0" spacing="4.0" style="-fx-border-color: #8B0000; -fx-border-width: 2; -fx-background-color: #f5f5dc; -fx-padding: 10;" visible="false" managed="false">
+            <HBox alignment="CENTER_LEFT" spacing="8">
+                <Label style="-fx-text-fill: #8B0000; -fx-font-size: 16; -fx-font-weight: bold;" text="✖" />
+                <Label fx:id="etiquetaTituloError" style="-fx-font-weight: bold; -fx-text-fill: #8B0000;" text="" />
+            </HBox>
+            <Label fx:id="etiquetaMensajeError" style="-fx-text-fill: #8B0000; -fx-font-size: 11;" text="" wrapText="true" />
+        </VBox>
+        <VBox fx:id="panelExito" layoutX="100.0" layoutY="105.0" maxWidth="300.0" prefWidth="300.0" spacing="4.0" style="-fx-border-color: #006400; -fx-border-width: 2; -fx-background-color: #f0fff0; -fx-padding: 10;" visible="false" managed="false">
+            <HBox alignment="CENTER_LEFT" spacing="8">
+                <Label style="-fx-text-fill: #006400; -fx-font-size: 16; -fx-font-weight: bold;" text="✔" />
+                <Label fx:id="etiquetaTituloExito" style="-fx-font-weight: bold; -fx-text-fill: #006400;" text="" />
+            </HBox>
+            <Label fx:id="etiquetaMensajeExito" style="-fx-text-fill: #006400; -fx-font-size: 11;" text="" wrapText="true" />
+        </VBox>
+        <Label layoutX="100.0" layoutY="180.0" text="Nueva contraseña" />
+        <PasswordField fx:id="campoTextoNuevaContrasena" layoutX="100.0" layoutY="200.0" prefHeight="27.0" prefWidth="300.0" promptText="Nueva contraseña" />
+        <Label layoutX="100.0" layoutY="240.0" text="Confirmar contraseña" />
+        <PasswordField fx:id="campoTextoConfirmarContrasena" layoutX="100.0" layoutY="260.0" prefHeight="27.0" prefWidth="300.0" promptText="Confirmar contraseña" />
+        <Button layoutX="100.0" layoutY="320.0" onAction="#botonCambiarContrasena" prefWidth="300.0" text="Cambiar Contraseña" />
+    </children>
+</AnchorPane>

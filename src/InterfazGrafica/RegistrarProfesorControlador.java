@@ -11,10 +11,12 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import logica.dominio.ServicioCorreo;
 import logica.dominio.CifracionContrasena;
 import logica.dao.excepciones.RegistroDuplicadoExcepcion;
 import logica.dao.excepciones.UsuariosExcepcion;
 import logica.dao.objetos.ProfesorDao;
+import logica.dominio.GeneradoContrasena;
 import logica.dominio.Profesor;
 import logica.dominio.enums.Estado;
 import logica.dominio.enums.Turno;
@@ -116,12 +118,12 @@ public class RegistrarProfesorControlador {
 
         verificarCaracteresPermitidos(camposFormularioValido, turnoValido, nombreValido, apellidosValido, correoValido, numeroPersonalValido);
 
-        boolean formularioCompletoValidado = camposFormularioValido && turnoValido && nombreValido && apellidosValido && correoValido && numeroPersonalValido;
-        return formularioCompletoValidado;
+        return camposFormularioValido && turnoValido && nombreValido && apellidosValido && correoValido && numeroPersonalValido;
     }
 
     private void verificarCaracteresPermitidos(boolean camposFormularioValido, boolean turnoValido,
-                                               boolean nombreValido, boolean apellidosValido, boolean correoValido, boolean numeroPersonalValido) {
+                                               boolean nombreValido, boolean apellidosValido,
+                                               boolean correoValido, boolean numeroPersonalValido) {
         if (!camposFormularioValido) {
             mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
                     "Campos obligatorios vacios", "Verifique la informacion e intente de nuevo");
@@ -167,7 +169,7 @@ public class RegistrarProfesorControlador {
         String correo = campoTextoCorreo.getText().trim();
         String numeroPersonal = campoTextoNumeroPersonal.getText().trim();
         Turno turno = obtenerTurnoSeleccionado();
-        contrasenaGenerada = generarContrasena(nombre, numeroPersonal);
+        contrasenaGenerada = GeneradoContrasena.generarContrasenaTemportal();
         String contrasenaCifrada = CifracionContrasena.cifrarContrasena(contrasenaGenerada);
 
         Profesor profesor = new Profesor();
@@ -198,10 +200,11 @@ public class RegistrarProfesorControlador {
         try {
             int filasAfectadas = profesorDao.insertarProfesor(profesor);
             if (filasAfectadas >= FILAS_AFECTADAS_ESPERADAS) {
+                ServicioCorreo.enviarContrasenaInicial(profesor.getCorreo(), profesor.getNombre(), contrasenaGenerada);
                 limpiarCamposRegistros();
                 mostrarPanel(etiquetaTituloExito, etiquetaMensajeExito, panelExito,
                         "Profesor registrado exitosamente",
-                        "Contraseña temporal: " + contrasenaGenerada);
+                        "Se ha enviado la contraseña temporal al correo del profesor");
             } else {
                 mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
                         "Error al registrar", "No fue posible registrar al profesor, intente mas tarde");
@@ -214,11 +217,6 @@ public class RegistrarProfesorControlador {
             mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
                     "Error inesperado", excepcion.getMessage().toUpperCase());
         }
-    }
-
-    private String generarContrasena(String nombre, String numeroPersonal) {
-        String contrasena = nombre.toLowerCase() + numeroPersonal;
-        return contrasena;
     }
 
     private String limitarTexto(String texto, int limite) {

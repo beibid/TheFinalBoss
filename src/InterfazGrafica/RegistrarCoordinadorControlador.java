@@ -9,6 +9,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import logica.dominio.GeneradoContrasena;
+import logica.dominio.ServicioCorreo;
 import logica.dominio.CifracionContrasena;
 import logica.dao.excepciones.RegistroDuplicadoExcepcion;
 import logica.dao.excepciones.UsuariosExcepcion;
@@ -118,12 +120,12 @@ public class RegistrarCoordinadorControlador {
 
         verficarCaracteresNoPermitidos(camposFormularioValido, nombreValido, apellidosValido, correoValido, numeroDePersonalValido);
 
-        boolean formularioValido = camposFormularioValido && nombreValido && apellidosValido && correoValido && numeroDePersonalValido;
-        return formularioValido;
+        return camposFormularioValido && nombreValido && apellidosValido && correoValido && numeroDePersonalValido;
     }
 
     private void verficarCaracteresNoPermitidos(boolean camposFormularioValido, boolean nombreValido,
-                                                boolean apellidosValido, boolean correoValido, boolean numeroPersonalValido) {
+                                                boolean apellidosValido, boolean correoValido,
+                                                boolean numeroPersonalValido) {
         if (!camposFormularioValido) {
             mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
                     "campos obligatorios vacios", "POR FAVOR LLENE TODOS LOS CAMPOS");
@@ -147,7 +149,7 @@ public class RegistrarCoordinadorControlador {
         String apellidos = campoTextoApellidos.getText().trim();
         String numeroPersonal = campoTextoNumeroPersonal.getText().trim();
         String correo = campoTextoCorreo.getText().trim();
-        contrasenaGenerada = generarContrasena(nombre, numeroPersonal);
+        contrasenaGenerada = GeneradoContrasena.generarContrasenaTemportal();
         String contrasenaCifrada = CifracionContrasena.cifrarContrasena(contrasenaGenerada);
 
         Coordinador coordinador = new Coordinador();
@@ -165,10 +167,11 @@ public class RegistrarCoordinadorControlador {
         try {
             int filasAfectadas = coordinadorDao.insertarCoordinador(coordinador);
             if (filasAfectadas >= FILAS_AFECTADAS_ESPERADAS) {
+                ServicioCorreo.enviarContrasenaInicial(coordinador.getCorreo(), coordinador.getNombre(), contrasenaGenerada);
                 limpiarCamposRegistros();
                 mostrarPanel(etiquetaTituloExito, etiquetaMensajeExito, panelExito,
                         "Coordinador registrado exitosamente",
-                        "Contraseña temporal: " + contrasenaGenerada);
+                        "Se ha enviado la contraseña temporal al correo del coordinador");
             } else {
                 mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
                         "Error al registrar", "NO SE PUDO REGISTRAR EL COORDINADOR. INTENTE DE NUEVO.");
@@ -181,11 +184,6 @@ public class RegistrarCoordinadorControlador {
             mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
                     "Error inesperado", excepcion.getMessage().toUpperCase());
         }
-    }
-
-    private String generarContrasena(String nombre, String numeroPersonal) {
-        String contrasena = nombre.toLowerCase() + numeroPersonal;
-        return contrasena;
     }
 
     private String limitarTexto(String texto, int limite) {

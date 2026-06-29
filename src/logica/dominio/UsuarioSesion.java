@@ -11,6 +11,7 @@ public class UsuarioSesion {
     private String matricula;
     private int idUsuario;
     private String identificador;
+    private boolean debeCambiarContrasena;
 
     public String getNombre() {
         return nombre;
@@ -55,6 +56,7 @@ public class UsuarioSesion {
     public void setMatricula(String matricula) {
         this.matricula = matricula;
     }
+
     public String getIdentificador() {
         return identificador;
     }
@@ -65,5 +67,13 @@ public class UsuarioSesion {
 
     public void setIdUsuario(int idUsuario) {
         this.idUsuario = idUsuario;
+    }
+
+    public boolean isDebeCambiarContrasena() {
+        return debeCambiarContrasena;
+    }
+
+    public void setDebeCambiarContrasena(boolean debeCambiarContrasena) {
+        this.debeCambiarContrasena = debeCambiarContrasena;
     }
 }

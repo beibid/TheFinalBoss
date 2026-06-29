@@ -70,6 +70,10 @@ public class IniciarSesionControlador {
 
     private void redirigir(UsuarioSesion usuarioSesion) {
         SesionUsuario.getInstance().iniciarSesion(usuarioSesion);
+        if (usuarioSesion.isDebeCambiarContrasena()) {
+            cargarVista("/InterfazGrafica/vistas/CambiarContrasenaVista.fxml");
+            return;
+        }
         String rutaFxml = obtenerRutaFxml(usuarioSesion.getRol());
         if (rutaFxml == null) {
             mostrarError("Error", "TIPO DE USUARIO NO RECONOCIDO.");
