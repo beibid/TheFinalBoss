@@ -21,10 +21,22 @@ public class SeccionDao implements SeccionDaoInterfaz {
     private static final int ID_PERIODO_MINIMO_VALIDO = 1;
     private static final int ERROR_DUPLICADO_MYSQL = 1062;
 
+    /**
+     * Verifica si la excepcion SQL es un error de conexion a la base de datos.
+     * @param excepcion la excepcion SQL a verificar
+     * @return true si es un error de conexion, false en caso contrario
+     */
     private boolean esErrorDeConexion(SQLException excepcion) {
         return excepcion.getMessage() != null && excepcion.getMessage().contains(ERROR_CONEXION);
     }
 
+    /**
+     * Agrega una nueva seccion en la base de datos.
+     * @param seccion la seccion a insertar
+     * @return el numero de filas afectadas
+     * @throws UsuariosExcepcion si ocurre un error al insertar o de conexion
+     * @throws RegistroDuplicadoExcepcion si el NRC ya existe en el periodo indicado
+     */
     @Override
     public int agregarSeccion(Seccion seccion) throws UsuariosExcepcion, RegistroDuplicadoExcepcion {
         if (seccion.getNoSeccion() == null) {
@@ -53,8 +65,8 @@ public class SeccionDao implements SeccionDaoInterfaz {
             throw new UsuariosExcepcion("Error al agregar la seccion", excepcionSql);
         } finally {
             try {
-                if (insertarEnBaseDeDatos != null) insertarEnBaseDeDatos.close();
-                if (conexionBaseDeDatos != null) conexionBaseDeDatos.close();
+                if (insertarEnBaseDeDatos != null) { insertarEnBaseDeDatos.close(); }
+                if (conexionBaseDeDatos != null) { conexionBaseDeDatos.close(); }
             } catch (SQLException excepcionSql) {
                 LOGGER.log(Level.SEVERE, "Error al cerrar la conexion", excepcionSql);
             }
@@ -62,6 +74,13 @@ public class SeccionDao implements SeccionDaoInterfaz {
         return filasAfectadas;
     }
 
+    /**
+     * Modifica los datos de una seccion existente en la base de datos.
+     * @param noSeccion el numero de la seccion a modificar
+     * @param seccion la seccion con los nuevos datos
+     * @return el numero de filas afectadas
+     * @throws UsuariosExcepcion si ocurre un error al modificar o de conexion
+     */
     public int modificarSeccion(String noSeccion, Seccion seccion) throws UsuariosExcepcion {
         if (seccion.getIdPeriodo() < ID_PERIODO_MINIMO_VALIDO) {
             throw new UsuariosExcepcion("El periodo no puede ser nulo");
@@ -86,8 +105,8 @@ public class SeccionDao implements SeccionDaoInterfaz {
             throw new UsuariosExcepcion("Error al modificar la seccion", excepcionSql);
         } finally {
             try {
-                if (actualizacion != null) actualizacion.close();
-                if (conexionBaseDeDatos != null) conexionBaseDeDatos.close();
+                if (actualizacion != null) { actualizacion.close(); }
+                if (conexionBaseDeDatos != null) { conexionBaseDeDatos.close(); }
             } catch (SQLException excepcionSql) {
                 LOGGER.log(Level.SEVERE, "Error al cerrar la conexion", excepcionSql);
             }
@@ -95,6 +114,11 @@ public class SeccionDao implements SeccionDaoInterfaz {
         return filasAfectadas;
     }
 
+    /**
+     * Obtiene las secciones del periodo universitario actualmente abierto.
+     * @return lista de secciones del periodo abierto
+     * @throws UsuariosExcepcion si ocurre un error al consultar o de conexion
+     */
     public List<Seccion> obtenerSecciones() throws UsuariosExcepcion {
         String consulta = "SELECT s.noSeccion, s.idPeriodo, s.numPersonalProfesor, p.nombre AS nombrePeriodo " +
                 "FROM seccion s " +
@@ -123,8 +147,8 @@ public class SeccionDao implements SeccionDaoInterfaz {
             throw new UsuariosExcepcion("Error al obtener secciones", excepcionSql);
         } finally {
             try {
-                if (consultaSecciones != null) consultaSecciones.close();
-                if (conexionBaseDeDatos != null) conexionBaseDeDatos.close();
+                if (consultaSecciones != null) { consultaSecciones.close(); }
+                if (conexionBaseDeDatos != null) { conexionBaseDeDatos.close(); }
             } catch (SQLException excepcionSql) {
                 LOGGER.log(Level.SEVERE, "Error al cerrar la conexion", excepcionSql);
             }
@@ -132,6 +156,12 @@ public class SeccionDao implements SeccionDaoInterfaz {
         return secciones;
     }
 
+    /**
+     * Obtiene las secciones asignadas a un profesor especifico.
+     * @param numPersonalProfesor el numero de personal del profesor
+     * @return lista de secciones del profesor
+     * @throws UsuariosExcepcion si ocurre un error al consultar o de conexion
+     */
     public List<Seccion> obtenerSeccionesPorProfesor(String numPersonalProfesor) throws UsuariosExcepcion {
         String consulta = "SELECT s.noSeccion, s.idPeriodo, s.numPersonalProfesor, p.nombre AS nombrePeriodo " +
                 "FROM seccion s " +
@@ -161,8 +191,8 @@ public class SeccionDao implements SeccionDaoInterfaz {
             throw new UsuariosExcepcion("Error al obtener secciones del profesor", excepcionSql);
         } finally {
             try {
-                if (consultaSecciones != null) consultaSecciones.close();
-                if (conexionBaseDeDatos != null) conexionBaseDeDatos.close();
+                if (consultaSecciones != null) { consultaSecciones.close(); }
+                if (conexionBaseDeDatos != null) { conexionBaseDeDatos.close(); }
             } catch (SQLException excepcionSql) {
                 LOGGER.log(Level.SEVERE, "Error al cerrar la conexion", excepcionSql);
             }

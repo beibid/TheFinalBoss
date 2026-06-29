@@ -21,10 +21,21 @@ public class UsuarioDao implements UsuarioDaoInterfaz {
     private static final String ERROR_CONEXION = "No se pudo conectar";
     private static final Logger LOGGER = Logger.getLogger(UsuarioDao.class.getName());
 
+    /**
+     * Verifica si la excepcion SQL es un error de conexion a la base de datos.
+     * @param excepcion la excepcion SQL a verificar
+     * @return true si es un error de conexion, false en caso contrario
+     */
     private boolean esErrorDeConexion(SQLException excepcion) {
         return excepcion.getMessage() != null && excepcion.getMessage().contains(ERROR_CONEXION);
     }
 
+    /**
+     * Inserta un nuevo usuario en la base de datos.
+     * @param usuario el usuario a insertar
+     * @return el ID generado del usuario insertado, o -1 si no se obtuvo
+     * @throws UsuariosExcepcion si ocurre un error al insertar o de conexion
+     */
     @Override
     public int insertarUsuario(Usuario usuario) throws UsuariosExcepcion {
         if (usuario.getNombre() == null) {
@@ -65,8 +76,12 @@ public class UsuarioDao implements UsuarioDaoInterfaz {
             throw new UsuariosExcepcion("Error al insertar usuario", excepcionSql);
         } finally {
             try {
-                if (insercionBaseDeDatos != null) insercionBaseDeDatos.close();
-                if (conexionBaseDeDatos != null) conexionBaseDeDatos.close();
+                if (insercionBaseDeDatos != null) {
+                    insercionBaseDeDatos.close();
+                }
+                if (conexionBaseDeDatos != null) {
+                    conexionBaseDeDatos.close();
+                }
             } catch (SQLException excepcionSql) {
                 LOGGER.log(Level.SEVERE, "Error al cerrar la conexión", excepcionSql);
             }
@@ -74,6 +89,13 @@ public class UsuarioDao implements UsuarioDaoInterfaz {
         return idGenerado;
     }
 
+    /**
+     * Busca un usuario en la base de datos mediante su correo y contrasena cifrada.
+     * @param correo el correo electronico del usuario
+     * @param contrasena la contrasena cifrada del usuario
+     * @return el objeto UsuarioSesion si se encontro, null si las credenciales no coinciden
+     * @throws UsuariosExcepcion si ocurre un error al buscar o de conexion
+     */
     public UsuarioSesion buscarUsuario(String correo, String contrasena) throws UsuariosExcepcion {
         String llamadaProcedimiento = "{CALL sp_buscar_usuario_login(?, ?)}";
         Connection conexionBaseDeDatos = null;
@@ -104,8 +126,12 @@ public class UsuarioDao implements UsuarioDaoInterfaz {
             throw new UsuariosExcepcion("Error al buscar usuario", excepcionSql);
         } finally {
             try {
-                if (procedimiento != null) procedimiento.close();
-                if (conexionBaseDeDatos != null) conexionBaseDeDatos.close();
+                if (procedimiento != null) {
+                    procedimiento.close();
+                }
+                if (conexionBaseDeDatos != null) {
+                    conexionBaseDeDatos.close();
+                }
             } catch (SQLException excepcionSql) {
                 LOGGER.log(Level.SEVERE, "Error al cerrar la conexión", excepcionSql);
             }
@@ -113,6 +139,13 @@ public class UsuarioDao implements UsuarioDaoInterfaz {
         return usuarioSesion;
     }
 
+    /**
+     * Actualiza la contrasena de un usuario y desactiva la bandera de cambio obligatorio.
+     * @param idUsuario el ID del usuario cuya contrasena se actualizara
+     * @param contrasenaCifrada la nueva contrasena ya cifrada
+     * @return el numero de filas afectadas
+     * @throws UsuariosExcepcion si ocurre un error al actualizar o de conexion
+     */
     public int actualizarContrasena(int idUsuario, String contrasenaCifrada) throws UsuariosExcepcion {
         String consulta = "UPDATE usuario SET contrasena = ?, debeCambiarContrasena = 0 WHERE idUsuario = ?";
         Connection conexionBaseDeDatos = null;
@@ -133,8 +166,12 @@ public class UsuarioDao implements UsuarioDaoInterfaz {
             throw new UsuariosExcepcion("Error al actualizar la contrasena", excepcionSql);
         } finally {
             try {
-                if (actualizacion != null) actualizacion.close();
-                if (conexionBaseDeDatos != null) conexionBaseDeDatos.close();
+                if (actualizacion != null) {
+                    actualizacion.close();
+                }
+                if (conexionBaseDeDatos != null) {
+                    conexionBaseDeDatos.close();
+                }
             } catch (SQLException excepcionSql) {
                 LOGGER.log(Level.SEVERE, "Error al cerrar la conexion", excepcionSql);
             }

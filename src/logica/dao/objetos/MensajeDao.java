@@ -20,6 +20,21 @@ public class MensajeDao implements MensajeDaoInterfaz {
     private static final String ERROR_CONEXION = "No se pudo conectar";
     private static final Logger LOGGER = Logger.getLogger(MensajeDao.class.getName());
 
+    /**
+     * Verifica si la excepcion SQL es un error de conexion a la base de datos.
+     * @param excepcion la excepcion SQL a verificar
+     * @return true si es un error de conexion, false en caso contrario
+     */
+    private boolean esErrorDeConexion(SQLException excepcion) {
+        return excepcion.getMessage() != null && excepcion.getMessage().contains(ERROR_CONEXION);
+    }
+
+    /**
+     * Agrega un mensaje a la base de datos.
+     * @param mensaje el mensaje a agregar
+     * @return el ID generado del mensaje insertado
+     * @throws MensajeriaExcepcion si ocurre un error al agregar o de conexion
+     */
     @Override
     public int agregarMensaje(Mensaje mensaje) throws MensajeriaExcepcion {
         String consultaMensaje = "INSERT INTO mensaje (contenido) VALUES (?)";
@@ -38,16 +53,16 @@ public class MensajeDao implements MensajeDaoInterfaz {
             LOGGER.info("Mensaje insertado correctamente con id: " + idGenerado);
         } catch (SQLException excepcionSql) {
             LOGGER.log(Level.SEVERE, "Error al insertar mensaje", excepcionSql);
-            if (excepcionSql.getMessage().contains(ERROR_CONEXION)) {
+            if (esErrorDeConexion(excepcionSql)) {
                 throw new MensajeriaExcepcion("No se pudo conectar al servidor. Verifique que la base de datos este encendida");
             }
             throw new MensajeriaExcepcion("Error al agregar mensaje", excepcionSql);
         } finally {
             try {
-                if (insercion != null) {
+                if (insercion != null){
                     insercion.close();
                 }
-                if (conexionBaseDeDatos != null) {
+                if (conexionBaseDeDatos != null){
                     conexionBaseDeDatos.close();
                 }
             } catch (SQLException excepcionSql) {
@@ -57,6 +72,12 @@ public class MensajeDao implements MensajeDaoInterfaz {
         return idGenerado;
     }
 
+    /**
+     * Obtiene los mensajes recibidos de un usuario.
+     * @param idUsuario el ID del usuario destinatario
+     * @return lista de mensajes recibidos por el usuario
+     * @throws MensajeriaExcepcion si ocurre un error al consultar o de conexion
+     */
     public List<MensajeVista> obtenerMensajesRecibidos(int idUsuario) throws MensajeriaExcepcion {
         String consulta = "SELECT m.idMensaje, m.contenido, m.fechaEnvio, u.nombre, u.apellidos " +
                 "FROM mensaje m " +
@@ -85,7 +106,7 @@ public class MensajeDao implements MensajeDaoInterfaz {
             LOGGER.info("Mensajes recibidos obtenidos correctamente");
         } catch (SQLException excepcionSQL) {
             LOGGER.log(Level.SEVERE, "Error al obtener mensajes recibidos", excepcionSQL);
-            if (excepcionSQL.getMessage().contains(ERROR_CONEXION)) {
+            if (esErrorDeConexion(excepcionSQL)) {
                 throw new MensajeriaExcepcion("No se pudo conectar al servidor. Verifique que la base de datos este encendida");
             }
             throw new MensajeriaExcepcion("Error al obtener mensajes recibidos", excepcionSQL);
@@ -94,7 +115,7 @@ public class MensajeDao implements MensajeDaoInterfaz {
                 if (sentencia != null) {
                     sentencia.close();
                 }
-                if (conexionBaseDeDatos != null) {
+                if (conexionBaseDeDatos != null){
                     conexionBaseDeDatos.close();
                 }
             } catch (SQLException excepcionSQL) {
@@ -104,6 +125,12 @@ public class MensajeDao implements MensajeDaoInterfaz {
         return mensajes;
     }
 
+    /**
+     * Obtiene los mensajes enviados por un usuario.
+     * @param idUsuario el ID del usuario remitente
+     * @return lista de mensajes enviados por el usuario
+     * @throws MensajeriaExcepcion si ocurre un error al consultar o de conexion
+     */
     public List<MensajeVista> obtenerMensajesEnviados(int idUsuario) throws MensajeriaExcepcion {
         String consulta = "SELECT m.idMensaje, m.contenido, m.fechaEnvio, u.nombre, u.apellidos " +
                 "FROM mensaje m " +
@@ -132,7 +159,7 @@ public class MensajeDao implements MensajeDaoInterfaz {
             LOGGER.info("Mensajes enviados obtenidos correctamente");
         } catch (SQLException excepcionSQL) {
             LOGGER.log(Level.SEVERE, "Error al obtener mensajes enviados", excepcionSQL);
-            if (excepcionSQL.getMessage().contains(ERROR_CONEXION)) {
+            if (esErrorDeConexion(excepcionSQL)) {
                 throw new MensajeriaExcepcion("No se pudo conectar al servidor. Verifique que la base de datos este encendida");
             }
             throw new MensajeriaExcepcion("Error al obtener mensajes enviados", excepcionSQL);
@@ -141,7 +168,7 @@ public class MensajeDao implements MensajeDaoInterfaz {
                 if (sentencia != null) {
                     sentencia.close();
                 }
-                if (conexionBaseDeDatos != null) {
+                if (conexionBaseDeDatos != null){
                     conexionBaseDeDatos.close();
                 }
             } catch (SQLException excepcionSQL) {

@@ -18,6 +18,22 @@ public class PracticanteSeccionDao implements PracticanteSeccionDaoInterfaz {
     private static final int ID_PERIODO_MINIMO_VALIDO = 1;
     private static final int ERROR_DUPLICADO_MYSQL = 1062;
 
+    /**
+     * Verifica si la excepcion SQL es un error de conexion a la base de datos.
+     * @param excepcion la excepcion SQL a verificar
+     * @return true si es un error de conexion, false en caso contrario
+     */
+    private boolean esErrorDeConexion(SQLException excepcion) {
+        return excepcion.getMessage() != null && excepcion.getMessage().contains(ERROR_CONEXION);
+    }
+
+    /**
+     * Agrega la relacion entre un practicante y una seccion en un periodo dado.
+     * @param practicanteSeccion el objeto con matricula, noSeccion e idPeriodo
+     * @return el numero de filas afectadas
+     * @throws UsuariosExcepcion si ocurre un error al insertar o de conexion
+     * @throws RegistroDuplicadoExcepcion si el practicante ya esta asignado a esa seccion en el periodo
+     */
     @Override
     public int agregarPracticanteSeccion(PracticanteSeccion practicanteSeccion) throws UsuariosExcepcion, RegistroDuplicadoExcepcion {
         if (practicanteSeccion.getMatricula() == null) {
@@ -43,7 +59,7 @@ public class PracticanteSeccionDao implements PracticanteSeccionDaoInterfaz {
             LOGGER.info("PracticanteSeccion insertada correctamente");
         } catch (SQLException excepcionSql) {
             LOGGER.log(Level.SEVERE, "Error al insertar practicante_seccion", excepcionSql);
-            if (excepcionSql.getMessage() != null && excepcionSql.getMessage().contains(ERROR_CONEXION)) {
+            if (esErrorDeConexion(excepcionSql)) {
                 throw new UsuariosExcepcion("No se pudo conectar al servidor. Verifique que la base de datos este encendida");
             }
             if (excepcionSql.getErrorCode() == ERROR_DUPLICADO_MYSQL) {
@@ -55,7 +71,7 @@ public class PracticanteSeccionDao implements PracticanteSeccionDaoInterfaz {
                 if (insercion != null) {
                     insercion.close();
                 }
-                if (conexionBaseDeDatos != null) {
+                if (conexionBaseDeDatos != null){
                     conexionBaseDeDatos.close();
                 }
             } catch (SQLException excepcionSql) {
@@ -65,6 +81,15 @@ public class PracticanteSeccionDao implements PracticanteSeccionDaoInterfaz {
         return filasAfectadas;
     }
 
+    /**
+     * Modifica la relacion practicante-seccion identificada por matricula, noSeccion e idPeriodo.
+     * @param matricula la matricula actual del practicante
+     * @param noSeccion el numero de seccion actual
+     * @param idPeriodo el ID del periodo actual
+     * @param practicanteSeccion el objeto con los nuevos valores a actualizar
+     * @return el numero de filas afectadas
+     * @throws UsuariosExcepcion si ocurre un error al modificar o de conexion
+     */
     public int modificarPracticanteSeccion(String matricula, String noSeccion, int idPeriodo, PracticanteSeccion practicanteSeccion) throws UsuariosExcepcion {
         if (matricula == null) {
             throw new UsuariosExcepcion("La matricula no puede ser nula");
@@ -92,13 +117,13 @@ public class PracticanteSeccionDao implements PracticanteSeccionDaoInterfaz {
             LOGGER.info("PracticanteSeccion modificada correctamente: " + matricula + " - " + noSeccion);
         } catch (SQLException excepcionSql) {
             LOGGER.log(Level.SEVERE, "Error al modificar practicante_seccion", excepcionSql);
-            if (excepcionSql.getMessage() != null && excepcionSql.getMessage().contains(ERROR_CONEXION)) {
+            if (esErrorDeConexion(excepcionSql)) {
                 throw new UsuariosExcepcion("No se pudo conectar al servidor. Verifique que la base de datos este encendida");
             }
             throw new UsuariosExcepcion("Error al modificar practicante seccion", excepcionSql);
         } finally {
             try {
-                if (actualizacion != null) {
+                if (actualizacion != null){
                     actualizacion.close();
                 }
                 if (conexionBaseDeDatos != null) {

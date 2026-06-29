@@ -1,6 +1,5 @@
 package logica.dao.objetos;
 
-
 import acceso.bd.ConexionBaseDeDatos;
 import logica.dominio.Buzon;
 import logica.dao.excepciones.MensajeriaExcepcion;
@@ -11,12 +10,26 @@ import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-
 public class BuzonDao implements BuzonDaoInterfaz {
 
     private static final String ERROR_CONEXION = "No se pudo conectar";
     private static final Logger LOGGER = Logger.getLogger(BuzonDao.class.getName());
 
+    /**
+     * Verifica si la excepcion SQL es un error de conexion a la base de datos.
+     * @param excepcion la excepcion SQL a verificar
+     * @return true si es un error de conexion, false en caso contrario
+     */
+    private boolean esErrorDeConexion(SQLException excepcion) {
+        return excepcion.getMessage() != null && excepcion.getMessage().contains(ERROR_CONEXION);
+    }
+
+    /**
+     * Agrega un buzon a la base de datos.
+     * @param buzon el buzon a agregar
+     * @return el numero de filas afectadas
+     * @throws MensajeriaExcepcion si ocurre un error al agregar o de conexion
+     */
     @Override
     public int agregarBuzon(Buzon buzon) throws MensajeriaExcepcion {
         String consultaBuzon = "INSERT INTO buzon (rolMensaje, idMensaje, idUsuario) VALUES (?, ?, ?)";
@@ -33,7 +46,7 @@ public class BuzonDao implements BuzonDaoInterfaz {
             LOGGER.info("Buzon insertado correctamente");
         } catch (SQLException excepcionSql) {
             LOGGER.log(Level.SEVERE, "Error en base de datos", excepcionSql);
-            if (excepcionSql.getMessage().contains(ERROR_CONEXION)) {
+            if (esErrorDeConexion(excepcionSql)) {
                 throw new MensajeriaExcepcion("No se pudo conectar al servidor. Verifique que la base de datos este encendida");
             }
             throw new MensajeriaExcepcion("Error inesperado, no fue posible agregar buzon", excepcionSql);

@@ -18,6 +18,22 @@ public class PreferenciaProyectoDao implements PreferenciaProyectoDaoInterfaz {
     private static final String ERROR_CONEXION = "No se pudo conectar";
     private static final Logger LOGGER = Logger.getLogger(PreferenciaProyectoDao.class.getName());
 
+    /**
+     * Verifica si la excepcion SQL es un error de conexion a la base de datos.
+     * @param excepcion la excepcion SQL a verificar
+     * @return true si es un error de conexion, false en caso contrario
+     */
+    private boolean esErrorDeConexion(SQLException excepcion) {
+        return excepcion.getMessage() != null && excepcion.getMessage().contains(ERROR_CONEXION);
+    }
+
+    /**
+     * Guarda las preferencias de proyecto de un practicante, eliminando las anteriores
+     * y reinsertando las nuevas en el orden indicado dentro de una transaccion.
+     * @param matricula la matricula del practicante
+     * @param idProyectosOrdenados lista de IDs de proyectos en orden de prioridad
+     * @throws UsuariosExcepcion si ocurre un error al guardar o de conexion
+     */
     @Override
     public void guardarPreferencias(String matricula, List<Integer> idProyectosOrdenados) throws UsuariosExcepcion {
         Connection conexionBaseDeDatos = null;
@@ -49,7 +65,7 @@ public class PreferenciaProyectoDao implements PreferenciaProyectoDaoInterfaz {
                     LOGGER.log(Level.SEVERE, "Error al ejecutar rollback", excepcionRollback);
                 }
             }
-            if (excepcionSql.getMessage() != null && excepcionSql.getMessage().contains(ERROR_CONEXION)) {
+            if (esErrorDeConexion(excepcionSql)) {
                 throw new UsuariosExcepcion("No se pudo conectar al servidor. Verifique que la base de datos este encendida");
             }
             throw new UsuariosExcepcion("Error al guardar preferencias", excepcionSql);
@@ -58,7 +74,7 @@ public class PreferenciaProyectoDao implements PreferenciaProyectoDaoInterfaz {
                 if (insertar != null) {
                     insertar.close();
                 }
-                if (eliminar != null) {
+                if (eliminar != null){
                     eliminar.close();
                 }
                 if (conexionBaseDeDatos != null) {
@@ -71,6 +87,12 @@ public class PreferenciaProyectoDao implements PreferenciaProyectoDaoInterfaz {
         }
     }
 
+    /**
+     * Obtiene la lista de preferencias de proyecto registradas para un practicante.
+     * @param matricula la matricula del practicante
+     * @return lista de preferencias ordenadas por prioridad
+     * @throws UsuariosExcepcion si ocurre un error al consultar o de conexion
+     */
     @Override
     public List<PreferenciaProyecto> obtenerPreferencias(String matricula) throws UsuariosExcepcion {
         Connection conexionBaseDeDatos = null;
@@ -95,7 +117,7 @@ public class PreferenciaProyectoDao implements PreferenciaProyectoDaoInterfaz {
             LOGGER.info("Preferencias obtenidas para: " + matricula + " - total: " + lista.size());
         } catch (SQLException excepcionSql) {
             LOGGER.log(Level.SEVERE, "Error al obtener preferencias", excepcionSql);
-            if (excepcionSql.getMessage() != null && excepcionSql.getMessage().contains(ERROR_CONEXION)) {
+            if (esErrorDeConexion(excepcionSql)) {
                 throw new UsuariosExcepcion("No se pudo conectar al servidor. Verifique que la base de datos este encendida");
             }
             throw new UsuariosExcepcion("Error al obtener preferencias", excepcionSql);
@@ -104,7 +126,7 @@ public class PreferenciaProyectoDao implements PreferenciaProyectoDaoInterfaz {
                 if (consultaPreferencias != null) {
                     consultaPreferencias.close();
                 }
-                if (conexionBaseDeDatos != null) {
+                if (conexionBaseDeDatos != null){
                     conexionBaseDeDatos.close();
                 }
             } catch (SQLException excepcionSql) {

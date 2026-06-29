@@ -18,6 +18,12 @@ public class ActividadDao implements ActividadDaoInterfaz {
 
     private static final Logger LOGGER = Logger.getLogger(ActividadDao.class.getName());
 
+    /**
+     * Registra una nueva actividad en la base de datos.
+     * @param actividad la actividad a registrar
+     * @return el numero de filas afectadas
+     * @throws MensajeriaExcepcion si ocurre un error al registrar o de conexion
+     */
     @Override
     public int registrarActividad(Actividad actividad) throws MensajeriaExcepcion {
         if (actividad.getMatriculaPracticante() == null) {
@@ -60,6 +66,12 @@ public class ActividadDao implements ActividadDaoInterfaz {
         return filasAfectadas;
     }
 
+    /**
+     * Obtiene la lista de actividades registradas por un practicante ordenadas por fecha.
+     * @param matricula la matricula del practicante
+     * @return lista de actividades del practicante
+     * @throws MensajeriaExcepcion si ocurre un error al consultar o de conexion
+     */
     @Override
     public List<Actividad> obtenerActividadesPorPracticante(String matricula) throws MensajeriaExcepcion {
         String consulta = "SELECT idActividad, titulo, descripcion, fechaInicio, fechaFin, horasActividad " +
@@ -102,6 +114,14 @@ public class ActividadDao implements ActividadDaoInterfaz {
         return actividades;
     }
 
+    /**
+     * Obtiene las actividades de un practicante filtradas por mes y anio.
+     * @param matricula la matricula del practicante
+     * @param mes el mes a filtrar (1-12)
+     * @param anio el anio a filtrar
+     * @return lista de actividades del mes indicado
+     * @throws MensajeriaExcepcion si ocurre un error al consultar o de conexion
+     */
     @Override
     public List<Actividad> obtenerActividadesPorPracticanteYMes(String matricula, int mes, int anio) throws MensajeriaExcepcion {
         String consulta = "SELECT idActividad, titulo, descripcion, fechaInicio, fechaFin, horasActividad " +
@@ -148,6 +168,12 @@ public class ActividadDao implements ActividadDaoInterfaz {
         return actividades;
     }
 
+    /**
+     * Obtiene el total de horas de actividades registradas por un practicante.
+     * @param matricula la matricula del practicante
+     * @return el total de horas acumuladas, 0 si no tiene actividades
+     * @throws MensajeriaExcepcion si ocurre un error al consultar o de conexion
+     */
     @Override
     public int obtenerHorasTotalesPorPracticante(String matricula) throws MensajeriaExcepcion {
         String consulta = "SELECT COALESCE(SUM(horasActividad), 0) FROM actividad WHERE matricula = ?";

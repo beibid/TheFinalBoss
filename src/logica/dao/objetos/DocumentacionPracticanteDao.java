@@ -20,6 +20,21 @@ public class DocumentacionPracticanteDao implements DocumentacionPracticanteDaoI
     private static final String ERROR_CONEXION = "No se pudo conectar";
     private static final Logger LOGGER = Logger.getLogger(DocumentacionPracticanteDao.class.getName());
 
+    /**
+     * Verifica si la excepcion SQL es un error de conexion a la base de datos.
+     * @param excepcion la excepcion SQL a verificar
+     * @return true si es un error de conexion, false en caso contrario
+     */
+    private boolean esErrorDeConexion(SQLException excepcion) {
+        return excepcion.getMessage() != null && excepcion.getMessage().contains(ERROR_CONEXION);
+    }
+
+    /**
+     * Agrega un documento de practicante a la base de datos.
+     * @param documentacion la documentacion a agregar
+     * @return el ID generado del documento insertado, o -1 si no se obtuvo
+     * @throws UsuariosExcepcion si ocurre un error al agregar o de conexion
+     */
     @Override
     public int agregarDocumentacion(DocumentacionPracticante documentacion) throws UsuariosExcepcion {
         if (documentacion.getEstadoRevision() == null) {
@@ -45,7 +60,7 @@ public class DocumentacionPracticanteDao implements DocumentacionPracticanteDaoI
             }
         } catch (SQLException excepcionSql) {
             LOGGER.log(Level.SEVERE, "Error al insertar documentacion", excepcionSql);
-            if (excepcionSql.getMessage().contains(ERROR_CONEXION)) {
+            if (esErrorDeConexion(excepcionSql)) {
                 throw new UsuariosExcepcion("No se pudo conectar al servidor. Verifique que la base de datos este encendida");
             }
             throw new UsuariosExcepcion("Error al agregar documentacion");
@@ -64,6 +79,12 @@ public class DocumentacionPracticanteDao implements DocumentacionPracticanteDaoI
         return idGenerado;
     }
 
+    /**
+     * Obtiene los documentos pendientes de revision de un practicante.
+     * @param matricula la matricula del practicante
+     * @return lista de documentos con estado pendiente
+     * @throws UsuariosExcepcion si ocurre un error al consultar o de conexion
+     */
     public List<DocumentacionPracticante> obtenerDocumentosPendientes(String matricula) throws UsuariosExcepcion {
         String consulta = "SELECT dp.idDocumentacionPracticante, dp.rutaDeArchivo, dp.estadoRevision " +
                 "FROM documentacionpracticante dp " +
@@ -89,13 +110,13 @@ public class DocumentacionPracticanteDao implements DocumentacionPracticanteDaoI
             LOGGER.info("Documentos pendientes obtenidos para: " + matricula);
         } catch (SQLException excepcionSql) {
             LOGGER.log(Level.SEVERE, "Error al obtener documentos pendientes", excepcionSql);
-            if (excepcionSql.getMessage().contains(ERROR_CONEXION)) {
+            if (esErrorDeConexion(excepcionSql)) {
                 throw new UsuariosExcepcion("No se pudo conectar al servidor. Verifique que la base de datos este encendida");
             }
             throw new UsuariosExcepcion("Error al obtener documentos pendientes");
         } finally {
             try {
-                if (sentencia != null) {
+                if (sentencia != null){
                     sentencia.close();
                 }
                 if (conexion != null) {
@@ -108,6 +129,14 @@ public class DocumentacionPracticanteDao implements DocumentacionPracticanteDaoI
         return documentos;
     }
 
+    /**
+     * Valida un documento de practicante actualizando su estado de revision.
+     * @param idDocumento el ID del documento a validar
+     * @param estado el nuevo estado de revision
+     * @param motivoRechazo el motivo de rechazo, o null si es aprobado
+     * @return el numero de filas afectadas
+     * @throws UsuariosExcepcion si ocurre un error al validar o de conexion
+     */
     public int validarDocumento(int idDocumento, EstadoRevision estado, String motivoRechazo) throws UsuariosExcepcion {
         String consulta = "UPDATE documentacionpracticante SET estadoRevision = ?, motivoRechazado = ? " +
                 "WHERE idDocumentacionPracticante = ?";
@@ -124,7 +153,7 @@ public class DocumentacionPracticanteDao implements DocumentacionPracticanteDaoI
             LOGGER.info("Documento validado correctamente: " + idDocumento);
         } catch (SQLException excepcionSql) {
             LOGGER.log(Level.SEVERE, "Error al validar documento", excepcionSql);
-            if (excepcionSql.getMessage().contains(ERROR_CONEXION)) {
+            if (esErrorDeConexion(excepcionSql)) {
                 throw new UsuariosExcepcion("No se pudo conectar al servidor. Verifique que la base de datos este encendida");
             }
             throw new UsuariosExcepcion("Error al validar documento");
@@ -133,7 +162,7 @@ public class DocumentacionPracticanteDao implements DocumentacionPracticanteDaoI
                 if (sentencia != null) {
                     sentencia.close();
                 }
-                if (conexion != null) {
+                if (conexion != null){
                     conexion.close();
                 }
             } catch (SQLException excepcionSql) {

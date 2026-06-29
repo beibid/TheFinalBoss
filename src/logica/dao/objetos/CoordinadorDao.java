@@ -21,6 +21,22 @@ public class CoordinadorDao implements CoordinadorDaoInterfaz {
     private static final String ERROR_CONEXION = "No se pudo conectar";
     private static final Logger LOGGER = Logger.getLogger(CoordinadorDao.class.getName());
 
+    /**
+     * Verifica si la excepcion SQL es un error de conexion a la base de datos.
+     * @param excepcion la excepcion SQL a verificar
+     * @return true si es un error de conexion, false en caso contrario
+     */
+    private boolean esErrorDeConexion(SQLException excepcion) {
+        return excepcion.getMessage() != null && excepcion.getMessage().contains(ERROR_CONEXION);
+    }
+
+    /**
+     * Inserta un nuevo coordinador en la base de datos.
+     * @param coordinador el coordinador a insertar
+     * @return el numero de filas afectadas
+     * @throws UsuariosExcepcion si ocurre un error al insertar o de conexion
+     * @throws RegistroDuplicadoExcepcion si el numero de personal ya existe
+     */
     @Override
     public int insertarCoordinador(Coordinador coordinador) throws UsuariosExcepcion, RegistroDuplicadoExcepcion {
         String consultaUsuario = "INSERT INTO usuario (nombre, apellidos, contrasena, estado, rol, correo) VALUES (?, ?, ?, ?, 'Coordinador', ?)";
@@ -50,9 +66,10 @@ public class CoordinadorDao implements CoordinadorDaoInterfaz {
             LOGGER.info("Coordinador insertado correctamente con ID de usuario: " + idUsuarioGenerado);
         } catch (SQLException excepcionSql) {
             LOGGER.log(Level.SEVERE, "Error al insertar coordinador", excepcionSql);
-            if (excepcionSql.getMessage().contains(ERROR_CONEXION)) {
+            if (esErrorDeConexion(excepcionSql)) {
                 throw new UsuariosExcepcion("No se pudo conectar al servidor. Verifique que la base de datos este encendida");
-            } else if (excepcionSql.getMessage().contains("Duplicate entry")) {
+            }
+            if (excepcionSql.getMessage() != null && excepcionSql.getMessage().contains("Duplicate entry")) {
                 throw new RegistroDuplicadoExcepcion("El numero del personal ya existe", excepcionSql);
             }
             throw new UsuariosExcepcion("Error al insertar coordinador", excepcionSql);
@@ -61,7 +78,7 @@ public class CoordinadorDao implements CoordinadorDaoInterfaz {
                 if (insercionCoordinador != null) {
                     insercionCoordinador.close();
                 }
-                if (insercionUsuario != null) {
+                if (insercionUsuario != null){
                     insercionUsuario.close();
                 }
                 if (conexionBaseDeDatos != null) {
@@ -74,6 +91,12 @@ public class CoordinadorDao implements CoordinadorDaoInterfaz {
         return filasAfectadas;
     }
 
+    /**
+     * Inactiva un coordinador en la base de datos.
+     * @param numPersonalCoordinador el numero de personal del coordinador a inactivar
+     * @return el numero de filas afectadas
+     * @throws UsuariosExcepcion si ocurre un error al inactivar o de conexion
+     */
     public int inactivarCoordinador(String numPersonalCoordinador) throws UsuariosExcepcion {
         if (numPersonalCoordinador == null) {
             throw new UsuariosExcepcion("El numero de personal no puede ser nulo");
@@ -91,7 +114,7 @@ public class CoordinadorDao implements CoordinadorDaoInterfaz {
             LOGGER.info("Coordinador inactivado correctamente: " + numPersonalCoordinador);
         } catch (SQLException excepcionSql) {
             LOGGER.log(Level.SEVERE, "Error al inactivar coordinador", excepcionSql);
-            if (excepcionSql.getMessage().contains(ERROR_CONEXION)) {
+            if (esErrorDeConexion(excepcionSql)) {
                 throw new UsuariosExcepcion("No se pudo conectar al servidor. Verifique que la base de datos este encendida");
             }
             throw new UsuariosExcepcion("Error al inactivar coordinador", excepcionSql);
@@ -110,6 +133,13 @@ public class CoordinadorDao implements CoordinadorDaoInterfaz {
         return filasAfectadas;
     }
 
+    /**
+     * Modifica los datos de un coordinador en la base de datos.
+     * @param numPersonalCoordinador el numero de personal del coordinador a modificar
+     * @param coordinador el coordinador con los nuevos datos
+     * @return el numero de filas afectadas
+     * @throws UsuariosExcepcion si ocurre un error al modificar o de conexion
+     */
     public int modificarCoordinador(String numPersonalCoordinador, Coordinador coordinador) throws UsuariosExcepcion {
         if (numPersonalCoordinador == null) {
             throw new UsuariosExcepcion("El numero de personal no puede ser nulo");
@@ -134,7 +164,7 @@ public class CoordinadorDao implements CoordinadorDaoInterfaz {
             LOGGER.info("Coordinador modificado correctamente: " + numPersonalCoordinador);
         } catch (SQLException excepcionSql) {
             LOGGER.log(Level.SEVERE, "Error al modificar coordinador", excepcionSql);
-            if (excepcionSql.getMessage().contains(ERROR_CONEXION)) {
+            if (esErrorDeConexion(excepcionSql)) {
                 throw new UsuariosExcepcion("No se pudo conectar al servidor. Verifique que la base de datos este encendida");
             }
             throw new UsuariosExcepcion("Error al modificar coordinador", excepcionSql);
@@ -146,13 +176,18 @@ public class CoordinadorDao implements CoordinadorDaoInterfaz {
                 if (conexionBaseDeDatos != null) {
                     conexionBaseDeDatos.close();
                 }
-            } catch (SQLException excepcionSQL) {
-                LOGGER.log(Level.SEVERE, "Error al cerrar la conexion", excepcionSQL);
+            } catch (SQLException excepcionSql) {
+                LOGGER.log(Level.SEVERE, "Error al cerrar la conexion", excepcionSql);
             }
         }
         return filasAfectadas;
     }
 
+    /**
+     * Obtiene la lista de coordinadores activos en el sistema.
+     * @return lista de coordinadores con estado activo
+     * @throws UsuariosExcepcion si ocurre un error al consultar o de conexion
+     */
     public List<Coordinador> obtenerCoordinadoresActivos() throws UsuariosExcepcion {
         String consulta = "SELECT u.nombre, u.apellidos, u.correo, u.estado, u.contrasena, p.numPersonalCoordinador " +
                 "FROM usuario u " +
@@ -177,13 +212,13 @@ public class CoordinadorDao implements CoordinadorDaoInterfaz {
             }
         } catch (SQLException excepcionSql) {
             LOGGER.log(Level.SEVERE, "Error al obtener coordinadores activos", excepcionSql);
-            if (excepcionSql.getMessage().contains(ERROR_CONEXION)) {
+            if (esErrorDeConexion(excepcionSql)) {
                 throw new UsuariosExcepcion("No se pudo conectar al servidor. Verifique que la base de datos este encendida");
             }
             throw new UsuariosExcepcion("Error al obtener coordinadores activos", excepcionSql);
         } finally {
             try {
-                if (consultaCoordinadores != null) {
+                if (consultaCoordinadores != null){
                     consultaCoordinadores.close();
                 }
                 if (conexionBaseDeDatos != null) {
@@ -196,6 +231,11 @@ public class CoordinadorDao implements CoordinadorDaoInterfaz {
         return coordinadores;
     }
 
+    /**
+     * Verifica si existe al menos un coordinador activo en el sistema.
+     * @return el numero de coordinadores activos
+     * @throws UsuariosExcepcion si ocurre un error al consultar o de conexion
+     */
     public int existeCoordinadorActivo() throws UsuariosExcepcion {
         String consulta = "SELECT COUNT(*) " +
                 "FROM usuario u " +
@@ -213,13 +253,13 @@ public class CoordinadorDao implements CoordinadorDaoInterfaz {
             }
         } catch (SQLException excepcionSql) {
             LOGGER.log(Level.SEVERE, "Error al verificar coordinadores activos", excepcionSql);
-            if (excepcionSql.getMessage().contains(ERROR_CONEXION)) {
+            if (esErrorDeConexion(excepcionSql)) {
                 throw new UsuariosExcepcion("No se pudo conectar al servidor. Verifique que la base de datos este encendida");
             }
             throw new UsuariosExcepcion("Error al verificar coordinadores activos", excepcionSql);
         } finally {
             try {
-                if (consultaCoordinadorActivo != null) {
+                if (consultaCoordinadorActivo != null){
                     consultaCoordinadorActivo.close();
                 }
                 if (conexionBaseDeDatos != null) {

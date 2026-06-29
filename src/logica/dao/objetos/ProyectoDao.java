@@ -20,10 +20,21 @@ public class ProyectoDao implements ProyectoDaoInterfaz {
     private static final String ERROR_CONEXION = "No se pudo conectar";
     private static final Logger LOGGER = Logger.getLogger(ProyectoDao.class.getName());
 
+    /**
+     * Verifica si la excepcion SQL es un error de conexion a la base de datos.
+     * @param excepcion la excepcion SQL a verificar
+     * @return true si es un error de conexion, false en caso contrario
+     */
     private boolean esErrorDeConexion(SQLException excepcion) {
         return excepcion.getMessage() != null && excepcion.getMessage().contains(ERROR_CONEXION);
     }
 
+    /**
+     * Agrega un nuevo proyecto en la base de datos.
+     * @param proyecto el proyecto a insertar
+     * @return el numero de filas afectadas
+     * @throws MensajeriaExcepcion si ocurre un error al insertar o de conexion
+     */
     @Override
     public int agregarProyecto(Proyecto proyecto) throws MensajeriaExcepcion {
         String consultaProyecto = "INSERT INTO proyecto (nombreProyecto, descripcion, responsableDelProyecto, estado, nombreEmpresa, sectorEmpresa, direccionEmpresa, idOrganizacion, numPersonalProfesor, numPersonalCoordinador, fechaRegistro, capacidad) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
@@ -55,8 +66,12 @@ public class ProyectoDao implements ProyectoDaoInterfaz {
             throw new MensajeriaExcepcion("Error al agregar el proyecto", excepcionSql);
         } finally {
             try {
-                if (insertarEnBaseDeDatos != null) insertarEnBaseDeDatos.close();
-                if (conexionBaseDeDatos != null) conexionBaseDeDatos.close();
+                if (insertarEnBaseDeDatos != null) {
+                    insertarEnBaseDeDatos.close();
+                }
+                if (conexionBaseDeDatos != null) {
+                    conexionBaseDeDatos.close();
+                }
             } catch (SQLException excepcionSql) {
                 LOGGER.log(Level.SEVERE, "Error al cerrar la conexión", excepcionSql);
             }
@@ -64,6 +79,13 @@ public class ProyectoDao implements ProyectoDaoInterfaz {
         return filasAfectadas;
     }
 
+    /**
+     * Modifica los datos de un proyecto existente en la base de datos.
+     * @param idProyecto el ID del proyecto a modificar
+     * @param proyecto el proyecto con los nuevos datos
+     * @return el numero de filas afectadas
+     * @throws MensajeriaExcepcion si ocurre un error al modificar o de conexion
+     */
     public int modificarProyecto(int idProyecto, Proyecto proyecto) throws MensajeriaExcepcion {
         if (proyecto.getNombreProyecto() == null) {
             throw new MensajeriaExcepcion("El nombre del proyecto no puede ser nulo");
@@ -101,8 +123,12 @@ public class ProyectoDao implements ProyectoDaoInterfaz {
             throw new MensajeriaExcepcion("Error al modificar proyecto");
         } finally {
             try {
-                if (actualizacion != null) actualizacion.close();
-                if (conexionBaseDeDatos != null) conexionBaseDeDatos.close();
+                if (actualizacion != null) {
+                    actualizacion.close();
+                }
+                if (conexionBaseDeDatos != null) {
+                    conexionBaseDeDatos.close();
+                }
             } catch (SQLException excepcionSql) {
                 LOGGER.log(Level.SEVERE, "Error al cerrar la conexión", excepcionSql);
             }
@@ -110,6 +136,11 @@ public class ProyectoDao implements ProyectoDaoInterfaz {
         return filasAfectadas;
     }
 
+    /**
+     * Obtiene la lista de proyectos con estado disponible.
+     * @return lista de proyectos disponibles
+     * @throws MensajeriaExcepcion si ocurre un error al consultar o de conexion
+     */
     public List<Proyecto> obtenerProyectosDisponibles() throws MensajeriaExcepcion {
         String consulta = "SELECT p.idProyecto, p.nombreProyecto, p.estado, o.nombre AS nombreOrganizacion " +
                 "FROM proyecto p JOIN organizacion_vinculada o ON p.idOrganizacion = o.idOrganizacion " +
@@ -138,8 +169,12 @@ public class ProyectoDao implements ProyectoDaoInterfaz {
             throw new MensajeriaExcepcion("Error al obtener proyectos disponibles", excepcionSql);
         } finally {
             try {
-                if (sentencia != null) sentencia.close();
-                if (conexionBaseDeDatos != null) conexionBaseDeDatos.close();
+                if (sentencia != null) {
+                    sentencia.close();
+                }
+                if (conexionBaseDeDatos != null) {
+                    conexionBaseDeDatos.close();
+                }
             } catch (SQLException excepcionSql) {
                 LOGGER.log(Level.SEVERE, "Error al cerrar conexión", excepcionSql);
             }
@@ -147,6 +182,12 @@ public class ProyectoDao implements ProyectoDaoInterfaz {
         return listaProyectos;
     }
 
+    /**
+     * Cambia el estado de un proyecto a Eliminado en la base de datos.
+     * @param idProyecto el ID del proyecto a inactivar
+     * @return el numero de filas afectadas
+     * @throws MensajeriaExcepcion si ocurre un error al inactivar o de conexion
+     */
     public int inactivarProyecto(int idProyecto) throws MensajeriaExcepcion {
         String consulta = "UPDATE proyecto SET estado = ? WHERE idProyecto = ?";
         Connection conexionBaseDeDatos = null;
@@ -167,8 +208,12 @@ public class ProyectoDao implements ProyectoDaoInterfaz {
             throw new MensajeriaExcepcion("Error al inactivar proyecto", excepcionSql);
         } finally {
             try {
-                if (actualizacion != null) actualizacion.close();
-                if (conexionBaseDeDatos != null) conexionBaseDeDatos.close();
+                if (actualizacion != null) {
+                    actualizacion.close();
+                }
+                if (conexionBaseDeDatos != null) {
+                    conexionBaseDeDatos.close();
+                }
             } catch (SQLException excepcionSql) {
                 LOGGER.log(Level.SEVERE, "Error al cerrar conexión", excepcionSql);
             }
@@ -176,6 +221,12 @@ public class ProyectoDao implements ProyectoDaoInterfaz {
         return filasAfectadas;
     }
 
+    /**
+     * Obtiene el proyecto asignado a un practicante segun su matricula.
+     * @param matricula la matricula del practicante
+     * @return el proyecto asignado, o null si no tiene ninguno
+     * @throws MensajeriaExcepcion si ocurre un error al consultar o de conexion
+     */
     public Proyecto obtenerProyectoPorPracticante(String matricula) throws MensajeriaExcepcion {
         String consulta = "SELECT pr.idProyecto, pr.nombreProyecto, pr.responsableDelProyecto, " +
                 "o.nombre AS nombreOrganizacion " +
@@ -207,8 +258,12 @@ public class ProyectoDao implements ProyectoDaoInterfaz {
             throw new MensajeriaExcepcion("Error al obtener proyecto del practicante", excepcionSql);
         } finally {
             try {
-                if (sentencia != null) sentencia.close();
-                if (conexionBaseDeDatos != null) conexionBaseDeDatos.close();
+                if (sentencia != null) {
+                    sentencia.close();
+                }
+                if (conexionBaseDeDatos != null) {
+                    conexionBaseDeDatos.close();
+                }
             } catch (SQLException excepcionSql) {
                 LOGGER.log(Level.SEVERE, "Error al cerrar conexión", excepcionSql);
             }
