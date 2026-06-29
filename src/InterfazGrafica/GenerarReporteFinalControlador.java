@@ -164,6 +164,17 @@ public class GenerarReporteFinalControlador {
         return horasSuficientes;
     }
 
+    private boolean esNumeroEntreRango(String texto, int min, int max) {
+        boolean esValido = false;
+        try {
+            int valor = Integer.parseInt(texto);
+            esValido = valor >= min && valor <= max;
+        } catch (NumberFormatException excepcion) {
+            esValido = false;
+        }
+        return esValido;
+    }
+
     private boolean camposValidos() {
         boolean validos = true;
 
@@ -173,6 +184,9 @@ public class GenerarReporteFinalControlador {
         } else if (campoAvanceUno.getText().trim().isEmpty()) {
             mostrarError("Campo requerido", "INGRESA EL PORCENTAJE DE AVANCE DE LA ACTIVIDAD 1.");
             validos = false;
+        } else if (!esNumeroEntreRango(campoAvanceUno.getText().trim(), 0, 100)) {
+            mostrarError("Avance invalido", "EL AVANCE DE LA ACTIVIDAD 1 DEBE SER UN NUMERO ENTRE 0 Y 100.");
+            validos = false;
         } else if (campoObservacionUno.getText().trim().isEmpty()) {
             mostrarError("Campo requerido", "INGRESA LA OBSERVACION DE LA ACTIVIDAD 1.");
             validos = false;
@@ -181,6 +195,9 @@ public class GenerarReporteFinalControlador {
             validos = false;
         } else if (campoAvanceDos.getText().trim().isEmpty()) {
             mostrarError("Campo requerido", "INGRESA EL PORCENTAJE DE AVANCE DE LA ACTIVIDAD 2.");
+            validos = false;
+        } else if (!esNumeroEntreRango(campoAvanceDos.getText().trim(), 0, 100)) {
+            mostrarError("Avance invalido", "EL AVANCE DE LA ACTIVIDAD 2 DEBE SER UN NUMERO ENTRE 0 Y 100.");
             validos = false;
         } else if (campoObservacionDos.getText().trim().isEmpty()) {
             mostrarError("Campo requerido", "INGRESA LA OBSERVACION DE LA ACTIVIDAD 2.");

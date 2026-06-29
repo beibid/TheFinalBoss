@@ -200,8 +200,26 @@ public class GenerarReporteParcialControlador {
         boolean validos = !camposVacios(campos);
         if (!validos) {
             mostrarError("Campo requerido", "Todos los campos son obligatorios.");
+            return false;
         }
-        return validos;
+        if (!esNumerico(tiempoPlaneadoUno) || !esNumerico(tiempoRealUno)
+                || !esNumerico(tiempoPlaneadoDos) || !esNumerico(tiempoRealDos)
+                || !esNumerico(tiempoPlaneadoTres) || !esNumerico(tiempoRealTres)) {
+            mostrarError("Tiempo invalido", "LOS CAMPOS DE TIEMPO PLANEADO Y TIEMPO REAL DEBEN SER NUMEROS ENTEROS.");
+            return false;
+        }
+        return true;
+    }
+
+    private boolean esNumerico(String texto) {
+        boolean esValido = false;
+        try {
+            Integer.parseInt(texto);
+            esValido = true;
+        } catch (NumberFormatException excepcion) {
+            esValido = false;
+        }
+        return esValido;
     }
 
     private boolean camposVacios(List<String> campos) {
