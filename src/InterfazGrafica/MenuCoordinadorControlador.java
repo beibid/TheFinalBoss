@@ -1,6 +1,5 @@
 package InterfazGrafica;
 
-
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -12,10 +11,10 @@ import javafx.scene.control.Label;
 import javafx.stage.Stage;
 import logica.dominio.SesionUsuario;
 import logica.dominio.enums.Rol;
+
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
 
 public class MenuCoordinadorControlador {
 
@@ -52,6 +51,11 @@ public class MenuCoordinadorControlador {
         } catch (IOException excepcion) {
             LOGGER.log(Level.SEVERE, "Error al cargar la vista de login", excepcion);
         }
+    }
+
+    @FXML
+    private void abrirConsultarAlumnos(ActionEvent event) throws IOException {
+        abrirVentana("/InterfazGrafica/vistas/ConsultarAlumnosCoordinadorVista.fxml", "Consultar Alumnos");
     }
 
     @FXML
@@ -121,13 +125,14 @@ public class MenuCoordinadorControlador {
 
     @FXML
     private void abrirModificarProfesor(ActionEvent event) throws IOException {
-        abrirVentana("/InterfazGrafica/vistas/ModificarProfesorVista.fxml", "Modificar practicante");
+        abrirVentana("/InterfazGrafica/vistas/ModificarProfesorVista.fxml", "Modificar Profesor");
     }
 
     @FXML
     private void abrirRegistrarPeriodo(ActionEvent event) throws IOException {
         abrirVentana("/InterfazGrafica/vistas/RegistrarPeriodoVista.fxml", "Registrar Período");
     }
+
     @FXML
     private void abrirCerrarPeriodo(ActionEvent event) throws IOException {
         abrirVentana("/InterfazGrafica/vistas/CerrarPeriodoVista.fxml", "Cerrar Período");

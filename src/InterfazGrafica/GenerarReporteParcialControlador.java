@@ -12,12 +12,15 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import logica.archivos.GeneradorPdfReporteParcial;
 import logica.dao.excepciones.MensajeriaExcepcion;
+import logica.dao.objetos.ActividadDao;
 import logica.dao.objetos.ProyectoDao;
 import logica.dao.objetos.ReporteDao;
+import logica.dominio.Actividad;
 import logica.dominio.Proyecto;
 import logica.dominio.Reporte;
 import logica.dominio.SesionUsuario;
 import logica.dominio.enums.TipoReporte;
+
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -25,12 +28,13 @@ import java.util.logging.Logger;
 public class GenerarReporteParcialControlador {
 
     private static final Logger LOGGER = Logger.getLogger(GenerarReporteParcialControlador.class.getName());
-    private static final int MENSUALES_PARA_PRIMER_PARCIAL = 3;
-    private static final int MENSUALES_PARA_SEGUNDO_PARCIAL = 6;
+    private static final int HORAS_PARA_PARCIAL = 210;
+    private static final String HORAS_PARCIAL_TEXTO = "210";
 
     @FXML private Label etiquetaMatricula;
     @FXML private Label etiquetaProyecto;
     @FXML private Label etiquetaOrganizacion;
+    @FXML private Label etiquetaHorasAcumuladas;
     @FXML private TextArea textoAreaDescripcion;
     @FXML private TextField campoNombreActividadUno;
     @FXML private TextArea campoDescripcionActividadUno;
@@ -68,6 +72,8 @@ public class GenerarReporteParcialControlador {
         nombrePracticante = SesionUsuario.getInstance().getUsuarioActivo().getNombre();
         etiquetaMatricula.setText(matricula);
         cargarInformacionProyecto();
+        cargarHorasAcumuladas();
+        precargarActividades();
     }
 
     @FXML
@@ -110,14 +116,59 @@ public class GenerarReporteParcialControlador {
         }
     }
 
-    private boolean camposVacios(List<String> campos) {
-        boolean hayCamposVacios = false;
-        for (String campo : campos) {
-            if (campo.isEmpty()) {
-                hayCamposVacios = true;
+    private void cargarHorasAcumuladas() {
+        ActividadDao actividadDao = new ActividadDao();
+        try {
+            int horasTotales = actividadDao.obtenerHorasTotalesPorPracticante(matricula);
+            if (etiquetaHorasAcumuladas != null) {
+                etiquetaHorasAcumuladas.setText(horasTotales + " horas acumuladas");
             }
+        } catch (MensajeriaExcepcion excepcion) {
+            LOGGER.log(Level.SEVERE, "Error al obtener horas acumuladas", excepcion);
         }
-        return hayCamposVacios;
+    }
+
+    private void precargarActividades() {
+        ActividadDao actividadDao = new ActividadDao();
+        try {
+            List<Actividad> actividades = actividadDao.obtenerActividadesPorPracticante(matricula);
+            if (actividades.size() >= 1) {
+                Actividad unaActividad = actividades.get(0);
+                campoNombreActividadUno.setText(unaActividad.getTitulo());
+                campoDescripcionActividadUno.setText(unaActividad.getDescripcion());
+            }
+            if (actividades.size() >= 2) {
+                Actividad dosActividad = actividades.get(1);
+                campoNombreActividadDos.setText(dosActividad.getTitulo());
+                campoDescripcionActividadDos.setText(dosActividad.getDescripcion());
+            }
+            if (actividades.size() >= 3) {
+                Actividad tresActividad = actividades.get(2);
+                campoNombreActividadTres.setText(tresActividad.getTitulo());
+                campoDescripcionActividadTres.setText(tresActividad.getDescripcion());
+            }
+        } catch (MensajeriaExcepcion excepcion) {
+            LOGGER.log(Level.SEVERE, "Error al precargar actividades en el reporte parcial", excepcion);
+        }
+    }
+
+    private boolean verificarHorasSuficientes() {
+        boolean horasSuficientes = false;
+        ActividadDao actividadDao = new ActividadDao();
+        try {
+            int horasTotales = actividadDao.obtenerHorasTotalesPorPracticante(matricula);
+            if (horasTotales >= HORAS_PARA_PARCIAL) {
+                horasSuficientes = true;
+            } else {
+                mostrarError("Horas insuficientes",
+                        "NECESITAS AL MENOS " + HORAS_PARA_PARCIAL + " HORAS ACUMULADAS. " +
+                                "ACTUALMENTE TIENES: " + horasTotales + " HORAS.");
+            }
+        } catch (MensajeriaExcepcion excepcion) {
+            LOGGER.log(Level.SEVERE, "Error al verificar horas para reporte parcial", excepcion);
+            mostrarError("Error inesperado", excepcion.getMessage().toUpperCase());
+        }
+        return horasSuficientes;
     }
 
     private boolean camposValidos() {
@@ -153,35 +204,14 @@ public class GenerarReporteParcialControlador {
         return validos;
     }
 
-    private boolean verificarPuedeGenerarParcial() {
-        boolean puedeGenerar = false;
-        ReporteDao reporteDao = new ReporteDao();
-        try {
-            int mensualesEvaluados = reporteDao.contarReportesEvaluados(matricula, "Mensual");
-            int parcialesEvaluados = reporteDao.contarReportesEvaluados(matricula, "Parcial");
-            if (mensualesEvaluados >= MENSUALES_PARA_PRIMER_PARCIAL && parcialesEvaluados == 0) {
-                puedeGenerar = true;
-            } else if (mensualesEvaluados >= MENSUALES_PARA_SEGUNDO_PARCIAL && parcialesEvaluados == 1) {
-                puedeGenerar = true;
-            } else if (parcialesEvaluados == 0 && mensualesEvaluados < MENSUALES_PARA_PRIMER_PARCIAL) {
-                mostrarError("Reportes insuficientes",
-                        "NECESITAS " + MENSUALES_PARA_PRIMER_PARCIAL + " REPORTES MENSUALES EVALUADOS. " +
-                                "ACTUALMENTE TIENES: " + mensualesEvaluados);
-            } else if (parcialesEvaluados >= 1 && mensualesEvaluados < MENSUALES_PARA_SEGUNDO_PARCIAL) {
-                mostrarError("Reportes insuficientes",
-                        "PARA EL SEGUNDO PARCIAL NECESITAS " + MENSUALES_PARA_SEGUNDO_PARCIAL +
-                                " REPORTES MENSUALES EVALUADOS. ACTUALMENTE TIENES: " + mensualesEvaluados);
-            } else if (parcialesEvaluados >= 2) {
-                mostrarError("Parciales completos",
-                        "YA TIENES LOS DOS REPORTES PARCIALES GENERADOS.");
-            } else {
-                mostrarError("Requisitos no cumplidos",
-                        "NO CUMPLES CON LOS REQUISITOS PARA GENERAR EL REPORTE PARCIAL.");
+    private boolean camposVacios(List<String> campos) {
+        boolean hayCamposVacios = false;
+        for (String campo : campos) {
+            if (campo.isEmpty()) {
+                hayCamposVacios = true;
             }
-        } catch (MensajeriaExcepcion excepcion) {
-            mostrarError("Error inesperado", excepcion.getMessage().toUpperCase());
         }
-        return puedeGenerar;
+        return hayCamposVacios;
     }
 
     private void generarPdf() {
@@ -190,13 +220,25 @@ public class GenerarReporteParcialControlador {
                 actividades, matricula, null, null);
 
         GeneradorPdfReporteParcial generador = new GeneradorPdfReporteParcial();
-        String rutaPdf = generador.generarPdf(reporte, nombrePracticante, nombreProyecto, nombreOrganizacion, "210");
+        String rutaPdf = generador.generarPdf(reporte, nombrePracticante, nombreProyecto, nombreOrganizacion, HORAS_PARCIAL_TEXTO);
 
         if (rutaPdf != null) {
+            guardarEnBaseDeDatos(reporte, rutaPdf);
             limpiarFormulario();
             mostrarExito("PDF generado correctamente", "El reporte se guardó en: " + rutaPdf);
         } else {
             mostrarError("Error al generar", "No se pudo generar el PDF. Intente de nuevo.");
+        }
+    }
+
+    private void guardarEnBaseDeDatos(Reporte reporte, String rutaPdf) {
+        ReporteDao reporteDao = new ReporteDao();
+        try {
+            reporte.setArchivoAdjunto(rutaPdf);
+            reporteDao.agregarReporte(reporte);
+            LOGGER.info("Reporte parcial guardado en BD correctamente");
+        } catch (MensajeriaExcepcion excepcion) {
+            LOGGER.log(Level.SEVERE, "Error al guardar reporte parcial en BD", excepcion);
         }
     }
 
@@ -227,7 +269,7 @@ public class GenerarReporteParcialControlador {
 
     private void procesarGeneracion() {
         if (camposValidos()) {
-            if (verificarPuedeGenerarParcial()) {
+            if (verificarHorasSuficientes()) {
                 generarPdf();
             }
         }

@@ -298,4 +298,57 @@ public class PracticanteDao implements PracticanteDaoInterfaz {
         }
         return practicantes;
     }
+    public List<Practicante> obtenerPracticantesPorSeccionProfesor(int idProfesor) throws UsuariosExcepcion {
+        String consulta = "SELECT DISTINCT u.idUsuario, u.nombre, u.apellidos, u.correo, u.estado, " +
+                "u.contrasena, p.matricula, p.lenguaIndigena, p.genero " +
+                "FROM usuario u " +
+                "INNER JOIN practicante p ON u.idUsuario = p.idUsuario " +
+                "INNER JOIN practicante_seccion ps ON p.matricula = ps.matricula " +
+                "INNER JOIN seccion s ON ps.noSeccion = s.noSeccion AND ps.idPeriodo = s.idPeriodo " +
+                "WHERE s.numPersonalProfesor = (" +
+                "    SELECT numPersonalProfesor FROM profesor WHERE idUsuario = ?" +
+                ") AND u.estado = 'Activo'";
+        Connection conexionBaseDeDatos = null;
+        PreparedStatement consultaPracticantes = null;
+        List<Practicante> practicantes = new ArrayList<>();
+        try {
+            conexionBaseDeDatos = ConexionBaseDeDatos.getInstance().conectar();
+            consultaPracticantes = conexionBaseDeDatos.prepareStatement(consulta);
+            consultaPracticantes.setInt(1, idProfesor);
+            ResultSet resultado = consultaPracticantes.executeQuery();
+            while (resultado.next()) {
+                Practicante practicante = new Practicante();
+                practicante.setIdUsuario(resultado.getInt("idUsuario"));
+                practicante.setNombre(resultado.getString("nombre"));
+                practicante.setApellidos(resultado.getString("apellidos"));
+                practicante.setCorreo(resultado.getString("correo"));
+                practicante.setEstado(Estado.valueOf(resultado.getString("estado")));
+                practicante.setContrasena(resultado.getString("contrasena"));
+                practicante.setMatricula(resultado.getString("matricula"));
+                practicante.setLenguaIndigena(resultado.getString("lenguaIndigena"));
+                practicante.setGenero(Genero.valueOf(resultado.getString("genero")));
+                practicantes.add(practicante);
+            }
+            LOGGER.info("Practicantes por seccion del profesor obtenidos: " + idProfesor);
+        } catch (SQLException excepcionSql) {
+            LOGGER.log(Level.SEVERE, "Error al obtener practicantes por seccion", excepcionSql);
+            if (excepcionSql.getMessage().contains(ERROR_CONEXION)) {
+                throw new UsuariosExcepcion("No se pudo conectar al servidor. Verifique que la base de datos este encendida");
+            }
+            throw new UsuariosExcepcion("Error al obtener practicantes por seccion del profesor", excepcionSql);
+        } finally {
+            try {
+                if (consultaPracticantes != null) {
+                    consultaPracticantes.close();
+                }
+                if (conexionBaseDeDatos != null) {
+                    conexionBaseDeDatos.close();
+                }
+            } catch (SQLException excepcionSql) {
+                LOGGER.log(Level.SEVERE, "Error al cerrar la conexion", excepcionSql);
+            }
+        }
+        return practicantes;
+    }
+
 }

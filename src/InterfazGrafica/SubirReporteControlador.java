@@ -9,21 +9,28 @@ import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.event.ActionEvent;
+import logica.dao.objetos.ActividadDao;
 import logica.dao.objetos.ReporteDao;
 import logica.dao.excepciones.MensajeriaExcepcion;
 import logica.dominio.Reporte;
 import logica.dominio.SesionUsuario;
 import logica.dominio.enums.TipoReporte;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class SubirReporteControlador {
 
+    private static final Logger LOGGER = Logger.getLogger(SubirReporteControlador.class.getName());
     private static final int FILAS_AFECTADAS_ESPERADAS = 1;
-    private static final int REPORTES_MENSUALES_PARA_PARCIAL = 3;
+    private static final int HORAS_MINIMAS_PARCIAL = 210;
+    private static final int HORAS_MINIMAS_FINAL = 420;
+    private static final String CARPETA_UPLOADS = "uploads/";
 
     @FXML private ComboBox<TipoReporte> comboBoxTipoReporte;
     @FXML private TextField campoDescripcion;
@@ -36,7 +43,6 @@ public class SubirReporteControlador {
     @FXML private Label etiquetaTituloExito;
     @FXML private Label etiquetaMensajeExito;
 
-    private static final String CARPETA_UPLOADS = "uploads/";
     private File archivoSeleccionado = null;
     private String matricula;
 
@@ -70,11 +76,15 @@ public class SubirReporteControlador {
             return;
         }
         if (comboBoxTipoReporte.getValue() == TipoReporte.Mensual) {
-            if (verificarReporteMensualMesActual()) {
+            if (verificarReporteMensualDuplicado()) {
                 return;
             }
         } else if (comboBoxTipoReporte.getValue() == TipoReporte.Parcial) {
-            if (!verificarPuedeGenerarParcial()) {
+            if (!verificarHorasParaParcial()) {
+                return;
+            }
+        } else if (comboBoxTipoReporte.getValue() == TipoReporte.Final) {
+            if (!verificarHorasParaFinal()) {
                 return;
             }
         }
@@ -89,42 +99,46 @@ public class SubirReporteControlador {
                     archivoSeleccionado.getName()
             );
             guardarReporte(reporte);
-        } catch (IOException e) {
-            mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError, "Error de archivo",
-                    "No se pudo copiar el PDF: " + e.getMessage());
-        } catch (MensajeriaExcepcion e) {
-            mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError, "Error", e.getMessage());
+        } catch (IOException excepcion) {
+            LOGGER.log(Level.SEVERE, "Error al copiar el PDF", excepcion);
+            mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
+                    "Error de archivo", "No se pudo copiar el PDF: " + excepcion.getMessage());
+        } catch (MensajeriaExcepcion excepcion) {
+            LOGGER.log(Level.SEVERE, "Error al guardar el reporte", excepcion);
+            mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
+                    "Error", excepcion.getMessage());
         }
     }
 
     private boolean validarFormulario() {
         boolean formularioValido = true;
         if (comboBoxTipoReporte.getValue() == null) {
-            mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError, "Campo requerido",
-                    "Selecciona el tipo de reporte.");
+            mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
+                    "Campo requerido", "Selecciona el tipo de reporte.");
             formularioValido = false;
         } else if (campoDescripcion.getText().trim().isEmpty()) {
-            mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError, "Campo requerido",
-                    "La descripción no puede estar vacía.");
+            mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
+                    "Campo requerido", "La descripción no puede estar vacía.");
             formularioValido = false;
         } else if (archivoSeleccionado == null) {
-            mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError, "Archivo requerido",
-                    "Debes seleccionar un archivo PDF.");
+            mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
+                    "Archivo requerido", "Debes seleccionar un archivo PDF.");
             formularioValido = false;
         }
         return formularioValido;
     }
 
-    private boolean verificarReporteMensualMesActual() {
+    private boolean verificarReporteMensualDuplicado() {
         boolean yaExiste = false;
         ReporteDao reporteDao = new ReporteDao();
         try {
             if (reporteDao.existeReporteMensualEnMesActual(matricula)) {
                 mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
-                        "Reporte duplicado", "YA ENTREGASTE UN REPORTE MENSUAL ESTE MES");
+                        "Reporte duplicado", "YA ENTREGASTE UN REPORTE MENSUAL ESTE MES.");
                 yaExiste = true;
             }
         } catch (MensajeriaExcepcion excepcion) {
+            LOGGER.log(Level.SEVERE, "Error al verificar reporte mensual", excepcion);
             mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
                     "Error inesperado", excepcion.getMessage().toUpperCase());
             yaExiste = true;
@@ -132,25 +146,46 @@ public class SubirReporteControlador {
         return yaExiste;
     }
 
-    private boolean verificarPuedeGenerarParcial() {
-        boolean puedeGenerar = false;
-        ReporteDao reporteDao = new ReporteDao();
+    private boolean verificarHorasParaParcial() {
+        boolean puedeSubir = false;
+        ActividadDao actividadDao = new ActividadDao();
         try {
-            int mensualesEvaluados = reporteDao.contarReportesEvaluados(matricula, "Mensual");
-            int parcialesEvaluados = reporteDao.contarReportesEvaluados(matricula, "Parcial");
-            if (mensualesEvaluados >= REPORTES_MENSUALES_PARA_PARCIAL && parcialesEvaluados == 0) {
-                puedeGenerar = true;
-            } else if (mensualesEvaluados >= REPORTES_MENSUALES_PARA_PARCIAL * 2 && parcialesEvaluados == 1) {
-                puedeGenerar = true;
+            int horasTotales = actividadDao.obtenerHorasTotalesPorPracticante(matricula);
+            if (horasTotales >= HORAS_MINIMAS_PARCIAL) {
+                puedeSubir = true;
             } else {
                 mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
-                        "Reportes incompletos", "NO CUMPLES CON LOS REQUISITOS PARA GENERAR EL REPORTE PARCIAL");
+                        "Horas insuficientes",
+                        "NECESITAS AL MENOS " + HORAS_MINIMAS_PARCIAL +
+                                " HORAS ACUMULADAS. TIENES: " + horasTotales + " HORAS.");
             }
         } catch (MensajeriaExcepcion excepcion) {
+            LOGGER.log(Level.SEVERE, "Error al verificar horas para parcial", excepcion);
             mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
                     "Error inesperado", excepcion.getMessage().toUpperCase());
         }
-        return puedeGenerar;
+        return puedeSubir;
+    }
+
+    private boolean verificarHorasParaFinal() {
+        boolean puedeSubir = false;
+        ActividadDao actividadDao = new ActividadDao();
+        try {
+            int horasTotales = actividadDao.obtenerHorasTotalesPorPracticante(matricula);
+            if (horasTotales >= HORAS_MINIMAS_FINAL) {
+                puedeSubir = true;
+            } else {
+                mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
+                        "Horas insuficientes",
+                        "NECESITAS AL MENOS " + HORAS_MINIMAS_FINAL +
+                                " HORAS ACUMULADAS. TIENES: " + horasTotales + " HORAS.");
+            }
+        } catch (MensajeriaExcepcion excepcion) {
+            LOGGER.log(Level.SEVERE, "Error al verificar horas para final", excepcion);
+            mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
+                    "Error inesperado", excepcion.getMessage().toUpperCase());
+        }
+        return puedeSubir;
     }
 
     private String copiarPDF(File archivo) throws IOException {
@@ -167,12 +202,12 @@ public class SubirReporteControlador {
         ReporteDao dao = new ReporteDao();
         int resultado = dao.agregarReporte(reporte);
         if (resultado >= FILAS_AFECTADAS_ESPERADAS) {
-            mostrarPanel(etiquetaTituloExito, etiquetaMensajeExito, panelExito, "Reporte subido",
-                    "Tu reporte fue enviado correctamente.");
+            mostrarPanel(etiquetaTituloExito, etiquetaMensajeExito, panelExito,
+                    "Reporte subido", "Tu reporte fue enviado correctamente.");
             limpiarFormulario();
         } else {
-            mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError, "Error",
-                    "No se pudo guardar el reporte.");
+            mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
+                    "Error", "No se pudo guardar el reporte.");
         }
     }
 
@@ -196,7 +231,8 @@ public class SubirReporteControlador {
         archivoSeleccionado = null;
     }
 
-    private void mostrarPanel(Label etiquetaTitulo, Label etiquetaMensaje, VBox panel, String titulo, String mensaje) {
+    private void mostrarPanel(Label etiquetaTitulo, Label etiquetaMensaje, VBox panel,
+                              String titulo, String mensaje) {
         etiquetaTitulo.setText(titulo);
         etiquetaMensaje.setText(mensaje);
         panel.setVisible(true);

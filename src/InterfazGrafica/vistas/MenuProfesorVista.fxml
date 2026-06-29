@@ -4,72 +4,77 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane prefHeight="600.0" prefWidth="750.0"
-            xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="InterfazGrafica.MenuProfesorControlador">
+<AnchorPane prefHeight="600.0" prefWidth="750.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="InterfazGrafica.MenuProfesorControlador">
     <children>
-
-        <VBox layoutX="0.0" layoutY="0.0" prefHeight="600.0" prefWidth="200.0"
-              style="-fx-background-color: #2ecc71; -fx-padding: 15;">
+        <VBox layoutX="0.0" layoutY="0.0" prefHeight="600.0" prefWidth="200.0" style="-fx-background-color: #2ecc71; -fx-padding: 15;">
             <children>
-                <Label text="Profesor" style="-fx-text-fill: white; -fx-font-size: 16; -fx-font-weight: bold;"/>
-                <Label fx:id="lblNombre" text="" style="-fx-text-fill: white; -fx-font-size: 12;">
-                    <VBox.margin><Insets top="4.0"/></VBox.margin>
+                <Label style="-fx-text-fill: white; -fx-font-size: 16; -fx-font-weight: bold;" text="Profesor" />
+                <Label fx:id="lblNombre" style="-fx-text-fill: white; -fx-font-size: 12;" text="">
+                    <VBox.margin><Insets top="4.0" /></VBox.margin>
                 </Label>
-                <Label fx:id="lblRol" text="" style="-fx-text-fill: white; -fx-font-size: 11; -fx-background-color: #27ae60; -fx-padding: 3 8 3 8; -fx-background-radius: 10;">
-                    <VBox.margin><Insets top="5.0" bottom="10.0"/></VBox.margin>
+                <Label fx:id="lblRol" style="-fx-text-fill: white; -fx-font-size: 11; -fx-background-color: #27ae60; -fx-padding: 3 8 3 8; -fx-background-radius: 10;" text="">
+                    <VBox.margin><Insets bottom="10.0" top="5.0" /></VBox.margin>
                 </Label>
 
-                <Separator><VBox.margin><Insets top="5.0" bottom="10.0"/></VBox.margin></Separator>
+                <Separator><VBox.margin><Insets bottom="10.0" top="5.0" /></VBox.margin></Separator>
 
-                <Label text="Reporte" style="-fx-text-fill: white; -fx-font-size: 11;"/>
-                <Button text="Calificar reporte" onAction="#abrirCalificarReporte" prefWidth="170.0"
-                        style="-fx-background-color: transparent; -fx-text-fill: white; -fx-alignment: CENTER-LEFT;">
-                    <VBox.margin><Insets top="5.0"/></VBox.margin>
-                </Button>
-                <Button text="Ver historial" onAction="#abrirHistorialReportes" prefWidth="170.0"
-                        style="-fx-background-color: transparent; -fx-text-fill: white; -fx-alignment: CENTER-LEFT;">
-                    <VBox.margin><Insets top="3.0"/></VBox.margin>
+                <Label style="-fx-text-fill: white; -fx-font-size: 11;" text="Alumnos" />
+                <Button onAction="#abrirConsultarAlumnos" prefWidth="170.0"
+                        style="-fx-background-color: transparent; -fx-text-fill: white; -fx-alignment: CENTER-LEFT;"
+                        text="Consultar alumnos">
+                    <VBox.margin><Insets top="5.0" /></VBox.margin>
                 </Button>
 
-                <Separator><VBox.margin><Insets top="10.0" bottom="10.0"/></VBox.margin></Separator>
+                <Separator><VBox.margin><Insets bottom="10.0" top="10.0" /></VBox.margin></Separator>
 
-                <Label text="Documentacion del practicante" style="-fx-text-fill: white; -fx-font-size: 11;"/>
-                <Button text="Validar documentacion" onAction="#abrirValidarDocumentacion" prefWidth="170.0"
-                        style="-fx-background-color: transparent; -fx-text-fill: white; -fx-alignment: CENTER-LEFT;">
-                    <VBox.margin><Insets top="5.0"/></VBox.margin>
+                <Label style="-fx-text-fill: white; -fx-font-size: 11;" text="Reportes" />
+                <Button onAction="#abrirCalificarReporte" prefWidth="170.0"
+                        style="-fx-background-color: transparent; -fx-text-fill: white; -fx-alignment: CENTER-LEFT;"
+                        text="Calificar reporte">
+                    <VBox.margin><Insets top="5.0" /></VBox.margin>
+                </Button>
+                <Button onAction="#abrirHistorialReportes" prefWidth="170.0"
+                        style="-fx-background-color: transparent; -fx-text-fill: white; -fx-alignment: CENTER-LEFT;"
+                        text="Historial de reportes">
+                    <VBox.margin><Insets top="5.0" /></VBox.margin>
+                </Button>
+                <Button onAction="#abrirValidarDocumentacion" prefWidth="170.0"
+                        style="-fx-background-color: transparent; -fx-text-fill: white; -fx-alignment: CENTER-LEFT;"
+                        text="Validar documentación">
+                    <VBox.margin><Insets top="5.0" /></VBox.margin>
                 </Button>
 
-                <Separator><VBox.margin><Insets top="10.0" bottom="10.0"/></VBox.margin></Separator>
+                <Separator><VBox.margin><Insets bottom="10.0" top="10.0" /></VBox.margin></Separator>
 
-                <Label text="Mensajes" style="-fx-text-fill: white; -fx-font-size: 11;"/>
-                <Button text="Enviar mensaje" onAction="#abrirMensajeria" prefWidth="170.0"
-                        style="-fx-background-color: transparent; -fx-text-fill: white; -fx-alignment: CENTER-LEFT;">
-                    <VBox.margin><Insets top="5.0"/></VBox.margin>
+                <Label style="-fx-text-fill: white; -fx-font-size: 11;" text="Mensajes" />
+                <Button onAction="#abrirMensajeria" prefWidth="170.0"
+                        style="-fx-background-color: transparent; -fx-text-fill: white; -fx-alignment: CENTER-LEFT;"
+                        text="Enviar mensaje">
+                    <VBox.margin><Insets top="5.0" /></VBox.margin>
                 </Button>
-                <Button text="Ver buzón" onAction="#abrirBuzon" prefWidth="170.0"
-                        style="-fx-background-color: transparent; -fx-text-fill: white; -fx-alignment: CENTER-LEFT;">
-                    <VBox.margin><Insets top="3.0"/></VBox.margin>
+                <Button onAction="#abrirBuzon" prefWidth="170.0"
+                        style="-fx-background-color: transparent; -fx-text-fill: white; -fx-alignment: CENTER-LEFT;"
+                        text="Ver buzón">
+                    <VBox.margin><Insets top="3.0" /></VBox.margin>
                 </Button>
 
-                <Separator><VBox.margin><Insets top="10.0" bottom="10.0"/></VBox.margin></Separator>
+                <Separator><VBox.margin><Insets bottom="10.0" top="10.0" /></VBox.margin></Separator>
 
-                <Button text="Cerrar Sesión" onAction="#cerrarSesion" prefWidth="170.0"
-                        style="-fx-background-color: #c0392b; -fx-text-fill: white;">
-                    <VBox.margin><Insets top="5.0"/></VBox.margin>
+                <Button onAction="#cerrarSesion" prefWidth="170.0"
+                        style="-fx-background-color: #c0392b; -fx-text-fill: white;"
+                        text="Cerrar Sesión">
+                    <VBox.margin><Insets top="5.0" /></VBox.margin>
                 </Button>
             </children>
         </VBox>
 
-        <VBox layoutX="200.0" layoutY="0.0" prefHeight="600.0" prefWidth="550.0"
-              alignment="CENTER" style="-fx-padding: 30;">
+        <VBox alignment="CENTER" layoutX="200.0" layoutY="0.0" prefHeight="600.0" prefWidth="550.0" style="-fx-padding: 30;">
             <children>
-                <Label fx:id="lblBienvenida" text="" style="-fx-font-size: 22; -fx-font-weight: bold;"/>
-                <Label text="Selecciona una opción del menú" style="-fx-font-size: 13; -fx-text-fill: #666666;">
-                    <VBox.margin><Insets top="8.0"/></VBox.margin>
+                <Label fx:id="lblBienvenida" style="-fx-font-size: 22; -fx-font-weight: bold;" text="" />
+                <Label style="-fx-font-size: 13; -fx-text-fill: #666666;" text="Selecciona una opción del menú">
+                    <VBox.margin><Insets top="8.0" /></VBox.margin>
                 </Label>
             </children>
         </VBox>
-
     </children>
 </AnchorPane>
