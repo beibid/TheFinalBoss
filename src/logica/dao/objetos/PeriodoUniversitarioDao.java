@@ -19,6 +19,21 @@ public class PeriodoUniversitarioDao implements PeriodoUniversitarioDaoInterfaz 
     private static final String ERROR_CONEXION = "No se pudo conectar";
     private static final Logger LOGGER = Logger.getLogger(PeriodoUniversitarioDao.class.getName());
 
+    /**
+     * Verifica si la excepcion SQL es un error de conexion a la base de datos.
+     * @param excepcion la excepcion SQL a verificar
+     * @return true si es un error de conexion, false en caso contrario
+     */
+    private boolean esErrorDeConexion(SQLException excepcion) {
+        return excepcion.getMessage() != null && excepcion.getMessage().contains(ERROR_CONEXION);
+    }
+
+    /**
+     * Inserta un nuevo periodo universitario en la base de datos.
+     * @param periodoUniversitario el periodo a insertar
+     * @return el numero de filas afectadas
+     * @throws UsuariosExcepcion si ocurre un error al insertar o de conexion
+     */
     @Override
     public int insertarPeriodo(PeriodoUniversitario periodoUniversitario) throws UsuariosExcepcion {
         String consulta = "INSERT INTO periodo_universitario (nombre, fechaInicio, estado) VALUES (?, ?, ?)";
@@ -35,7 +50,7 @@ public class PeriodoUniversitarioDao implements PeriodoUniversitarioDaoInterfaz 
             LOGGER.info("Periodo universitario insertado correctamente");
         } catch (SQLException excepcionSql) {
             LOGGER.log(Level.SEVERE, "Error al insertar el periodo universitario", excepcionSql);
-            if (excepcionSql.getMessage().contains(ERROR_CONEXION)) {
+            if (esErrorDeConexion(excepcionSql)) {
                 throw new UsuariosExcepcion("No se pudo conectar al servidor. Verifique que la base de datos este encendida");
             }
             throw new UsuariosExcepcion("Error al insertar el periodo universitario", excepcionSql);
@@ -54,6 +69,11 @@ public class PeriodoUniversitarioDao implements PeriodoUniversitarioDaoInterfaz 
         return filasAfectadas;
     }
 
+    /**
+     * Verifica si existe al menos un periodo universitario abierto.
+     * @return true si hay un periodo abierto, false en caso contrario
+     * @throws UsuariosExcepcion si ocurre un error al consultar o de conexion
+     */
     @Override
     public boolean verificarPeriodoAbierto() throws UsuariosExcepcion {
         String consulta = "SELECT COUNT(*) FROM periodo_universitario WHERE estado = 'Abierto'";
@@ -70,16 +90,16 @@ public class PeriodoUniversitarioDao implements PeriodoUniversitarioDaoInterfaz 
             LOGGER.info("Verificacion de periodo abierto completada");
         } catch (SQLException excepcionSql) {
             LOGGER.log(Level.SEVERE, "Error al verificar periodo abierto", excepcionSql);
-            if (excepcionSql.getMessage().contains(ERROR_CONEXION)) {
+            if (esErrorDeConexion(excepcionSql)) {
                 throw new UsuariosExcepcion("No se pudo conectar al servidor. Verifique que la base de datos este encendida");
             }
             throw new UsuariosExcepcion("Error al verificar periodo abierto", excepcionSql);
         } finally {
             try {
-                if (consultaPreparada != null) {
+                if (consultaPreparada != null){
                     consultaPreparada.close();
                 }
-                if (conexionBaseDeDatos != null) {
+                if (conexionBaseDeDatos != null){
                     conexionBaseDeDatos.close();
                 }
             } catch (SQLException excepcionSql) {
@@ -89,6 +109,11 @@ public class PeriodoUniversitarioDao implements PeriodoUniversitarioDaoInterfaz 
         return hayPeriodoAbierto;
     }
 
+    /**
+     * Obtiene la lista de periodos universitarios con estado abierto.
+     * @return lista de periodos abiertos
+     * @throws UsuariosExcepcion si ocurre un error al consultar o de conexion
+     */
     public List<PeriodoUniversitario> obtenerPeriodosAbiertos() throws UsuariosExcepcion {
         String consulta = "SELECT idPeriodo, nombre, fechaInicio, estado FROM periodo_universitario WHERE estado = 'Abierto'";
         Connection conexionBaseDeDatos = null;
@@ -109,7 +134,7 @@ public class PeriodoUniversitarioDao implements PeriodoUniversitarioDaoInterfaz 
             LOGGER.info("Periodos abiertos obtenidos correctamente");
         } catch (SQLException excepcionSql) {
             LOGGER.log(Level.SEVERE, "Error al obtener periodos abiertos", excepcionSql);
-            if (excepcionSql.getMessage().contains(ERROR_CONEXION)) {
+            if (esErrorDeConexion(excepcionSql)) {
                 throw new UsuariosExcepcion("No se pudo conectar al servidor. Verifique que la base de datos este encendida");
             }
             throw new UsuariosExcepcion("Error al obtener periodos abiertos", excepcionSql);
@@ -128,6 +153,12 @@ public class PeriodoUniversitarioDao implements PeriodoUniversitarioDaoInterfaz 
         return periodos;
     }
 
+    /**
+     * Cierra un periodo universitario actualizando su estado y fecha de fin.
+     * @param idPeriodo el ID del periodo a cerrar
+     * @return el numero de filas afectadas
+     * @throws UsuariosExcepcion si ocurre un error al cerrar o de conexion
+     */
     public int cerrarPeriodo(int idPeriodo) throws UsuariosExcepcion {
         String consulta = "UPDATE periodo_universitario SET estado = 'Cerrado', fechaFin = CURDATE() WHERE idPeriodo = ?";
         Connection conexionBaseDeDatos = null;
@@ -141,7 +172,7 @@ public class PeriodoUniversitarioDao implements PeriodoUniversitarioDaoInterfaz 
             LOGGER.info("Periodo cerrado correctamente: " + idPeriodo);
         } catch (SQLException excepcionSql) {
             LOGGER.log(Level.SEVERE, "Error al cerrar el periodo", excepcionSql);
-            if (excepcionSql.getMessage().contains(ERROR_CONEXION)) {
+            if (esErrorDeConexion(excepcionSql)) {
                 throw new UsuariosExcepcion("No se pudo conectar al servidor. Verifique que la base de datos este encendida");
             }
             throw new UsuariosExcepcion("Error al cerrar el periodo", excepcionSql);
@@ -150,7 +181,7 @@ public class PeriodoUniversitarioDao implements PeriodoUniversitarioDaoInterfaz 
                 if (actualizacion != null) {
                     actualizacion.close();
                 }
-                if (conexionBaseDeDatos != null) {
+                if (conexionBaseDeDatos != null){
                     conexionBaseDeDatos.close();
                 }
             } catch (SQLException excepcionSql) {

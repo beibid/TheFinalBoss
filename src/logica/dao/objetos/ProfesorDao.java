@@ -22,10 +22,21 @@ public class ProfesorDao implements ProfesorDaoInterfaz {
     private static final String ERROR_CONEXION = "No se pudo conectar";
     private static final Logger LOGGER = Logger.getLogger(ProfesorDao.class.getName());
 
+    /**
+     * Verifica si la excepcion SQL es un error de conexion a la base de datos.
+     * @param excepcion la excepcion SQL a verificar
+     * @return true si es un error de conexion, false en caso contrario
+     */
     private boolean esErrorDeConexion(SQLException excepcion) {
         return excepcion.getMessage() != null && excepcion.getMessage().contains(ERROR_CONEXION);
     }
 
+    /**
+     * Inserta un nuevo profesor en la base de datos.
+     * @param profesor el profesor a insertar
+     * @return el numero de filas afectadas
+     * @throws UsuariosExcepcion si ocurre un error al insertar o de conexion
+     */
     @Override
     public int insertarProfesor(Profesor profesor) throws UsuariosExcepcion {
         String consultaUsuario = "INSERT INTO usuario (nombre, apellidos, contrasena, estado, rol, correo) VALUES (?, ?, ?, ?, 'Profesor', ?)";
@@ -62,13 +73,13 @@ public class ProfesorDao implements ProfesorDaoInterfaz {
             throw new UsuariosExcepcion("Error al insertar profesor", excepcionSql);
         } finally {
             try {
-                if (insercionProfesor != null) {
+                if (insercionProfesor != null){
                     insercionProfesor.close();
                 }
-                if (insercionUsuario != null) {
+                if (insercionUsuario != null){
                     insercionUsuario.close();
                 }
-                if (conexionBaseDeDatos != null) {
+                if (conexionBaseDeDatos != null){
                     conexionBaseDeDatos.close();
                 }
             } catch (SQLException excepcionSql) {
@@ -78,6 +89,12 @@ public class ProfesorDao implements ProfesorDaoInterfaz {
         return filasAfectadas;
     }
 
+    /**
+     * Inactiva un profesor en la base de datos.
+     * @param numPersonalProfesor el numero de personal del profesor a inactivar
+     * @return el numero de filas afectadas
+     * @throws UsuariosExcepcion si ocurre un error al inactivar o de conexion
+     */
     public int inactivarProfesor(String numPersonalProfesor) throws UsuariosExcepcion {
         if (numPersonalProfesor == null) {
             throw new UsuariosExcepcion("El numero de personal no puede ser nulo");
@@ -101,10 +118,10 @@ public class ProfesorDao implements ProfesorDaoInterfaz {
             throw new UsuariosExcepcion("Error al inactivar profesor", excepcionSql);
         } finally {
             try {
-                if (actualizacion != null) {
+                if (actualizacion != null){
                     actualizacion.close();
                 }
-                if (conexionBaseDeDatos != null) {
+                if (conexionBaseDeDatos != null){
                     conexionBaseDeDatos.close();
                 }
             } catch (SQLException excepcionSql) {
@@ -114,6 +131,13 @@ public class ProfesorDao implements ProfesorDaoInterfaz {
         return filasAfectadas;
     }
 
+    /**
+     * Modifica los datos de un profesor en la base de datos.
+     * @param numPersonalProfesor el numero de personal del profesor a modificar
+     * @param profesor el profesor con los nuevos datos
+     * @return el numero de filas afectadas
+     * @throws UsuariosExcepcion si ocurre un error al modificar o de conexion
+     */
     public int modificarProfesor(String numPersonalProfesor, Profesor profesor) throws UsuariosExcepcion {
         if (numPersonalProfesor == null) {
             throw new UsuariosExcepcion("El numero de personal no puede ser nulo");
@@ -150,13 +174,13 @@ public class ProfesorDao implements ProfesorDaoInterfaz {
             throw new UsuariosExcepcion("Error al modificar profesor", excepcionSql);
         } finally {
             try {
-                if (actualizacionProfesor != null) {
+                if (actualizacionProfesor != null){
                     actualizacionProfesor.close();
                 }
-                if (actualizacionUsuario != null) {
+                if (actualizacionUsuario != null){
                     actualizacionUsuario.close();
                 }
-                if (conexionBaseDeDatos != null) {
+                if (conexionBaseDeDatos != null){
                     conexionBaseDeDatos.close();
                 }
             } catch (SQLException excepcionSql) {
@@ -166,6 +190,11 @@ public class ProfesorDao implements ProfesorDaoInterfaz {
         return filasAfectadas;
     }
 
+    /**
+     * Obtiene la lista de profesores con estado activo en el sistema.
+     * @return lista de profesores activos
+     * @throws UsuariosExcepcion si ocurre un error al consultar o de conexion
+     */
     public List<Profesor> obtenerProfesoresActivos() throws UsuariosExcepcion {
         String consulta = "SELECT u.idUsuario, u.nombre, u.apellidos, u.estado, p.numPersonalProfesor, p.turno " +
                 "FROM usuario u " +
@@ -196,7 +225,7 @@ public class ProfesorDao implements ProfesorDaoInterfaz {
             throw new UsuariosExcepcion("Error al obtener profesores activos", excepcionSql);
         } finally {
             try {
-                if (consultaProfesores != null) {
+                if (consultaProfesores != null){
                     consultaProfesores.close();
                 }
                 if (conexionBaseDeDatos != null) {
@@ -209,6 +238,12 @@ public class ProfesorDao implements ProfesorDaoInterfaz {
         return profesores;
     }
 
+    /**
+     * Obtiene la lista de practicantes asignados al proyecto de un profesor.
+     * @param numPersonalProfesor el numero de personal del profesor
+     * @return lista de practicantes del profesor
+     * @throws UsuariosExcepcion si ocurre un error al consultar o de conexion
+     */
     public List<Practicante> obtenerPracticantesPorProfesor(String numPersonalProfesor) throws UsuariosExcepcion {
         String consulta = "SELECT u.idUsuario, u.nombre, u.apellidos, p.matricula " +
                 "FROM practicante p " +
@@ -240,7 +275,7 @@ public class ProfesorDao implements ProfesorDaoInterfaz {
             throw new UsuariosExcepcion("Error al obtener practicantes", excepcionSql);
         } finally {
             try {
-                if (consultaProfesor != null) {
+                if (consultaProfesor != null){
                     consultaProfesor.close();
                 }
                 if (conexion != null) {
@@ -253,6 +288,11 @@ public class ProfesorDao implements ProfesorDaoInterfaz {
         return practicantes;
     }
 
+    /**
+     * Retorna el conteo de profesores con estado activo en el sistema.
+     * @return numero de profesores activos
+     * @throws UsuariosExcepcion si ocurre un error al consultar o de conexion
+     */
     public int existeProfesorActivo() throws UsuariosExcepcion {
         String consulta = "SELECT COUNT(*) " +
                 "FROM usuario u " +
@@ -279,7 +319,7 @@ public class ProfesorDao implements ProfesorDaoInterfaz {
                 if (consultaProfesorActivo != null) {
                     consultaProfesorActivo.close();
                 }
-                if (conexionBaseDeDatos != null) {
+                if (conexionBaseDeDatos != null){
                     conexionBaseDeDatos.close();
                 }
             } catch (SQLException excepcionSql) {

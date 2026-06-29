@@ -20,6 +20,21 @@ public class OrganizacionVinculadaDao implements OrganizacionVinculadaDaoInterfa
     private static final String ERROR_CONEXION = "No se pudo conectar";
     private static final Logger LOGGER = Logger.getLogger(OrganizacionVinculadaDao.class.getName());
 
+    /**
+     * Verifica si la excepcion SQL es un error de conexion a la base de datos.
+     * @param excepcion la excepcion SQL a verificar
+     * @return true si es un error de conexion, false en caso contrario
+     */
+    private boolean esErrorDeConexion(SQLException excepcion) {
+        return excepcion.getMessage() != null && excepcion.getMessage().contains(ERROR_CONEXION);
+    }
+
+    /**
+     * Inserta una nueva organizacion vinculada en la base de datos.
+     * @param organizacionVinculada la organizacion a insertar
+     * @return el numero de filas afectadas
+     * @throws UsuariosExcepcion si ocurre un error al insertar o de conexion
+     */
     @Override
     public int insertarOrganizacionVinculada(OrganizacionVinculada organizacionVinculada) throws UsuariosExcepcion {
         String consultaOrganizacion = "INSERT INTO organizacion_vinculada (nombre, direccion, telefono, correo, sector) VALUES (?, ?, ?, ?, ?)";
@@ -38,7 +53,7 @@ public class OrganizacionVinculadaDao implements OrganizacionVinculadaDaoInterfa
             LOGGER.info("Organizacion vinculada insertada correctamente");
         } catch (SQLException excepcionSql) {
             LOGGER.log(Level.SEVERE, "Error al insertar la organizacion vinculada", excepcionSql);
-            if (excepcionSql.getMessage().contains(ERROR_CONEXION)) {
+            if (esErrorDeConexion(excepcionSql)) {
                 throw new UsuariosExcepcion("No se pudo conectar al servidor. Verifique que la base de datos este encendida");
             }
             throw new UsuariosExcepcion("Error al insertar la organizacion", excepcionSql);
@@ -57,6 +72,13 @@ public class OrganizacionVinculadaDao implements OrganizacionVinculadaDaoInterfa
         return filasAfectadas;
     }
 
+    /**
+     * Modifica los datos de una organizacion vinculada en la base de datos.
+     * @param idOrganizacion el ID de la organizacion a modificar
+     * @param organizacionVinculada la organizacion con los nuevos datos
+     * @return el numero de filas afectadas
+     * @throws UsuariosExcepcion si ocurre un error al modificar o de conexion
+     */
     public int modificarOrganizacionVinculada(int idOrganizacion, OrganizacionVinculada organizacionVinculada) throws UsuariosExcepcion {
         String consulta = "UPDATE organizacion_vinculada SET nombre = ?, direccion = ?, telefono = ?, correo = ?, sector = ? WHERE idOrganizacion = ?";
         Connection conexionBaseDeDatos = null;
@@ -75,16 +97,16 @@ public class OrganizacionVinculadaDao implements OrganizacionVinculadaDaoInterfa
             LOGGER.info("OrganizacionVinculada modificada correctamente: " + idOrganizacion);
         } catch (SQLException excepcionSql) {
             LOGGER.log(Level.SEVERE, "Error al modificar organizacion vinculada", excepcionSql);
-            if (excepcionSql.getMessage().contains(ERROR_CONEXION)) {
+            if (esErrorDeConexion(excepcionSql)) {
                 throw new UsuariosExcepcion("No se pudo conectar al servidor. Verifique que la base de datos este encendida");
             }
             throw new UsuariosExcepcion("Error al modificar organizacion vinculada", excepcionSql);
         } finally {
             try {
-                if (actualizacion != null) {
+                if (actualizacion != null){
                     actualizacion.close();
                 }
-                if (conexionBaseDeDatos != null) {
+                if (conexionBaseDeDatos != null){
                     conexionBaseDeDatos.close();
                 }
             } catch (SQLException excepcionSql) {
@@ -94,6 +116,11 @@ public class OrganizacionVinculadaDao implements OrganizacionVinculadaDaoInterfa
         return filasAfectadas;
     }
 
+    /**
+     * Obtiene la lista de organizaciones vinculadas activas.
+     * @return lista de organizaciones registradas en el sistema
+     * @throws UsuariosExcepcion si ocurre un error al consultar o de conexion
+     */
     public List<OrganizacionVinculada> obtenerOrganizacionesActivas() throws UsuariosExcepcion {
         String consulta = "SELECT idOrganizacion, nombre, direccion, telefono, correo, sector FROM organizacion_vinculada";
         Connection conexionBaseDeDatos = null;
@@ -115,7 +142,7 @@ public class OrganizacionVinculadaDao implements OrganizacionVinculadaDaoInterfa
             }
         } catch (SQLException excepcionSql) {
             LOGGER.log(Level.SEVERE, "Error al obtener organizaciones", excepcionSql);
-            if (excepcionSql.getMessage().contains(ERROR_CONEXION)) {
+            if (esErrorDeConexion(excepcionSql)) {
                 throw new UsuariosExcepcion("No se pudo conectar al servidor. Verifique que la base de datos este encendida");
             }
             throw new UsuariosExcepcion("Error al obtener organizaciones", excepcionSql);
@@ -124,7 +151,7 @@ public class OrganizacionVinculadaDao implements OrganizacionVinculadaDaoInterfa
                 if (consultaOrganizaciones != null) {
                     consultaOrganizaciones.close();
                 }
-                if (conexionBaseDeDatos != null) {
+                if (conexionBaseDeDatos != null){
                     conexionBaseDeDatos.close();
                 }
             } catch (SQLException excepcionSql) {
@@ -134,6 +161,12 @@ public class OrganizacionVinculadaDao implements OrganizacionVinculadaDaoInterfa
         return organizaciones;
     }
 
+    /**
+     * Inactiva una organizacion vinculada en la base de datos.
+     * @param idOrganizacion el ID de la organizacion a inactivar
+     * @return el numero de filas afectadas
+     * @throws MensajeriaExcepcion si ocurre un error al inactivar o de conexion
+     */
     public int inactivarOrganizacionVinculada(int idOrganizacion) throws MensajeriaExcepcion {
         String consulta = "UPDATE organizacion_vinculada SET estado = ? WHERE idOrganizacion = ?";
         Connection conexionBaseDeDatos = null;
@@ -148,7 +181,7 @@ public class OrganizacionVinculadaDao implements OrganizacionVinculadaDaoInterfa
             LOGGER.info("Organizacion inactivada correctamente: " + idOrganizacion);
         } catch (SQLException excepcionSql) {
             LOGGER.log(Level.SEVERE, "Error al inactivar la organizacion", excepcionSql);
-            if (excepcionSql.getMessage().contains(ERROR_CONEXION)) {
+            if (esErrorDeConexion(excepcionSql)) {
                 throw new MensajeriaExcepcion("No se pudo conectar al servidor. Verifique que la base de datos este encendida");
             }
             throw new MensajeriaExcepcion("Error al inactivar la organizacion", excepcionSql);
@@ -157,7 +190,7 @@ public class OrganizacionVinculadaDao implements OrganizacionVinculadaDaoInterfa
                 if (actualizacion != null) {
                     actualizacion.close();
                 }
-                if (conexionBaseDeDatos != null) {
+                if (conexionBaseDeDatos != null){
                     conexionBaseDeDatos.close();
                 }
             } catch (SQLException excepcionSql) {

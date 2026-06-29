@@ -15,6 +15,21 @@ public class EntregaDocumentacionDao implements EntregaDocumentacionDaoInterfaz 
     private static final String ERROR_CONEXION = "No se pudo conectar";
     private static final Logger LOGGER = Logger.getLogger(EntregaDocumentacionDao.class.getName());
 
+    /**
+     * Verifica si la excepcion SQL es un error de conexion a la base de datos.
+     * @param excepcion la excepcion SQL a verificar
+     * @return true si es un error de conexion, false en caso contrario
+     */
+    private boolean esErrorDeConexion(SQLException excepcion) {
+        return excepcion.getMessage() != null && excepcion.getMessage().contains(ERROR_CONEXION);
+    }
+
+    /**
+     * Agrega una entrega de documentacion a la base de datos.
+     * @param entrega la entrega de documentacion a agregar
+     * @return el numero de filas afectadas
+     * @throws UsuariosExcepcion si ocurre un error al agregar o de conexion
+     */
     @Override
     public int agregarEntrega(EntregaDocumentacion entrega) throws UsuariosExcepcion {
         if (entrega.getFechaEntrega() == null) {
@@ -37,16 +52,16 @@ public class EntregaDocumentacionDao implements EntregaDocumentacionDaoInterfaz 
             LOGGER.info("EntregaDocumentacion insertada correctamente");
         } catch (SQLException excepcionSql) {
             LOGGER.log(Level.SEVERE, "Error al insertar entrega documentacion", excepcionSql);
-            if (excepcionSql.getMessage().contains(ERROR_CONEXION)) {
+            if (esErrorDeConexion(excepcionSql)) {
                 throw new UsuariosExcepcion("No se pudo conectar al servidor. Verifique que la base de datos este encendida");
             }
             throw new UsuariosExcepcion("Error al agregar entrega documentacion");
         } finally {
             try {
-                if (insercion != null) {
+                if (insercion != null){
                     insercion.close();
                 }
-                if (conexion != null) {
+                if (conexion != null){
                     conexion.close();
                 }
             } catch (SQLException excepcionSql) {

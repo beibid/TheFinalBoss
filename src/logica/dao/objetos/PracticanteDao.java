@@ -24,6 +24,30 @@ public class PracticanteDao implements PracticanteDaoInterfaz {
     private static final String ERROR_DUPLICADO = "Duplicate entry";
     private static final Logger LOGGER = Logger.getLogger(PracticanteDao.class.getName());
 
+    /**
+     * Verifica si la excepcion SQL es un error de conexion a la base de datos.
+     * @param excepcion la excepcion SQL a verificar
+     * @return true si es un error de conexion, false en caso contrario
+     */
+    private boolean esErrorDeConexion(SQLException excepcion) {
+        return excepcion.getMessage() != null && excepcion.getMessage().contains(ERROR_CONEXION);
+    }
+
+    /**
+     * Verifica si la excepcion SQL es un error de registro duplicado.
+     * @param excepcion la excepcion SQL a verificar
+     * @return true si es un error de duplicado, false en caso contrario
+     */
+    private boolean esErrorDuplicado(SQLException excepcion) {
+        return excepcion.getMessage() != null && excepcion.getMessage().contains(ERROR_DUPLICADO);
+    }
+
+    /**
+     * Inserta un nuevo practicante en la base de datos.
+     * @param practicante el practicante a insertar
+     * @return el numero de filas afectadas
+     * @throws UsuariosExcepcion si ocurre un error al insertar o de conexion
+     */
     @Override
     public int insertarPracticante(Practicante practicante) throws UsuariosExcepcion {
         String consultaUsuario = "INSERT INTO usuario (nombre, apellidos, contrasena, estado, rol, correo) VALUES (?, ?, ?, ?, 'Practicante', ?)";
@@ -56,21 +80,22 @@ public class PracticanteDao implements PracticanteDaoInterfaz {
             LOGGER.info("Practicante insertado correctamente con ID de usuario: " + idUsuarioGenerado);
         } catch (SQLException excepcionSql) {
             LOGGER.log(Level.SEVERE, "Error al insertar practicante", excepcionSql);
-            if (excepcionSql.getMessage().contains(ERROR_CONEXION)) {
+            if (esErrorDeConexion(excepcionSql)) {
                 throw new UsuariosExcepcion("No se pudo conectar al servidor. Verifique que la base de datos este encendida");
-            } else if (excepcionSql.getMessage().contains(ERROR_DUPLICADO)) {
+            }
+            if (esErrorDuplicado(excepcionSql)) {
                 throw new RegistroDuplicadoExcepcion("La matricula ingresada ya existe", excepcionSql);
             }
             throw new UsuariosExcepcion("Error al insertar practicante", excepcionSql);
         } finally {
             try {
-                if (insercionPracticante != null) {
+                if (insercionPracticante != null){
                     insercionPracticante.close();
                 }
-                if (insercionUsuario != null) {
+                if (insercionUsuario != null){
                     insercionUsuario.close();
                 }
-                if (conexionBaseDeDatos != null) {
+                if (conexionBaseDeDatos != null){
                     conexionBaseDeDatos.close();
                 }
             } catch (SQLException excepcionSql) {
@@ -80,6 +105,12 @@ public class PracticanteDao implements PracticanteDaoInterfaz {
         return filasAfectadas;
     }
 
+    /**
+     * Inactiva un practicante en la base de datos.
+     * @param matricula la matricula del practicante a inactivar
+     * @return el numero de filas afectadas
+     * @throws UsuariosExcepcion si ocurre un error al inactivar o de conexion
+     */
     public int inactivarPracticante(String matricula) throws UsuariosExcepcion {
         if (matricula == null) {
             throw new UsuariosExcepcion("La matricula no puede ser nula");
@@ -100,25 +131,32 @@ public class PracticanteDao implements PracticanteDaoInterfaz {
             LOGGER.info("Practicante inactivado correctamente: " + matricula);
         } catch (SQLException excepcionSql) {
             LOGGER.log(Level.SEVERE, "Error al inactivar practicante", excepcionSql);
-            if (excepcionSql.getMessage().contains(ERROR_CONEXION)) {
+            if (esErrorDeConexion(excepcionSql)) {
                 throw new UsuariosExcepcion("No se pudo conectar al servidor. Verifique que la base de datos este encendida");
             }
             throw new UsuariosExcepcion("Error al inactivar practicante", excepcionSql);
         } finally {
             try {
-                if (actualizacion != null) {
+                if (actualizacion != null){
                     actualizacion.close();
                 }
                 if (conexionBaseDeDatos != null) {
                     conexionBaseDeDatos.close();
                 }
-            } catch (SQLException excepcionSQL) {
-                LOGGER.log(Level.SEVERE, "Error al cerrar la conexion", excepcionSQL);
+            } catch (SQLException excepcionSql) {
+                LOGGER.log(Level.SEVERE, "Error al cerrar la conexion", excepcionSql);
             }
         }
         return filasAfectadas;
     }
 
+    /**
+     * Modifica los datos de un practicante en la base de datos.
+     * @param matricula la matricula del practicante a modificar
+     * @param practicante el practicante con los nuevos datos
+     * @return el numero de filas afectadas
+     * @throws UsuariosExcepcion si ocurre un error al modificar o de conexion
+     */
     public int modificarPracticante(String matricula, Practicante practicante) throws UsuariosExcepcion {
         if (matricula == null) {
             throw new UsuariosExcepcion("La matricula no puede ser nula");
@@ -153,13 +191,13 @@ public class PracticanteDao implements PracticanteDaoInterfaz {
             LOGGER.info("Practicante modificado correctamente: " + matricula);
         } catch (SQLException excepcionSql) {
             LOGGER.log(Level.SEVERE, "Error al modificar practicante", excepcionSql);
-            if (excepcionSql.getMessage().contains(ERROR_CONEXION)) {
+            if (esErrorDeConexion(excepcionSql)) {
                 throw new UsuariosExcepcion("No se pudo conectar al servidor. Verifique que la base de datos este encendida");
             }
             throw new UsuariosExcepcion("Error al modificar practicante", excepcionSql);
         } finally {
             try {
-                if (actualizacionPracticante != null) {
+                if (actualizacionPracticante != null){
                     actualizacionPracticante.close();
                 }
                 if (actualizacionUsuario != null) {
@@ -175,6 +213,11 @@ public class PracticanteDao implements PracticanteDaoInterfaz {
         return filasAfectadas;
     }
 
+    /**
+     * Obtiene la lista de practicantes activos en el sistema.
+     * @return lista de practicantes con estado activo
+     * @throws UsuariosExcepcion si ocurre un error al consultar o de conexion
+     */
     public List<Practicante> obtenerPracticantesActivos() throws UsuariosExcepcion {
         String consulta = "SELECT u.idUsuario, u.nombre, u.apellidos, u.correo, u.estado, u.contrasena, " +
                 "p.matricula, p.lenguaIndigena, p.genero " +
@@ -203,7 +246,7 @@ public class PracticanteDao implements PracticanteDaoInterfaz {
             }
         } catch (SQLException excepcionSql) {
             LOGGER.log(Level.SEVERE, "Error al obtener practicantes activos", excepcionSql);
-            if (excepcionSql.getMessage().contains(ERROR_CONEXION)) {
+            if (esErrorDeConexion(excepcionSql)) {
                 throw new UsuariosExcepcion("No se pudo conectar al servidor. Verifique que la base de datos este encendida");
             }
             throw new UsuariosExcepcion("Error al obtener practicantes activos", excepcionSql);
@@ -222,6 +265,13 @@ public class PracticanteDao implements PracticanteDaoInterfaz {
         return practicantes;
     }
 
+    /**
+     * Asigna un proyecto a un practicante mediante un procedimiento almacenado.
+     * @param matricula la matricula del practicante
+     * @param idProyecto el ID del proyecto a asignar
+     * @return 1 si la asignacion fue exitosa
+     * @throws UsuariosExcepcion si ocurre un error al asignar o de conexion
+     */
     public int asignarProyecto(String matricula, int idProyecto) throws UsuariosExcepcion {
         Connection conexionBaseDeDatos = null;
         int filasAfectadas = 0;
@@ -235,7 +285,7 @@ public class PracticanteDao implements PracticanteDaoInterfaz {
             LOGGER.info("Proyecto asignado correctamente al practicante: " + matricula);
         } catch (SQLException excepcionSql) {
             LOGGER.log(Level.SEVERE, "Error al asignar proyecto", excepcionSql);
-            if (excepcionSql.getMessage().contains(ERROR_CONEXION)) {
+            if (esErrorDeConexion(excepcionSql)) {
                 throw new UsuariosExcepcion("No se pudo conectar al servidor. Verifique que la base de datos este encendida");
             }
             throw new UsuariosExcepcion(excepcionSql.getMessage(), excepcionSql);
@@ -251,6 +301,12 @@ public class PracticanteDao implements PracticanteDaoInterfaz {
         return filasAfectadas;
     }
 
+    /**
+     * Obtiene la lista de practicantes activos asignados a un profesor.
+     * @param idProfesor el ID del profesor
+     * @return lista de practicantes activos del profesor
+     * @throws UsuariosExcepcion si ocurre un error al consultar o de conexion
+     */
     public List<Practicante> obtenerPracticantesPorProfesor(int idProfesor) throws UsuariosExcepcion {
         String consulta = "SELECT u.idUsuario, u.nombre, u.apellidos, u.correo, u.estado, u.contrasena, " +
                 "p.matricula, p.lenguaIndigena, p.genero " +
@@ -280,16 +336,16 @@ public class PracticanteDao implements PracticanteDaoInterfaz {
             }
         } catch (SQLException excepcionSql) {
             LOGGER.log(Level.SEVERE, "Error al obtener practicantes por profesor", excepcionSql);
-            if (excepcionSql.getMessage().contains(ERROR_CONEXION)) {
+            if (esErrorDeConexion(excepcionSql)) {
                 throw new UsuariosExcepcion("No se pudo conectar al servidor. Verifique que la base de datos este encendida");
             }
             throw new UsuariosExcepcion("Error al obtener practicantes por profesor", excepcionSql);
         } finally {
             try {
-                if (consultaPracticantes != null) {
+                if (consultaPracticantes != null){
                     consultaPracticantes.close();
                 }
-                if (conexionBaseDeDatos != null) {
+                if (conexionBaseDeDatos != null){
                     conexionBaseDeDatos.close();
                 }
             } catch (SQLException excepcionSql) {

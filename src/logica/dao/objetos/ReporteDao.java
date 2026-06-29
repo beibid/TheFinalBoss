@@ -19,10 +19,21 @@ public class ReporteDao implements ReporteDaoInterfaz {
     private static final String ERROR_CONEXION = "No se pudo conectar";
     private static final Logger LOGGER = Logger.getLogger(ReporteDao.class.getName());
 
+    /**
+     * Verifica si la excepcion SQL es un error de conexion a la base de datos.
+     * @param excepcion la excepcion SQL a verificar
+     * @return true si es un error de conexion, false en caso contrario
+     */
     private boolean esErrorDeConexion(SQLException excepcion) {
         return excepcion.getMessage() != null && excepcion.getMessage().contains(ERROR_CONEXION);
     }
 
+    /**
+     * Agrega un nuevo reporte en la base de datos.
+     * @param reporte el reporte a insertar
+     * @return el numero de filas afectadas
+     * @throws MensajeriaExcepcion si ocurre un error al insertar o de conexion
+     */
     @Override
     public int agregarReporte(Reporte reporte) throws MensajeriaExcepcion {
         if (reporte.getMatriculaPracticante() == null) {
@@ -54,8 +65,12 @@ public class ReporteDao implements ReporteDaoInterfaz {
             throw new MensajeriaExcepcion("Error al agregar el reporte", excepcionSql);
         } finally {
             try {
-                if (insertarEnBaseDeDatos != null) insertarEnBaseDeDatos.close();
-                if (conexionBaseDeDatos != null) conexionBaseDeDatos.close();
+                if (insertarEnBaseDeDatos != null) {
+                    insertarEnBaseDeDatos.close();
+                }
+                if (conexionBaseDeDatos != null) {
+                    conexionBaseDeDatos.close();
+                }
             } catch (SQLException excepcionSql) {
                 LOGGER.log(Level.SEVERE, "Error al cerrar la conexión", excepcionSql);
             }
@@ -63,6 +78,12 @@ public class ReporteDao implements ReporteDaoInterfaz {
         return filasAfectadas;
     }
 
+    /**
+     * Obtiene los reportes pendientes de un practicante segun su matricula.
+     * @param matricula la matricula del practicante
+     * @return lista de reportes pendientes
+     * @throws MensajeriaExcepcion si ocurre un error al consultar o de conexion
+     */
     public List<Reporte> obtenerReportesPorPracticante(String matricula) throws MensajeriaExcepcion {
         String consulta = "SELECT idReporte, tipoReporte, descripcion, fechaGeneracion, estado " +
                 "FROM reporte WHERE matricula = ? AND estado = 'Pendiente'";
@@ -93,8 +114,12 @@ public class ReporteDao implements ReporteDaoInterfaz {
             throw new MensajeriaExcepcion("Error al obtener reportes", excepcionSql);
         } finally {
             try {
-                if (consultaReportes != null) consultaReportes.close();
-                if (conexionBaseDeDatos != null) conexionBaseDeDatos.close();
+                if (consultaReportes != null) {
+                    consultaReportes.close();
+                }
+                if (conexionBaseDeDatos != null) {
+                    conexionBaseDeDatos.close();
+                }
             } catch (SQLException excepcionSql) {
                 LOGGER.log(Level.SEVERE, "Error al cerrar la conexión", excepcionSql);
             }
@@ -102,6 +127,15 @@ public class ReporteDao implements ReporteDaoInterfaz {
         return reportes;
     }
 
+    /**
+     * Registra la evaluacion de un reporte por parte del profesor.
+     * @param idReporte el ID del reporte a evaluar
+     * @param calificacion la calificacion asignada
+     * @param observaciones las observaciones del profesor
+     * @param numPersonalProfesor el numero de personal del profesor evaluador
+     * @return el numero de filas afectadas
+     * @throws MensajeriaExcepcion si ocurre un error al evaluar o de conexion
+     */
     public int evaluarReporte(int idReporte, double calificacion, String observaciones, String numPersonalProfesor) throws MensajeriaExcepcion {
         String consulta = "UPDATE reporte SET calificacion = ?, observacionesProf = ?, " +
                 "numPersonalProfesor = ?, estado = 'Evaluado' WHERE idReporte = ?";
@@ -125,8 +159,12 @@ public class ReporteDao implements ReporteDaoInterfaz {
             throw new MensajeriaExcepcion("Error al evaluar reporte", excepcionSql);
         } finally {
             try {
-                if (actualizacion != null) actualizacion.close();
-                if (conexionBaseDeDatos != null) conexionBaseDeDatos.close();
+                if (actualizacion != null) {
+                    actualizacion.close();
+                }
+                if (conexionBaseDeDatos != null) {
+                    conexionBaseDeDatos.close();
+                }
             } catch (SQLException excepcionSql) {
                 LOGGER.log(Level.SEVERE, "Error al cerrar la conexión", excepcionSql);
             }
@@ -134,6 +172,12 @@ public class ReporteDao implements ReporteDaoInterfaz {
         return filasAfectadas;
     }
 
+    /**
+     * Obtiene todos los reportes de un practicante ordenados por fecha de generacion.
+     * @param matricula la matricula del practicante
+     * @return lista de reportes del practicante
+     * @throws MensajeriaExcepcion si ocurre un error al consultar o de conexion
+     */
     public List<Reporte> obtenerReportesPorMatricula(String matricula) throws MensajeriaExcepcion {
         String consulta = "SELECT idReporte, tipoReporte, descripcion, fechaGeneracion, calificacion, " +
                 "observacionesProf, estado FROM reporte WHERE matricula = ? ORDER BY fechaGeneracion DESC";
@@ -166,8 +210,12 @@ public class ReporteDao implements ReporteDaoInterfaz {
             throw new MensajeriaExcepcion("Error al obtener reportes por matricula", excepcionSql);
         } finally {
             try {
-                if (consultaReportes != null) consultaReportes.close();
-                if (conexionBaseDeDatos != null) conexionBaseDeDatos.close();
+                if (consultaReportes != null) {
+                    consultaReportes.close();
+                }
+                if (conexionBaseDeDatos != null) {
+                    conexionBaseDeDatos.close();
+                }
             } catch (SQLException excepcionSql) {
                 LOGGER.log(Level.SEVERE, "Error al cerrar la conexión", excepcionSql);
             }
@@ -175,6 +223,13 @@ public class ReporteDao implements ReporteDaoInterfaz {
         return reportes;
     }
 
+    /**
+     * Cuenta los reportes evaluados de un tipo especifico para un practicante.
+     * @param matricula la matricula del practicante
+     * @param tipoReporte el tipo de reporte a contar
+     * @return el total de reportes evaluados del tipo indicado
+     * @throws MensajeriaExcepcion si ocurre un error al consultar o de conexion
+     */
     public int contarReportesEvaluados(String matricula, String tipoReporte) throws MensajeriaExcepcion {
         String consulta = "SELECT COUNT(*) FROM reporte " +
                 "WHERE matricula = ? AND tipoReporte = ? AND estado = 'Evaluado'";
@@ -198,8 +253,12 @@ public class ReporteDao implements ReporteDaoInterfaz {
             throw new MensajeriaExcepcion("Error al contar reportes evaluados", excepcionSql);
         } finally {
             try {
-                if (sentencia != null) sentencia.close();
-                if (conexionBaseDeDatos != null) conexionBaseDeDatos.close();
+                if (sentencia != null) {
+                    sentencia.close();
+                }
+                if (conexionBaseDeDatos != null) {
+                    conexionBaseDeDatos.close();
+                }
             } catch (SQLException excepcionSql) {
                 LOGGER.log(Level.SEVERE, "Error al cerrar la conexion", excepcionSql);
             }
@@ -207,6 +266,12 @@ public class ReporteDao implements ReporteDaoInterfaz {
         return totalReportes;
     }
 
+    /**
+     * Verifica si ya existe un reporte mensual registrado en el mes actual para un practicante.
+     * @param matricula la matricula del practicante
+     * @return true si ya existe un reporte mensual en el mes actual, false en caso contrario
+     * @throws MensajeriaExcepcion si ocurre un error al consultar o de conexion
+     */
     public boolean existeReporteMensualEnMesActual(String matricula) throws MensajeriaExcepcion {
         String consulta = "SELECT COUNT(*) FROM reporte " +
                 "WHERE matricula = ? AND tipoReporte = 'Mensual' " +
@@ -231,8 +296,12 @@ public class ReporteDao implements ReporteDaoInterfaz {
             throw new MensajeriaExcepcion("Error al verificar reporte mensual", excepcionSql);
         } finally {
             try {
-                if (sentencia != null) sentencia.close();
-                if (conexionBaseDeDatos != null) conexionBaseDeDatos.close();
+                if (sentencia != null) {
+                    sentencia.close();
+                }
+                if (conexionBaseDeDatos != null) {
+                    conexionBaseDeDatos.close();
+                }
             } catch (SQLException excepcionSql) {
                 LOGGER.log(Level.SEVERE, "Error al cerrar la conexion", excepcionSql);
             }

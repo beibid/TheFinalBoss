@@ -17,6 +17,21 @@ public class AdministradorDao implements AdministradorDaoInterfaz {
     private static final String ERROR_CONEXION = "No se pudo conectar";
     private static final Logger LOGGER = Logger.getLogger(AdministradorDao.class.getName());
 
+    /**
+     * Verifica si la excepcion SQL es un error de conexion a la base de datos.
+     * @param excepcion la excepcion SQL a verificar
+     * @return true si es un error de conexion, false en caso contrario
+     */
+    private boolean esErrorDeConexion(SQLException excepcion) {
+        return excepcion.getMessage() != null && excepcion.getMessage().contains(ERROR_CONEXION);
+    }
+
+    /**
+     * Inserta un nuevo administrador en la base de datos.
+     * @param administrador el administrador a insertar
+     * @return el numero de filas afectadas
+     * @throws UsuariosExcepcion si ocurre un error al insertar o de conexion
+     */
     @Override
     public int insertarAdministrador(Administrador administrador) throws UsuariosExcepcion {
         String consultaUsuario = "INSERT INTO usuario (nombre, apellidos, contrasena, estado, rol, correo) VALUES (?, ?, ?, ?, 'Administrador', ?)";
@@ -25,7 +40,6 @@ public class AdministradorDao implements AdministradorDaoInterfaz {
         PreparedStatement insercionUsuario = null;
         PreparedStatement insercionAdministrador = null;
         int filasAfectadas = 0;
-
         try {
             conexionBaseDeDatos = ConexionBaseDeDatos.getInstance().conectar();
             insercionUsuario = conexionBaseDeDatos.prepareStatement(consultaUsuario, Statement.RETURN_GENERATED_KEYS);
@@ -35,12 +49,10 @@ public class AdministradorDao implements AdministradorDaoInterfaz {
             insercionUsuario.setString(4, administrador.getEstado().toString());
             insercionUsuario.setString(5, administrador.getCorreo());
             insercionUsuario.executeUpdate();
-
             ResultSet tomarLlave = insercionUsuario.getGeneratedKeys();
             if (!tomarLlave.next()) {
                 throw new UsuariosExcepcion("No se obtuvo el ID del usuario insertado");
             }
-
             int idUsuarioGenerado = tomarLlave.getInt(1);
             insercionAdministrador = conexionBaseDeDatos.prepareStatement(consultaAdministrador);
             insercionAdministrador.setString(1, administrador.getNumeroDePersonalAdministrador());
@@ -49,13 +61,13 @@ public class AdministradorDao implements AdministradorDaoInterfaz {
             LOGGER.info("Administrador insertado correctamente con ID de usuario: " + idUsuarioGenerado);
         } catch (SQLException excepcionSql) {
             LOGGER.log(Level.SEVERE, "Error en base de datos", excepcionSql);
-            if (excepcionSql.getMessage().contains(ERROR_CONEXION)) {
+            if (esErrorDeConexion(excepcionSql)) {
                 throw new UsuariosExcepcion("No se pudo conectar al servidor. Verifique que la base de datos este encendida");
             }
             throw new UsuariosExcepcion("Error al insertar el administrador", excepcionSql);
         } finally {
             try {
-                if (insercionAdministrador != null) {
+                if (insercionAdministrador != null){
                     insercionAdministrador.close();
                 }
                 if (insercionUsuario != null) {
