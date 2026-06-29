@@ -10,7 +10,6 @@ import javax.mail.internet.MimeMessage;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
 public class ServicioCorreo {
 
     private static final String CORREO_REMITENTE = "bichitoespimo@gmail.com";

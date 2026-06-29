@@ -49,5 +49,6 @@
     <orderEntry type="library" name="slf4j-api-2.0.13" level="project" />
     <orderEntry type="library" name="commons-9.6.0" level="project" />
     <orderEntry type="library" name="openjfx-monocle-21.0.2" level="project" />
+    <orderEntry type="library" name="activation-1.1.1" level="project" />
   </component>
 </module>
