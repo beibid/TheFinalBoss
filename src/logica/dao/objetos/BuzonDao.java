@@ -13,6 +13,8 @@ import java.util.logging.Logger;
 
 
 public class BuzonDao implements BuzonDaoInterfaz {
+
+    private static final String ERROR_CONEXION = "No se pudo conectar";
     private static final Logger LOGGER = Logger.getLogger(BuzonDao.class.getName());
 
     @Override
@@ -30,8 +32,11 @@ public class BuzonDao implements BuzonDaoInterfaz {
             filasAfectadas = insercion.executeUpdate();
             LOGGER.info("Buzon insertado correctamente");
         } catch (SQLException excepcionSql) {
-            LOGGER.log(Level.SEVERE, "Error al insertar buzon", excepcionSql);
-            throw new MensajeriaExcepcion("Error al agregar buzon", excepcionSql);
+            LOGGER.log(Level.SEVERE, "Error en base de datos", excepcionSql);
+            if (excepcionSql.getMessage().contains(ERROR_CONEXION)) {
+                throw new MensajeriaExcepcion("No se pudo conectar al servidor. Verifique que la base de datos este encendida");
+            }
+            throw new MensajeriaExcepcion("Error inesperado, no fue posible agregar buzon", excepcionSql);
         } finally {
             try {
                 if (insercion != null) {

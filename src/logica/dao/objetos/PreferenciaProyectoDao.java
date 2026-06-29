@@ -1,6 +1,5 @@
 package logica.dao.objetos;
 
-
 import acceso.bd.ConexionBaseDeDatos;
 import logica.dao.excepciones.UsuariosExcepcion;
 import logica.dao.interfaces.PreferenciaProyectoDaoInterfaz;
@@ -14,27 +13,22 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-
 public class PreferenciaProyectoDao implements PreferenciaProyectoDaoInterfaz {
 
+    private static final String ERROR_CONEXION = "No se pudo conectar";
     private static final Logger LOGGER = Logger.getLogger(PreferenciaProyectoDao.class.getName());
 
     @Override
-    public void guardarPreferencias(String matricula, List<Integer> idProyectosOrdenados)
-            throws UsuariosExcepcion {
-
+    public void guardarPreferencias(String matricula, List<Integer> idProyectosOrdenados) throws UsuariosExcepcion {
         Connection conexionBaseDeDatos = null;
         CallableStatement eliminar = null;
         CallableStatement insertar = null;
-
         try {
             conexionBaseDeDatos = ConexionBaseDeDatos.getInstance().conectar();
             conexionBaseDeDatos.setAutoCommit(false);
-
             eliminar = conexionBaseDeDatos.prepareCall("{CALL EliminarPreferencias(?)}");
             eliminar.setString(1, matricula);
             eliminar.execute();
-
             insertar = conexionBaseDeDatos.prepareCall("{CALL GuardarPreferencias(?, ?, ?)}");
             for (int i = 0; i < idProyectosOrdenados.size(); i++) {
                 insertar.setString(1, matricula);
@@ -43,10 +37,8 @@ public class PreferenciaProyectoDao implements PreferenciaProyectoDaoInterfaz {
                 insertar.addBatch();
             }
             insertar.executeBatch();
-
             conexionBaseDeDatos.commit();
             LOGGER.info("Preferencias guardadas correctamente para: " + matricula);
-
         } catch (SQLException excepcionSql) {
             LOGGER.log(Level.SEVERE, "Error al guardar preferencias", excepcionSql);
             if (conexionBaseDeDatos != null) {
@@ -57,8 +49,10 @@ public class PreferenciaProyectoDao implements PreferenciaProyectoDaoInterfaz {
                     LOGGER.log(Level.SEVERE, "Error al ejecutar rollback", excepcionRollback);
                 }
             }
-            throw new UsuariosExcepcion(excepcionSql.getMessage(), excepcionSql);
-
+            if (excepcionSql.getMessage() != null && excepcionSql.getMessage().contains(ERROR_CONEXION)) {
+                throw new UsuariosExcepcion("No se pudo conectar al servidor. Verifique que la base de datos este encendida");
+            }
+            throw new UsuariosExcepcion("Error al guardar preferencias", excepcionSql);
         } finally {
             try {
                 if (insertar != null) {
@@ -72,24 +66,21 @@ public class PreferenciaProyectoDao implements PreferenciaProyectoDaoInterfaz {
                     conexionBaseDeDatos.close();
                 }
             } catch (SQLException excepcionSql) {
-                LOGGER.log(Level.SEVERE, "Error al cerrar la conexión", excepcionSql);
+                LOGGER.log(Level.SEVERE, "Error al cerrar la conexion", excepcionSql);
             }
         }
     }
 
     @Override
     public List<PreferenciaProyecto> obtenerPreferencias(String matricula) throws UsuariosExcepcion {
-
-        Connection conexionBaseDeDatos  = null;
+        Connection conexionBaseDeDatos = null;
         CallableStatement consultaPreferencias = null;
         List<PreferenciaProyecto> lista = new ArrayList<>();
-
         try {
             conexionBaseDeDatos = ConexionBaseDeDatos.getInstance().conectar();
             consultaPreferencias = conexionBaseDeDatos.prepareCall("{CALL ObtenerPreferencias(?)}");
             consultaPreferencias.setString(1, matricula);
             ResultSet resultado = consultaPreferencias.executeQuery();
-
             while (resultado.next()) {
                 PreferenciaProyecto preferencia = new PreferenciaProyecto();
                 preferencia.setMatricula(matricula);
@@ -101,13 +92,13 @@ public class PreferenciaProyectoDao implements PreferenciaProyectoDaoInterfaz {
                 preferencia.setEstado(resultado.getString("estado"));
                 lista.add(preferencia);
             }
-
-            LOGGER.info("Preferencias obtenidas para: " + matricula + " — total: " + lista.size());
-
+            LOGGER.info("Preferencias obtenidas para: " + matricula + " - total: " + lista.size());
         } catch (SQLException excepcionSql) {
             LOGGER.log(Level.SEVERE, "Error al obtener preferencias", excepcionSql);
-            throw new UsuariosExcepcion(excepcionSql.getMessage(), excepcionSql);
-
+            if (excepcionSql.getMessage() != null && excepcionSql.getMessage().contains(ERROR_CONEXION)) {
+                throw new UsuariosExcepcion("No se pudo conectar al servidor. Verifique que la base de datos este encendida");
+            }
+            throw new UsuariosExcepcion("Error al obtener preferencias", excepcionSql);
         } finally {
             try {
                 if (consultaPreferencias != null) {
@@ -117,7 +108,7 @@ public class PreferenciaProyectoDao implements PreferenciaProyectoDaoInterfaz {
                     conexionBaseDeDatos.close();
                 }
             } catch (SQLException excepcionSql) {
-                LOGGER.log(Level.SEVERE, "Error al cerrar la conexión", excepcionSql);
+                LOGGER.log(Level.SEVERE, "Error al cerrar la conexion", excepcionSql);
             }
         }
         return lista;

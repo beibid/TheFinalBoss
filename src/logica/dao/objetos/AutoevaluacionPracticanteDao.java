@@ -17,7 +17,7 @@ import java.util.logging.Logger;
 
 public class AutoevaluacionPracticanteDao implements AutoevaluacionPracticanteDaoInterfaz {
 
-
+    private static final String ERROR_CONEXION = "No se pudo conectar";
     private static final Logger LOGGER = Logger.getLogger(AutoevaluacionPracticanteDao.class.getName());
 
     @Override
@@ -46,8 +46,11 @@ public class AutoevaluacionPracticanteDao implements AutoevaluacionPracticanteDa
             String mensaje = registro.getString(13);
             LOGGER.info(mensaje);
         } catch (SQLException excepcionSql) {
-            LOGGER.log(Level.SEVERE, "Error al registrar la autoevaluación", excepcionSql);
-            throw new MensajeriaExcepcion("Error al registrar la autoevaluación", excepcionSql);
+            LOGGER.log(Level.SEVERE, "Error en base de datos", excepcionSql);
+            if (excepcionSql.getMessage().contains(ERROR_CONEXION)) {
+                throw new MensajeriaExcepcion("No se pudo conectar al servidor. Verifique que la base de datos este encendida");
+            }
+            throw new MensajeriaExcepcion("Error inesperado, no fue posible registrar la autoevaluacion", excepcionSql);
         } finally {
             try {
                 if (registro != null) {
@@ -84,8 +87,11 @@ public class AutoevaluacionPracticanteDao implements AutoevaluacionPracticanteDa
             }
             LOGGER.info(sentencia.getString(2));
         } catch (SQLException excepcionSql) {
-            LOGGER.log(Level.SEVERE, "Error al obtener info de autoevaluación", excepcionSql);
-            throw new MensajeriaExcepcion("Error al obtener info de autoevaluación", excepcionSql);
+            LOGGER.log(Level.SEVERE, "Error en base de datos", excepcionSql);
+            if (excepcionSql.getMessage().contains(ERROR_CONEXION)) {
+                throw new MensajeriaExcepcion("No se pudo conectar al servidor. Verifique que la base de datos este encendida");
+            }
+            throw new MensajeriaExcepcion("Error inesperado, no fue posible obtener informacion", excepcionSql);
         } finally {
             try {
                 if (sentencia != null) {
@@ -132,8 +138,11 @@ public class AutoevaluacionPracticanteDao implements AutoevaluacionPracticanteDa
             }
             LOGGER.info("Autoevaluación obtenida para: " + matricula);
         } catch (SQLException excepcionSql) {
-            LOGGER.log(Level.SEVERE, "Error al obtener autoevaluación", excepcionSql);
-            throw new MensajeriaExcepcion("Error al obtener autoevaluación", excepcionSql);
+            LOGGER.log(Level.SEVERE, "Error en base de datos", excepcionSql);
+            if (excepcionSql.getMessage().contains(ERROR_CONEXION)) {
+                throw new MensajeriaExcepcion("No se pudo conectar al servidor. Verifique que la base de datos este encendida");
+            }
+            throw new MensajeriaExcepcion("Error inesperado, no fue posible obtener la autoevaluacion", excepcionSql);
         } finally {
             try {
                 if (sentencia != null) {

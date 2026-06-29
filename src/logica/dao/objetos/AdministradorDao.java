@@ -14,6 +14,7 @@ import java.util.logging.Logger;
 
 public class AdministradorDao implements AdministradorDaoInterfaz {
 
+    private static final String ERROR_CONEXION = "No se pudo conectar";
     private static final Logger LOGGER = Logger.getLogger(AdministradorDao.class.getName());
 
     @Override
@@ -47,8 +48,11 @@ public class AdministradorDao implements AdministradorDaoInterfaz {
             filasAfectadas = insercionAdministrador.executeUpdate();
             LOGGER.info("Administrador insertado correctamente con ID de usuario: " + idUsuarioGenerado);
         } catch (SQLException excepcionSql) {
-            LOGGER.log(Level.SEVERE, "Error al insertar Administrador", excepcionSql);
-            throw new UsuariosExcepcion("Error al insertar administrador", excepcionSql);
+            LOGGER.log(Level.SEVERE, "Error en base de datos", excepcionSql);
+            if (excepcionSql.getMessage().contains(ERROR_CONEXION)) {
+                throw new UsuariosExcepcion("No se pudo conectar al servidor. Verifique que la base de datos este encendida");
+            }
+            throw new UsuariosExcepcion("Error al insertar el administrador", excepcionSql);
         } finally {
             try {
                 if (insercionAdministrador != null) {

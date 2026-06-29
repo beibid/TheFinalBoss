@@ -5,7 +5,6 @@ import logica.dao.excepciones.UsuariosExcepcion;
 import logica.dao.interfaces.PeriodoUniversitarioDaoInterfaz;
 import logica.dominio.PeriodoUniversitario;
 import logica.dominio.enums.EstadoPeriodo;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -16,6 +15,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class PeriodoUniversitarioDao implements PeriodoUniversitarioDaoInterfaz {
+
+    private static final String ERROR_CONEXION = "No se pudo conectar";
     private static final Logger LOGGER = Logger.getLogger(PeriodoUniversitarioDao.class.getName());
 
     @Override
@@ -34,6 +35,9 @@ public class PeriodoUniversitarioDao implements PeriodoUniversitarioDaoInterfaz 
             LOGGER.info("Periodo universitario insertado correctamente");
         } catch (SQLException excepcionSql) {
             LOGGER.log(Level.SEVERE, "Error al insertar el periodo universitario", excepcionSql);
+            if (excepcionSql.getMessage().contains(ERROR_CONEXION)) {
+                throw new UsuariosExcepcion("No se pudo conectar al servidor. Verifique que la base de datos este encendida");
+            }
             throw new UsuariosExcepcion("Error al insertar el periodo universitario", excepcionSql);
         } finally {
             try {
@@ -44,7 +48,7 @@ public class PeriodoUniversitarioDao implements PeriodoUniversitarioDaoInterfaz 
                     conexionBaseDeDatos.close();
                 }
             } catch (SQLException excepcionSql) {
-                LOGGER.log(Level.SEVERE, "Error al cerrar la conexión", excepcionSql);
+                LOGGER.log(Level.SEVERE, "Error al cerrar la conexion", excepcionSql);
             }
         }
         return filasAfectadas;
@@ -66,6 +70,9 @@ public class PeriodoUniversitarioDao implements PeriodoUniversitarioDaoInterfaz 
             LOGGER.info("Verificacion de periodo abierto completada");
         } catch (SQLException excepcionSql) {
             LOGGER.log(Level.SEVERE, "Error al verificar periodo abierto", excepcionSql);
+            if (excepcionSql.getMessage().contains(ERROR_CONEXION)) {
+                throw new UsuariosExcepcion("No se pudo conectar al servidor. Verifique que la base de datos este encendida");
+            }
             throw new UsuariosExcepcion("Error al verificar periodo abierto", excepcionSql);
         } finally {
             try {
@@ -76,7 +83,7 @@ public class PeriodoUniversitarioDao implements PeriodoUniversitarioDaoInterfaz 
                     conexionBaseDeDatos.close();
                 }
             } catch (SQLException excepcionSql) {
-                LOGGER.log(Level.SEVERE, "Error al cerrar la conexión", excepcionSql);
+                LOGGER.log(Level.SEVERE, "Error al cerrar la conexion", excepcionSql);
             }
         }
         return hayPeriodoAbierto;
@@ -102,6 +109,9 @@ public class PeriodoUniversitarioDao implements PeriodoUniversitarioDaoInterfaz 
             LOGGER.info("Periodos abiertos obtenidos correctamente");
         } catch (SQLException excepcionSql) {
             LOGGER.log(Level.SEVERE, "Error al obtener periodos abiertos", excepcionSql);
+            if (excepcionSql.getMessage().contains(ERROR_CONEXION)) {
+                throw new UsuariosExcepcion("No se pudo conectar al servidor. Verifique que la base de datos este encendida");
+            }
             throw new UsuariosExcepcion("Error al obtener periodos abiertos", excepcionSql);
         } finally {
             try {
@@ -112,7 +122,7 @@ public class PeriodoUniversitarioDao implements PeriodoUniversitarioDaoInterfaz 
                     conexionBaseDeDatos.close();
                 }
             } catch (SQLException excepcionSql) {
-                LOGGER.log(Level.SEVERE, "Error al cerrar la conexión", excepcionSql);
+                LOGGER.log(Level.SEVERE, "Error al cerrar la conexion", excepcionSql);
             }
         }
         return periodos;
@@ -131,6 +141,9 @@ public class PeriodoUniversitarioDao implements PeriodoUniversitarioDaoInterfaz 
             LOGGER.info("Periodo cerrado correctamente: " + idPeriodo);
         } catch (SQLException excepcionSql) {
             LOGGER.log(Level.SEVERE, "Error al cerrar el periodo", excepcionSql);
+            if (excepcionSql.getMessage().contains(ERROR_CONEXION)) {
+                throw new UsuariosExcepcion("No se pudo conectar al servidor. Verifique que la base de datos este encendida");
+            }
             throw new UsuariosExcepcion("Error al cerrar el periodo", excepcionSql);
         } finally {
             try {
@@ -141,7 +154,7 @@ public class PeriodoUniversitarioDao implements PeriodoUniversitarioDaoInterfaz 
                     conexionBaseDeDatos.close();
                 }
             } catch (SQLException excepcionSql) {
-                LOGGER.log(Level.SEVERE, "Error al cerrar la conexión", excepcionSql);
+                LOGGER.log(Level.SEVERE, "Error al cerrar la conexion", excepcionSql);
             }
         }
         return filasAfectadas;

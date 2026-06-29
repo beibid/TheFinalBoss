@@ -15,9 +15,15 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class SeccionDao implements SeccionDaoInterfaz {
+
+    private static final String ERROR_CONEXION = "No se pudo conectar";
     private static final Logger LOGGER = Logger.getLogger(SeccionDao.class.getName());
     private static final int ID_PERIODO_MINIMO_VALIDO = 1;
     private static final int ERROR_DUPLICADO_MYSQL = 1062;
+
+    private boolean esErrorDeConexion(SQLException excepcion) {
+        return excepcion.getMessage() != null && excepcion.getMessage().contains(ERROR_CONEXION);
+    }
 
     @Override
     public int agregarSeccion(Seccion seccion) throws UsuariosExcepcion, RegistroDuplicadoExcepcion {
@@ -38,18 +44,17 @@ public class SeccionDao implements SeccionDaoInterfaz {
             LOGGER.info("Seccion insertada correctamente");
         } catch (SQLException excepcionSql) {
             LOGGER.log(Level.SEVERE, "Error al insertar la seccion", excepcionSql);
+            if (esErrorDeConexion(excepcionSql)) {
+                throw new UsuariosExcepcion("No se pudo conectar al servidor. Verifique que la base de datos este encendida");
+            }
             if (excepcionSql.getErrorCode() == ERROR_DUPLICADO_MYSQL) {
                 throw new RegistroDuplicadoExcepcion("El NRC " + seccion.getNoSeccion() + " ya existe en ese periodo");
             }
             throw new UsuariosExcepcion("Error al agregar la seccion", excepcionSql);
         } finally {
             try {
-                if (insertarEnBaseDeDatos != null) {
-                    insertarEnBaseDeDatos.close();
-                }
-                if (conexionBaseDeDatos != null) {
-                    conexionBaseDeDatos.close();
-                }
+                if (insertarEnBaseDeDatos != null) insertarEnBaseDeDatos.close();
+                if (conexionBaseDeDatos != null) conexionBaseDeDatos.close();
             } catch (SQLException excepcionSql) {
                 LOGGER.log(Level.SEVERE, "Error al cerrar la conexion", excepcionSql);
             }
@@ -75,15 +80,14 @@ public class SeccionDao implements SeccionDaoInterfaz {
             LOGGER.info("Seccion modificada correctamente: " + noSeccion);
         } catch (SQLException excepcionSql) {
             LOGGER.log(Level.SEVERE, "Error al modificar la seccion", excepcionSql);
+            if (esErrorDeConexion(excepcionSql)) {
+                throw new UsuariosExcepcion("No se pudo conectar al servidor. Verifique que la base de datos este encendida");
+            }
             throw new UsuariosExcepcion("Error al modificar la seccion", excepcionSql);
         } finally {
             try {
-                if (actualizacion != null) {
-                    actualizacion.close();
-                }
-                if (conexionBaseDeDatos != null) {
-                    conexionBaseDeDatos.close();
-                }
+                if (actualizacion != null) actualizacion.close();
+                if (conexionBaseDeDatos != null) conexionBaseDeDatos.close();
             } catch (SQLException excepcionSql) {
                 LOGGER.log(Level.SEVERE, "Error al cerrar la conexion", excepcionSql);
             }
@@ -113,15 +117,14 @@ public class SeccionDao implements SeccionDaoInterfaz {
             }
         } catch (SQLException excepcionSql) {
             LOGGER.log(Level.SEVERE, "Error al obtener secciones", excepcionSql);
+            if (esErrorDeConexion(excepcionSql)) {
+                throw new UsuariosExcepcion("No se pudo conectar al servidor. Verifique que la base de datos este encendida");
+            }
             throw new UsuariosExcepcion("Error al obtener secciones", excepcionSql);
         } finally {
             try {
-                if (consultaSecciones != null) {
-                    consultaSecciones.close();
-                }
-                if (conexionBaseDeDatos != null) {
-                    conexionBaseDeDatos.close();
-                }
+                if (consultaSecciones != null) consultaSecciones.close();
+                if (conexionBaseDeDatos != null) conexionBaseDeDatos.close();
             } catch (SQLException excepcionSql) {
                 LOGGER.log(Level.SEVERE, "Error al cerrar la conexion", excepcionSql);
             }
@@ -152,15 +155,14 @@ public class SeccionDao implements SeccionDaoInterfaz {
             }
         } catch (SQLException excepcionSql) {
             LOGGER.log(Level.SEVERE, "Error al obtener secciones por profesor", excepcionSql);
+            if (esErrorDeConexion(excepcionSql)) {
+                throw new UsuariosExcepcion("No se pudo conectar al servidor. Verifique que la base de datos este encendida");
+            }
             throw new UsuariosExcepcion("Error al obtener secciones del profesor", excepcionSql);
         } finally {
             try {
-                if (consultaSecciones != null) {
-                    consultaSecciones.close();
-                }
-                if (conexionBaseDeDatos != null) {
-                    conexionBaseDeDatos.close();
-                }
+                if (consultaSecciones != null) consultaSecciones.close();
+                if (conexionBaseDeDatos != null) conexionBaseDeDatos.close();
             } catch (SQLException excepcionSql) {
                 LOGGER.log(Level.SEVERE, "Error al cerrar la conexion", excepcionSql);
             }

@@ -16,7 +16,13 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class ProyectoDao implements ProyectoDaoInterfaz {
+
+    private static final String ERROR_CONEXION = "No se pudo conectar";
     private static final Logger LOGGER = Logger.getLogger(ProyectoDao.class.getName());
+
+    private boolean esErrorDeConexion(SQLException excepcion) {
+        return excepcion.getMessage() != null && excepcion.getMessage().contains(ERROR_CONEXION);
+    }
 
     @Override
     public int agregarProyecto(Proyecto proyecto) throws MensajeriaExcepcion {
@@ -43,6 +49,9 @@ public class ProyectoDao implements ProyectoDaoInterfaz {
             LOGGER.info("Proyecto insertado correctamente");
         } catch (SQLException excepcionSql) {
             LOGGER.log(Level.SEVERE, "Error al insertar proyecto", excepcionSql);
+            if (esErrorDeConexion(excepcionSql)) {
+                throw new MensajeriaExcepcion("No se pudo conectar al servidor. Verifique que la base de datos este encendida");
+            }
             throw new MensajeriaExcepcion("Error al agregar el proyecto", excepcionSql);
         } finally {
             try {
@@ -86,6 +95,9 @@ public class ProyectoDao implements ProyectoDaoInterfaz {
             LOGGER.info("Proyecto modificado correctamente: " + idProyecto);
         } catch (SQLException excepcionSql) {
             LOGGER.log(Level.SEVERE, "Error al modificar proyecto", excepcionSql);
+            if (esErrorDeConexion(excepcionSql)) {
+                throw new MensajeriaExcepcion("No se pudo conectar al servidor. Verifique que la base de datos este encendida");
+            }
             throw new MensajeriaExcepcion("Error al modificar proyecto");
         } finally {
             try {
@@ -97,6 +109,7 @@ public class ProyectoDao implements ProyectoDaoInterfaz {
         }
         return filasAfectadas;
     }
+
     public List<Proyecto> obtenerProyectosDisponibles() throws MensajeriaExcepcion {
         String consulta = "SELECT p.idProyecto, p.nombreProyecto, p.estado, o.nombre AS nombreOrganizacion " +
                 "FROM proyecto p JOIN organizacion_vinculada o ON p.idOrganizacion = o.idOrganizacion " +
@@ -119,15 +132,14 @@ public class ProyectoDao implements ProyectoDaoInterfaz {
             }
         } catch (SQLException excepcionSql) {
             LOGGER.log(Level.SEVERE, "Error al obtener proyectos disponibles", excepcionSql);
+            if (esErrorDeConexion(excepcionSql)) {
+                throw new MensajeriaExcepcion("No se pudo conectar al servidor. Verifique que la base de datos este encendida");
+            }
             throw new MensajeriaExcepcion("Error al obtener proyectos disponibles", excepcionSql);
         } finally {
             try {
-                if (sentencia != null) {
-                    sentencia.close();
-                }
-                if (conexionBaseDeDatos != null) {
-                    conexionBaseDeDatos.close();
-                }
+                if (sentencia != null) sentencia.close();
+                if (conexionBaseDeDatos != null) conexionBaseDeDatos.close();
             } catch (SQLException excepcionSql) {
                 LOGGER.log(Level.SEVERE, "Error al cerrar conexión", excepcionSql);
             }
@@ -149,15 +161,14 @@ public class ProyectoDao implements ProyectoDaoInterfaz {
             LOGGER.info("Proyecto inactivado correctamente: " + idProyecto);
         } catch (SQLException excepcionSql) {
             LOGGER.log(Level.SEVERE, "Error al inactivar proyecto", excepcionSql);
+            if (esErrorDeConexion(excepcionSql)) {
+                throw new MensajeriaExcepcion("No se pudo conectar al servidor. Verifique que la base de datos este encendida");
+            }
             throw new MensajeriaExcepcion("Error al inactivar proyecto", excepcionSql);
         } finally {
             try {
-                if (actualizacion != null) {
-                    actualizacion.close();
-                }
-                if (conexionBaseDeDatos != null) {
-                    conexionBaseDeDatos.close();
-                }
+                if (actualizacion != null) actualizacion.close();
+                if (conexionBaseDeDatos != null) conexionBaseDeDatos.close();
             } catch (SQLException excepcionSql) {
                 LOGGER.log(Level.SEVERE, "Error al cerrar conexión", excepcionSql);
             }
@@ -190,15 +201,14 @@ public class ProyectoDao implements ProyectoDaoInterfaz {
             LOGGER.info("Proyecto cargado para practicante: " + matricula);
         } catch (SQLException excepcionSql) {
             LOGGER.log(Level.SEVERE, "Error al obtener proyecto del practicante", excepcionSql);
+            if (esErrorDeConexion(excepcionSql)) {
+                throw new MensajeriaExcepcion("No se pudo conectar al servidor. Verifique que la base de datos este encendida");
+            }
             throw new MensajeriaExcepcion("Error al obtener proyecto del practicante", excepcionSql);
         } finally {
             try {
-                if (sentencia != null) {
-                    sentencia.close();
-                }
-                if (conexionBaseDeDatos != null) {
-                    conexionBaseDeDatos.close();
-                }
+                if (sentencia != null) sentencia.close();
+                if (conexionBaseDeDatos != null) conexionBaseDeDatos.close();
             } catch (SQLException excepcionSql) {
                 LOGGER.log(Level.SEVERE, "Error al cerrar conexión", excepcionSql);
             }

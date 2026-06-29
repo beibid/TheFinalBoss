@@ -12,6 +12,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class PracticanteSeccionDao implements PracticanteSeccionDaoInterfaz {
+
+    private static final String ERROR_CONEXION = "No se pudo conectar";
     private static final Logger LOGGER = Logger.getLogger(PracticanteSeccionDao.class.getName());
     private static final int ID_PERIODO_MINIMO_VALIDO = 1;
     private static final int ERROR_DUPLICADO_MYSQL = 1062;
@@ -41,6 +43,9 @@ public class PracticanteSeccionDao implements PracticanteSeccionDaoInterfaz {
             LOGGER.info("PracticanteSeccion insertada correctamente");
         } catch (SQLException excepcionSql) {
             LOGGER.log(Level.SEVERE, "Error al insertar practicante_seccion", excepcionSql);
+            if (excepcionSql.getMessage() != null && excepcionSql.getMessage().contains(ERROR_CONEXION)) {
+                throw new UsuariosExcepcion("No se pudo conectar al servidor. Verifique que la base de datos este encendida");
+            }
             if (excepcionSql.getErrorCode() == ERROR_DUPLICADO_MYSQL) {
                 throw new RegistroDuplicadoExcepcion("El practicante ya esta asignado a una seccion en este periodo");
             }
@@ -87,6 +92,9 @@ public class PracticanteSeccionDao implements PracticanteSeccionDaoInterfaz {
             LOGGER.info("PracticanteSeccion modificada correctamente: " + matricula + " - " + noSeccion);
         } catch (SQLException excepcionSql) {
             LOGGER.log(Level.SEVERE, "Error al modificar practicante_seccion", excepcionSql);
+            if (excepcionSql.getMessage() != null && excepcionSql.getMessage().contains(ERROR_CONEXION)) {
+                throw new UsuariosExcepcion("No se pudo conectar al servidor. Verifique que la base de datos este encendida");
+            }
             throw new UsuariosExcepcion("Error al modificar practicante seccion", excepcionSql);
         } finally {
             try {

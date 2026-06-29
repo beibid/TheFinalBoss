@@ -1,6 +1,5 @@
 package logica.dao.objetos;
 
-
 import acceso.bd.ConexionBaseDeDatos;
 import logica.dominio.EntregaDocumentacion;
 import logica.dao.excepciones.UsuariosExcepcion;
@@ -11,8 +10,9 @@ import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-
 public class EntregaDocumentacionDao implements EntregaDocumentacionDaoInterfaz {
+
+    private static final String ERROR_CONEXION = "No se pudo conectar";
     private static final Logger LOGGER = Logger.getLogger(EntregaDocumentacionDao.class.getName());
 
     @Override
@@ -37,6 +37,9 @@ public class EntregaDocumentacionDao implements EntregaDocumentacionDaoInterfaz 
             LOGGER.info("EntregaDocumentacion insertada correctamente");
         } catch (SQLException excepcionSql) {
             LOGGER.log(Level.SEVERE, "Error al insertar entrega documentacion", excepcionSql);
+            if (excepcionSql.getMessage().contains(ERROR_CONEXION)) {
+                throw new UsuariosExcepcion("No se pudo conectar al servidor. Verifique que la base de datos este encendida");
+            }
             throw new UsuariosExcepcion("Error al agregar entrega documentacion");
         } finally {
             try {
@@ -47,7 +50,7 @@ public class EntregaDocumentacionDao implements EntregaDocumentacionDaoInterfaz 
                     conexion.close();
                 }
             } catch (SQLException excepcionSql) {
-                LOGGER.log(Level.SEVERE, "Error al cerrar la conexión", excepcionSql);
+                LOGGER.log(Level.SEVERE, "Error al cerrar la conexion", excepcionSql);
             }
         }
         return filasAfectadas;

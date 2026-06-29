@@ -18,7 +18,12 @@ import java.sql.SQLException;
 
 public class UsuarioDao implements UsuarioDaoInterfaz {
 
+    private static final String ERROR_CONEXION = "No se pudo conectar";
     private static final Logger LOGGER = Logger.getLogger(UsuarioDao.class.getName());
+
+    private boolean esErrorDeConexion(SQLException excepcion) {
+        return excepcion.getMessage() != null && excepcion.getMessage().contains(ERROR_CONEXION);
+    }
 
     @Override
     public int insertarUsuario(Usuario usuario) throws UsuariosExcepcion {
@@ -54,15 +59,14 @@ public class UsuarioDao implements UsuarioDaoInterfaz {
             }
         } catch (SQLException excepcionSql) {
             LOGGER.log(Level.SEVERE, "Error al insertar el usuario", excepcionSql);
+            if (esErrorDeConexion(excepcionSql)) {
+                throw new UsuariosExcepcion("No se pudo conectar al servidor. Verifique que la base de datos este encendida");
+            }
             throw new UsuariosExcepcion("Error al insertar usuario", excepcionSql);
         } finally {
             try {
-                if (insercionBaseDeDatos != null) {
-                    insercionBaseDeDatos.close();
-                }
-                if (conexionBaseDeDatos != null) {
-                    conexionBaseDeDatos.close();
-                }
+                if (insercionBaseDeDatos != null) insercionBaseDeDatos.close();
+                if (conexionBaseDeDatos != null) conexionBaseDeDatos.close();
             } catch (SQLException excepcionSql) {
                 LOGGER.log(Level.SEVERE, "Error al cerrar la conexión", excepcionSql);
             }
@@ -93,15 +97,14 @@ public class UsuarioDao implements UsuarioDaoInterfaz {
             }
         } catch (SQLException excepcionSql) {
             LOGGER.log(Level.SEVERE, "Error al buscar usuario", excepcionSql);
+            if (esErrorDeConexion(excepcionSql)) {
+                throw new UsuariosExcepcion("No se pudo conectar al servidor. Verifique que la base de datos este encendida");
+            }
             throw new UsuariosExcepcion("Error al buscar usuario", excepcionSql);
         } finally {
             try {
-                if (procedimiento != null) {
-                    procedimiento.close();
-                }
-                if (conexionBaseDeDatos != null) {
-                    conexionBaseDeDatos.close();
-                }
+                if (procedimiento != null) procedimiento.close();
+                if (conexionBaseDeDatos != null) conexionBaseDeDatos.close();
             } catch (SQLException excepcionSql) {
                 LOGGER.log(Level.SEVERE, "Error al cerrar la conexión", excepcionSql);
             }

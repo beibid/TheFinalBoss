@@ -1,6 +1,5 @@
 package logica.dao.objetos;
 
-
 import acceso.bd.ConexionBaseDeDatos;
 import logica.dominio.Mensaje;
 import logica.dao.excepciones.MensajeriaExcepcion;
@@ -16,8 +15,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
-
 public class MensajeDao implements MensajeDaoInterfaz {
+
+    private static final String ERROR_CONEXION = "No se pudo conectar";
     private static final Logger LOGGER = Logger.getLogger(MensajeDao.class.getName());
 
     @Override
@@ -38,6 +38,9 @@ public class MensajeDao implements MensajeDaoInterfaz {
             LOGGER.info("Mensaje insertado correctamente con id: " + idGenerado);
         } catch (SQLException excepcionSql) {
             LOGGER.log(Level.SEVERE, "Error al insertar mensaje", excepcionSql);
+            if (excepcionSql.getMessage().contains(ERROR_CONEXION)) {
+                throw new MensajeriaExcepcion("No se pudo conectar al servidor. Verifique que la base de datos este encendida");
+            }
             throw new MensajeriaExcepcion("Error al agregar mensaje", excepcionSql);
         } finally {
             try {
@@ -48,7 +51,7 @@ public class MensajeDao implements MensajeDaoInterfaz {
                     conexionBaseDeDatos.close();
                 }
             } catch (SQLException excepcionSql) {
-                LOGGER.log(Level.SEVERE, "Error al cerrar la conexión", excepcionSql);
+                LOGGER.log(Level.SEVERE, "Error al cerrar la conexion", excepcionSql);
             }
         }
         return idGenerado;
@@ -66,7 +69,6 @@ public class MensajeDao implements MensajeDaoInterfaz {
         Connection conexionBaseDeDatos = null;
         PreparedStatement sentencia = null;
         List<MensajeVista> mensajes = new ArrayList<>();
-
         try {
             conexionBaseDeDatos = ConexionBaseDeDatos.getInstance().conectar();
             sentencia = conexionBaseDeDatos.prepareStatement(consulta);
@@ -83,6 +85,9 @@ public class MensajeDao implements MensajeDaoInterfaz {
             LOGGER.info("Mensajes recibidos obtenidos correctamente");
         } catch (SQLException excepcionSQL) {
             LOGGER.log(Level.SEVERE, "Error al obtener mensajes recibidos", excepcionSQL);
+            if (excepcionSQL.getMessage().contains(ERROR_CONEXION)) {
+                throw new MensajeriaExcepcion("No se pudo conectar al servidor. Verifique que la base de datos este encendida");
+            }
             throw new MensajeriaExcepcion("Error al obtener mensajes recibidos", excepcionSQL);
         } finally {
             try {
@@ -93,7 +98,7 @@ public class MensajeDao implements MensajeDaoInterfaz {
                     conexionBaseDeDatos.close();
                 }
             } catch (SQLException excepcionSQL) {
-                LOGGER.log(Level.SEVERE, "Error al cerrar la conexión", excepcionSQL);
+                LOGGER.log(Level.SEVERE, "Error al cerrar la conexion", excepcionSQL);
             }
         }
         return mensajes;
@@ -111,7 +116,6 @@ public class MensajeDao implements MensajeDaoInterfaz {
         Connection conexionBaseDeDatos = null;
         PreparedStatement sentencia = null;
         List<MensajeVista> mensajes = new ArrayList<>();
-
         try {
             conexionBaseDeDatos = ConexionBaseDeDatos.getInstance().conectar();
             sentencia = conexionBaseDeDatos.prepareStatement(consulta);
@@ -128,6 +132,9 @@ public class MensajeDao implements MensajeDaoInterfaz {
             LOGGER.info("Mensajes enviados obtenidos correctamente");
         } catch (SQLException excepcionSQL) {
             LOGGER.log(Level.SEVERE, "Error al obtener mensajes enviados", excepcionSQL);
+            if (excepcionSQL.getMessage().contains(ERROR_CONEXION)) {
+                throw new MensajeriaExcepcion("No se pudo conectar al servidor. Verifique que la base de datos este encendida");
+            }
             throw new MensajeriaExcepcion("Error al obtener mensajes enviados", excepcionSQL);
         } finally {
             try {
@@ -138,7 +145,7 @@ public class MensajeDao implements MensajeDaoInterfaz {
                     conexionBaseDeDatos.close();
                 }
             } catch (SQLException excepcionSQL) {
-                LOGGER.log(Level.SEVERE, "Error al cerrar la conexión", excepcionSQL);
+                LOGGER.log(Level.SEVERE, "Error al cerrar la conexion", excepcionSQL);
             }
         }
         return mensajes;

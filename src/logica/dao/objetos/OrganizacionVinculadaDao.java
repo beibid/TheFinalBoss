@@ -6,7 +6,6 @@ import logica.dao.excepciones.UsuariosExcepcion;
 import logica.dominio.OrganizacionVinculada;
 import logica.dao.interfaces.OrganizacionVinculadaDaoInterfaz;
 import logica.dominio.enums.EstadoOrganizacion;
-
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Connection;
@@ -17,6 +16,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class OrganizacionVinculadaDao implements OrganizacionVinculadaDaoInterfaz {
+
+    private static final String ERROR_CONEXION = "No se pudo conectar";
     private static final Logger LOGGER = Logger.getLogger(OrganizacionVinculadaDao.class.getName());
 
     @Override
@@ -34,9 +35,12 @@ public class OrganizacionVinculadaDao implements OrganizacionVinculadaDaoInterfa
             insertarEnBaseDeDatos.setString(4, organizacionVinculada.getCorreo());
             insertarEnBaseDeDatos.setString(5, organizacionVinculada.getSector());
             filasAfectadas = insertarEnBaseDeDatos.executeUpdate();
-            LOGGER.info("Organización vinculada insertada correctamente");
+            LOGGER.info("Organizacion vinculada insertada correctamente");
         } catch (SQLException excepcionSql) {
-            LOGGER.log(Level.SEVERE, "Error al insertar la organización vinculada", excepcionSql);
+            LOGGER.log(Level.SEVERE, "Error al insertar la organizacion vinculada", excepcionSql);
+            if (excepcionSql.getMessage().contains(ERROR_CONEXION)) {
+                throw new UsuariosExcepcion("No se pudo conectar al servidor. Verifique que la base de datos este encendida");
+            }
             throw new UsuariosExcepcion("Error al insertar la organizacion", excepcionSql);
         } finally {
             try {
@@ -47,7 +51,7 @@ public class OrganizacionVinculadaDao implements OrganizacionVinculadaDaoInterfa
                     conexionBaseDeDatos.close();
                 }
             } catch (SQLException excepcionSql) {
-                LOGGER.log(Level.SEVERE, "Error al cerrar la conexión", excepcionSql);
+                LOGGER.log(Level.SEVERE, "Error al cerrar la conexion", excepcionSql);
             }
         }
         return filasAfectadas;
@@ -71,6 +75,9 @@ public class OrganizacionVinculadaDao implements OrganizacionVinculadaDaoInterfa
             LOGGER.info("OrganizacionVinculada modificada correctamente: " + idOrganizacion);
         } catch (SQLException excepcionSql) {
             LOGGER.log(Level.SEVERE, "Error al modificar organizacion vinculada", excepcionSql);
+            if (excepcionSql.getMessage().contains(ERROR_CONEXION)) {
+                throw new UsuariosExcepcion("No se pudo conectar al servidor. Verifique que la base de datos este encendida");
+            }
             throw new UsuariosExcepcion("Error al modificar organizacion vinculada", excepcionSql);
         } finally {
             try {
@@ -81,7 +88,7 @@ public class OrganizacionVinculadaDao implements OrganizacionVinculadaDaoInterfa
                     conexionBaseDeDatos.close();
                 }
             } catch (SQLException excepcionSql) {
-                LOGGER.log(Level.SEVERE, "Error al cerrar la conexión", excepcionSql);
+                LOGGER.log(Level.SEVERE, "Error al cerrar la conexion", excepcionSql);
             }
         }
         return filasAfectadas;
@@ -108,6 +115,9 @@ public class OrganizacionVinculadaDao implements OrganizacionVinculadaDaoInterfa
             }
         } catch (SQLException excepcionSql) {
             LOGGER.log(Level.SEVERE, "Error al obtener organizaciones", excepcionSql);
+            if (excepcionSql.getMessage().contains(ERROR_CONEXION)) {
+                throw new UsuariosExcepcion("No se pudo conectar al servidor. Verifique que la base de datos este encendida");
+            }
             throw new UsuariosExcepcion("Error al obtener organizaciones", excepcionSql);
         } finally {
             try {
@@ -118,7 +128,7 @@ public class OrganizacionVinculadaDao implements OrganizacionVinculadaDaoInterfa
                     conexionBaseDeDatos.close();
                 }
             } catch (SQLException excepcionSql) {
-                LOGGER.log(Level.SEVERE, "Error al cerrar la conexión", excepcionSql);
+                LOGGER.log(Level.SEVERE, "Error al cerrar la conexion", excepcionSql);
             }
         }
         return organizaciones;
@@ -138,6 +148,9 @@ public class OrganizacionVinculadaDao implements OrganizacionVinculadaDaoInterfa
             LOGGER.info("Organizacion inactivada correctamente: " + idOrganizacion);
         } catch (SQLException excepcionSql) {
             LOGGER.log(Level.SEVERE, "Error al inactivar la organizacion", excepcionSql);
+            if (excepcionSql.getMessage().contains(ERROR_CONEXION)) {
+                throw new MensajeriaExcepcion("No se pudo conectar al servidor. Verifique que la base de datos este encendida");
+            }
             throw new MensajeriaExcepcion("Error al inactivar la organizacion", excepcionSql);
         } finally {
             try {
@@ -148,7 +161,7 @@ public class OrganizacionVinculadaDao implements OrganizacionVinculadaDaoInterfa
                     conexionBaseDeDatos.close();
                 }
             } catch (SQLException excepcionSql) {
-                LOGGER.log(Level.SEVERE, "Error al cerrar conexión", excepcionSql);
+                LOGGER.log(Level.SEVERE, "Error al cerrar conexion", excepcionSql);
             }
         }
         return filasAfectadas;

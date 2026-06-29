@@ -16,7 +16,12 @@ import java.util.logging.Logger;
 
 public class ReporteDao implements ReporteDaoInterfaz {
 
+    private static final String ERROR_CONEXION = "No se pudo conectar";
     private static final Logger LOGGER = Logger.getLogger(ReporteDao.class.getName());
+
+    private boolean esErrorDeConexion(SQLException excepcion) {
+        return excepcion.getMessage() != null && excepcion.getMessage().contains(ERROR_CONEXION);
+    }
 
     @Override
     public int agregarReporte(Reporte reporte) throws MensajeriaExcepcion {
@@ -31,7 +36,6 @@ public class ReporteDao implements ReporteDaoInterfaz {
         Connection conexionBaseDeDatos = null;
         PreparedStatement insertarEnBaseDeDatos = null;
         int filasAfectadas = 0;
-
         try {
             conexionBaseDeDatos = ConexionBaseDeDatos.getInstance().conectar();
             insertarEnBaseDeDatos = conexionBaseDeDatos.prepareStatement(consultaReporte);
@@ -44,15 +48,14 @@ public class ReporteDao implements ReporteDaoInterfaz {
             LOGGER.info("Reporte insertado correctamente");
         } catch (SQLException excepcionSql) {
             LOGGER.log(Level.SEVERE, "Error al insertar el reporte", excepcionSql);
+            if (esErrorDeConexion(excepcionSql)) {
+                throw new MensajeriaExcepcion("No se pudo conectar al servidor. Verifique que la base de datos este encendida");
+            }
             throw new MensajeriaExcepcion("Error al agregar el reporte", excepcionSql);
         } finally {
             try {
-                if (insertarEnBaseDeDatos != null) {
-                    insertarEnBaseDeDatos.close();
-                }
-                if (conexionBaseDeDatos != null) {
-                    conexionBaseDeDatos.close();
-                }
+                if (insertarEnBaseDeDatos != null) insertarEnBaseDeDatos.close();
+                if (conexionBaseDeDatos != null) conexionBaseDeDatos.close();
             } catch (SQLException excepcionSql) {
                 LOGGER.log(Level.SEVERE, "Error al cerrar la conexión", excepcionSql);
             }
@@ -66,7 +69,6 @@ public class ReporteDao implements ReporteDaoInterfaz {
         Connection conexionBaseDeDatos = null;
         PreparedStatement consultaReportes = null;
         List<Reporte> reportes = new ArrayList<>();
-
         try {
             conexionBaseDeDatos = ConexionBaseDeDatos.getInstance().conectar();
             consultaReportes = conexionBaseDeDatos.prepareStatement(consulta);
@@ -85,15 +87,14 @@ public class ReporteDao implements ReporteDaoInterfaz {
             }
         } catch (SQLException excepcionSql) {
             LOGGER.log(Level.SEVERE, "Error al obtener reportes", excepcionSql);
+            if (esErrorDeConexion(excepcionSql)) {
+                throw new MensajeriaExcepcion("No se pudo conectar al servidor. Verifique que la base de datos este encendida");
+            }
             throw new MensajeriaExcepcion("Error al obtener reportes", excepcionSql);
         } finally {
             try {
-                if (consultaReportes != null) {
-                    consultaReportes.close();
-                }
-                if (conexionBaseDeDatos != null) {
-                    conexionBaseDeDatos.close();
-                }
+                if (consultaReportes != null) consultaReportes.close();
+                if (conexionBaseDeDatos != null) conexionBaseDeDatos.close();
             } catch (SQLException excepcionSql) {
                 LOGGER.log(Level.SEVERE, "Error al cerrar la conexión", excepcionSql);
             }
@@ -107,7 +108,6 @@ public class ReporteDao implements ReporteDaoInterfaz {
         Connection conexionBaseDeDatos = null;
         PreparedStatement actualizacion = null;
         int filasAfectadas = 0;
-
         try {
             conexionBaseDeDatos = ConexionBaseDeDatos.getInstance().conectar();
             actualizacion = conexionBaseDeDatos.prepareStatement(consulta);
@@ -119,21 +119,21 @@ public class ReporteDao implements ReporteDaoInterfaz {
             LOGGER.info("Reporte evaluado correctamente: " + idReporte);
         } catch (SQLException excepcionSql) {
             LOGGER.log(Level.SEVERE, "Error al evaluar reporte", excepcionSql);
+            if (esErrorDeConexion(excepcionSql)) {
+                throw new MensajeriaExcepcion("No se pudo conectar al servidor. Verifique que la base de datos este encendida");
+            }
             throw new MensajeriaExcepcion("Error al evaluar reporte", excepcionSql);
         } finally {
             try {
-                if (actualizacion != null) {
-                    actualizacion.close();
-                }
-                if (conexionBaseDeDatos != null) {
-                    conexionBaseDeDatos.close();
-                }
+                if (actualizacion != null) actualizacion.close();
+                if (conexionBaseDeDatos != null) conexionBaseDeDatos.close();
             } catch (SQLException excepcionSql) {
                 LOGGER.log(Level.SEVERE, "Error al cerrar la conexión", excepcionSql);
             }
         }
         return filasAfectadas;
     }
+
     public List<Reporte> obtenerReportesPorMatricula(String matricula) throws MensajeriaExcepcion {
         String consulta = "SELECT idReporte, tipoReporte, descripcion, fechaGeneracion, calificacion, " +
                 "observacionesProf, estado FROM reporte WHERE matricula = ? ORDER BY fechaGeneracion DESC";
@@ -160,15 +160,14 @@ public class ReporteDao implements ReporteDaoInterfaz {
             }
         } catch (SQLException excepcionSql) {
             LOGGER.log(Level.SEVERE, "Error al obtener reportes por matricula", excepcionSql);
+            if (esErrorDeConexion(excepcionSql)) {
+                throw new MensajeriaExcepcion("No se pudo conectar al servidor. Verifique que la base de datos este encendida");
+            }
             throw new MensajeriaExcepcion("Error al obtener reportes por matricula", excepcionSql);
         } finally {
             try {
-                if (consultaReportes != null) {
-                    consultaReportes.close();
-                }
-                if (conexionBaseDeDatos != null) {
-                    conexionBaseDeDatos.close();
-                }
+                if (consultaReportes != null) consultaReportes.close();
+                if (conexionBaseDeDatos != null) conexionBaseDeDatos.close();
             } catch (SQLException excepcionSql) {
                 LOGGER.log(Level.SEVERE, "Error al cerrar la conexión", excepcionSql);
             }
@@ -193,15 +192,14 @@ public class ReporteDao implements ReporteDaoInterfaz {
             }
         } catch (SQLException excepcionSql) {
             LOGGER.log(Level.SEVERE, "Error al contar reportes evaluados", excepcionSql);
+            if (esErrorDeConexion(excepcionSql)) {
+                throw new MensajeriaExcepcion("No se pudo conectar al servidor. Verifique que la base de datos este encendida");
+            }
             throw new MensajeriaExcepcion("Error al contar reportes evaluados", excepcionSql);
         } finally {
             try {
-                if (sentencia != null) {
-                    sentencia.close();
-                }
-                if (conexionBaseDeDatos != null) {
-                    conexionBaseDeDatos.close();
-                }
+                if (sentencia != null) sentencia.close();
+                if (conexionBaseDeDatos != null) conexionBaseDeDatos.close();
             } catch (SQLException excepcionSql) {
                 LOGGER.log(Level.SEVERE, "Error al cerrar la conexion", excepcionSql);
             }
@@ -227,15 +225,14 @@ public class ReporteDao implements ReporteDaoInterfaz {
             }
         } catch (SQLException excepcionSql) {
             LOGGER.log(Level.SEVERE, "Error al verificar reporte mensual", excepcionSql);
+            if (esErrorDeConexion(excepcionSql)) {
+                throw new MensajeriaExcepcion("No se pudo conectar al servidor. Verifique que la base de datos este encendida");
+            }
             throw new MensajeriaExcepcion("Error al verificar reporte mensual", excepcionSql);
         } finally {
             try {
-                if (sentencia != null) {
-                    sentencia.close();
-                }
-                if (conexionBaseDeDatos != null) {
-                    conexionBaseDeDatos.close();
-                }
+                if (sentencia != null) sentencia.close();
+                if (conexionBaseDeDatos != null) conexionBaseDeDatos.close();
             } catch (SQLException excepcionSql) {
                 LOGGER.log(Level.SEVERE, "Error al cerrar la conexion", excepcionSql);
             }

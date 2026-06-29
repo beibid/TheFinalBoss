@@ -1,6 +1,5 @@
 package logica.dao.objetos;
 
-
 import acceso.bd.ConexionBaseDeDatos;
 import logica.dao.excepciones.UsuariosExcepcion;
 import logica.dominio.Profesor;
@@ -18,10 +17,14 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-
 public class ProfesorDao implements ProfesorDaoInterfaz {
 
+    private static final String ERROR_CONEXION = "No se pudo conectar";
     private static final Logger LOGGER = Logger.getLogger(ProfesorDao.class.getName());
+
+    private boolean esErrorDeConexion(SQLException excepcion) {
+        return excepcion.getMessage() != null && excepcion.getMessage().contains(ERROR_CONEXION);
+    }
 
     @Override
     public int insertarProfesor(Profesor profesor) throws UsuariosExcepcion {
@@ -31,7 +34,6 @@ public class ProfesorDao implements ProfesorDaoInterfaz {
         PreparedStatement insercionUsuario = null;
         PreparedStatement insercionProfesor = null;
         int filasAfectadas = 0;
-
         try {
             conexionBaseDeDatos = ConexionBaseDeDatos.getInstance().conectar();
             insercionUsuario = conexionBaseDeDatos.prepareStatement(consultaUsuario, Statement.RETURN_GENERATED_KEYS);
@@ -41,12 +43,10 @@ public class ProfesorDao implements ProfesorDaoInterfaz {
             insercionUsuario.setString(4, profesor.getEstado().toString());
             insercionUsuario.setString(5, profesor.getCorreo());
             insercionUsuario.executeUpdate();
-
             ResultSet tomarLlave = insercionUsuario.getGeneratedKeys();
             if (!tomarLlave.next()) {
                 throw new UsuariosExcepcion("No se obtuvo el ID del usuario insertado");
             }
-
             int idUsuarioGenerado = tomarLlave.getInt(1);
             insercionProfesor = conexionBaseDeDatos.prepareStatement(consultaProfesor);
             insercionProfesor.setString(1, profesor.getNumeroDePersonalProfesor());
@@ -56,6 +56,9 @@ public class ProfesorDao implements ProfesorDaoInterfaz {
             LOGGER.info("Profesor insertado correctamente con ID de usuario: " + idUsuarioGenerado);
         } catch (SQLException excepcionSql) {
             LOGGER.log(Level.SEVERE, "Error al insertar profesor", excepcionSql);
+            if (esErrorDeConexion(excepcionSql)) {
+                throw new UsuariosExcepcion("No se pudo conectar al servidor. Verifique que la base de datos este encendida");
+            }
             throw new UsuariosExcepcion("Error al insertar profesor", excepcionSql);
         } finally {
             try {
@@ -69,7 +72,7 @@ public class ProfesorDao implements ProfesorDaoInterfaz {
                     conexionBaseDeDatos.close();
                 }
             } catch (SQLException excepcionSql) {
-                LOGGER.log(Level.SEVERE, "Error al cerrar la conexión", excepcionSql);
+                LOGGER.log(Level.SEVERE, "Error al cerrar la conexion", excepcionSql);
             }
         }
         return filasAfectadas;
@@ -83,7 +86,6 @@ public class ProfesorDao implements ProfesorDaoInterfaz {
         Connection conexionBaseDeDatos = null;
         PreparedStatement actualizacion = null;
         int filasAfectadas = 0;
-
         try {
             conexionBaseDeDatos = ConexionBaseDeDatos.getInstance().conectar();
             actualizacion = conexionBaseDeDatos.prepareStatement(consulta);
@@ -93,6 +95,9 @@ public class ProfesorDao implements ProfesorDaoInterfaz {
             LOGGER.info("Profesor inactivado correctamente: " + numPersonalProfesor);
         } catch (SQLException excepcionSql) {
             LOGGER.log(Level.SEVERE, "Error al inactivar profesor", excepcionSql);
+            if (esErrorDeConexion(excepcionSql)) {
+                throw new UsuariosExcepcion("No se pudo conectar al servidor. Verifique que la base de datos este encendida");
+            }
             throw new UsuariosExcepcion("Error al inactivar profesor", excepcionSql);
         } finally {
             try {
@@ -103,7 +108,7 @@ public class ProfesorDao implements ProfesorDaoInterfaz {
                     conexionBaseDeDatos.close();
                 }
             } catch (SQLException excepcionSql) {
-                LOGGER.log(Level.SEVERE, "Error al cerrar la conexión", excepcionSql);
+                LOGGER.log(Level.SEVERE, "Error al cerrar la conexion", excepcionSql);
             }
         }
         return filasAfectadas;
@@ -122,7 +127,6 @@ public class ProfesorDao implements ProfesorDaoInterfaz {
         PreparedStatement actualizacionUsuario = null;
         PreparedStatement actualizacionProfesor = null;
         int filasAfectadas = 0;
-
         try {
             conexionBaseDeDatos = ConexionBaseDeDatos.getInstance().conectar();
             actualizacionUsuario = conexionBaseDeDatos.prepareStatement(consultaUsuario);
@@ -133,7 +137,6 @@ public class ProfesorDao implements ProfesorDaoInterfaz {
             actualizacionUsuario.setString(5, profesor.getEstado().toString());
             actualizacionUsuario.setString(6, numPersonalProfesor);
             actualizacionUsuario.executeUpdate();
-
             actualizacionProfesor = conexionBaseDeDatos.prepareStatement(consultaProfesor);
             actualizacionProfesor.setString(1, profesor.getTurno().toString());
             actualizacionProfesor.setString(2, numPersonalProfesor);
@@ -141,6 +144,9 @@ public class ProfesorDao implements ProfesorDaoInterfaz {
             LOGGER.info("Profesor modificado correctamente: " + numPersonalProfesor);
         } catch (SQLException excepcionSql) {
             LOGGER.log(Level.SEVERE, "Error al modificar profesor", excepcionSql);
+            if (esErrorDeConexion(excepcionSql)) {
+                throw new UsuariosExcepcion("No se pudo conectar al servidor. Verifique que la base de datos este encendida");
+            }
             throw new UsuariosExcepcion("Error al modificar profesor", excepcionSql);
         } finally {
             try {
@@ -154,7 +160,7 @@ public class ProfesorDao implements ProfesorDaoInterfaz {
                     conexionBaseDeDatos.close();
                 }
             } catch (SQLException excepcionSql) {
-                LOGGER.log(Level.SEVERE, "Error al cerrar la conexión", excepcionSql);
+                LOGGER.log(Level.SEVERE, "Error al cerrar la conexion", excepcionSql);
             }
         }
         return filasAfectadas;
@@ -168,7 +174,6 @@ public class ProfesorDao implements ProfesorDaoInterfaz {
         Connection conexionBaseDeDatos = null;
         PreparedStatement consultaProfesores = null;
         List<Profesor> profesores = new ArrayList<>();
-
         try {
             conexionBaseDeDatos = ConexionBaseDeDatos.getInstance().conectar();
             consultaProfesores = conexionBaseDeDatos.prepareStatement(consulta);
@@ -185,6 +190,9 @@ public class ProfesorDao implements ProfesorDaoInterfaz {
             }
         } catch (SQLException excepcionSql) {
             LOGGER.log(Level.SEVERE, "Error al obtener profesores activos", excepcionSql);
+            if (esErrorDeConexion(excepcionSql)) {
+                throw new UsuariosExcepcion("No se pudo conectar al servidor. Verifique que la base de datos este encendida");
+            }
             throw new UsuariosExcepcion("Error al obtener profesores activos", excepcionSql);
         } finally {
             try {
@@ -195,7 +203,7 @@ public class ProfesorDao implements ProfesorDaoInterfaz {
                     conexionBaseDeDatos.close();
                 }
             } catch (SQLException excepcionSql) {
-                LOGGER.log(Level.SEVERE, "Error al cerrar la conexión", excepcionSql);
+                LOGGER.log(Level.SEVERE, "Error al cerrar la conexion", excepcionSql);
             }
         }
         return profesores;
@@ -226,7 +234,10 @@ public class ProfesorDao implements ProfesorDaoInterfaz {
             LOGGER.info("Practicantes obtenidos para profesor: " + numPersonalProfesor);
         } catch (SQLException excepcionSql) {
             LOGGER.log(Level.SEVERE, "Error al obtener practicantes", excepcionSql);
-            throw new UsuariosExcepcion("Error al obtener practicantes");
+            if (esErrorDeConexion(excepcionSql)) {
+                throw new UsuariosExcepcion("No se pudo conectar al servidor. Verifique que la base de datos este encendida");
+            }
+            throw new UsuariosExcepcion("Error al obtener practicantes", excepcionSql);
         } finally {
             try {
                 if (consultaProfesor != null) {
@@ -236,7 +247,7 @@ public class ProfesorDao implements ProfesorDaoInterfaz {
                     conexion.close();
                 }
             } catch (SQLException excepcionSql) {
-                LOGGER.log(Level.SEVERE, "Error al cerrar conexión", excepcionSql);
+                LOGGER.log(Level.SEVERE, "Error al cerrar conexion", excepcionSql);
             }
         }
         return practicantes;
@@ -250,18 +261,19 @@ public class ProfesorDao implements ProfesorDaoInterfaz {
         Connection conexionBaseDeDatos = null;
         PreparedStatement consultaProfesorActivo = null;
         int filasAfectadas = 0;
-
         try {
             conexionBaseDeDatos = ConexionBaseDeDatos.getInstance().conectar();
             consultaProfesorActivo = conexionBaseDeDatos.prepareStatement(consulta);
             ResultSet resultado = consultaProfesorActivo.executeQuery();
-
             if (resultado.next()) {
                 filasAfectadas = resultado.getInt(1);
             }
-        } catch (SQLException exceptionSql) {
-            LOGGER.log(Level.SEVERE, "Error al verificar profesores activos", exceptionSql);
-            throw new UsuariosExcepcion("Error al verificar profesores activos", exceptionSql);
+        } catch (SQLException excepcionSql) {
+            LOGGER.log(Level.SEVERE, "Error al verificar profesores activos", excepcionSql);
+            if (esErrorDeConexion(excepcionSql)) {
+                throw new UsuariosExcepcion("No se pudo conectar al servidor. Verifique que la base de datos este encendida");
+            }
+            throw new UsuariosExcepcion("Error al verificar profesores activos", excepcionSql);
         } finally {
             try {
                 if (consultaProfesorActivo != null) {
@@ -270,8 +282,8 @@ public class ProfesorDao implements ProfesorDaoInterfaz {
                 if (conexionBaseDeDatos != null) {
                     conexionBaseDeDatos.close();
                 }
-            }catch (SQLException exceptionSql) {
-                LOGGER.log(Level.SEVERE, "Error al cerrar la conexion", exceptionSql);
+            } catch (SQLException excepcionSql) {
+                LOGGER.log(Level.SEVERE, "Error al cerrar la conexion", excepcionSql);
             }
         }
         return filasAfectadas;

@@ -17,6 +17,7 @@ import java.util.logging.Logger;
 
 public class DocumentacionPracticanteDao implements DocumentacionPracticanteDaoInterfaz {
 
+    private static final String ERROR_CONEXION = "No se pudo conectar";
     private static final Logger LOGGER = Logger.getLogger(DocumentacionPracticanteDao.class.getName());
 
     @Override
@@ -31,14 +32,12 @@ public class DocumentacionPracticanteDao implements DocumentacionPracticanteDaoI
         Connection conexion = null;
         PreparedStatement insercion = null;
         int idGenerado = -1;
-
         try {
             conexion = ConexionBaseDeDatos.getInstance().conectar();
             insercion = conexion.prepareStatement(consulta, Statement.RETURN_GENERATED_KEYS);
             insercion.setString(1, documentacion.getRutaDeArchivo());
             insercion.setString(2, documentacion.getEstadoRevision().toString());
             insercion.executeUpdate();
-
             ResultSet tomarLlave = insercion.getGeneratedKeys();
             if (tomarLlave.next()) {
                 idGenerado = tomarLlave.getInt(1);
@@ -46,6 +45,9 @@ public class DocumentacionPracticanteDao implements DocumentacionPracticanteDaoI
             }
         } catch (SQLException excepcionSql) {
             LOGGER.log(Level.SEVERE, "Error al insertar documentacion", excepcionSql);
+            if (excepcionSql.getMessage().contains(ERROR_CONEXION)) {
+                throw new UsuariosExcepcion("No se pudo conectar al servidor. Verifique que la base de datos este encendida");
+            }
             throw new UsuariosExcepcion("Error al agregar documentacion");
         } finally {
             try {
@@ -56,7 +58,7 @@ public class DocumentacionPracticanteDao implements DocumentacionPracticanteDaoI
                     conexion.close();
                 }
             } catch (SQLException excepcionSql) {
-                LOGGER.log(Level.SEVERE, "Error al cerrar la conexión", excepcionSql);
+                LOGGER.log(Level.SEVERE, "Error al cerrar la conexion", excepcionSql);
             }
         }
         return idGenerado;
@@ -87,6 +89,9 @@ public class DocumentacionPracticanteDao implements DocumentacionPracticanteDaoI
             LOGGER.info("Documentos pendientes obtenidos para: " + matricula);
         } catch (SQLException excepcionSql) {
             LOGGER.log(Level.SEVERE, "Error al obtener documentos pendientes", excepcionSql);
+            if (excepcionSql.getMessage().contains(ERROR_CONEXION)) {
+                throw new UsuariosExcepcion("No se pudo conectar al servidor. Verifique que la base de datos este encendida");
+            }
             throw new UsuariosExcepcion("Error al obtener documentos pendientes");
         } finally {
             try {
@@ -97,7 +102,7 @@ public class DocumentacionPracticanteDao implements DocumentacionPracticanteDaoI
                     conexion.close();
                 }
             } catch (SQLException excepcionSql) {
-                LOGGER.log(Level.SEVERE, "Error al cerrar conexión", excepcionSql);
+                LOGGER.log(Level.SEVERE, "Error al cerrar conexion", excepcionSql);
             }
         }
         return documentos;
@@ -119,6 +124,9 @@ public class DocumentacionPracticanteDao implements DocumentacionPracticanteDaoI
             LOGGER.info("Documento validado correctamente: " + idDocumento);
         } catch (SQLException excepcionSql) {
             LOGGER.log(Level.SEVERE, "Error al validar documento", excepcionSql);
+            if (excepcionSql.getMessage().contains(ERROR_CONEXION)) {
+                throw new UsuariosExcepcion("No se pudo conectar al servidor. Verifique que la base de datos este encendida");
+            }
             throw new UsuariosExcepcion("Error al validar documento");
         } finally {
             try {
@@ -129,7 +137,7 @@ public class DocumentacionPracticanteDao implements DocumentacionPracticanteDaoI
                     conexion.close();
                 }
             } catch (SQLException excepcionSql) {
-                LOGGER.log(Level.SEVERE, "Error al cerrar conexión", excepcionSql);
+                LOGGER.log(Level.SEVERE, "Error al cerrar conexion", excepcionSql);
             }
         }
         return filasAfectadas;

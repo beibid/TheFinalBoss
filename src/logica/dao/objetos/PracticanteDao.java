@@ -1,6 +1,5 @@
 package logica.dao.objetos;
 
-
 import acceso.bd.ConexionBaseDeDatos;
 import logica.dao.excepciones.RegistroDuplicadoExcepcion;
 import logica.dao.excepciones.UsuariosExcepcion;
@@ -19,9 +18,10 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-
 public class PracticanteDao implements PracticanteDaoInterfaz {
 
+    private static final String ERROR_CONEXION = "No se pudo conectar";
+    private static final String ERROR_DUPLICADO = "Duplicate entry";
     private static final Logger LOGGER = Logger.getLogger(PracticanteDao.class.getName());
 
     @Override
@@ -32,7 +32,6 @@ public class PracticanteDao implements PracticanteDaoInterfaz {
         PreparedStatement insercionUsuario = null;
         PreparedStatement insercionPracticante = null;
         int filasAfectadas = 0;
-
         try {
             conexionBaseDeDatos = ConexionBaseDeDatos.getInstance().conectar();
             insercionUsuario = conexionBaseDeDatos.prepareStatement(consultaUsuario, Statement.RETURN_GENERATED_KEYS);
@@ -42,12 +41,10 @@ public class PracticanteDao implements PracticanteDaoInterfaz {
             insercionUsuario.setString(4, practicante.getEstado().toString());
             insercionUsuario.setString(5, practicante.getCorreo());
             insercionUsuario.executeUpdate();
-
             ResultSet tomarLlave = insercionUsuario.getGeneratedKeys();
             if (!tomarLlave.next()) {
                 throw new UsuariosExcepcion("No se obtuvo el ID del usuario insertado");
             }
-
             int idUsuarioGenerado = tomarLlave.getInt(1);
             insercionPracticante = conexionBaseDeDatos.prepareStatement(consultaPracticante);
             insercionPracticante.setString(1, practicante.getMatricula());
@@ -59,7 +56,9 @@ public class PracticanteDao implements PracticanteDaoInterfaz {
             LOGGER.info("Practicante insertado correctamente con ID de usuario: " + idUsuarioGenerado);
         } catch (SQLException excepcionSql) {
             LOGGER.log(Level.SEVERE, "Error al insertar practicante", excepcionSql);
-            if (excepcionSql.getMessage().contains("Duplicate entry")) {
+            if (excepcionSql.getMessage().contains(ERROR_CONEXION)) {
+                throw new UsuariosExcepcion("No se pudo conectar al servidor. Verifique que la base de datos este encendida");
+            } else if (excepcionSql.getMessage().contains(ERROR_DUPLICADO)) {
                 throw new RegistroDuplicadoExcepcion("La matricula ingresada ya existe", excepcionSql);
             }
             throw new UsuariosExcepcion("Error al insertar practicante", excepcionSql);
@@ -75,7 +74,7 @@ public class PracticanteDao implements PracticanteDaoInterfaz {
                     conexionBaseDeDatos.close();
                 }
             } catch (SQLException excepcionSql) {
-                LOGGER.log(Level.SEVERE, "Error al cerrar la conexión", excepcionSql);
+                LOGGER.log(Level.SEVERE, "Error al cerrar la conexion", excepcionSql);
             }
         }
         return filasAfectadas;
@@ -92,7 +91,6 @@ public class PracticanteDao implements PracticanteDaoInterfaz {
         Connection conexionBaseDeDatos = null;
         PreparedStatement actualizacion = null;
         int filasAfectadas = 0;
-
         try {
             conexionBaseDeDatos = ConexionBaseDeDatos.getInstance().conectar();
             actualizacion = conexionBaseDeDatos.prepareStatement(consulta);
@@ -102,6 +100,9 @@ public class PracticanteDao implements PracticanteDaoInterfaz {
             LOGGER.info("Practicante inactivado correctamente: " + matricula);
         } catch (SQLException excepcionSql) {
             LOGGER.log(Level.SEVERE, "Error al inactivar practicante", excepcionSql);
+            if (excepcionSql.getMessage().contains(ERROR_CONEXION)) {
+                throw new UsuariosExcepcion("No se pudo conectar al servidor. Verifique que la base de datos este encendida");
+            }
             throw new UsuariosExcepcion("Error al inactivar practicante", excepcionSql);
         } finally {
             try {
@@ -112,7 +113,7 @@ public class PracticanteDao implements PracticanteDaoInterfaz {
                     conexionBaseDeDatos.close();
                 }
             } catch (SQLException excepcionSQL) {
-                LOGGER.log(Level.SEVERE, "Error al cerrar la conexión", excepcionSQL);
+                LOGGER.log(Level.SEVERE, "Error al cerrar la conexion", excepcionSQL);
             }
         }
         return filasAfectadas;
@@ -123,7 +124,7 @@ public class PracticanteDao implements PracticanteDaoInterfaz {
             throw new UsuariosExcepcion("La matricula no puede ser nula");
         }
         if (matricula.isEmpty()) {
-             throw new UsuariosExcepcion("La matricula no pueda estar vacia");
+            throw new UsuariosExcepcion("La matricula no pueda estar vacia");
         }
         if (practicante.getNombre() == null) {
             throw new UsuariosExcepcion("El nombre del practicante no puede ser nulo");
@@ -134,7 +135,6 @@ public class PracticanteDao implements PracticanteDaoInterfaz {
         PreparedStatement actualizacionUsuario = null;
         PreparedStatement actualizacionPracticante = null;
         int filasAfectadas = 0;
-
         try {
             conexionBaseDeDatos = ConexionBaseDeDatos.getInstance().conectar();
             actualizacionUsuario = conexionBaseDeDatos.prepareStatement(consultaUsuario);
@@ -145,7 +145,6 @@ public class PracticanteDao implements PracticanteDaoInterfaz {
             actualizacionUsuario.setString(5, practicante.getEstado().toString());
             actualizacionUsuario.setString(6, matricula);
             actualizacionUsuario.executeUpdate();
-
             actualizacionPracticante = conexionBaseDeDatos.prepareStatement(consultaPracticante);
             actualizacionPracticante.setString(1, practicante.getLenguaIndigena());
             actualizacionPracticante.setString(2, practicante.getGenero().toString());
@@ -154,6 +153,9 @@ public class PracticanteDao implements PracticanteDaoInterfaz {
             LOGGER.info("Practicante modificado correctamente: " + matricula);
         } catch (SQLException excepcionSql) {
             LOGGER.log(Level.SEVERE, "Error al modificar practicante", excepcionSql);
+            if (excepcionSql.getMessage().contains(ERROR_CONEXION)) {
+                throw new UsuariosExcepcion("No se pudo conectar al servidor. Verifique que la base de datos este encendida");
+            }
             throw new UsuariosExcepcion("Error al modificar practicante", excepcionSql);
         } finally {
             try {
@@ -167,7 +169,7 @@ public class PracticanteDao implements PracticanteDaoInterfaz {
                     conexionBaseDeDatos.close();
                 }
             } catch (SQLException excepcionSql) {
-                LOGGER.log(Level.SEVERE, "Error al cerrar la conexión", excepcionSql);
+                LOGGER.log(Level.SEVERE, "Error al cerrar la conexion", excepcionSql);
             }
         }
         return filasAfectadas;
@@ -182,7 +184,6 @@ public class PracticanteDao implements PracticanteDaoInterfaz {
         Connection conexionBaseDeDatos = null;
         PreparedStatement consultaPracticantes = null;
         List<Practicante> practicantes = new ArrayList<>();
-
         try {
             conexionBaseDeDatos = ConexionBaseDeDatos.getInstance().conectar();
             consultaPracticantes = conexionBaseDeDatos.prepareStatement(consulta);
@@ -202,6 +203,9 @@ public class PracticanteDao implements PracticanteDaoInterfaz {
             }
         } catch (SQLException excepcionSql) {
             LOGGER.log(Level.SEVERE, "Error al obtener practicantes activos", excepcionSql);
+            if (excepcionSql.getMessage().contains(ERROR_CONEXION)) {
+                throw new UsuariosExcepcion("No se pudo conectar al servidor. Verifique que la base de datos este encendida");
+            }
             throw new UsuariosExcepcion("Error al obtener practicantes activos", excepcionSql);
         } finally {
             try {
@@ -212,17 +216,15 @@ public class PracticanteDao implements PracticanteDaoInterfaz {
                     conexionBaseDeDatos.close();
                 }
             } catch (SQLException excepcionSql) {
-                LOGGER.log(Level.SEVERE, "Error al cerrar la conexión", excepcionSql);
+                LOGGER.log(Level.SEVERE, "Error al cerrar la conexion", excepcionSql);
             }
         }
         return practicantes;
     }
 
-
     public int asignarProyecto(String matricula, int idProyecto) throws UsuariosExcepcion {
         Connection conexionBaseDeDatos = null;
         int filasAfectadas = 0;
-
         try {
             conexionBaseDeDatos = ConexionBaseDeDatos.getInstance().conectar();
             CallableStatement procedimientoAsignaProyecto = conexionBaseDeDatos.prepareCall("{CALL AsignarProyecto(?, ?)}");
@@ -233,6 +235,9 @@ public class PracticanteDao implements PracticanteDaoInterfaz {
             LOGGER.info("Proyecto asignado correctamente al practicante: " + matricula);
         } catch (SQLException excepcionSql) {
             LOGGER.log(Level.SEVERE, "Error al asignar proyecto", excepcionSql);
+            if (excepcionSql.getMessage().contains(ERROR_CONEXION)) {
+                throw new UsuariosExcepcion("No se pudo conectar al servidor. Verifique que la base de datos este encendida");
+            }
             throw new UsuariosExcepcion(excepcionSql.getMessage(), excepcionSql);
         } finally {
             try {
@@ -240,11 +245,12 @@ public class PracticanteDao implements PracticanteDaoInterfaz {
                     conexionBaseDeDatos.close();
                 }
             } catch (SQLException excepcionSql) {
-                LOGGER.log(Level.SEVERE, "Error al cerrar la conexión", excepcionSql);
+                LOGGER.log(Level.SEVERE, "Error al cerrar la conexion", excepcionSql);
             }
         }
         return filasAfectadas;
     }
+
     public List<Practicante> obtenerPracticantesPorProfesor(int idProfesor) throws UsuariosExcepcion {
         String consulta = "SELECT u.idUsuario, u.nombre, u.apellidos, u.correo, u.estado, u.contrasena, " +
                 "p.matricula, p.lenguaIndigena, p.genero " +
@@ -274,6 +280,9 @@ public class PracticanteDao implements PracticanteDaoInterfaz {
             }
         } catch (SQLException excepcionSql) {
             LOGGER.log(Level.SEVERE, "Error al obtener practicantes por profesor", excepcionSql);
+            if (excepcionSql.getMessage().contains(ERROR_CONEXION)) {
+                throw new UsuariosExcepcion("No se pudo conectar al servidor. Verifique que la base de datos este encendida");
+            }
             throw new UsuariosExcepcion("Error al obtener practicantes por profesor", excepcionSql);
         } finally {
             try {
@@ -284,7 +293,7 @@ public class PracticanteDao implements PracticanteDaoInterfaz {
                     conexionBaseDeDatos.close();
                 }
             } catch (SQLException excepcionSql) {
-                LOGGER.log(Level.SEVERE, "Error al cerrar la conexión", excepcionSql);
+                LOGGER.log(Level.SEVERE, "Error al cerrar la conexion", excepcionSql);
             }
         }
         return practicantes;
