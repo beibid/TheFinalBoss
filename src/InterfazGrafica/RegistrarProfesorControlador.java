@@ -40,6 +40,10 @@ public class RegistrarProfesorControlador {
 
     private static final int FILAS_AFECTADAS_ESPERADAS = 1;
     private static final int PROFESORES_ACTIVOS_PERMITIDOS = 2;
+    private static final int LIMITE_NOMBRE = 55;
+    private static final int LIMITE_APELLIDOS = 55;
+    private static final int LIMITE_CORREO = 100;
+    private static final int LIMITE_NUMERO_PERSONAL = 20;
     private ToggleGroup grupoTurno = new ToggleGroup();
     private String contrasenaGenerada;
 
@@ -115,15 +119,25 @@ public class RegistrarProfesorControlador {
         boolean apellidosValido = apellidos.matches("[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+");
         boolean correoValido = correo.matches("^[\\w.-]+@[\\w.-]+\\.[a-zA-Z]{2,}$");
         boolean numeroPersonalValido = numeroPersonal.matches("[a-zA-Z0-9]+");
+        boolean longitudNombreValida = nombre.length() <= LIMITE_NOMBRE;
+        boolean longitudApellidosValida = apellidos.length() <= LIMITE_APELLIDOS;
+        boolean longitudCorreoValida = correo.length() <= LIMITE_CORREO;
+        boolean longitudNumeroPersonalValida = numeroPersonal.length() <= LIMITE_NUMERO_PERSONAL;
 
-        verificarCaracteresPermitidos(camposFormularioValido, turnoValido, nombreValido, apellidosValido, correoValido, numeroPersonalValido);
+        verificarCaracteresPermitidos(camposFormularioValido, turnoValido, nombreValido, apellidosValido,
+                correoValido, numeroPersonalValido, longitudNombreValida, longitudApellidosValida,
+                longitudCorreoValida, longitudNumeroPersonalValida);
 
-        return camposFormularioValido && turnoValido && nombreValido && apellidosValido && correoValido && numeroPersonalValido;
+        return camposFormularioValido && turnoValido && nombreValido && apellidosValido
+                && correoValido && numeroPersonalValido && longitudNombreValida
+                && longitudApellidosValida && longitudCorreoValida && longitudNumeroPersonalValida;
     }
 
     private void verificarCaracteresPermitidos(boolean camposFormularioValido, boolean turnoValido,
                                                boolean nombreValido, boolean apellidosValido,
-                                               boolean correoValido, boolean numeroPersonalValido) {
+                                               boolean correoValido, boolean numeroPersonalValido,
+                                               boolean longitudNombreValida, boolean longitudApellidosValida,
+                                               boolean longitudCorreoValida, boolean longitudNumeroPersonalValida) {
         if (!camposFormularioValido) {
             mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
                     "Campos obligatorios vacios", "Verifique la informacion e intente de nuevo");
@@ -132,16 +146,28 @@ public class RegistrarProfesorControlador {
                     "Turno no seleccionado", "Seleccione un turno para el profesor.");
         } else if (!nombreValido) {
             mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
-                    "Nombre invalido", "EL NOMBRE SOLO PUEDE CONTENER LETRAS");
+                    "Nombre invalido", "El nombre solo puede contener letras");
+        } else if (!longitudNombreValida) {
+            mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
+                    "Nombre demasiado largo", "El nombre no puede exceder " + LIMITE_NOMBRE + " caracteres");
         } else if (!apellidosValido) {
             mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
-                    "Apellidos invalidos", "LOS APELLIDOS SOLO PUEDEN CONTENER LETRAS");
+                    "Apellidos invalidos", "Los apellidos solo pueden contener letras");
+        } else if (!longitudApellidosValida) {
+            mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
+                    "Apellidos demasiado largos", "Los apellidos no pueden exceder " + LIMITE_APELLIDOS + " caracteres");
         } else if (!correoValido) {
             mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
-                    "Correo invalido", "INGRESE UN CORREO ELECTRONICO VALIDO");
+                    "Correo invalido", "Ingrese un correo electronico valido");
+        } else if (!longitudCorreoValida) {
+            mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
+                    "Correo demasiado largo", "El correo no puede exceder " + LIMITE_CORREO + " caracteres");
         } else if (!numeroPersonalValido) {
             mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
-                    "Numero de personal invalido", "EL NUMERO DE PERSONAL SOLO PUEDE CONTENER LETRAS Y NUMEROS");
+                    "Numero de personal invalido", "El numero de personal solo puede contener letras y numeros");
+        } else if (!longitudNumeroPersonalValida) {
+            mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
+                    "Numero de personal demasiado largo", "El numero de personal no puede exceder " + LIMITE_NUMERO_PERSONAL + " caracteres");
         }
     }
 
@@ -173,11 +199,11 @@ public class RegistrarProfesorControlador {
         String contrasenaCifrada = CifracionContrasena.cifrarContrasena(contrasenaGenerada);
 
         Profesor profesor = new Profesor();
-        profesor.setNombre(limitarTexto(nombre, 55));
-        profesor.setApellidos(limitarTexto(apellidos, 55));
+        profesor.setNombre(nombre);
+        profesor.setApellidos(apellidos);
         profesor.setTurno(turno);
-        profesor.setCorreo(limitarTexto(correo, 100));
-        profesor.setNumeroDePersonalProfesor(limitarTexto(numeroPersonal, 12));
+        profesor.setCorreo(correo);
+        profesor.setNumeroDePersonalProfesor(numeroPersonal);
         profesor.setContrasena(contrasenaCifrada);
         profesor.setEstado(Estado.Activo);
         return profesor;
@@ -217,10 +243,6 @@ public class RegistrarProfesorControlador {
             mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
                     "Error inesperado", excepcion.getMessage().toUpperCase());
         }
-    }
-
-    private String limitarTexto(String texto, int limite) {
-        return texto.substring(0, Math.min(limite, texto.length()));
     }
 
     private void limpiarCamposRegistros() {
