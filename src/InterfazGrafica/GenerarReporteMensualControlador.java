@@ -20,10 +20,10 @@ import logica.dominio.Proyecto;
 import logica.dominio.Reporte;
 import logica.dominio.SesionUsuario;
 import logica.dominio.enums.TipoReporte;
-
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -40,6 +40,10 @@ public class GenerarReporteMensualControlador {
             Map.entry("Julio", 7), Map.entry("Agosto", 8), Map.entry("Septiembre", 9),
             Map.entry("Octubre", 10), Map.entry("Noviembre", 11), Map.entry("Diciembre", 12)
     );
+
+    private final ProyectoDao proyectoDao = new ProyectoDao();
+    private final ActividadDao actividadDao = new ActividadDao();
+    private final ReporteDao reporteDao = new ReporteDao();
 
     @FXML private Label etiquetaMatricula;
     @FXML private Label etiquetaProyecto;
@@ -87,23 +91,23 @@ public class GenerarReporteMensualControlador {
 
     @FXML
     private void botonGenerar() {
-        ocultarError();
-        ocultarExito();
-        if (confirmarAccion("¿Desea generar el reporte mensual?")) {
+        ocultarPanel(panelError);
+        ocultarPanel(panelExito);
+        if (confirmarAccion("Desea generar el reporte mensual?")) {
             procesarGeneracion();
         }
     }
 
     @FXML
     private void botonCancelar() {
-        if (confirmarAccion("¿Seguro que desea cancelar?")) {
+        if (confirmarAccion("Seguro que desea cancelar?")) {
             limpiarFormulario();
         }
     }
 
     @FXML
-    private void botonRegresar(ActionEvent event) {
-        Stage escenario = (Stage) ((Node) event.getSource()).getScene().getWindow();
+    private void botonRegresar(ActionEvent evento) {
+        Stage escenario = (Stage) ((Node) evento.getSource()).getScene().getWindow();
         escenario.close();
     }
 
@@ -122,7 +126,6 @@ public class GenerarReporteMensualControlador {
     }
 
     private void cargarInformacionProyecto() {
-        ProyectoDao proyectoDao = new ProyectoDao();
         try {
             Proyecto proyecto = proyectoDao.obtenerProyectoPorPracticante(matricula);
             if (proyecto != null) {
@@ -131,7 +134,8 @@ public class GenerarReporteMensualControlador {
                 etiquetaProyecto.setText(nombreProyecto);
                 etiquetaOrganizacion.setText(nombreOrganizacion);
             } else {
-                mostrarError("Sin proyecto asignado", "No se encontró proyecto para la matrícula: " + matricula);
+                mostrarError("Sin proyecto asignado",
+                        "NO SE ENCONTRO PROYECTO PARA LA MATRICULA: " + matricula);
             }
         } catch (MensajeriaExcepcion excepcion) {
             LOGGER.log(Level.SEVERE, "Error al cargar proyecto", excepcion);
@@ -140,7 +144,6 @@ public class GenerarReporteMensualControlador {
     }
 
     private void cargarHorasAcumuladas() {
-        ActividadDao actividadDao = new ActividadDao();
         try {
             int horasTotales = actividadDao.obtenerHorasTotalesPorPracticante(matricula);
             if (etiquetaHorasAcumuladas != null) {
@@ -152,7 +155,6 @@ public class GenerarReporteMensualControlador {
     }
 
     private void cargarActividadesDelMes(String mesSeleccionado) {
-        ActividadDao actividadDao = new ActividadDao();
         limpiarEtiquetasActividades();
         try {
             int mes = NUMERO_MES.getOrDefault(mesSeleccionado, 0);
@@ -167,9 +169,10 @@ public class GenerarReporteMensualControlador {
                 indice++;
             }
             if (actividades.isEmpty()) {
-                mostrarError("Sin actividades", "No tienes actividades registradas en " + mesSeleccionado + ".");
+                mostrarError("Sin actividades",
+                        "NO TIENES ACTIVIDADES REGISTRADAS EN " + mesSeleccionado.toUpperCase() + ".");
             } else {
-                ocultarError();
+                ocultarPanel(panelError);
             }
         } catch (MensajeriaExcepcion excepcion) {
             LOGGER.log(Level.SEVERE, "Error al cargar actividades del mes", excepcion);
@@ -200,84 +203,90 @@ public class GenerarReporteMensualControlador {
     private boolean verificarReporteDuplicado() {
         boolean yaExiste = false;
         String mesSeleccionado = comboMes.getSelectionModel().getSelectedItem();
-        if (mesSeleccionado == null) {
-            return false;
-        }
-        int mes = NUMERO_MES.getOrDefault(mesSeleccionado, 0);
-        int anio = java.time.LocalDate.now().getYear();
-        ReporteDao reporteDao = new ReporteDao();
-        try {
-            if (reporteDao.existeReporteMensualEnMes(matricula, mes, anio)) {
-                mostrarError("Reporte duplicado", "YA GENERASTE UN REPORTE MENSUAL PARA " +
-                        mesSeleccionado.toUpperCase() + ".");
+        boolean mesValido = mesSeleccionado != null;
+        if (!mesValido) {
+            yaExiste = false;
+        } else {
+            int mes = NUMERO_MES.getOrDefault(mesSeleccionado, 0);
+            int anio = LocalDate.now().getYear();
+            try {
+                if (reporteDao.existeReporteMensualEnMes(matricula, mes, anio)) {
+                    mostrarError("Reporte duplicado", "YA GENERASTE UN REPORTE MENSUAL PARA "
+                            + mesSeleccionado.toUpperCase() + ".");
+                    yaExiste = true;
+                }
+            } catch (MensajeriaExcepcion excepcion) {
+                LOGGER.log(Level.SEVERE, "Error al verificar reporte duplicado", excepcion);
+                mostrarError("Error inesperado", excepcion.getMessage().toUpperCase());
                 yaExiste = true;
             }
-        } catch (MensajeriaExcepcion excepcion) {
-            LOGGER.log(Level.SEVERE, "Error al verificar reporte duplicado", excepcion);
-            mostrarError("Error inesperado", excepcion.getMessage().toUpperCase());
-            yaExiste = true;
         }
         return yaExiste;
     }
 
-    private boolean camposValidos() {
+    private boolean verificarCampos() {
         boolean validos = true;
         if (!tieneMesSeleccionado()) {
-            mostrarError("Campo requerido", "Selecciona un mes antes de generar el reporte.");
+            mostrarError("Campo requerido", "SELECCIONA UN MES ANTES DE GENERAR EL REPORTE.");
             validos = false;
         } else if (!tieneAlMenosUnaActividad()) {
-            mostrarError("Sin actividades", "No tienes actividades registradas en el mes seleccionado.");
+            mostrarError("Sin actividades", "NO TIENES ACTIVIDADES REGISTRADAS EN EL MES SELECCIONADO.");
             validos = false;
         } else if (textoAreaDescripcion.getText().trim().isEmpty()) {
-            mostrarError("Campo requerido", "La descripción es obligatoria.");
+            mostrarError("Campo requerido", "LA DESCRIPCION ES OBLIGATORIA.");
             validos = false;
         }
         return validos;
     }
 
     private void procesarGeneracion() {
-        if (camposValidos()) {
-            if (!verificarReporteDuplicado()) {
-                generarPdf();
-            }
+        boolean camposCorrectos = verificarCampos();
+        boolean reporteNoDuplicado = false;
+        if (camposCorrectos) {
+            reporteNoDuplicado = !verificarReporteDuplicado();
+        }
+        if (camposCorrectos && reporteNoDuplicado) {
+            generarPdf();
         }
     }
 
     private void generarPdf() {
         StringBuilder actividades = new StringBuilder();
-        for (int i = 0; i < etiquetasActividades.length; i++) {
-            String texto = etiquetasActividades[i].getText().trim();
-            if (!texto.isEmpty()) {
-                if (actividades.length() > 0) {
-                    actividades.append("\n");
-                }
-                actividades.append("Actividad ").append(i + 1).append(": ").append(texto);
+        for (int indice = 0; indice < etiquetasActividades.length; indice++) {
+            String texto = etiquetasActividades[indice].getText().trim();
+            boolean textoNoVacio = !texto.isEmpty();
+            if (textoNoVacio && actividades.length() > 0) {
+                actividades.append("\n");
+            }
+            if (textoNoVacio) {
+                actividades.append("Actividad ").append(indice + 1).append(": ").append(texto);
             }
         }
-
         Reporte reporte = new Reporte(TipoReporte.Mensual, textoAreaDescripcion.getText().trim(),
                 actividades.toString(), matricula, null, null);
-
         GeneradorPdfReporteMensual generador = new GeneradorPdfReporteMensual();
         String rutaPdf = generador.generarPdf(reporte, nombrePracticante, nombreProyecto, nombreOrganizacion);
-
         if (rutaPdf != null) {
-            guardarEnBaseDeDatos(reporte, rutaPdf);
-            limpiarFormulario();
-            mostrarExito("PDF generado correctamente", "El reporte se guardó en: " + rutaPdf);
+            procesarResultadoPdf(reporte, rutaPdf);
         } else {
-            mostrarError("Error al generar", "No se pudo generar el PDF. Intente de nuevo.");
+            mostrarError("Error al generar", "NO SE PUDO GENERAR EL PDF. INTENTE DE NUEVO.");
         }
     }
 
+    private void procesarResultadoPdf(Reporte reporte, String rutaPdf) {
+        guardarEnBaseDeDatos(reporte, rutaPdf);
+        limpiarFormulario();
+        mostrarExito("PDF generado correctamente", "EL REPORTE SE GUARDO EN: " + rutaPdf);
+    }
+
     private void guardarEnBaseDeDatos(Reporte reporte, String rutaPdf) {
-        ReporteDao reporteDao = new ReporteDao();
         try {
             reporte.setArchivoAdjunto(rutaPdf);
             reporteDao.agregarReporte(reporte);
             LOGGER.info("Reporte mensual guardado en BD correctamente");
         } catch (MensajeriaExcepcion excepcion) {
             LOGGER.log(Level.SEVERE, "Error al guardar reporte mensual en BD", excepcion);
+            mostrarError("Error al guardar", "NO SE PUDO GUARDAR EL REPORTE EN LA BASE DE DATOS.");
         }
     }
 
@@ -285,42 +294,46 @@ public class GenerarReporteMensualControlador {
         comboMes.getSelectionModel().clearSelection();
         textoAreaDescripcion.clear();
         limpiarEtiquetasActividades();
-        ocultarError();
-        ocultarExito();
+        ocultarPanel(panelError);
+        ocultarPanel(panelExito);
     }
 
     private boolean confirmarAccion(String mensaje) {
         Alert alerta = new Alert(Alert.AlertType.CONFIRMATION);
-        alerta.setTitle("Confirmación");
+        boolean confirmado = false;
+        alerta.setTitle("Confirmacion");
         alerta.setHeaderText(mensaje);
         alerta.setContentText("");
-        ButtonType botonSi = new ButtonType("Sí");
+        ButtonType botonSi = new ButtonType("Si");
         ButtonType botonNo = new ButtonType("No");
         alerta.getButtonTypes().setAll(botonSi, botonNo);
-        return alerta.showAndWait().filter(botonPresionado -> botonPresionado == botonSi).isPresent();
+        Optional<ButtonType> resultado = alerta.showAndWait();
+        if (resultado.isPresent() && resultado.get() == botonSi) {
+            confirmado = true;
+        }
+        return confirmado;
+    }
+
+    private void mostrarPanel(VBox panelMostrar, VBox panelOcultar) {
+        panelMostrar.setVisible(true);
+        panelMostrar.setManaged(true);
+        ocultarPanel(panelOcultar);
+    }
+
+    private void ocultarPanel(VBox panel) {
+        panel.setVisible(false);
+        panel.setManaged(false);
     }
 
     private void mostrarError(String titulo, String mensaje) {
         etiquetaTituloError.setText(titulo);
         etiquetaMensajeError.setText(mensaje);
-        panelError.setVisible(true);
-        panelError.setManaged(true);
-    }
-
-    private void ocultarError() {
-        panelError.setVisible(false);
-        panelError.setManaged(false);
+        mostrarPanel(panelError, panelExito);
     }
 
     private void mostrarExito(String titulo, String mensaje) {
         etiquetaTituloExito.setText(titulo);
         etiquetaMensajeExito.setText(mensaje);
-        panelExito.setVisible(true);
-        panelExito.setManaged(true);
-    }
-
-    private void ocultarExito() {
-        panelExito.setVisible(false);
-        panelExito.setManaged(false);
+        mostrarPanel(panelExito, panelError);
     }
 }

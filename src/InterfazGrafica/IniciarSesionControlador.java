@@ -9,16 +9,21 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import logica.dominio.CifracionContrasena;
 import logica.dao.excepciones.UsuariosExcepcion;
 import logica.dao.objetos.UsuarioDao;
+import logica.dominio.CifracionContrasena;
 import logica.dominio.SesionUsuario;
 import logica.dominio.UsuarioSesion;
 import logica.dominio.enums.Estado;
 import logica.dominio.enums.Rol;
+import java.io.IOException;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class IniciarSesionControlador {
+
+    private static final Logger LOGGER = Logger.getLogger(IniciarSesionControlador.class.getName());
 
     @FXML private TextField campoTextoIdentificador;
     @FXML private PasswordField campoTextoContrasena;
@@ -26,22 +31,21 @@ public class IniciarSesionControlador {
     @FXML private Label etiquetaTituloError;
     @FXML private Label etiquetaMensajeError;
 
-    private UsuarioDao usuarioDao = new UsuarioDao();
-
     @FXML
     private void botonIniciarSesion() {
         ocultarError();
-        String correo = campoTextoIdentificador.getText().trim();
+        String identificador = campoTextoIdentificador.getText().trim();
         String contrasena = campoTextoContrasena.getText().trim();
 
-        if (camposVacios(List.of(correo, contrasena))) {
+        if (camposVacios(List.of(identificador, contrasena))) {
             mostrarError("Campos vacíos", "POR FAVOR INGRESA TUS CREDENCIALES.");
             return;
         }
 
         try {
+            UsuarioDao usuarioDao = new UsuarioDao();
             String contrasenaCifrada = CifracionContrasena.cifrarContrasena(contrasena);
-            UsuarioSesion usuarioSesion = usuarioDao.buscarUsuario(correo, contrasenaCifrada);
+            UsuarioSesion usuarioSesion = usuarioDao.buscarUsuario(identificador, contrasenaCifrada);
             procesarResultadoLogin(usuarioSesion);
         } catch (UsuariosExcepcion excepcion) {
             mostrarError("Error inesperado", excepcion.getMessage().toUpperCase());
@@ -83,13 +87,25 @@ public class IniciarSesionControlador {
     }
 
     private String obtenerRutaFxml(Rol rol) {
+        String rutaFxml;
         switch (rol) {
-            case Coordinador:   return "/InterfazGrafica/vistas/MenuCoordinadorVista.fxml";
-            case Profesor:      return "/InterfazGrafica/vistas/MenuProfesorVista.fxml";
-            case Practicante:   return "/InterfazGrafica/vistas/MenuPracticanteVista.fxml";
-            case Administrador: return "/InterfazGrafica/vistas/MenuAdministradorVista.fxml";
-            default:            return null;
+            case Coordinador:
+                rutaFxml = "/InterfazGrafica/vistas/MenuCoordinadorVista.fxml";
+                break;
+            case Profesor:
+                rutaFxml = "/InterfazGrafica/vistas/MenuProfesorVista.fxml";
+                break;
+            case Practicante:
+                rutaFxml = "/InterfazGrafica/vistas/MenuPracticanteVista.fxml";
+                break;
+            case Administrador:
+                rutaFxml = "/InterfazGrafica/vistas/MenuAdministradorVista.fxml";
+                break;
+            default:
+                rutaFxml = null;
+                break;
         }
+        return rutaFxml;
     }
 
     private void cargarVista(String rutaFxml) {
@@ -98,7 +114,8 @@ public class IniciarSesionControlador {
             Stage escenario = (Stage) campoTextoIdentificador.getScene().getWindow();
             escenario.setScene(new Scene(ruta));
             escenario.show();
-        } catch (Exception excepcion) {
+        } catch (IOException excepcion) {
+            LOGGER.log(Level.SEVERE, "Error al cargar vista", excepcion);
             mostrarError("Error al cargar pantalla", excepcion.getMessage().toUpperCase());
         }
     }

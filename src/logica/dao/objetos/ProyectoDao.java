@@ -30,33 +30,33 @@ public class ProyectoDao implements ProyectoDaoInterfaz {
     }
 
     /**
-     * Agrega un nuevo proyecto en la base de datos.
+     * Inserta un nuevo proyecto en la base de datos.
      * @param proyecto el proyecto a insertar
      * @return el numero de filas afectadas
      * @throws MensajeriaExcepcion si ocurre un error al insertar o de conexion
      */
     @Override
     public int agregarProyecto(Proyecto proyecto) throws MensajeriaExcepcion {
-        String consultaProyecto = "INSERT INTO proyecto (nombreProyecto, descripcion, responsableDelProyecto, estado, nombreEmpresa, sectorEmpresa, direccionEmpresa, idOrganizacion, numPersonalProfesor, numPersonalCoordinador, fechaRegistro, capacidad) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String consulta = "INSERT INTO proyecto (nombreProyecto, descripcion, responsableDelProyecto, estado, nombreEmpresa, sectorEmpresa, direccionEmpresa, idOrganizacion, numPersonalProfesor, numPersonalCoordinador, fechaRegistro, capacidad) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         Connection conexionBaseDeDatos = null;
-        PreparedStatement insertarEnBaseDeDatos = null;
+        PreparedStatement sentencia = null;
         int filasAfectadas = 0;
         try {
             conexionBaseDeDatos = ConexionBaseDeDatos.getInstance().conectar();
-            insertarEnBaseDeDatos = conexionBaseDeDatos.prepareStatement(consultaProyecto);
-            insertarEnBaseDeDatos.setString(1, proyecto.getNombreProyecto());
-            insertarEnBaseDeDatos.setString(2, proyecto.getDescripcion());
-            insertarEnBaseDeDatos.setString(3, proyecto.getResponsableDelProyecto());
-            insertarEnBaseDeDatos.setString(4, proyecto.getEstado().toString().replace("_", " "));
-            insertarEnBaseDeDatos.setString(5, proyecto.getNombreEmpresa());
-            insertarEnBaseDeDatos.setString(6, proyecto.getSectorEmpresa());
-            insertarEnBaseDeDatos.setString(7, proyecto.getDireccionEmpresa());
-            insertarEnBaseDeDatos.setInt(8, proyecto.getIdOrganizacion());
-            insertarEnBaseDeDatos.setString(9, proyecto.getNumPersonalProfesor());
-            insertarEnBaseDeDatos.setString(10, proyecto.getNumPersonalCoordinador());
-            insertarEnBaseDeDatos.setDate(11, proyecto.getFechaRegistro());
-            insertarEnBaseDeDatos.setInt(12, proyecto.getCapacidad());
-            filasAfectadas = insertarEnBaseDeDatos.executeUpdate();
+            sentencia = conexionBaseDeDatos.prepareStatement(consulta);
+            sentencia.setString(1, proyecto.getNombreProyecto());
+            sentencia.setString(2, proyecto.getDescripcion());
+            sentencia.setString(3, proyecto.getResponsableDelProyecto());
+            sentencia.setString(4, proyecto.getEstado().toString().replace("_", " "));
+            sentencia.setString(5, proyecto.getNombreEmpresa());
+            sentencia.setString(6, proyecto.getSectorEmpresa());
+            sentencia.setString(7, proyecto.getDireccionEmpresa());
+            sentencia.setInt(8, proyecto.getIdOrganizacion());
+            sentencia.setString(9, proyecto.getNumPersonalProfesor());
+            sentencia.setString(10, proyecto.getNumPersonalCoordinador());
+            sentencia.setDate(11, proyecto.getFechaRegistro());
+            sentencia.setInt(12, proyecto.getCapacidad());
+            filasAfectadas = sentencia.executeUpdate();
             LOGGER.info("Proyecto insertado correctamente");
         } catch (SQLException excepcionSql) {
             LOGGER.log(Level.SEVERE, "Error al insertar proyecto", excepcionSql);
@@ -66,8 +66,8 @@ public class ProyectoDao implements ProyectoDaoInterfaz {
             throw new MensajeriaExcepcion("Error al agregar el proyecto", excepcionSql);
         } finally {
             try {
-                if (insertarEnBaseDeDatos != null) {
-                    insertarEnBaseDeDatos.close();
+                if (sentencia != null) {
+                    sentencia.close();
                 }
                 if (conexionBaseDeDatos != null) {
                     conexionBaseDeDatos.close();
@@ -80,8 +80,65 @@ public class ProyectoDao implements ProyectoDaoInterfaz {
     }
 
     /**
+     * Obtiene un proyecto por su identificador.
+     * @param idProyecto el identificador del proyecto a buscar
+     * @return el proyecto con todos sus datos, o null si no se encontro
+     * @throws MensajeriaExcepcion si ocurre un error al obtener el proyecto o de conexion
+     */
+    public Proyecto obtenerProyectoPorId(int idProyecto) throws MensajeriaExcepcion {
+        String consulta = "SELECT idProyecto, nombreProyecto, descripcion, responsableDelProyecto, " +
+                "estado, nombreEmpresa, sectorEmpresa, direccionEmpresa, " +
+                "numPersonalCoordinador, fechaRegistro, idOrganizacion, capacidad " +
+                "FROM proyecto WHERE idProyecto = ?";
+        Connection conexionBaseDeDatos = null;
+        PreparedStatement sentencia = null;
+        Proyecto proyecto = null;
+        try {
+            conexionBaseDeDatos = ConexionBaseDeDatos.getInstance().conectar();
+            sentencia = conexionBaseDeDatos.prepareStatement(consulta);
+            sentencia.setInt(1, idProyecto);
+            ResultSet resultado = sentencia.executeQuery();
+            if (resultado.next()) {
+                proyecto = new Proyecto();
+                proyecto.setIdProyecto(resultado.getInt("idProyecto"));
+                proyecto.setNombreProyecto(resultado.getString("nombreProyecto"));
+                proyecto.setDescripcion(resultado.getString("descripcion"));
+                proyecto.setResponsableDelProyecto(resultado.getString("responsableDelProyecto"));
+                proyecto.setEstado(EstadoProyecto.valueOf(
+                        resultado.getString("estado").replace(" ", "_")));
+                proyecto.setNombreEmpresa(resultado.getString("nombreEmpresa"));
+                proyecto.setSectorEmpresa(resultado.getString("sectorEmpresa"));
+                proyecto.setDireccionEmpresa(resultado.getString("direccionEmpresa"));
+                proyecto.setNumPersonalCoordinador(resultado.getString("numPersonalCoordinador"));
+                proyecto.setFechaRegistro(resultado.getDate("fechaRegistro"));
+                proyecto.setIdOrganizacion(resultado.getInt("idOrganizacion"));
+                proyecto.setCapacidad(resultado.getInt("capacidad"));
+            }
+            LOGGER.info("Proyecto cargado por id: " + idProyecto);
+        } catch (SQLException excepcionSql) {
+            LOGGER.log(Level.SEVERE, "Error al obtener proyecto por id", excepcionSql);
+            if (esErrorDeConexion(excepcionSql)) {
+                throw new MensajeriaExcepcion("No se pudo conectar al servidor. Verifique que la base de datos este encendida");
+            }
+            throw new MensajeriaExcepcion("Error al obtener proyecto", excepcionSql);
+        } finally {
+            try {
+                if (sentencia != null) {
+                    sentencia.close();
+                }
+                if (conexionBaseDeDatos != null) {
+                    conexionBaseDeDatos.close();
+                }
+            } catch (SQLException excepcionSql) {
+                LOGGER.log(Level.SEVERE, "Error al cerrar conexión", excepcionSql);
+            }
+        }
+        return proyecto;
+    }
+
+    /**
      * Modifica los datos de un proyecto existente en la base de datos.
-     * @param idProyecto el ID del proyecto a modificar
+     * @param idProyecto el identificador del proyecto a modificar
      * @param proyecto el proyecto con los nuevos datos
      * @return el numero de filas afectadas
      * @throws MensajeriaExcepcion si ocurre un error al modificar o de conexion
@@ -95,36 +152,36 @@ public class ProyectoDao implements ProyectoDaoInterfaz {
         }
         String consulta = "UPDATE proyecto SET nombreProyecto = ?, descripcion = ?, responsableDelProyecto = ?, estado = ?, nombreEmpresa = ?, sectorEmpresa = ?, direccionEmpresa = ?, idOrganizacion = ?, numPersonalProfesor = ?, numPersonalCoordinador = ?, fechaRegistro = ?, capacidad = ? WHERE idProyecto = ?";
         Connection conexionBaseDeDatos = null;
-        PreparedStatement actualizacion = null;
+        PreparedStatement sentencia = null;
         int filasAfectadas = 0;
         try {
             conexionBaseDeDatos = ConexionBaseDeDatos.getInstance().conectar();
-            actualizacion = conexionBaseDeDatos.prepareStatement(consulta);
-            actualizacion.setString(1, proyecto.getNombreProyecto());
-            actualizacion.setString(2, proyecto.getDescripcion());
-            actualizacion.setString(3, proyecto.getResponsableDelProyecto());
-            actualizacion.setString(4, proyecto.getEstado().toString().replace("_", " "));
-            actualizacion.setString(5, proyecto.getNombreEmpresa());
-            actualizacion.setString(6, proyecto.getSectorEmpresa());
-            actualizacion.setString(7, proyecto.getDireccionEmpresa());
-            actualizacion.setInt(8, proyecto.getIdOrganizacion());
-            actualizacion.setString(9, proyecto.getNumPersonalProfesor());
-            actualizacion.setString(10, proyecto.getNumPersonalCoordinador());
-            actualizacion.setDate(11, proyecto.getFechaRegistro());
-            actualizacion.setInt(12, proyecto.getCapacidad());
-            actualizacion.setInt(13, idProyecto);
-            filasAfectadas = actualizacion.executeUpdate();
+            sentencia = conexionBaseDeDatos.prepareStatement(consulta);
+            sentencia.setString(1, proyecto.getNombreProyecto());
+            sentencia.setString(2, proyecto.getDescripcion());
+            sentencia.setString(3, proyecto.getResponsableDelProyecto());
+            sentencia.setString(4, proyecto.getEstado().toString().replace("_", " "));
+            sentencia.setString(5, proyecto.getNombreEmpresa());
+            sentencia.setString(6, proyecto.getSectorEmpresa());
+            sentencia.setString(7, proyecto.getDireccionEmpresa());
+            sentencia.setInt(8, proyecto.getIdOrganizacion());
+            sentencia.setString(9, proyecto.getNumPersonalProfesor());
+            sentencia.setString(10, proyecto.getNumPersonalCoordinador());
+            sentencia.setDate(11, proyecto.getFechaRegistro());
+            sentencia.setInt(12, proyecto.getCapacidad());
+            sentencia.setInt(13, idProyecto);
+            filasAfectadas = sentencia.executeUpdate();
             LOGGER.info("Proyecto modificado correctamente: " + idProyecto);
         } catch (SQLException excepcionSql) {
             LOGGER.log(Level.SEVERE, "Error al modificar proyecto", excepcionSql);
             if (esErrorDeConexion(excepcionSql)) {
                 throw new MensajeriaExcepcion("No se pudo conectar al servidor. Verifique que la base de datos este encendida");
             }
-            throw new MensajeriaExcepcion("Error al modificar proyecto");
+            throw new MensajeriaExcepcion("Error al modificar proyecto", excepcionSql);
         } finally {
             try {
-                if (actualizacion != null) {
-                    actualizacion.close();
+                if (sentencia != null) {
+                    sentencia.close();
                 }
                 if (conexionBaseDeDatos != null) {
                     conexionBaseDeDatos.close();
@@ -137,12 +194,13 @@ public class ProyectoDao implements ProyectoDaoInterfaz {
     }
 
     /**
-     * Obtiene la lista de proyectos con estado disponible.
-     * @return lista de proyectos disponibles
-     * @throws MensajeriaExcepcion si ocurre un error al consultar o de conexion
+     * Obtiene la lista de proyectos con estado Disponible.
+     * @return lista de proyectos disponibles para asignar a practicantes
+     * @throws MensajeriaExcepcion si ocurre un error al obtener los proyectos o de conexion
      */
     public List<Proyecto> obtenerProyectosDisponibles() throws MensajeriaExcepcion {
-        String consulta = "SELECT p.idProyecto, p.nombreProyecto, p.estado, o.nombre AS nombreOrganizacion " +
+        String consulta = "SELECT p.idProyecto, p.nombreProyecto, p.estado, p.capacidad, " +
+                "o.nombre AS nombreOrganizacion " +
                 "FROM proyecto p JOIN organizacion_vinculada o ON p.idOrganizacion = o.idOrganizacion " +
                 "WHERE p.estado = 'Disponible'";
         Connection conexionBaseDeDatos = null;
@@ -159,8 +217,10 @@ public class ProyectoDao implements ProyectoDaoInterfaz {
                 proyecto.setEstado(EstadoProyecto.valueOf(
                         resultados.getString("estado").replace(" ", "_")));
                 proyecto.setNombreEmpresa(resultados.getString("nombreOrganizacion"));
+                proyecto.setCapacidad(resultados.getInt("capacidad"));
                 listaProyectos.add(proyecto);
             }
+            LOGGER.info("Proyectos disponibles cargados: " + listaProyectos.size());
         } catch (SQLException excepcionSql) {
             LOGGER.log(Level.SEVERE, "Error al obtener proyectos disponibles", excepcionSql);
             if (esErrorDeConexion(excepcionSql)) {
@@ -183,22 +243,22 @@ public class ProyectoDao implements ProyectoDaoInterfaz {
     }
 
     /**
-     * Cambia el estado de un proyecto a Eliminado en la base de datos.
-     * @param idProyecto el ID del proyecto a inactivar
+     * Cambia el estado de un proyecto a Eliminado.
+     * @param idProyecto el identificador del proyecto a inactivar
      * @return el numero de filas afectadas
      * @throws MensajeriaExcepcion si ocurre un error al inactivar o de conexion
      */
     public int inactivarProyecto(int idProyecto) throws MensajeriaExcepcion {
         String consulta = "UPDATE proyecto SET estado = ? WHERE idProyecto = ?";
         Connection conexionBaseDeDatos = null;
-        PreparedStatement actualizacion = null;
+        PreparedStatement sentencia = null;
         int filasAfectadas = 0;
         try {
             conexionBaseDeDatos = ConexionBaseDeDatos.getInstance().conectar();
-            actualizacion = conexionBaseDeDatos.prepareStatement(consulta);
-            actualizacion.setString(1, EstadoProyecto.Eliminado.toString().replace("_", " "));
-            actualizacion.setInt(2, idProyecto);
-            filasAfectadas = actualizacion.executeUpdate();
+            sentencia = conexionBaseDeDatos.prepareStatement(consulta);
+            sentencia.setString(1, EstadoProyecto.Eliminado.toString().replace("_", " "));
+            sentencia.setInt(2, idProyecto);
+            filasAfectadas = sentencia.executeUpdate();
             LOGGER.info("Proyecto inactivado correctamente: " + idProyecto);
         } catch (SQLException excepcionSql) {
             LOGGER.log(Level.SEVERE, "Error al inactivar proyecto", excepcionSql);
@@ -208,8 +268,8 @@ public class ProyectoDao implements ProyectoDaoInterfaz {
             throw new MensajeriaExcepcion("Error al inactivar proyecto", excepcionSql);
         } finally {
             try {
-                if (actualizacion != null) {
-                    actualizacion.close();
+                if (sentencia != null) {
+                    sentencia.close();
                 }
                 if (conexionBaseDeDatos != null) {
                     conexionBaseDeDatos.close();
@@ -222,10 +282,10 @@ public class ProyectoDao implements ProyectoDaoInterfaz {
     }
 
     /**
-     * Obtiene el proyecto asignado a un practicante segun su matricula.
+     * Obtiene el proyecto asignado a un practicante.
      * @param matricula la matricula del practicante
-     * @return el proyecto asignado, o null si no tiene ninguno
-     * @throws MensajeriaExcepcion si ocurre un error al consultar o de conexion
+     * @return el proyecto asignado al practicante, o null si no tiene proyecto asignado
+     * @throws MensajeriaExcepcion si ocurre un error al obtener el proyecto o de conexion
      */
     public Proyecto obtenerProyectoPorPracticante(String matricula) throws MensajeriaExcepcion {
         String consulta = "SELECT pr.idProyecto, pr.nombreProyecto, pr.responsableDelProyecto, " +

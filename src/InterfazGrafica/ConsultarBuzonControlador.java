@@ -1,6 +1,5 @@
 package InterfazGrafica;
 
-
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
@@ -15,9 +14,12 @@ import logica.dao.objetos.MensajeDao;
 import logica.dominio.MensajeVista;
 import logica.dominio.SesionUsuario;
 import java.util.List;
-
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class ConsultarBuzonControlador {
+
+    private static final Logger LOGGER = Logger.getLogger(ConsultarBuzonControlador.class.getName());
 
     @FXML private TableView<MensajeVista> tablaRecibidos;
     @FXML private TableColumn<MensajeVista, String> columnaRemitenteRecibidos;
@@ -38,12 +40,18 @@ public class ConsultarBuzonControlador {
     }
 
     private void configurarColumnas() {
-        columnaRemitenteRecibidos.setCellValueFactory(celda -> new SimpleStringProperty(celda.getValue().getNombreUsuario()));
-        columnaFechaRecibidos.setCellValueFactory(celda -> obtenerFecha(celda.getValue()));
-        columnaContenidoRecibidos.setCellValueFactory(celda -> new SimpleStringProperty(celda.getValue().getContenido()));
-        columnaDestinatarioEnviados.setCellValueFactory(celda -> new SimpleStringProperty(celda.getValue().getNombreUsuario()));
-        columnaFechaEnviados.setCellValueFactory(celda -> obtenerFecha(celda.getValue()));
-        columnaContenidoEnviados.setCellValueFactory(celda -> new SimpleStringProperty(celda.getValue().getContenido()));
+        columnaRemitenteRecibidos.setCellValueFactory(celda ->
+                new SimpleStringProperty(celda.getValue().getNombreUsuario()));
+        columnaFechaRecibidos.setCellValueFactory(celda ->
+                obtenerFecha(celda.getValue()));
+        columnaContenidoRecibidos.setCellValueFactory(celda ->
+                new SimpleStringProperty(celda.getValue().getContenido()));
+        columnaDestinatarioEnviados.setCellValueFactory(celda ->
+                new SimpleStringProperty(celda.getValue().getNombreUsuario()));
+        columnaFechaEnviados.setCellValueFactory(celda ->
+                obtenerFecha(celda.getValue()));
+        columnaContenidoEnviados.setCellValueFactory(celda ->
+                new SimpleStringProperty(celda.getValue().getContenido()));
     }
 
     private SimpleStringProperty obtenerFecha(MensajeVista mensaje) {
@@ -55,15 +63,29 @@ public class ConsultarBuzonControlador {
     }
 
     private void cargarMensajes() {
-        int idUsuario = SesionUsuario.getInstance().getIdUsuario();
+        cargarRecibidos();
+        cargarEnviados();
+    }
+
+    private void cargarRecibidos() {
+        int idUsuario = SesionUsuario.getInstance().getUsuarioActivo().getIdUsuario();
         try {
             List<MensajeVista> recibidos = mensajeDao.obtenerMensajesRecibidos(idUsuario);
             tablaRecibidos.setItems(FXCollections.observableArrayList(recibidos));
+        } catch (MensajeriaExcepcion excepcion) {
+            LOGGER.log(Level.SEVERE, "Error al cargar mensajes recibidos", excepcion);
+            areaContenidoMensaje.setText("ERROR AL CARGAR LOS MENSAJES RECIBIDOS.");
+        }
+    }
 
+    private void cargarEnviados() {
+        int idUsuario = SesionUsuario.getInstance().getUsuarioActivo().getIdUsuario();
+        try {
             List<MensajeVista> enviados = mensajeDao.obtenerMensajesEnviados(idUsuario);
             tablaEnviados.setItems(FXCollections.observableArrayList(enviados));
         } catch (MensajeriaExcepcion excepcion) {
-            areaContenidoMensaje.setText("Error al cargar los mensajes.");
+            LOGGER.log(Level.SEVERE, "Error al cargar mensajes enviados", excepcion);
+            areaContenidoMensaje.setText("ERROR AL CARGAR LOS MENSAJES ENVIADOS.");
         }
     }
 

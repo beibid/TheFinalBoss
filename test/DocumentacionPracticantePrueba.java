@@ -12,7 +12,7 @@ public class DocumentacionPracticantePrueba {
 
     @Test
     public void pruebaAgregarDocumentacionPendienteExitoso() throws UsuariosExcepcion {
-        DocumentacionPracticante doc = new DocumentacionPracticante("/uploads/oficio_S24013282.pdf", EstadoRevision.Pendiente, "");
+        DocumentacionPracticante doc = new DocumentacionPracticante("/uploads/nuevo_doc_001.pdf", EstadoRevision.Pendiente, "");
         DocumentacionPracticanteDao documentacionDao = new DocumentacionPracticanteDao();
         int filasAfectadas = documentacionDao.agregarDocumentacion(doc);
         assertEquals(1, filasAfectadas);
@@ -20,7 +20,7 @@ public class DocumentacionPracticantePrueba {
 
     @Test
     public void pruebaAgregarDocumentacionAlternoEstadoAprobado() throws UsuariosExcepcion {
-        DocumentacionPracticante doc = new DocumentacionPracticante("/uploads/horario_S22019874.pdf", EstadoRevision.Aprobado, "");
+        DocumentacionPracticante doc = new DocumentacionPracticante("/uploads/nuevo_doc_002.pdf", EstadoRevision.Aprobado, "");
         DocumentacionPracticanteDao documentacionDao = new DocumentacionPracticanteDao();
         int filasAfectadas = documentacionDao.agregarDocumentacion(doc);
         assertEquals(1, filasAfectadas);
@@ -28,7 +28,7 @@ public class DocumentacionPracticantePrueba {
 
     @Test
     public void pruebaAgregarDocumentacionAlternoEstadoRechazado() throws UsuariosExcepcion {
-        DocumentacionPracticante doc = new DocumentacionPracticante("/uploads/seguro_S23010045.pdf", EstadoRevision.Rechazado, "Firma ilegible, favor de resubir");
+        DocumentacionPracticante doc = new DocumentacionPracticante("/uploads/nuevo_doc_003.pdf", EstadoRevision.Rechazado, "Firma ilegible, favor de resubir");
         DocumentacionPracticanteDao documentacionDao = new DocumentacionPracticanteDao();
         int filasAfectadas = documentacionDao.agregarDocumentacion(doc);
         assertEquals(1, filasAfectadas);
@@ -36,7 +36,7 @@ public class DocumentacionPracticantePrueba {
 
     @Test
     public void pruebaAgregarDocumentacionAlternoRutaDiferente() throws UsuariosExcepcion {
-        DocumentacionPracticante doc = new DocumentacionPracticante("/uploads/cronograma_S21007654.pdf", EstadoRevision.Pendiente, "");
+        DocumentacionPracticante doc = new DocumentacionPracticante("/uploads/nuevo_doc_004.pdf", EstadoRevision.Pendiente, "");
         DocumentacionPracticanteDao documentacionDao = new DocumentacionPracticanteDao();
         int filasAfectadas = documentacionDao.agregarDocumentacion(doc);
         assertEquals(1, filasAfectadas);
@@ -71,6 +71,13 @@ public class DocumentacionPracticantePrueba {
     }
 
     @Test
+    public void pruebaObtenerDocumentosPendientesAlternoTerceraPracticante() throws UsuariosExcepcion {
+        DocumentacionPracticanteDao documentacionDao = new DocumentacionPracticanteDao();
+        List<DocumentacionPracticante> documentos = documentacionDao.obtenerDocumentosPendientes("S21007654");
+        assertNotNull(documentos);
+    }
+
+    @Test
     public void pruebaObtenerDocumentosPendientesMatriculaNoExistente() throws UsuariosExcepcion {
         DocumentacionPracticanteDao documentacionDao = new DocumentacionPracticanteDao();
         List<DocumentacionPracticante> documentos = documentacionDao.obtenerDocumentosPendientes("S99999999");
@@ -80,21 +87,21 @@ public class DocumentacionPracticantePrueba {
     @Test
     public void pruebaValidarDocumentoAprobadoExitoso() throws UsuariosExcepcion {
         DocumentacionPracticanteDao documentacionDao = new DocumentacionPracticanteDao();
-        int filasAfectadas = documentacionDao.validarDocumento(1, EstadoRevision.Aprobado, "");
+        int filasAfectadas = documentacionDao.validarDocumento(5, EstadoRevision.Aprobado, "");
         assertEquals(1, filasAfectadas);
     }
 
     @Test
     public void pruebaValidarDocumentoAlternoRechazado() throws UsuariosExcepcion {
         DocumentacionPracticanteDao documentacionDao = new DocumentacionPracticanteDao();
-        int filasAfectadas = documentacionDao.validarDocumento(2, EstadoRevision.Rechazado, "El documento esta incompleto, falta la firma del jefe de departamento");
+        int filasAfectadas = documentacionDao.validarDocumento(6, EstadoRevision.Rechazado, "El documento esta incompleto, falta la firma del jefe de departamento");
         assertEquals(1, filasAfectadas);
     }
 
     @Test
     public void pruebaValidarDocumentoAlternoOtroDocumento() throws UsuariosExcepcion {
         DocumentacionPracticanteDao documentacionDao = new DocumentacionPracticanteDao();
-        int filasAfectadas = documentacionDao.validarDocumento(3, EstadoRevision.Aprobado, "");
+        int filasAfectadas = documentacionDao.validarDocumento(7, EstadoRevision.Aprobado, "");
         assertEquals(1, filasAfectadas);
     }
 

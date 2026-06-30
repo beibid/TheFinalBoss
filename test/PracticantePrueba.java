@@ -14,7 +14,7 @@ public class PracticantePrueba {
 
     @Test
     public void pruebaInsertarPracticanteExitoso() throws UsuariosExcepcion {
-        Practicante practicante = new Practicante("S24013282", "Ninguna", Genero.Masculino, "Ameth", "Polanco Hernandez", "amethS24013282", "ameth.polanco@uv.mx", Estado.Activo, 3);
+        Practicante practicante = new Practicante("S25001001", "Ninguna", Genero.Masculino, "Carlos", "Mora Fuentes", "carlosS25001001", "carlos.mora@uv.mx", Estado.Activo, 6);
         PracticanteDao practicanteDao = new PracticanteDao();
         int filasAfectadas = practicanteDao.insertarPracticante(practicante);
         assertEquals(1, filasAfectadas);
@@ -22,7 +22,7 @@ public class PracticantePrueba {
 
     @Test
     public void pruebaInsertarPracticanteAlternoGeneroFemenino() throws UsuariosExcepcion {
-        Practicante practicante = new Practicante("S24013290", "Ninguna", Genero.Femenino, "Valeria", "Mendez Cruz", "valeriaS24013290", "valeria.mendez@uv.mx", Estado.Activo, 3);
+        Practicante practicante = new Practicante("S25001002", "Ninguna", Genero.Femenino, "Laura", "Solis Vera", "lauraS25001002", "laura.solis@uv.mx", Estado.Activo, 6);
         PracticanteDao practicanteDao = new PracticanteDao();
         int filasAfectadas = practicanteDao.insertarPracticante(practicante);
         assertEquals(1, filasAfectadas);
@@ -30,23 +30,23 @@ public class PracticantePrueba {
 
     @Test
     public void pruebaInsertarPracticanteAlternoConLenguaIndigena() throws UsuariosExcepcion {
-        Practicante practicante = new Practicante("S23010045", "Nahuatl", Genero.Masculino, "Diego", "Xochitl Ramirez", "diegoS23010045", "diego.xochitl@uv.mx", Estado.Activo, 3);
+        Practicante practicante = new Practicante("S25001003", "Nahuatl", Genero.Masculino, "Emilio", "Cruz Tepetl", "emilioS25001003", "emilio.cruz@uv.mx", Estado.Activo, 6);
         PracticanteDao practicanteDao = new PracticanteDao();
         int filasAfectadas = practicanteDao.insertarPracticante(practicante);
         assertEquals(1, filasAfectadas);
     }
 
     @Test
-    public void pruebaInsertarPracticanteAlternoGeneracion22() throws UsuariosExcepcion {
-        Practicante practicante = new Practicante("S22019874", "Ninguna", Genero.Femenino, "Fernanda", "Gutierrez Leal", "fernandaS22019874", "fernanda.gutierrez@uv.mx", Estado.Activo, 3);
+    public void pruebaInsertarPracticanteAlternoGeneroFemenino2() throws UsuariosExcepcion {
+        Practicante practicante = new Practicante("S25001004", "Ninguna", Genero.Femenino, "Alex", "Rios Blanco", "alexS25001004", "alex.rios@uv.mx", Estado.Activo, 7);
         PracticanteDao practicanteDao = new PracticanteDao();
         int filasAfectadas = practicanteDao.insertarPracticante(practicante);
         assertEquals(1, filasAfectadas);
     }
 
     @Test
-    public void pruebaInsertarPracticanteAlternoGeneracion21() throws UsuariosExcepcion {
-        Practicante practicante = new Practicante("S21007654", "Totonaco", Genero.Masculino, "Kevin", "Bernal Salinas", "kevinS21007654", "kevin.bernal@uv.mx", Estado.Activo, 3);
+    public void pruebaInsertarPracticanteAlternoProfesorDistinto() throws UsuariosExcepcion {
+        Practicante practicante = new Practicante("S25001005", "Totonaco", Genero.Masculino, "Rodrigo", "Leal Pedraza", "rodrigoS25001005", "rodrigo.leal@uv.mx", Estado.Activo, 7);
         PracticanteDao practicanteDao = new PracticanteDao();
         int filasAfectadas = practicanteDao.insertarPracticante(practicante);
         assertEquals(1, filasAfectadas);
@@ -54,35 +54,35 @@ public class PracticantePrueba {
 
     @Test
     public void pruebaInsertarPracticanteDuplicadoLanzaExcepcion() {
-        Practicante practicante = new Practicante("S24013282", "Ninguna", Genero.Masculino, "Ameth", "Polanco Hernandez", "amethS24013282", "ameth2@uv.mx", Estado.Activo, 3);
+        Practicante practicante = new Practicante("S24013287", "Ninguna", Genero.Masculino, "David", "Espinoza Morales", "daviddup", "daviddup@uv.mx", Estado.Activo, 6);
         PracticanteDao practicanteDao = new PracticanteDao();
         assertThrows(UsuariosExcepcion.class, () -> practicanteDao.insertarPracticante(practicante));
     }
 
     @Test
     public void pruebaInsertarPracticanteExcepcionMatriculaNula() {
-        Practicante practicante = new Practicante(null, "Ninguna", Genero.Masculino, "Luis", "Torres Vega", "luispass", "luis.torres@uv.mx", Estado.Activo, 3);
+        Practicante practicante = new Practicante(null, "Ninguna", Genero.Masculino, "Luis", "Torres Vega", "luispassnuevo", "luisnuevo@uv.mx", Estado.Activo, 6);
         PracticanteDao practicanteDao = new PracticanteDao();
         assertThrows(UsuariosExcepcion.class, () -> practicanteDao.insertarPracticante(practicante));
     }
 
     @Test
     public void pruebaInsertarPracticanteExcepcionNombreNulo() {
-        Practicante practicante = new Practicante("S24099001", "Ninguna", Genero.Femenino, null, "Reyes Dominguez", "pass24099001", "reyes@uv.mx", Estado.Activo, 3);
+        Practicante practicante = new Practicante("S25001006", "Ninguna", Genero.Femenino, null, "Reyes Dominguez", "pass25001006", "reyes25@uv.mx", Estado.Activo, 6);
         PracticanteDao practicanteDao = new PracticanteDao();
         assertThrows(UsuariosExcepcion.class, () -> practicanteDao.insertarPracticante(practicante));
     }
 
     @Test
     public void pruebaInsertarPracticanteExcepcionContraseniaNula() {
-        Practicante practicante = new Practicante("S24099002", "Ninguna", Genero.Masculino, "Ivan", "Perez Molina", null, "ivan.perez@uv.mx", Estado.Activo, 3);
+        Practicante practicante = new Practicante("S25001007", "Ninguna", Genero.Masculino, "Ivan", "Perez Molina", null, "ivan25@uv.mx", Estado.Activo, 6);
         PracticanteDao practicanteDao = new PracticanteDao();
         assertThrows(UsuariosExcepcion.class, () -> practicanteDao.insertarPracticante(practicante));
     }
 
     @Test
     public void pruebaInsertarPracticanteExcepcionCorreoNulo() {
-        Practicante practicante = new Practicante("S24099003", "Ninguna", Genero.Femenino, "Sofia", "Luna Carrillo", "sofiaS24099003", null, Estado.Activo, 3);
+        Practicante practicante = new Practicante("S25001008", "Ninguna", Genero.Femenino, "Sofia", "Luna Carrillo", "sofiaS25001008", null, Estado.Activo, 6);
         PracticanteDao practicanteDao = new PracticanteDao();
         assertThrows(UsuariosExcepcion.class, () -> practicanteDao.insertarPracticante(practicante));
     }
@@ -90,14 +90,14 @@ public class PracticantePrueba {
     @Test
     public void pruebaInactivarPracticanteExitoso() throws UsuariosExcepcion {
         PracticanteDao practicanteDao = new PracticanteDao();
-        int filasAfectadas = practicanteDao.inactivarPracticante("S24013282");
+        int filasAfectadas = practicanteDao.inactivarPracticante("S012452");
         assertEquals(1, filasAfectadas);
     }
 
     @Test
     public void pruebaInactivarPracticanteAlternoSegundaMatricula() throws UsuariosExcepcion {
         PracticanteDao practicanteDao = new PracticanteDao();
-        int filasAfectadas = practicanteDao.inactivarPracticante("S24013290");
+        int filasAfectadas = practicanteDao.inactivarPracticante("S0252944");
         assertEquals(1, filasAfectadas);
     }
 
@@ -122,31 +122,31 @@ public class PracticantePrueba {
 
     @Test
     public void pruebaModificarPracticanteExitoso() throws UsuariosExcepcion {
-        Practicante practicante = new Practicante("S21007654", "Zapoteco", Genero.Masculino, "Kevin", "Bernal Salinas", "kevinNuevoS21007654", "kevin.nuevo@uv.mx", Estado.Activo, 3);
+        Practicante practicante = new Practicante("S24026789", "Ninguna", Genero.Masculino, "Valentin", "Benavidez Martinez", "valenmod1", "valenmod1@uv.mx", Estado.Activo, 7);
         PracticanteDao practicanteDao = new PracticanteDao();
-        int filasAfectadas = practicanteDao.modificarPracticante("S21007654", practicante);
+        int filasAfectadas = practicanteDao.modificarPracticante("S24026789", practicante);
         assertEquals(1, filasAfectadas);
     }
 
     @Test
     public void pruebaModificarPracticanteAlternoCambioLengua() throws UsuariosExcepcion {
-        Practicante practicante = new Practicante("S22019874", "Nahuatl", Genero.Femenino, "Fernanda", "Gutierrez Leal", "fernandaS22019874", "fernanda.nuevo@uv.mx", Estado.Activo, 3);
+        Practicante practicante = new Practicante("S23016547", "Zapoteco", Genero.Masculino, "Valentina", "Espinoza", "valinmod2", "valinmod2@uv.mx", Estado.Activo, 7);
         PracticanteDao practicanteDao = new PracticanteDao();
-        int filasAfectadas = practicanteDao.modificarPracticante("S22019874", practicante);
+        int filasAfectadas = practicanteDao.modificarPracticante("S23016547", practicante);
         assertEquals(1, filasAfectadas);
     }
 
     @Test
     public void pruebaModificarPracticanteAlternoCambioCorreo() throws UsuariosExcepcion {
-        Practicante practicante = new Practicante("S23010045", "Nahuatl", Genero.Masculino, "Diego", "Xochitl Ramirez", "diegoS23010045", "diego.nuevo@uv.mx", Estado.Activo, 3);
+        Practicante practicante = new Practicante("S23035678", "Ninguna", Genero.Masculino, "Martin", "Murrieta", "tintinmod3", "tintinmod3@uv.mx", Estado.Activo, 7);
         PracticanteDao practicanteDao = new PracticanteDao();
-        int filasAfectadas = practicanteDao.modificarPracticante("S23010045", practicante);
+        int filasAfectadas = practicanteDao.modificarPracticante("S23035678", practicante);
         assertEquals(1, filasAfectadas);
     }
 
     @Test
     public void pruebaModificarPracticanteAlternoMatriculaNoExistente() throws UsuariosExcepcion {
-        Practicante practicante = new Practicante("S99999999", "Ninguna", Genero.Masculino, "Fantasma", "Inexistente", "pass99999999", "fantasma@uv.mx", Estado.Activo, 3);
+        Practicante practicante = new Practicante("S99999999", "Ninguna", Genero.Masculino, "Fantasma", "Inexistente", "pass99999999", "fantasma@uv.mx", Estado.Activo, 6);
         PracticanteDao practicanteDao = new PracticanteDao();
         int filasAfectadas = practicanteDao.modificarPracticante("S99999999", practicante);
         assertEquals(0, filasAfectadas);
@@ -154,23 +154,23 @@ public class PracticantePrueba {
 
     @Test
     public void pruebaModificarPracticanteExcepcionMatriculaNula() {
-        Practicante practicante = new Practicante("S21007654", "Ninguna", Genero.Masculino, "Kevin", "Bernal Salinas", "kevinS21007654", "kevin.bernal@uv.mx", Estado.Activo, 3);
+        Practicante practicante = new Practicante("S24026789", "Ninguna", Genero.Masculino, "Valentin", "Benavidez Martinez", "valenmod4", "valenmod4@uv.mx", Estado.Activo, 7);
         PracticanteDao practicanteDao = new PracticanteDao();
         assertThrows(UsuariosExcepcion.class, () -> practicanteDao.modificarPracticante(null, practicante));
     }
 
     @Test
     public void pruebaModificarPracticanteExcepcionMatriculaVacia() {
-        Practicante practicante = new Practicante("S21007654", "Ninguna", Genero.Masculino, "Kevin", "Bernal Salinas", "kevinS21007654", "kevin.bernal@uv.mx", Estado.Activo, 3);
+        Practicante practicante = new Practicante("S24026789", "Ninguna", Genero.Masculino, "Valentin", "Benavidez Martinez", "valenmod5", "valenmod5@uv.mx", Estado.Activo, 7);
         PracticanteDao practicanteDao = new PracticanteDao();
         assertThrows(UsuariosExcepcion.class, () -> practicanteDao.modificarPracticante("", practicante));
     }
 
     @Test
     public void pruebaModificarPracticanteExcepcionNombreNulo() {
-        Practicante practicante = new Practicante("S21007654", "Ninguna", Genero.Masculino, null, "Bernal Salinas", "kevinS21007654", "kevin.bernal@uv.mx", Estado.Activo, 3);
+        Practicante practicante = new Practicante("S24026789", "Ninguna", Genero.Masculino, null, "Benavidez Martinez", "valenmod6", "valenmod6@uv.mx", Estado.Activo, 7);
         PracticanteDao practicanteDao = new PracticanteDao();
-        assertThrows(UsuariosExcepcion.class, () -> practicanteDao.modificarPracticante("S21007654", practicante));
+        assertThrows(UsuariosExcepcion.class, () -> practicanteDao.modificarPracticante("S24026789", practicante));
     }
 
     @Test
@@ -217,21 +217,21 @@ public class PracticantePrueba {
     @Test
     public void pruebaAsignarProyectoExitoso() throws UsuariosExcepcion {
         PracticanteDao practicanteDao = new PracticanteDao();
-        int filasAfectadas = practicanteDao.asignarProyecto("S21007654", 1);
+        int filasAfectadas = practicanteDao.asignarProyecto("S23010045", 1);
         assertEquals(1, filasAfectadas);
     }
 
     @Test
     public void pruebaAsignarProyectoAlternoOtroPracticante() throws UsuariosExcepcion {
         PracticanteDao practicanteDao = new PracticanteDao();
-        int filasAfectadas = practicanteDao.asignarProyecto("S22019874", 2);
+        int filasAfectadas = practicanteDao.asignarProyecto("S0425523", 5);
         assertEquals(1, filasAfectadas);
     }
 
     @Test
     public void pruebaAsignarProyectoAlternoProyectoNoExistente() {
         PracticanteDao practicanteDao = new PracticanteDao();
-        assertThrows(UsuariosExcepcion.class, () -> practicanteDao.asignarProyecto("S21007654", 9999));
+        assertThrows(UsuariosExcepcion.class, () -> practicanteDao.asignarProyecto("S23010045", 9999));
     }
 
     @Test
@@ -239,17 +239,18 @@ public class PracticantePrueba {
         PracticanteDao practicanteDao = new PracticanteDao();
         assertThrows(UsuariosExcepcion.class, () -> practicanteDao.asignarProyecto("S99999999", 1));
     }
+
     @Test
     public void pruebaObtenerPracticantesPorProfesorExitoso() throws UsuariosExcepcion {
         PracticanteDao practicanteDao = new PracticanteDao();
-        List<Practicante> practicantes = practicanteDao.obtenerPracticantesPorProfesor(3);
+        List<Practicante> practicantes = practicanteDao.obtenerPracticantesPorProfesor(6);
         assertNotNull(practicantes);
     }
 
     @Test
     public void pruebaObtenerPracticantesPorProfesorAlternoOtroProfesor() throws UsuariosExcepcion {
         PracticanteDao practicanteDao = new PracticanteDao();
-        List<Practicante> practicantes = practicanteDao.obtenerPracticantesPorProfesor(4);
+        List<Practicante> practicantes = practicanteDao.obtenerPracticantesPorProfesor(7);
         assertNotNull(practicantes);
     }
 

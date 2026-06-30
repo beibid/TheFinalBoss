@@ -10,6 +10,7 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
@@ -19,6 +20,7 @@ import logica.dominio.Proyecto;
 import logica.dominio.enums.EstadoProyecto;
 import java.sql.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -26,7 +28,16 @@ public class ModificarProyectoControlador {
 
     private static final Logger LOGGER = Logger.getLogger(ModificarProyectoControlador.class.getName());
     private static final int FILAS_AFECTADAS_ESPERADAS = 1;
+    private static final int LONGITUD_MAXIMA_NOMBRE_PROYECTO = 100;
+    private static final int LONGITUD_MAXIMA_DESCRIPCION = 150;
+    private static final int LONGITUD_MAXIMA_RESPONSABLE = 50;
+    private static final int LONGITUD_MAXIMA_NOMBRE_EMPRESA = 80;
+    private static final int LONGITUD_MAXIMA_SECTOR_EMPRESA = 80;
+    private static final int LONGITUD_MAXIMA_DIRECCION_EMPRESA = 80;
 
+    private final ProyectoDao proyectoDao = new ProyectoDao();
+
+    @FXML private ScrollPane scrollPane;
     @FXML private ComboBox<Proyecto> comboBoxProyectos;
     @FXML private ComboBox<EstadoProyecto> comboBoxEstado;
     @FXML private VBox panelFormulario;
@@ -42,7 +53,6 @@ public class ModificarProyectoControlador {
     @FXML private TextField campoNombreEmpresa;
     @FXML private TextField campoSectorEmpresa;
     @FXML private TextField campoDireccionEmpresa;
-    @FXML private TextField campoMatricula;
     @FXML private TextField campoNumPersonalCoordinador;
     @FXML private TextField campoFechaRegistro;
 
@@ -51,11 +61,13 @@ public class ModificarProyectoControlador {
     @FXML
     public void initialize() {
         comboBoxEstado.setItems(FXCollections.observableArrayList(EstadoProyecto.values()));
+        ocultarPanel(panelError);
+        ocultarPanel(panelExito);
+        ocultarPanel(panelFormulario);
         cargarProyectosDisponibles();
     }
 
     private void cargarProyectosDisponibles() {
-        ProyectoDao proyectoDao = new ProyectoDao();
         try {
             List<Proyecto> listaProyectos = proyectoDao.obtenerProyectosDisponibles();
             if (listaProyectos.isEmpty()) {
@@ -64,7 +76,7 @@ public class ModificarProyectoControlador {
             } else {
                 ObservableList<Proyecto> proyectosObservable = FXCollections.observableArrayList(listaProyectos);
                 comboBoxProyectos.setItems(proyectosObservable);
-                comboBoxProyectos.setCellFactory(listaProyectos2 -> crearCeldaProyecto());
+                comboBoxProyectos.setCellFactory(lista -> crearCeldaProyecto());
                 comboBoxProyectos.setButtonCell(crearCeldaProyecto());
             }
         } catch (MensajeriaExcepcion excepcion) {
@@ -79,7 +91,8 @@ public class ModificarProyectoControlador {
             @Override
             protected void updateItem(Proyecto proyecto, boolean vacio) {
                 super.updateItem(proyecto, vacio);
-                if (vacio || proyecto == null) {
+                boolean esVacioONulo = vacio || proyecto == null;
+                if (esVacioONulo) {
                     setText("-- Selecciona un proyecto --");
                 } else {
                     setText(proyecto.getNombreProyecto());
@@ -90,38 +103,62 @@ public class ModificarProyectoControlador {
 
     @FXML
     private void seleccionarProyecto() {
-        proyectoSeleccionado = comboBoxProyectos.getValue();
-        if (proyectoSeleccionado != null) {
+        Proyecto proyectoResumen = comboBoxProyectos.getValue();
+        if (proyectoResumen != null) {
             ocultarPanel(panelError);
             ocultarPanel(panelExito);
-            rellenarFormulario(proyectoSeleccionado);
+            try {
+                proyectoSeleccionado = proyectoDao.obtenerProyectoPorId(proyectoResumen.getIdProyecto());
+                if (proyectoSeleccionado != null) {
+                    rellenarFormulario(proyectoSeleccionado);
+                } else {
+                    mostrarError("Error", "NO SE ENCONTRO EL PROYECTO SELECCIONADO.");
+                }
+            } catch (MensajeriaExcepcion excepcion) {
+                LOGGER.log(Level.SEVERE, "Error al obtener proyecto", excepcion);
+                mostrarError("Error al cargar proyecto", excepcion.getMessage().toUpperCase());
+            }
         }
     }
 
     private void rellenarFormulario(Proyecto proyecto) {
-        campoNombreProyecto.setText(proyecto.getNombreProyecto());
-        campoDescripcion.setText(proyecto.getDescripcion());
-        campoResponsable.setText(proyecto.getResponsableDelProyecto());
+        asignarTextoSiNoNulo(campoNombreProyecto, proyecto.getNombreProyecto());
+        asignarTextoSiNoNulo(campoDescripcion, proyecto.getDescripcion());
+        asignarTextoSiNoNulo(campoResponsable, proyecto.getResponsableDelProyecto());
+        asignarTextoSiNoNulo(campoNombreEmpresa, proyecto.getNombreEmpresa());
+        asignarTextoSiNoNulo(campoSectorEmpresa, proyecto.getSectorEmpresa());
+        asignarTextoSiNoNulo(campoDireccionEmpresa, proyecto.getDireccionEmpresa());
+        asignarTextoSiNoNulo(campoNumPersonalCoordinador, proyecto.getNumPersonalCoordinador());
+        boolean tieneFecha = proyecto.getFechaRegistro() != null;
+        if (tieneFecha) {
+            campoFechaRegistro.setText(proyecto.getFechaRegistro().toString());
+        } else {
+            campoFechaRegistro.setText("");
+        }
         comboBoxEstado.setValue(proyecto.getEstado());
-        campoNombreEmpresa.setText(proyecto.getNombreEmpresa());
-        campoSectorEmpresa.setText(proyecto.getSectorEmpresa());
-        campoDireccionEmpresa.setText(proyecto.getDireccionEmpresa());
-        campoNumPersonalCoordinador.setText(proyecto.getNumPersonalCoordinador());
-        campoFechaRegistro.setText(proyecto.getFechaRegistro() != null ? proyecto.getFechaRegistro().toString() : "");
         panelFormulario.setVisible(true);
         panelFormulario.setManaged(true);
     }
 
+    private void asignarTextoSiNoNulo(TextField campo, String valor) {
+        boolean tieneValor = valor != null;
+        if (tieneValor) {
+            campo.setText(valor);
+        } else {
+            campo.setText("");
+        }
+    }
+
     @FXML
     private void botonGuardar() {
-        if (confirmarAccion("¿Seguro que desea guardar los cambios?")) {
+        if (confirmarAccion("Seguro que desea guardar los cambios?")) {
             procesarModificacion();
         }
     }
 
     private void procesarModificacion() {
-        if (camposValidos()) {
-            ProyectoDao proyectoDao = new ProyectoDao();
+        boolean camposCorrectos = verificarCampos();
+        if (camposCorrectos) {
             try {
                 Proyecto proyectoModificado = construirProyecto();
                 int filasAfectadas = proyectoDao.modificarProyecto(
@@ -152,28 +189,58 @@ public class ModificarProyectoControlador {
         return hayCamposVacios;
     }
 
-    private boolean camposValidos() {
+    private boolean verificarCampos() {
+        String nombreProyecto = campoNombreProyecto.getText().trim();
+        String descripcion = campoDescripcion.getText().trim();
+        String responsable = campoResponsable.getText().trim();
+        String nombreEmpresa = campoNombreEmpresa.getText().trim();
+        String sectorEmpresa = campoSectorEmpresa.getText().trim();
+        String direccionEmpresa = campoDireccionEmpresa.getText().trim();
         List<TextField> camposObligatorios = List.of(
                 campoNombreProyecto, campoDescripcion, campoResponsable,
                 campoNombreEmpresa, campoSectorEmpresa, campoDireccionEmpresa,
-                campoMatricula, campoNumPersonalCoordinador, campoFechaRegistro);
+                campoNumPersonalCoordinador, campoFechaRegistro);
         boolean camposTextosValidos = !camposVacios(camposObligatorios);
-        boolean estadoValido = comboBoxEstado.getValue() != null;
-        boolean fechaValida = esFechaValida(campoFechaRegistro.getText().trim());
-
-        verificarCampos(camposTextosValidos, estadoValido, fechaValida);
-
-        return camposTextosValidos && estadoValido && fechaValida;
+        boolean valido = true;
+        if (!camposTextosValidos) {
+            mostrarError("Campos obligatorios vacios", "POR FAVOR LLENE TODOS LOS CAMPOS.");
+            valido = false;
+        } else if (!verificarLongitudes(nombreProyecto, descripcion, responsable,
+                nombreEmpresa, sectorEmpresa, direccionEmpresa)) {
+            valido = false;
+        } else if (comboBoxEstado.getValue() == null) {
+            mostrarError("Estado no seleccionado", "SELECCIONE UN ESTADO PARA EL PROYECTO.");
+            valido = false;
+        } else if (!esFechaValida(campoFechaRegistro.getText().trim())) {
+            mostrarError("Fecha invalida", "EL FORMATO DE FECHA DEBE SER YYYY-MM-DD.");
+            valido = false;
+        }
+        return valido;
     }
 
-    private void verificarCampos(boolean camposTextosValidos, boolean estadoValido, boolean fechaValida) {
-        if (!camposTextosValidos) {
-            mostrarError("Campos obligatorios vacíos", "POR FAVOR LLENE TODOS LOS CAMPOS.");
-        } else if (!estadoValido) {
-            mostrarError("Estado no seleccionado", "SELECCIONE UN ESTADO PARA EL PROYECTO.");
-        } else if (!fechaValida) {
-            mostrarError("Fecha inválida", "EL FORMATO DE FECHA DEBE SER YYYY-MM-DD.");
+    private boolean verificarLongitudes(String nombreProyecto, String descripcion, String responsable,
+                                        String nombreEmpresa, String sectorEmpresa, String direccionEmpresa) {
+        boolean valido = true;
+        if (nombreProyecto.length() > LONGITUD_MAXIMA_NOMBRE_PROYECTO) {
+            mostrarError("Nombre demasiado largo", "EL NOMBRE DEL PROYECTO NO PUEDE EXCEDER " + LONGITUD_MAXIMA_NOMBRE_PROYECTO + " CARACTERES.");
+            valido = false;
+        } else if (descripcion.length() > LONGITUD_MAXIMA_DESCRIPCION) {
+            mostrarError("Descripcion demasiado larga", "LA DESCRIPCION NO PUEDE EXCEDER " + LONGITUD_MAXIMA_DESCRIPCION + " CARACTERES.");
+            valido = false;
+        } else if (responsable.length() > LONGITUD_MAXIMA_RESPONSABLE) {
+            mostrarError("Responsable demasiado largo", "EL RESPONSABLE NO PUEDE EXCEDER " + LONGITUD_MAXIMA_RESPONSABLE + " CARACTERES.");
+            valido = false;
+        } else if (nombreEmpresa.length() > LONGITUD_MAXIMA_NOMBRE_EMPRESA) {
+            mostrarError("Nombre de empresa demasiado largo", "EL NOMBRE DE LA EMPRESA NO PUEDE EXCEDER " + LONGITUD_MAXIMA_NOMBRE_EMPRESA + " CARACTERES.");
+            valido = false;
+        } else if (sectorEmpresa.length() > LONGITUD_MAXIMA_SECTOR_EMPRESA) {
+            mostrarError("Sector demasiado largo", "EL SECTOR NO PUEDE EXCEDER " + LONGITUD_MAXIMA_SECTOR_EMPRESA + " CARACTERES.");
+            valido = false;
+        } else if (direccionEmpresa.length() > LONGITUD_MAXIMA_DIRECCION_EMPRESA) {
+            mostrarError("Direccion demasiado larga", "LA DIRECCION NO PUEDE EXCEDER " + LONGITUD_MAXIMA_DIRECCION_EMPRESA + " CARACTERES.");
+            valido = false;
         }
+        return valido;
     }
 
     private boolean esFechaValida(String fecha) {
@@ -181,7 +248,7 @@ public class ModificarProyectoControlador {
         try {
             Date.valueOf(fecha);
         } catch (IllegalArgumentException excepcion) {
-            LOGGER.log(Level.WARNING, "Formato de fecha inválido", excepcion);
+            LOGGER.log(Level.WARNING, "Formato de fecha invalido", excepcion);
             valida = false;
         }
         return valida;
@@ -197,14 +264,16 @@ public class ModificarProyectoControlador {
         proyectoModificado.setSectorEmpresa(campoSectorEmpresa.getText().trim());
         proyectoModificado.setDireccionEmpresa(campoDireccionEmpresa.getText().trim());
         proyectoModificado.setIdOrganizacion(proyectoSeleccionado.getIdOrganizacion());
+        proyectoModificado.setNumPersonalProfesor(proyectoSeleccionado.getNumPersonalProfesor());
         proyectoModificado.setNumPersonalCoordinador(campoNumPersonalCoordinador.getText().trim());
         proyectoModificado.setFechaRegistro(Date.valueOf(campoFechaRegistro.getText().trim()));
+        proyectoModificado.setCapacidad(proyectoSeleccionado.getCapacidad());
         return proyectoModificado;
     }
 
     @FXML
     private void botonCancelar() {
-        if (confirmarAccion("¿Seguro que desea cancelar?")) {
+        if (confirmarAccion("Seguro que desea cancelar?")) {
             ocultarTodo();
             comboBoxProyectos.setValue(null);
         }
@@ -218,13 +287,18 @@ public class ModificarProyectoControlador {
 
     private boolean confirmarAccion(String mensaje) {
         Alert alerta = new Alert(Alert.AlertType.CONFIRMATION);
-        alerta.setTitle("Confirmación");
+        boolean confirmado = false;
+        alerta.setTitle("Confirmacion");
         alerta.setHeaderText(mensaje);
         alerta.setContentText("");
-        ButtonType botonSi = new ButtonType("Sí");
+        ButtonType botonSi = new ButtonType("Si");
         ButtonType botonNo = new ButtonType("No");
         alerta.getButtonTypes().setAll(botonSi, botonNo);
-        return alerta.showAndWait().filter(botonPresionado -> botonPresionado == botonSi).isPresent();
+        Optional<ButtonType> resultado = alerta.showAndWait();
+        if (resultado.isPresent() && resultado.get() == botonSi) {
+            confirmado = true;
+        }
+        return confirmado;
     }
 
     private void ocultarTodo() {
@@ -233,12 +307,10 @@ public class ModificarProyectoControlador {
         ocultarPanel(panelFormulario);
     }
 
-    private void mostrarPanel(VBox panel, Label etiquetaTitulo, Label etiquetaMensaje,
-                              String titulo, String mensaje) {
-        etiquetaTitulo.setText(titulo);
-        etiquetaMensaje.setText(mensaje);
-        panel.setVisible(true);
-        panel.setManaged(true);
+    private void mostrarPanel(VBox panelMostrar, VBox panelOcultar) {
+        panelMostrar.setVisible(true);
+        panelMostrar.setManaged(true);
+        ocultarPanel(panelOcultar);
     }
 
     private void ocultarPanel(VBox panel) {
@@ -247,12 +319,16 @@ public class ModificarProyectoControlador {
     }
 
     private void mostrarError(String titulo, String mensaje) {
-        ocultarPanel(panelExito);
-        mostrarPanel(panelError, etiquetaTituloError, etiquetaMensajeError, titulo, mensaje);
+        etiquetaTituloError.setText(titulo);
+        etiquetaMensajeError.setText(mensaje);
+        mostrarPanel(panelError, panelExito);
+        scrollPane.setVvalue(0);
     }
 
     private void mostrarExito(String titulo, String mensaje) {
-        ocultarPanel(panelError);
-        mostrarPanel(panelExito, etiquetaTituloExito, etiquetaMensajeExito, titulo, mensaje);
+        etiquetaTituloExito.setText(titulo);
+        etiquetaMensajeExito.setText(mensaje);
+        mostrarPanel(panelExito, panelError);
+        scrollPane.setVvalue(0);
     }
 }

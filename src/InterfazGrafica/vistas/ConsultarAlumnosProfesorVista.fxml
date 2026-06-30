@@ -76,6 +76,14 @@
                                 <Label text="Reportes:" style="-fx-font-weight: bold;"/>
                                 <Label fx:id="etiquetaReportes" text=""/>
                             </HBox>
+                            <HBox spacing="10.0">
+                                <Label text="Estado:" style="-fx-font-weight: bold;"/>
+                                <Label fx:id="etiquetaEstado" text=""/>
+                            </HBox>
+                            <HBox spacing="10.0">
+                                <Label text="Autoevaluación:" style="-fx-font-weight: bold;"/>
+                                <Label fx:id="etiquetaAutoevaluacion" managed="false" visible="false" text=""/>
+                            </HBox>
 
                             <Separator><VBox.margin><Insets bottom="3.0" top="3.0"/></VBox.margin></Separator>
 

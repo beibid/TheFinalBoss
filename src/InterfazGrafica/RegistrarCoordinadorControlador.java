@@ -18,8 +18,21 @@ import logica.dao.objetos.CoordinadorDao;
 import logica.dominio.Coordinador;
 import logica.dominio.enums.Estado;
 import java.util.List;
+import java.util.Optional;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class RegistrarCoordinadorControlador {
+
+    private static final Logger LOGGER = Logger.getLogger(RegistrarCoordinadorControlador.class.getName());
+    private static final int FILAS_AFECTADAS_ESPERADAS = 1;
+    private static final int COORDINADORES_ACTIVOS_PERMITIDOS = 0;
+    private static final int LIMITE_NOMBRE = 55;
+    private static final int LIMITE_APELLIDOS = 55;
+    private static final int LIMITE_CORREO = 100;
+    private static final int LIMITE_NUMERO_PERSONAL = 12;
+
+    private final CoordinadorDao coordinadorDao = new CoordinadorDao();
 
     @FXML private TextField campoTextoNombres;
     @FXML private TextField campoTextoApellidos;
@@ -32,22 +45,20 @@ public class RegistrarCoordinadorControlador {
     @FXML private Label etiquetaTituloExito;
     @FXML private Label etiquetaMensajeExito;
 
-    private static final int FILAS_AFECTADAS_ESPERADAS = 1;
-    private static final int COORDINADORES_ACTIVOS_PERMITIDOS = 0;
     private String contrasenaGenerada;
 
     @FXML
     private void botonRegistrar() {
         ocultarPanel(panelError);
         ocultarPanel(panelExito);
-        if (confirmarAccion("¿Seguro que desea registrar al Coordinador?")) {
+        if (confirmarAccion("Seguro que desea registrar al Coordinador?")) {
             procesarRegistro();
         }
     }
 
     @FXML
     private void botonCancelar() {
-        if (confirmarAccion("¿Seguro que desea cancelar?")) {
+        if (confirmarAccion("Seguro que desea cancelar?")) {
             limpiarCamposRegistros();
         }
     }
@@ -60,20 +71,28 @@ public class RegistrarCoordinadorControlador {
 
     private boolean confirmarAccion(String mensaje) {
         Alert alerta = new Alert(Alert.AlertType.CONFIRMATION);
-        alerta.setTitle("Confirmación");
+        boolean confirmado = false;
+        alerta.setTitle("Confirmacion");
         alerta.setHeaderText(mensaje);
         alerta.setContentText("");
-        ButtonType botonSi = new ButtonType("Sí");
+        ButtonType botonSi = new ButtonType("Si");
         ButtonType botonNo = new ButtonType("No");
         alerta.getButtonTypes().setAll(botonSi, botonNo);
-        return alerta.showAndWait().filter(botonPresionado -> botonPresionado == botonSi).isPresent();
+        Optional<ButtonType> resultado = alerta.showAndWait();
+        if (resultado.isPresent() && resultado.get() == botonSi) {
+            confirmado = true;
+        }
+        return confirmado;
     }
 
     private void procesarRegistro() {
-        if (camposValidos()) {
-            if (verificarCoordinadorActivo()) {
-                guardarCoordinador(construirCoordinador());
-            }
+        boolean camposCorrectos = verificarCampos();
+        boolean coordinadorValido = false;
+        if (camposCorrectos) {
+            coordinadorValido = verificarCoordinadorActivo();
+        }
+        if (camposCorrectos && coordinadorValido) {
+            guardarCoordinador(construirCoordinador());
         }
     }
 
@@ -89,59 +108,66 @@ public class RegistrarCoordinadorControlador {
 
     private boolean verificarCoordinadorActivo() {
         boolean registrarCoordinador = true;
-        CoordinadorDao coordinadorDao = new CoordinadorDao();
         try {
             int coordinadoresActivos = coordinadorDao.existeCoordinadorActivo();
             if (coordinadoresActivos > COORDINADORES_ACTIVOS_PERMITIDOS) {
-                mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
-                        "Error coordinador activo existente", "Ya existe un coordinador activo en el sistema");
+                mostrarError("Error coordinador activo existente",
+                        "YA EXISTE UN COORDINADOR ACTIVO EN EL SISTEMA.");
                 registrarCoordinador = false;
             }
         } catch (UsuariosExcepcion excepcion) {
-            mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
-                    "Error", excepcion.getMessage().toUpperCase());
+            LOGGER.log(Level.SEVERE, "Error al verificar coordinador activo", excepcion);
+            mostrarError("Error", excepcion.getMessage().toUpperCase());
             registrarCoordinador = false;
         }
         return registrarCoordinador;
     }
 
-    private boolean camposValidos() {
+    private boolean verificarCampos() {
         String nombre = campoTextoNombres.getText().trim();
         String apellidos = campoTextoApellidos.getText().trim();
         String correo = campoTextoCorreo.getText().trim();
         String numeroPersonal = campoTextoNumeroPersonal.getText().trim();
-
         List<String> campos = List.of(nombre, apellidos, correo, numeroPersonal);
         boolean camposFormularioValido = !camposVacios(campos);
         boolean nombreValido = nombre.matches("[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+");
         boolean apellidosValido = apellidos.matches("[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+");
         boolean correoValido = correo.matches("^[\\w.-]+@[\\w.-]+\\.[a-zA-Z]{2,}$");
         boolean numeroDePersonalValido = numeroPersonal.matches("[a-zA-Z0-9]+");
-
-        verficarCaracteresNoPermitidos(camposFormularioValido, nombreValido, apellidosValido, correoValido, numeroDePersonalValido);
-
-        return camposFormularioValido && nombreValido && apellidosValido && correoValido && numeroDePersonalValido;
-    }
-
-    private void verficarCaracteresNoPermitidos(boolean camposFormularioValido, boolean nombreValido,
-                                                boolean apellidosValido, boolean correoValido,
-                                                boolean numeroPersonalValido) {
+        boolean longitudNombreValida = nombre.length() <= LIMITE_NOMBRE;
+        boolean longitudApellidosValida = apellidos.length() <= LIMITE_APELLIDOS;
+        boolean longitudCorreoValida = correo.length() <= LIMITE_CORREO;
+        boolean longitudNumeroPersonalValida = numeroPersonal.length() <= LIMITE_NUMERO_PERSONAL;
+        boolean valido = true;
         if (!camposFormularioValido) {
-            mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
-                    "campos obligatorios vacios", "POR FAVOR LLENE TODOS LOS CAMPOS");
+            mostrarError("Campos obligatorios vacios", "POR FAVOR LLENE TODOS LOS CAMPOS.");
+            valido = false;
         } else if (!nombreValido) {
-            mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
-                    "nombre invalido", "EL NOMBRE SOLO PUEDE CONTENER LETRAS");
+            mostrarError("Nombre invalido", "EL NOMBRE SOLO PUEDE CONTENER LETRAS.");
+            valido = false;
+        } else if (!longitudNombreValida) {
+            mostrarError("Nombre demasiado largo", "EL NOMBRE NO PUEDE EXCEDER " + LIMITE_NOMBRE + " CARACTERES.");
+            valido = false;
         } else if (!apellidosValido) {
-            mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
-                    "apellidos invalidos", "LOS APELLIDOS SOLO PUEDEN CONTENER LETRAS");
+            mostrarError("Apellidos invalidos", "LOS APELLIDOS SOLO PUEDEN CONTENER LETRAS.");
+            valido = false;
+        } else if (!longitudApellidosValida) {
+            mostrarError("Apellidos demasiado largos", "LOS APELLIDOS NO PUEDEN EXCEDER " + LIMITE_APELLIDOS + " CARACTERES.");
+            valido = false;
         } else if (!correoValido) {
-            mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
-                    "correo invalido", "INGRESE UN CORREO ELECTRONICO VALIDO");
-        } else if (!numeroPersonalValido) {
-            mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
-                    "numero de personal invalido", "EL NUMERO DE PERSONAL SOLO PUEDE CONTENER LETRAS Y NUMEROS");
+            mostrarError("Correo invalido", "INGRESE UN CORREO ELECTRONICO VALIDO.");
+            valido = false;
+        } else if (!longitudCorreoValida) {
+            mostrarError("Correo demasiado largo", "EL CORREO NO PUEDE EXCEDER " + LIMITE_CORREO + " CARACTERES.");
+            valido = false;
+        } else if (!numeroDePersonalValido) {
+            mostrarError("Numero de personal invalido", "EL NUMERO DE PERSONAL SOLO PUEDE CONTENER LETRAS Y NUMEROS.");
+            valido = false;
+        } else if (!longitudNumeroPersonalValida) {
+            mostrarError("Numero de personal demasiado largo", "EL NUMERO DE PERSONAL NO PUEDE EXCEDER " + LIMITE_NUMERO_PERSONAL + " CARACTERES.");
+            valido = false;
         }
+        return valido;
     }
 
     private Coordinador construirCoordinador() {
@@ -151,43 +177,35 @@ public class RegistrarCoordinadorControlador {
         String correo = campoTextoCorreo.getText().trim();
         contrasenaGenerada = GeneradoContrasena.generarContrasenaTemportal();
         String contrasenaCifrada = CifracionContrasena.cifrarContrasena(contrasenaGenerada);
-
         Coordinador coordinador = new Coordinador();
-        coordinador.setNombre(limitarTexto(nombre, 55));
-        coordinador.setApellidos(limitarTexto(apellidos, 55));
-        coordinador.setNumeroDePersonalCoordinador(limitarTexto(numeroPersonal, 12));
-        coordinador.setCorreo(limitarTexto(correo, 100));
+        coordinador.setNombre(nombre);
+        coordinador.setApellidos(apellidos);
+        coordinador.setNumeroDePersonalCoordinador(numeroPersonal);
+        coordinador.setCorreo(correo);
         coordinador.setContrasena(contrasenaCifrada);
         coordinador.setEstado(Estado.Activo);
         return coordinador;
     }
 
     private void guardarCoordinador(Coordinador coordinador) {
-        CoordinadorDao coordinadorDao = new CoordinadorDao();
         try {
             int filasAfectadas = coordinadorDao.insertarCoordinador(coordinador);
             if (filasAfectadas >= FILAS_AFECTADAS_ESPERADAS) {
                 ServicioCorreo.enviarContrasenaInicial(coordinador.getCorreo(), coordinador.getNombre(), contrasenaGenerada);
                 limpiarCamposRegistros();
-                mostrarPanel(etiquetaTituloExito, etiquetaMensajeExito, panelExito,
-                        "Coordinador registrado exitosamente",
-                        "Se ha enviado la contraseña temporal al correo del coordinador");
+                mostrarExito("Coordinador registrado exitosamente",
+                        "SE HA ENVIADO LA CONTRASENA TEMPORAL AL CORREO DEL COORDINADOR.");
             } else {
-                mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
-                        "Error al registrar", "NO SE PUDO REGISTRAR EL COORDINADOR. INTENTE DE NUEVO.");
+                mostrarError("Error al registrar", "NO SE PUDO REGISTRAR EL COORDINADOR. INTENTE DE NUEVO.");
             }
         } catch (RegistroDuplicadoExcepcion excepcion) {
-            mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
-                    "Numero de personal repetido",
+            LOGGER.log(Level.WARNING, "Numero de personal duplicado", excepcion);
+            mostrarError("Numero de personal repetido",
                     "EL NUMERO DE PERSONAL YA EXISTE EN EL SISTEMA. VERIFIQUE LA INFORMACION.");
         } catch (UsuariosExcepcion excepcion) {
-            mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
-                    "Error inesperado", excepcion.getMessage().toUpperCase());
+            LOGGER.log(Level.SEVERE, "Error al registrar coordinador", excepcion);
+            mostrarError("Error inesperado", excepcion.getMessage().toUpperCase());
         }
-    }
-
-    private String limitarTexto(String texto, int limite) {
-        return texto.substring(0, Math.min(limite, texto.length()));
     }
 
     private void limpiarCamposRegistros() {
@@ -195,18 +213,30 @@ public class RegistrarCoordinadorControlador {
         ocultarPanel(panelExito);
         campoTextoNombres.clear();
         campoTextoApellidos.clear();
+        campoTextoCorreo.clear();
         campoTextoNumeroPersonal.clear();
     }
 
-    private void mostrarPanel(Label etiquetaTitulo, Label etiquetaMensaje, VBox panel, String titulo, String mensaje) {
-        etiquetaTitulo.setText(titulo);
-        etiquetaMensaje.setText(mensaje);
-        panel.setVisible(true);
-        panel.setManaged(true);
+    private void mostrarPanel(VBox panelMostrar, VBox panelOcultar) {
+        panelMostrar.setVisible(true);
+        panelMostrar.setManaged(true);
+        ocultarPanel(panelOcultar);
     }
 
     private void ocultarPanel(VBox panel) {
         panel.setVisible(false);
         panel.setManaged(false);
+    }
+
+    private void mostrarError(String titulo, String mensaje) {
+        etiquetaTituloError.setText(titulo);
+        etiquetaMensajeError.setText(mensaje);
+        mostrarPanel(panelError, panelExito);
+    }
+
+    private void mostrarExito(String titulo, String mensaje) {
+        etiquetaTituloExito.setText(titulo);
+        etiquetaMensajeExito.setText(mensaje);
+        mostrarPanel(panelExito, panelError);
     }
 }

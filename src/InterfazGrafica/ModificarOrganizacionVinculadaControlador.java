@@ -17,6 +17,7 @@ import logica.dao.excepciones.UsuariosExcepcion;
 import logica.dao.objetos.OrganizacionVinculadaDao;
 import logica.dominio.OrganizacionVinculada;
 import java.util.List;
+import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -24,6 +25,13 @@ public class ModificarOrganizacionVinculadaControlador {
 
     private static final Logger LOGGER = Logger.getLogger(ModificarOrganizacionVinculadaControlador.class.getName());
     private static final int FILAS_AFECTADAS_ESPERADAS = 1;
+    private static final int LONGITUD_MAXIMA_NOMBRE = 80;
+    private static final int LONGITUD_MAXIMA_DIRECCION = 80;
+    private static final int LONGITUD_MAXIMA_TELEFONO = 10;
+    private static final int LONGITUD_MAXIMA_CORREO = 100;
+    private static final int LONGITUD_MAXIMA_SECTOR = 50;
+
+    private final OrganizacionVinculadaDao organizacionDao = new OrganizacionVinculadaDao();
 
     @FXML private ComboBox<OrganizacionVinculada> comboBoxOrganizacion;
     @FXML private VBox panelFormulario;
@@ -47,7 +55,6 @@ public class ModificarOrganizacionVinculadaControlador {
     }
 
     private void cargarOrganizaciones() {
-        OrganizacionVinculadaDao organizacionDao = new OrganizacionVinculadaDao();
         try {
             List<OrganizacionVinculada> lista = organizacionDao.obtenerOrganizacionesActivas();
             if (lista.isEmpty()) {
@@ -71,8 +78,9 @@ public class ModificarOrganizacionVinculadaControlador {
             @Override
             protected void updateItem(OrganizacionVinculada organizacion, boolean vacio) {
                 super.updateItem(organizacion, vacio);
-                if (vacio || organizacion == null) {
-                    setText("-- Selecciona una organización --");
+                boolean esVacioONulo = vacio || organizacion == null;
+                if (esVacioONulo) {
+                    setText("-- Selecciona una organizacion --");
                 } else {
                     setText(organizacion.getNombre());
                 }
@@ -102,14 +110,14 @@ public class ModificarOrganizacionVinculadaControlador {
 
     @FXML
     private void botonGuardar() {
-        if (confirmarAccion("¿Desea guardar los cambios?")) {
+        if (confirmarAccion("Desea guardar los cambios?")) {
             procesarModificacion();
         }
     }
 
     private void procesarModificacion() {
-        if (camposValidos()) {
-            OrganizacionVinculadaDao organizacionDao = new OrganizacionVinculadaDao();
+        boolean camposCorrectos = verificarCampos();
+        if (camposCorrectos) {
             try {
                 OrganizacionVinculada organizacionModificada = construirOrganizacion();
                 int filasAfectadas = organizacionDao.modificarOrganizacionVinculada(
@@ -119,12 +127,12 @@ public class ModificarOrganizacionVinculadaControlador {
                     comboBoxOrganizacion.setValue(null);
                     comboBoxOrganizacion.setDisable(false);
                     cargarOrganizaciones();
-                    mostrarExito("Organización modificada", "ORGANIZACIÓN ACTUALIZADA EXITOSAMENTE.");
+                    mostrarExito("Organizacion modificada", "ORGANIZACION ACTUALIZADA EXITOSAMENTE.");
                 } else {
-                    mostrarError("Error al modificar", "NO SE PUDO MODIFICAR LA ORGANIZACIÓN. INTENTE DE NUEVO.");
+                    mostrarError("Error al modificar", "NO SE PUDO MODIFICAR LA ORGANIZACION. INTENTE DE NUEVO.");
                 }
             } catch (UsuariosExcepcion excepcion) {
-                LOGGER.log(Level.SEVERE, "Error al modificar organización", excepcion);
+                LOGGER.log(Level.SEVERE, "Error al modificar organizacion", excepcion);
                 mostrarError("Error inesperado", excepcion.getMessage().toUpperCase());
             }
         }
@@ -140,41 +148,60 @@ public class ModificarOrganizacionVinculadaControlador {
         return hayCamposVacios;
     }
 
-    private boolean camposValidos() {
+    private boolean verificarCampos() {
         String nombre = campoNombre.getText().trim();
         String direccion = campoDireccion.getText().trim();
         String telefono = campoTelefono.getText().trim();
         String correo = campoCorreo.getText().trim();
         String sector = campoSector.getText().trim();
-
         List<String> campos = List.of(nombre, direccion, telefono, correo, sector);
         boolean camposFormularioValidos = !camposVacios(campos);
+        boolean longitudNombreValida = nombre.length() <= LONGITUD_MAXIMA_NOMBRE;
+        boolean longitudDireccionValida = direccion.length() <= LONGITUD_MAXIMA_DIRECCION;
+        boolean longitudTelefonoValida = telefono.length() <= LONGITUD_MAXIMA_TELEFONO;
+        boolean longitudCorreoValida = correo.length() <= LONGITUD_MAXIMA_CORREO;
+        boolean longitudSectorValida = sector.length() <= LONGITUD_MAXIMA_SECTOR;
         boolean nombreValido = nombre.matches("^[a-zA-Z0-9áéíóúÁÉÍÓÚñÑ\\s]+$");
         boolean direccionValida = direccion.matches("^[a-zA-Z0-9áéíóúÁÉÍÓÚñÑ\\s#.,\\-]+$");
         boolean telefonoValido = telefono.matches("\\d{10}");
         boolean correoValido = correo.matches("^[\\w._%+\\-]+@[\\w.\\-]+\\.[a-zA-Z]{2,}$");
         boolean sectorValido = sector.matches("^[a-zA-ZáéíóúÁÉÍÓÚñÑ\\s]+$");
-
-        mostrarPrimerError(camposFormularioValidos, nombreValido, direccionValida, telefonoValido, correoValido, sectorValido);
-
-        return camposFormularioValidos && nombreValido && direccionValida && telefonoValido && correoValido && sectorValido;
-    }
-
-    private void mostrarPrimerError(boolean camposFormularioValidos, boolean nombreValido, boolean direccionValida,
-                                    boolean telefonoValido, boolean correoValido, boolean sectorValido) {
+        boolean valido = true;
         if (!camposFormularioValidos) {
-            mostrarError("Campos obligatorios vacíos", "POR FAVOR LLENE TODOS LOS CAMPOS.");
+            mostrarError("Campos obligatorios vacios", "POR FAVOR LLENE TODOS LOS CAMPOS.");
+            valido = false;
+        } else if (!longitudNombreValida) {
+            mostrarError("Nombre demasiado largo", "EL NOMBRE NO PUEDE EXCEDER " + LONGITUD_MAXIMA_NOMBRE + " CARACTERES.");
+            valido = false;
+        } else if (!longitudDireccionValida) {
+            mostrarError("Direccion demasiado larga", "LA DIRECCION NO PUEDE EXCEDER " + LONGITUD_MAXIMA_DIRECCION + " CARACTERES.");
+            valido = false;
+        } else if (!longitudTelefonoValida) {
+            mostrarError("Telefono demasiado largo", "EL TELEFONO NO PUEDE EXCEDER " + LONGITUD_MAXIMA_TELEFONO + " CARACTERES.");
+            valido = false;
+        } else if (!longitudCorreoValida) {
+            mostrarError("Correo demasiado largo", "EL CORREO NO PUEDE EXCEDER " + LONGITUD_MAXIMA_CORREO + " CARACTERES.");
+            valido = false;
+        } else if (!longitudSectorValida) {
+            mostrarError("Sector demasiado largo", "EL SECTOR NO PUEDE EXCEDER " + LONGITUD_MAXIMA_SECTOR + " CARACTERES.");
+            valido = false;
         } else if (!nombreValido) {
-            mostrarError("Nombre inválido", "EL NOMBRE NO DEBE CONTENER CARACTERES ESPECIALES.");
+            mostrarError("Nombre invalido", "EL NOMBRE NO DEBE CONTENER CARACTERES ESPECIALES.");
+            valido = false;
         } else if (!direccionValida) {
-            mostrarError("Dirección inválida", "LA DIRECCIÓN CONTIENE CARACTERES NO PERMITIDOS.");
+            mostrarError("Direccion invalida", "LA DIRECCION CONTIENE CARACTERES NO PERMITIDOS.");
+            valido = false;
         } else if (!telefonoValido) {
-            mostrarError("Teléfono inválido", "EL TELÉFONO DEBE CONTENER EXACTAMENTE 10 DÍGITOS NUMÉRICOS.");
+            mostrarError("Telefono invalido", "EL TELEFONO DEBE CONTENER EXACTAMENTE 10 DIGITOS NUMERICOS.");
+            valido = false;
         } else if (!correoValido) {
-            mostrarError("Correo inválido", "INGRESE UN CORREO ELECTRÓNICO VÁLIDO.");
+            mostrarError("Correo invalido", "INGRESE UN CORREO ELECTRONICO VALIDO.");
+            valido = false;
         } else if (!sectorValido) {
-            mostrarError("Sector inválido", "EL SECTOR NO DEBE CONTENER NÚMEROS NI CARACTERES ESPECIALES.");
+            mostrarError("Sector invalido", "EL SECTOR NO DEBE CONTENER NUMEROS NI CARACTERES ESPECIALES.");
+            valido = false;
         }
+        return valido;
     }
 
     private OrganizacionVinculada construirOrganizacion() {
@@ -189,7 +216,7 @@ public class ModificarOrganizacionVinculadaControlador {
 
     @FXML
     private void botonCancelar() {
-        if (confirmarAccion("¿Seguro que desea cancelar?")) {
+        if (confirmarAccion("Seguro que desea cancelar?")) {
             ocultarTodo();
             comboBoxOrganizacion.setValue(null);
         }
@@ -203,13 +230,18 @@ public class ModificarOrganizacionVinculadaControlador {
 
     private boolean confirmarAccion(String mensaje) {
         Alert alerta = new Alert(Alert.AlertType.CONFIRMATION);
-        alerta.setTitle("Confirmación");
+        boolean confirmado = false;
+        alerta.setTitle("Confirmacion");
         alerta.setHeaderText(mensaje);
         alerta.setContentText("");
-        ButtonType botonSi = new ButtonType("Sí");
+        ButtonType botonSi = new ButtonType("Si");
         ButtonType botonNo = new ButtonType("No");
         alerta.getButtonTypes().setAll(botonSi, botonNo);
-        return alerta.showAndWait().filter(botonPresionado -> botonPresionado == botonSi).isPresent();
+        Optional<ButtonType> resultado = alerta.showAndWait();
+        if (resultado.isPresent() && resultado.get() == botonSi) {
+            confirmado = true;
+        }
+        return confirmado;
     }
 
     private void ocultarTodo() {
@@ -218,12 +250,10 @@ public class ModificarOrganizacionVinculadaControlador {
         ocultarPanel(panelFormulario);
     }
 
-    private void mostrarPanel(VBox panel, Label etiquetaTitulo, Label etiquetaMensaje,
-                              String titulo, String mensaje) {
-        etiquetaTitulo.setText(titulo);
-        etiquetaMensaje.setText(mensaje);
-        panel.setVisible(true);
-        panel.setManaged(true);
+    private void mostrarPanel(VBox panelMostrar, VBox panelOcultar) {
+        panelMostrar.setVisible(true);
+        panelMostrar.setManaged(true);
+        ocultarPanel(panelOcultar);
     }
 
     private void ocultarPanel(VBox panel) {
@@ -232,12 +262,14 @@ public class ModificarOrganizacionVinculadaControlador {
     }
 
     private void mostrarError(String titulo, String mensaje) {
-        ocultarPanel(panelExito);
-        mostrarPanel(panelError, etiquetaTituloError, etiquetaMensajeError, titulo, mensaje);
+        etiquetaTituloError.setText(titulo);
+        etiquetaMensajeError.setText(mensaje);
+        mostrarPanel(panelError, panelExito);
     }
 
     private void mostrarExito(String titulo, String mensaje) {
-        ocultarPanel(panelError);
-        mostrarPanel(panelExito, etiquetaTituloExito, etiquetaMensajeExito, titulo, mensaje);
+        etiquetaTituloExito.setText(titulo);
+        etiquetaMensajeExito.setText(mensaje);
+        mostrarPanel(panelExito, panelError);
     }
 }

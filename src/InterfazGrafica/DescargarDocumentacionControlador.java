@@ -1,5 +1,6 @@
 package InterfazGrafica;
 
+import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -40,7 +41,7 @@ public class DescargarDocumentacionControlador {
 
     private void configurarColumnas() {
         columnaDocumento.setCellValueFactory(dato ->
-                new javafx.beans.property.SimpleStringProperty(dato.getValue()[0]));
+                new SimpleStringProperty(dato.getValue()[0]));
         columnaAccion.setCellFactory(columna -> new TableCell<>() {
             private final Button botonDescargar = new Button("Descargar");
             {
@@ -64,14 +65,19 @@ public class DescargarDocumentacionControlador {
 
     private void cargarDocumentos() {
         tablaDocumentos.getItems().add(new String[]{
-                "PRAIS-04 Evaluación de la organización",
+                "PRAIS-04 Evaluacion de la organizacion",
                 "/recursos/PRAIS-04-Evaluacion-de-la-organizacion.pdf",
                 "PRAIS-04-Evaluacion-de-la-organizacion.pdf"
         });
         tablaDocumentos.getItems().add(new String[]{
-                "F1 Solicitud de Prácticas",
+                "F1 Solicitud de Practicas",
                 "/recursos/F1-Solicitud-Practicas-3.pdf",
                 "F1-Solicitud-Practicas-3.pdf"
+        });
+        tablaDocumentos.getItems().add(new String[]{
+                "PRAIS-05 Reporte Final",
+                "/recursos/PRAIS-05-Reporte-FINAL.pdf",
+                "PRAIS-05-Reporte-FINAL.pdf"
         });
     }
 
@@ -84,18 +90,18 @@ public class DescargarDocumentacionControlador {
         ocultarPanel(panelExito);
         if (!archivoExisteEnRecursos(rutaRecurso)) {
             mostrarError("Archivo no encontrado", "EL ARCHIVO NO EXISTE EN LOS RECURSOS DEL SISTEMA.");
-            return;
-        }
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Guardar documento");
-        fileChooser.setInitialFileName(nombreArchivo);
-        fileChooser.getExtensionFilters().add(
-                new FileChooser.ExtensionFilter("PDF", "*.pdf")
-        );
-        Stage escenario = (Stage) tablaDocumentos.getScene().getWindow();
-        File destino = fileChooser.showSaveDialog(escenario);
-        if (destino != null) {
-            copiarArchivo(rutaRecurso, destino);
+        } else {
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.setTitle("Guardar documento");
+            fileChooser.setInitialFileName(nombreArchivo);
+            fileChooser.getExtensionFilters().add(
+                    new FileChooser.ExtensionFilter("PDF", "*.pdf")
+            );
+            Stage escenario = (Stage) tablaDocumentos.getScene().getWindow();
+            File destino = fileChooser.showSaveDialog(escenario);
+            if (destino != null) {
+                copiarArchivo(rutaRecurso, destino);
+            }
         }
     }
 
@@ -117,19 +123,18 @@ public class DescargarDocumentacionControlador {
     }
 
     private void mostrarError(String titulo, String mensaje) {
-        ocultarPanel(panelExito);
-        etiquetaTituloError.setText(titulo);
-        etiquetaMensajeError.setText(mensaje);
-        panelError.setVisible(true);
-        panelError.setManaged(true);
+        mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError, titulo, mensaje);
     }
 
     private void mostrarExito(String titulo, String mensaje) {
-        ocultarPanel(panelError);
-        etiquetaTituloExito.setText(titulo);
-        etiquetaMensajeExito.setText(mensaje);
-        panelExito.setVisible(true);
-        panelExito.setManaged(true);
+        mostrarPanel(etiquetaTituloExito, etiquetaMensajeExito, panelExito, titulo, mensaje);
+    }
+
+    private void mostrarPanel(Label etiquetaTitulo, Label etiquetaMensaje, VBox panel, String titulo, String mensaje) {
+        etiquetaTitulo.setText(titulo);
+        etiquetaMensaje.setText(mensaje);
+        panel.setVisible(true);
+        panel.setManaged(true);
     }
 
     private void ocultarPanel(VBox panel) {

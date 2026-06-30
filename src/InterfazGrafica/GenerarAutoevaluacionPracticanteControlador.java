@@ -8,6 +8,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.Toggle;
+import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
@@ -17,6 +18,7 @@ import logica.dao.excepciones.MensajeriaExcepcion;
 import logica.dominio.SesionUsuario;
 import logica.archivos.GeneradorPdfAutoevaluacion;
 import java.util.List;
+import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -26,6 +28,9 @@ public class GenerarAutoevaluacionPracticanteControlador {
     private static final int FILAS_AFECTADAS_ESPERADAS = 1;
     private static final int MENSUALES_REQUERIDOS = 6;
     private static final int PARCIALES_REQUERIDOS = 2;
+
+    private final AutoevaluacionPracticanteDao autoevaluacionDao = new AutoevaluacionPracticanteDao();
+    private final ReporteDao reporteDao = new ReporteDao();
 
     @FXML private Label etiquetaMatricula;
     @FXML private Label etiquetaOrganizacion;
@@ -51,11 +56,12 @@ public class GenerarAutoevaluacionPracticanteControlador {
     private String matricula;
     private String nombrePracticante;
     private int idProyecto;
+    private boolean autoevaluacionGuardada = false;
 
     @FXML
     public void initialize() {
-        matricula = SesionUsuario.getInstance().getMatricula();
-        nombrePracticante = SesionUsuario.getInstance().getNombre();
+        matricula = SesionUsuario.getInstance().getUsuarioActivo().getMatricula();
+        nombrePracticante = SesionUsuario.getInstance().getUsuarioActivo().getNombre();
         etiquetaMatricula.setText(matricula);
         cargarInformacionProyecto();
         verificarAutoevaluacionExistente();
@@ -65,7 +71,10 @@ public class GenerarAutoevaluacionPracticanteControlador {
     private void botonGuardar() {
         ocultarPanel(panelError);
         ocultarPanel(panelExito);
-        if (confirmarAccion("¿Seguro que desea guardar la autoevaluación?")) {
+        if (autoevaluacionGuardada) {
+            mostrarError("Autoevaluacion ya registrada",
+                    "YA GUARDASTE TU AUTOEVALUACION. SOLO PUEDES GENERAR EL PDF.");
+        } else if (confirmarAccion("Seguro que desea guardar la autoevaluacion?")) {
             procesarRegistro();
         }
     }
@@ -74,19 +83,23 @@ public class GenerarAutoevaluacionPracticanteControlador {
     private void botonGenerarPDF() {
         ocultarPanel(panelError);
         ocultarPanel(panelExito);
-        if (verificarReportesCompletos()) {
-            if (!respuestasValidas()) {
-                mostrarError("Respuestas incompletas",
-                        "Debes responder todas las afirmaciones antes de generar el PDF.");
-            } else if (confirmarAccion("¿Desea generar el PDF de la autoevaluación?")) {
-                generarPdf();
-            }
+        boolean reportesCompletos = verificarReportesCompletos();
+        boolean respuestasCompletas = respuestasValidas();
+        boolean usuarioConfirmo = false;
+        if (reportesCompletos && !respuestasCompletas) {
+            mostrarError("Respuestas incompletas",
+                    "DEBES RESPONDER TODAS LAS AFIRMACIONES ANTES DE GENERAR EL PDF.");
+        } else if (reportesCompletos && respuestasCompletas) {
+            usuarioConfirmo = confirmarAccion("Desea generar el PDF de la autoevaluacion?");
+        }
+        if (usuarioConfirmo) {
+            generarPdf();
         }
     }
 
     @FXML
     private void botonCancelar() {
-        if (confirmarAccion("¿Seguro que desea cancelar?")) {
+        if (confirmarAccion("Seguro que desea cancelar?")) {
             limpiarRespuestas();
         }
     }
@@ -98,14 +111,15 @@ public class GenerarAutoevaluacionPracticanteControlador {
     }
 
     private void verificarAutoevaluacionExistente() {
-        AutoevaluacionPracticanteDao autoevaluacionDao = new AutoevaluacionPracticanteDao();
         try {
             AutoevaluacionPracticante autoevaluacion = autoevaluacionDao.obtenerAutoevaluacion(matricula);
             if (autoevaluacion != null) {
                 precargarRespuestas(autoevaluacion);
+                deshabilitarRespuestas();
+                autoevaluacionGuardada = true;
             }
         } catch (MensajeriaExcepcion excepcion) {
-            LOGGER.log(Level.SEVERE, "Error al verificar autoevaluación existente", excepcion);
+            LOGGER.log(Level.SEVERE, "Error al verificar autoevaluacion existente", excepcion);
         }
     }
 
@@ -136,8 +150,18 @@ public class GenerarAutoevaluacionPracticanteControlador {
         }
     }
 
+    private void deshabilitarRespuestas() {
+        List<ToggleGroup> grupos = List.of(grupoRespuesta1, grupoRespuesta2, grupoRespuesta3,
+                grupoRespuesta4, grupoRespuesta5, grupoRespuesta6, grupoRespuesta7,
+                grupoRespuesta8, grupoRespuesta9, grupoRespuesta10);
+        for (ToggleGroup grupo : grupos) {
+            for (Toggle toggle : grupo.getToggles()) {
+                ((ToggleButton) toggle).setDisable(true);
+            }
+        }
+    }
+
     private void cargarInformacionProyecto() {
-        AutoevaluacionPracticanteDao autoevaluacionDao = new AutoevaluacionPracticanteDao();
         try {
             AutoevaluacionPracticante informacion = autoevaluacionDao.obtenerInfoAutoevaluacion(matricula);
             if (informacion != null) {
@@ -147,21 +171,21 @@ public class GenerarAutoevaluacionPracticanteControlador {
                 etiquetaResponsable.setText(informacion.getResponsableDelProyecto());
             } else {
                 mostrarError("Sin proyecto asignado",
-                        "No se encontró información del proyecto para la matrícula: " + matricula);
+                        "NO SE ENCONTRO INFORMACION DEL PROYECTO PARA LA MATRICULA: " + matricula);
             }
         } catch (MensajeriaExcepcion excepcion) {
-            LOGGER.log(Level.SEVERE, "Error al cargar información del proyecto", excepcion);
+            LOGGER.log(Level.SEVERE, "Error al cargar informacion del proyecto", excepcion);
             mostrarError("Error inesperado", excepcion.getMessage().toUpperCase());
         }
     }
 
     private void procesarRegistro() {
-        if (verificarReportesCompletos()) {
-            if (!respuestasValidas()) {
-                mostrarError("Respuestas incompletas", "Debes responder todo antes de guardar.");
-            } else {
-                guardarAutoevaluacion(construirAutoevaluacion());
-            }
+        boolean reportesCompletos = verificarReportesCompletos();
+        boolean respuestasCompletas = respuestasValidas();
+        if (reportesCompletos && !respuestasCompletas) {
+            mostrarError("Respuestas incompletas", "DEBES RESPONDER TODO ANTES DE GUARDAR.");
+        } else if (reportesCompletos && respuestasCompletas) {
+            guardarAutoevaluacion(construirAutoevaluacion());
         }
     }
 
@@ -172,9 +196,11 @@ public class GenerarAutoevaluacionPracticanteControlador {
                 etiquetaNombreProyecto.getText(), etiquetaOrganizacion.getText(),
                 etiquetaResponsable.getText());
         if (rutaPdf != null) {
-            mostrarExito("PDF generado correctamente", "La autoevaluación se guardó en: " + rutaPdf);
+            mostrarExito("PDF generado correctamente",
+                    "LA AUTOEVALUACION SE GUARDO EN: " + rutaPdf);
         } else {
-            mostrarError("Error al generar", "No se pudo generar el PDF. Intente de nuevo.");
+            mostrarError("Error al generar",
+                    "NO SE PUDO GENERAR EL PDF. INTENTE DE NUEVO.");
         }
     }
 
@@ -192,7 +218,7 @@ public class GenerarAutoevaluacionPracticanteControlador {
     }
 
     private AutoevaluacionPracticante construirAutoevaluacion() {
-        AutoevaluacionPracticante autoevaluacionPracticante = new AutoevaluacionPracticante(
+        AutoevaluacionPracticante autoevaluacion = new AutoevaluacionPracticante(
                 matricula, idProyecto,
                 obtenerRespuesta(grupoRespuesta1),
                 obtenerRespuesta(grupoRespuesta2),
@@ -205,7 +231,7 @@ public class GenerarAutoevaluacionPracticanteControlador {
                 obtenerRespuesta(grupoRespuesta9),
                 obtenerRespuesta(grupoRespuesta10)
         );
-        return autoevaluacionPracticante;
+        return autoevaluacion;
     }
 
     private int obtenerRespuesta(ToggleGroup grupo) {
@@ -214,34 +240,36 @@ public class GenerarAutoevaluacionPracticanteControlador {
     }
 
     private void guardarAutoevaluacion(AutoevaluacionPracticante autoevaluacion) {
-        AutoevaluacionPracticanteDao autoevaluacionDao = new AutoevaluacionPracticanteDao();
         try {
             int filasAfectadas = autoevaluacionDao.registrarAutoevaluacion(autoevaluacion);
             if (filasAfectadas >= FILAS_AFECTADAS_ESPERADAS) {
-                limpiarRespuestas();
-                mostrarExito("Autoevaluación registrada", "LA AUTOEVALUACIÓN SE GUARDÓ EXITOSAMENTE.");
+                autoevaluacionGuardada = true;
+                deshabilitarRespuestas();
+                mostrarExito("Autoevaluacion registrada", "LA AUTOEVALUACION SE GUARDO EXITOSAMENTE.");
             } else {
-                mostrarError("Error al guardar", "NO SE PUDO GUARDAR LA AUTOEVALUACIÓN. INTENTE DE NUEVO.");
+                mostrarError("Error al guardar", "NO SE PUDO GUARDAR LA AUTOEVALUACION. INTENTE DE NUEVO.");
             }
         } catch (MensajeriaExcepcion excepcion) {
-            LOGGER.log(Level.SEVERE, "Error al guardar autoevaluación", excepcion);
+            LOGGER.log(Level.SEVERE, "Error al guardar autoevaluacion", excepcion);
             mostrarError("Error inesperado", excepcion.getMessage().toUpperCase());
         }
     }
 
     private boolean verificarReportesCompletos() {
         boolean puedeGenerar = false;
-        ReporteDao reporteDao = new ReporteDao();
         try {
             int mensualesEvaluados = reporteDao.contarReportesEvaluados(matricula, "Mensual");
             int parcialesEvaluados = reporteDao.contarReportesEvaluados(matricula, "Parcial");
-            if (mensualesEvaluados >= MENSUALES_REQUERIDOS && parcialesEvaluados >= PARCIALES_REQUERIDOS) {
+            boolean mensualesSuficientes = mensualesEvaluados >= MENSUALES_REQUERIDOS;
+            boolean parcialesSuficientes = parcialesEvaluados >= PARCIALES_REQUERIDOS;
+            if (mensualesSuficientes && parcialesSuficientes) {
                 puedeGenerar = true;
             } else {
                 mostrarError("Reportes incompletos",
-                        "DEBES TENER 6 REPORTES MENSUALES Y 2 PARCIALES EVALUADOS PARA GENERAR LA AUTOEVALUACION");
+                        "DEBES TENER 6 REPORTES MENSUALES Y 2 PARCIALES EVALUADOS PARA GENERAR LA AUTOEVALUACION.");
             }
         } catch (MensajeriaExcepcion excepcion) {
+            LOGGER.log(Level.SEVERE, "Error al verificar reportes completos", excepcion);
             mostrarError("Error inesperado", excepcion.getMessage().toUpperCase());
         }
         return puedeGenerar;
@@ -250,34 +278,40 @@ public class GenerarAutoevaluacionPracticanteControlador {
     private void limpiarRespuestas() {
         ocultarPanel(panelError);
         ocultarPanel(panelExito);
-        grupoRespuesta1.selectToggle(null);
-        grupoRespuesta2.selectToggle(null);
-        grupoRespuesta3.selectToggle(null);
-        grupoRespuesta4.selectToggle(null);
-        grupoRespuesta5.selectToggle(null);
-        grupoRespuesta6.selectToggle(null);
-        grupoRespuesta7.selectToggle(null);
-        grupoRespuesta8.selectToggle(null);
-        grupoRespuesta9.selectToggle(null);
-        grupoRespuesta10.selectToggle(null);
+        if (!autoevaluacionGuardada) {
+            grupoRespuesta1.selectToggle(null);
+            grupoRespuesta2.selectToggle(null);
+            grupoRespuesta3.selectToggle(null);
+            grupoRespuesta4.selectToggle(null);
+            grupoRespuesta5.selectToggle(null);
+            grupoRespuesta6.selectToggle(null);
+            grupoRespuesta7.selectToggle(null);
+            grupoRespuesta8.selectToggle(null);
+            grupoRespuesta9.selectToggle(null);
+            grupoRespuesta10.selectToggle(null);
+        }
     }
 
     private boolean confirmarAccion(String mensaje) {
         Alert alerta = new Alert(Alert.AlertType.CONFIRMATION);
-        alerta.setTitle("Confirmación");
+        boolean confirmado = false;
+        alerta.setTitle("Confirmacion");
         alerta.setHeaderText(mensaje);
         alerta.setContentText("");
-        ButtonType botonSi = new ButtonType("Sí");
+        ButtonType botonSi = new ButtonType("Si");
         ButtonType botonNo = new ButtonType("No");
         alerta.getButtonTypes().setAll(botonSi, botonNo);
-        return alerta.showAndWait().filter(botonPresionado -> botonPresionado == botonSi).isPresent();
+        Optional<ButtonType> resultado = alerta.showAndWait();
+        if (resultado.isPresent() && resultado.get() == botonSi) {
+            confirmado = true;
+        }
+        return confirmado;
     }
 
-    private void mostrarPanel(VBox panel, Label etiquetaTitulo, Label etiquetaMensaje,String titulo, String mensaje) {
-        etiquetaTitulo.setText(titulo);
-        etiquetaMensaje.setText(mensaje);
-        panel.setVisible(true);
-        panel.setManaged(true);
+    private void mostrarPanel(VBox panelMostrar, VBox panelOcultar) {
+        panelMostrar.setVisible(true);
+        panelMostrar.setManaged(true);
+        ocultarPanel(panelOcultar);
     }
 
     private void ocultarPanel(VBox panel) {
@@ -286,12 +320,14 @@ public class GenerarAutoevaluacionPracticanteControlador {
     }
 
     private void mostrarError(String titulo, String mensaje) {
-        ocultarPanel(panelExito);
-        mostrarPanel(panelError, etiquetaTituloError, etiquetaMensajeError, titulo, mensaje);
+        etiquetaTituloError.setText(titulo);
+        etiquetaMensajeError.setText(mensaje);
+        mostrarPanel(panelError, panelExito);
     }
 
     private void mostrarExito(String titulo, String mensaje) {
-        ocultarPanel(panelError);
-        mostrarPanel(panelExito, etiquetaTituloExito, etiquetaMensajeExito, titulo, mensaje);
+        etiquetaTituloExito.setText(titulo);
+        etiquetaMensajeExito.setText(mensaje);
+        mostrarPanel(panelExito, panelError);
     }
 }

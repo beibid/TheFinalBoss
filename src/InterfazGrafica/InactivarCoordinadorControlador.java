@@ -16,6 +16,7 @@ import logica.dao.excepciones.UsuariosExcepcion;
 import logica.dao.objetos.CoordinadorDao;
 import logica.dominio.Coordinador;
 import java.util.List;
+import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -23,6 +24,8 @@ public class InactivarCoordinadorControlador {
 
     private static final Logger LOGGER = Logger.getLogger(InactivarCoordinadorControlador.class.getName());
     private static final int FILAS_AFECTADAS_ESPERADAS = 1;
+
+    private final CoordinadorDao coordinadorDao = new CoordinadorDao();
 
     @FXML private ComboBox<Coordinador> comboBoxCoordinadores;
     @FXML private VBox panelDatos;
@@ -36,7 +39,6 @@ public class InactivarCoordinadorControlador {
     @FXML private Label etiquetaApellidos;
     @FXML private Label etiquetaNumeroPersonal;
 
-    private final CoordinadorDao coordinadorDao = new CoordinadorDao();
     private Coordinador coordinadorSeleccionado;
 
     @FXML
@@ -68,7 +70,8 @@ public class InactivarCoordinadorControlador {
             @Override
             protected void updateItem(Coordinador coordinador, boolean vacio) {
                 super.updateItem(coordinador, vacio);
-                if (vacio || coordinador == null) {
+                boolean esVacioONulo = vacio || coordinador == null;
+                if (esVacioONulo) {
                     setText("-- Selecciona un coordinador --");
                 } else {
                     setText(coordinador.getNombre() + " " + coordinador.getApellidos());
@@ -98,8 +101,8 @@ public class InactivarCoordinadorControlador {
     @FXML
     private void botonInactivar() {
         if (coordinadorSeleccionado == null) {
-            mostrarError("Sin selección", "POR FAVOR SELECCIONA UN COORDINADOR.");
-        } else if (confirmarAccion("¿Seguro que desea inactivar a este coordinador?")) {
+            mostrarError("Sin seleccion", "POR FAVOR SELECCIONA UN COORDINADOR.");
+        } else if (confirmarAccion("Seguro que desea inactivar a este coordinador?")) {
             ejecutarInactivacion(coordinadorSeleccionado);
         }
     }
@@ -123,7 +126,7 @@ public class InactivarCoordinadorControlador {
 
     @FXML
     private void botonCancelar() {
-        if (confirmarAccion("¿Seguro que desea cancelar?")) {
+        if (confirmarAccion("Seguro que desea cancelar?")) {
             limpiar();
         }
     }
@@ -136,13 +139,18 @@ public class InactivarCoordinadorControlador {
 
     private boolean confirmarAccion(String mensaje) {
         Alert alerta = new Alert(Alert.AlertType.CONFIRMATION);
-        alerta.setTitle("Confirmación");
+        boolean confirmado = false;
+        alerta.setTitle("Confirmacion");
         alerta.setHeaderText(mensaje);
         alerta.setContentText("");
-        ButtonType botonSi = new ButtonType("Sí");
+        ButtonType botonSi = new ButtonType("Si");
         ButtonType botonNo = new ButtonType("No");
         alerta.getButtonTypes().setAll(botonSi, botonNo);
-        return alerta.showAndWait().filter(botonPresionado -> botonPresionado == botonSi).isPresent();
+        Optional<ButtonType> resultado = alerta.showAndWait();
+        if (resultado.isPresent() && resultado.get() == botonSi) {
+            confirmado = true;
+        }
+        return confirmado;
     }
 
     private void limpiar() {
@@ -154,12 +162,10 @@ public class InactivarCoordinadorControlador {
         ocultarPanel(panelExito);
     }
 
-    private void mostrarPanel(VBox panel, Label etiquetaTitulo, Label etiquetaMensaje,
-                              String titulo, String mensaje) {
-        etiquetaTitulo.setText(titulo);
-        etiquetaMensaje.setText(mensaje);
-        panel.setVisible(true);
-        panel.setManaged(true);
+    private void mostrarPanel(VBox panelMostrar, VBox panelOcultar) {
+        panelMostrar.setVisible(true);
+        panelMostrar.setManaged(true);
+        ocultarPanel(panelOcultar);
     }
 
     private void ocultarPanel(VBox panel) {
@@ -168,12 +174,14 @@ public class InactivarCoordinadorControlador {
     }
 
     private void mostrarError(String titulo, String mensaje) {
-        ocultarPanel(panelExito);
-        mostrarPanel(panelError, etiquetaTituloError, etiquetaMensajeError, titulo, mensaje);
+        etiquetaTituloError.setText(titulo);
+        etiquetaMensajeError.setText(mensaje);
+        mostrarPanel(panelError, panelExito);
     }
 
     private void mostrarExito(String titulo, String mensaje) {
-        ocultarPanel(panelError);
-        mostrarPanel(panelExito, etiquetaTituloExito, etiquetaMensajeExito, titulo, mensaje);
+        etiquetaTituloExito.setText(titulo);
+        etiquetaMensajeExito.setText(mensaje);
+        mostrarPanel(panelExito, panelError);
     }
 }

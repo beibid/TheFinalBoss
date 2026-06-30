@@ -125,21 +125,21 @@ public class ReportePrueba {
     @Test
     public void pruebaEvaluarReporteExitoso() throws MensajeriaExcepcion {
         ReporteDao reporteDao = new ReporteDao();
-        int filasAfectadas = reporteDao.evaluarReporte(1, 9.0, "Buen trabajo, continua asi", "22114455");
+        int filasAfectadas = reporteDao.evaluarReporte(17, 9.0, "Buen trabajo, continua asi", "22114455");
         assertEquals(1, filasAfectadas);
     }
 
     @Test
     public void pruebaEvaluarReporteAlternoCalificacionMaxima() throws MensajeriaExcepcion {
         ReporteDao reporteDao = new ReporteDao();
-        int filasAfectadas = reporteDao.evaluarReporte(2, 10.0, "Excelente desempeno, actividades muy bien documentadas", "22114455");
+        int filasAfectadas = reporteDao.evaluarReporte(18, 10.0, "Excelente desempeno, actividades muy bien documentadas", "22114455");
         assertEquals(1, filasAfectadas);
     }
 
     @Test
     public void pruebaEvaluarReporteAlternoCalificacionMinima() throws MensajeriaExcepcion {
         ReporteDao reporteDao = new ReporteDao();
-        int filasAfectadas = reporteDao.evaluarReporte(3, 6.0, "Debe mejorar la redaccion y profundizar en los temas", "33224411");
+        int filasAfectadas = reporteDao.evaluarReporte(19, 6.0, "Debe mejorar la redaccion y profundizar en los temas", "33224411");
         assertEquals(1, filasAfectadas);
     }
 

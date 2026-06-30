@@ -16,6 +16,7 @@ import logica.dao.excepciones.UsuariosExcepcion;
 import logica.dao.objetos.PracticanteDao;
 import logica.dominio.Practicante;
 import java.util.List;
+import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -23,6 +24,8 @@ public class InactivarPracticanteControlador {
 
     private static final Logger LOGGER = Logger.getLogger(InactivarPracticanteControlador.class.getName());
     private static final int FILAS_AFECTADAS_ESPERADAS = 1;
+
+    private final PracticanteDao practicanteDao = new PracticanteDao();
 
     @FXML private ComboBox<Practicante> comboBoxPracticantes;
     @FXML private VBox panelDatos;
@@ -36,7 +39,6 @@ public class InactivarPracticanteControlador {
     @FXML private Label etiquetaApellidos;
     @FXML private Label etiquetaNumeroPersonal;
 
-    private final PracticanteDao practicanteDao = new PracticanteDao();
     private Practicante practicanteSeleccionado;
 
     @FXML
@@ -68,7 +70,8 @@ public class InactivarPracticanteControlador {
             @Override
             protected void updateItem(Practicante practicante, boolean vacio) {
                 super.updateItem(practicante, vacio);
-                if (vacio || practicante == null) {
+                boolean esVacioONulo = vacio || practicante == null;
+                if (esVacioONulo) {
                     setText("-- Selecciona un practicante --");
                 } else {
                     setText(practicante.getNombre() + " " + practicante.getApellidos() + " - " + practicante.getMatricula());
@@ -98,8 +101,8 @@ public class InactivarPracticanteControlador {
     @FXML
     private void botonInactivar() {
         if (practicanteSeleccionado == null) {
-            mostrarError("Sin selección", "POR FAVOR SELECCIONA UN PRACTICANTE.");
-        } else if (confirmarAccion("¿Seguro que desea inactivar a este practicante?")) {
+            mostrarError("Sin seleccion", "POR FAVOR SELECCIONA UN PRACTICANTE.");
+        } else if (confirmarAccion("Seguro que desea inactivar a este practicante?")) {
             ejecutarInactivacion(practicanteSeleccionado);
         }
     }
@@ -123,7 +126,7 @@ public class InactivarPracticanteControlador {
 
     @FXML
     private void botonCancelar() {
-        if (confirmarAccion("¿Seguro que desea cancelar?")) {
+        if (confirmarAccion("Seguro que desea cancelar?")) {
             limpiar();
         }
     }
@@ -136,13 +139,18 @@ public class InactivarPracticanteControlador {
 
     private boolean confirmarAccion(String mensaje) {
         Alert alerta = new Alert(Alert.AlertType.CONFIRMATION);
-        alerta.setTitle("Confirmación");
+        boolean confirmado = false;
+        alerta.setTitle("Confirmacion");
         alerta.setHeaderText(mensaje);
         alerta.setContentText("");
-        ButtonType botonSi = new ButtonType("Sí");
+        ButtonType botonSi = new ButtonType("Si");
         ButtonType botonNo = new ButtonType("No");
         alerta.getButtonTypes().setAll(botonSi, botonNo);
-        return alerta.showAndWait().filter(botonPresionado -> botonPresionado == botonSi).isPresent();
+        Optional<ButtonType> resultado = alerta.showAndWait();
+        if (resultado.isPresent() && resultado.get() == botonSi) {
+            confirmado = true;
+        }
+        return confirmado;
     }
 
     private void limpiar() {
@@ -154,12 +162,10 @@ public class InactivarPracticanteControlador {
         ocultarPanel(panelExito);
     }
 
-    private void mostrarPanel(VBox panel, Label etiquetaTitulo, Label etiquetaMensaje,
-                              String titulo, String mensaje) {
-        etiquetaTitulo.setText(titulo);
-        etiquetaMensaje.setText(mensaje);
-        panel.setVisible(true);
-        panel.setManaged(true);
+    private void mostrarPanel(VBox panelMostrar, VBox panelOcultar) {
+        panelMostrar.setVisible(true);
+        panelMostrar.setManaged(true);
+        ocultarPanel(panelOcultar);
     }
 
     private void ocultarPanel(VBox panel) {
@@ -168,12 +174,14 @@ public class InactivarPracticanteControlador {
     }
 
     private void mostrarError(String titulo, String mensaje) {
-        ocultarPanel(panelExito);
-        mostrarPanel(panelError, etiquetaTituloError, etiquetaMensajeError, titulo, mensaje);
+        etiquetaTituloError.setText(titulo);
+        etiquetaMensajeError.setText(mensaje);
+        mostrarPanel(panelError, panelExito);
     }
 
     private void mostrarExito(String titulo, String mensaje) {
-        ocultarPanel(panelError);
-        mostrarPanel(panelExito, etiquetaTituloExito, etiquetaMensajeExito, titulo, mensaje);
+        etiquetaTituloExito.setText(titulo);
+        etiquetaMensajeExito.setText(mensaje);
+        mostrarPanel(panelExito, panelError);
     }
 }

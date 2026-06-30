@@ -23,7 +23,7 @@
             </children>
         </VBox>
 
-        <ScrollPane layoutX="180.0" layoutY="0.0" prefHeight="700.0" prefWidth="570.0" fitToWidth="true">
+        <ScrollPane fx:id="scrollPane" layoutX="180.0" layoutY="0.0" prefHeight="700.0" prefWidth="570.0" fitToWidth="true">
             <content>
                 <VBox prefWidth="550.0" spacing="8.0" style="-fx-padding: 25;">
                     <children>
@@ -77,9 +77,6 @@
 
                                 <Label style="-fx-font-size: 13;" text="Dirección de la empresa" />
                                 <TextField fx:id="campoDireccionEmpresa" prefHeight="30.0" prefWidth="500.0" promptText="Ej. Av. Principal 123" />
-
-                                <Label style="-fx-font-size: 13;" text="Matrícula" />
-                                <TextField fx:id="campoMatricula" prefHeight="30.0" prefWidth="500.0" promptText="Ej. S12345678" />
 
                                 <Label style="-fx-font-size: 13;" text="Número de personal del coordinador" />
                                 <TextField fx:id="campoNumPersonalCoordinador" prefHeight="30.0" prefWidth="500.0" promptText="Ej. C001" />

@@ -1,19 +1,18 @@
 package logica.archivos;
 
-
+import com.itextpdf.io.font.constants.StandardFonts;
+import com.itextpdf.kernel.colors.ColorConstants;
 import com.itextpdf.kernel.font.PdfFont;
 import com.itextpdf.kernel.font.PdfFontFactory;
 import com.itextpdf.kernel.pdf.PdfDocument;
 import com.itextpdf.kernel.pdf.PdfWriter;
 import com.itextpdf.layout.Document;
+import com.itextpdf.layout.borders.Border;
 import com.itextpdf.layout.element.Cell;
 import com.itextpdf.layout.element.Paragraph;
 import com.itextpdf.layout.element.Table;
 import com.itextpdf.layout.properties.TextAlignment;
 import com.itextpdf.layout.properties.UnitValue;
-import com.itextpdf.kernel.colors.ColorConstants;
-import com.itextpdf.layout.borders.Border;
-import com.itextpdf.io.font.constants.StandardFonts;
 import logica.dominio.Reporte;
 import java.io.File;
 import java.io.IOException;
@@ -22,9 +21,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-
 public class GeneradorPdfReporteParcial {
-
 
     private static final Logger LOGGER = Logger.getLogger(GeneradorPdfReporteParcial.class.getName());
     private static final String CARPETA_REPORTES = "reportes/";
@@ -34,57 +31,48 @@ public class GeneradorPdfReporteParcial {
         crearCarpetaSiNoExiste();
         String nombreArchivo = generarNombreArchivo(reporte);
         String rutaCompleta = CARPETA_REPORTES + nombreArchivo;
+        Document documento = null;
         try {
             PdfFont fontNormal = PdfFontFactory.createFont(StandardFonts.HELVETICA);
             PdfFont fontBold = PdfFontFactory.createFont(StandardFonts.HELVETICA_BOLD);
-            PdfWriter writer = new PdfWriter(rutaCompleta);
-            PdfDocument documentoPdf = new PdfDocument(writer);
-            Document documento = new Document(documentoPdf);
-
+            documento = new Document(new PdfDocument(new PdfWriter(rutaCompleta)));
             agregarEncabezado(documento, fontNormal, fontBold, reporte);
-            agregarDatosPracticante(documento, reporte, nombrePracticante, nombreProyecto, nombreOrganizacion, horasCubiertas, fontNormal, fontBold);
+            agregarDatosPracticante(documento, reporte, nombrePracticante, nombreProyecto,
+                    nombreOrganizacion, horasCubiertas, fontNormal, fontBold);
             agregarDescripcion(documento, reporte, fontNormal, fontBold);
             agregarTablaActividades(documento, reporte, fontNormal, fontBold, horasCubiertas);
             agregarPie(documento, fontNormal);
-            documento.close();
-
             LOGGER.info("PDF generado correctamente: " + rutaCompleta);
-        } catch (Exception excepcion) {
+        } catch (IOException excepcion) {
             LOGGER.log(Level.SEVERE, "Error al generar el PDF", excepcion);
             return null;
+        } finally {
+            if (documento != null) {
+                documento.close();
+            }
         }
         return rutaCompleta;
     }
 
     private void agregarEncabezado(Document documento, PdfFont fontNormal, PdfFont fontBold,
-                                   Reporte reporte) throws IOException {
+                                   Reporte reporte) {
         documento.add(new Paragraph("FACULTAD DE ESTADÍSTICA E INFORMÁTICA")
-                .setFont(fontBold)
-                .setFontSize(14)
-                .setTextAlignment(TextAlignment.CENTER));
+                .setFont(fontBold).setFontSize(14).setTextAlignment(TextAlignment.CENTER));
         documento.add(new Paragraph("Licenciatura en Ingeniería de Software")
-                .setFont(fontNormal)
-                .setFontSize(11)
-                .setTextAlignment(TextAlignment.CENTER));
+                .setFont(fontNormal).setFontSize(11).setTextAlignment(TextAlignment.CENTER));
         documento.add(new Paragraph("Prácticas de Ingeniería de Software")
-                .setFont(fontNormal)
-                .setFontSize(11)
-                .setTextAlignment(TextAlignment.CENTER));
+                .setFont(fontNormal).setFontSize(11).setTextAlignment(TextAlignment.CENTER));
         documento.add(new Paragraph("REPORTE PARCIAL — " + reporte.getTipoReporte().name().toUpperCase())
-                .setFont(fontBold)
-                .setFontSize(12)
-                .setTextAlignment(TextAlignment.CENTER));
+                .setFont(fontBold).setFontSize(12).setTextAlignment(TextAlignment.CENTER));
         documento.add(new Paragraph(" "));
     }
 
     private void agregarDatosPracticante(Document documento, Reporte reporte,
                                          String nombrePracticante, String nombreProyecto,
                                          String nombreOrganizacion, String horasCubiertas,
-                                         PdfFont fontNormal, PdfFont fontBold) throws IOException {
+                                         PdfFont fontNormal, PdfFont fontBold) {
         documento.add(new Paragraph("INFORMACIÓN DEL REPORTE")
-                .setFont(fontBold)
-                .setFontSize(12)
-                .setTextAlignment(TextAlignment.LEFT));
+                .setFont(fontBold).setFontSize(12).setTextAlignment(TextAlignment.LEFT));
         documento.add(new Paragraph(" "));
 
         Table tabla = new Table(UnitValue.createPercentArray(new float[]{40, 60}));
@@ -114,23 +102,19 @@ public class GeneradorPdfReporteParcial {
     }
 
     private void agregarDescripcion(Document documento, Reporte reporte,
-                                    PdfFont fontNormal, PdfFont fontBold) throws IOException {
+                                    PdfFont fontNormal, PdfFont fontBold) {
         documento.add(new Paragraph("DESCRIPCIÓN")
-                .setFont(fontBold)
-                .setFontSize(12));
+                .setFont(fontBold).setFontSize(12));
         documento.add(new Paragraph(reporte.getDescripcion() != null ? reporte.getDescripcion() : "")
-                .setFont(fontNormal)
-                .setFontSize(11)
-                .setTextAlignment(TextAlignment.JUSTIFIED));
+                .setFont(fontNormal).setFontSize(11).setTextAlignment(TextAlignment.JUSTIFIED));
         documento.add(new Paragraph(" "));
     }
 
     private void agregarTablaActividades(Document documento, Reporte reporte,
                                          PdfFont fontNormal, PdfFont fontBold,
-                                         String horasCubiertas) throws IOException {
+                                         String horasCubiertas) {
         documento.add(new Paragraph("ACTIVIDADES REALIZADAS DURANTE LAS PRIMERAS " + horasCubiertas + " HORAS")
-                .setFont(fontBold)
-                .setFontSize(12));
+                .setFont(fontBold).setFontSize(12));
         documento.add(new Paragraph(" "));
 
         Table tabla = new Table(UnitValue.createPercentArray(new float[]{25, 25, 15, 15, 10, 10}));
@@ -146,19 +130,12 @@ public class GeneradorPdfReporteParcial {
         String[] lineas = reporte.getActividades().split("\n");
         for (String linea : lineas) {
             String[] partes = linea.split("\\|", -1);
-            String nombre = partes.length > 0 ? partes[0].trim() : "";
-            String descripcion = partes.length > 1 ? partes[1].trim() : "";
-            String tiempoPlaneado = partes.length > 2 ? partes[2].trim() : "";
-            String tiempoReal = partes.length > 3 ? partes[3].trim() : "";
-            String mes = partes.length > 4 ? partes[4].trim() : "";
-            String semana = partes.length > 5 ? partes[5].trim() : "";
-
-            agregarCeldaTabla(tabla, nombre, fontNormal);
-            agregarCeldaTabla(tabla, descripcion, fontNormal);
-            agregarCeldaTabla(tabla, tiempoPlaneado, fontNormal);
-            agregarCeldaTabla(tabla, tiempoReal, fontNormal);
-            agregarCeldaTabla(tabla, mes, fontNormal);
-            agregarCeldaTabla(tabla, semana, fontNormal);
+            agregarCeldaTabla(tabla, partes.length > 0 ? partes[0].trim() : "", fontNormal);
+            agregarCeldaTabla(tabla, partes.length > 1 ? partes[1].trim() : "", fontNormal);
+            agregarCeldaTabla(tabla, partes.length > 2 ? partes[2].trim() : "", fontNormal);
+            agregarCeldaTabla(tabla, partes.length > 3 ? partes[3].trim() : "", fontNormal);
+            agregarCeldaTabla(tabla, partes.length > 4 ? partes[4].trim() : "", fontNormal);
+            agregarCeldaTabla(tabla, partes.length > 5 ? partes[5].trim() : "", fontNormal);
         }
 
         documento.add(tabla);
@@ -178,7 +155,7 @@ public class GeneradorPdfReporteParcial {
                 .setTextAlignment(TextAlignment.CENTER));
     }
 
-    private void agregarPie(Document documento, PdfFont fontNormal) throws IOException {
+    private void agregarPie(Document documento, PdfFont fontNormal) {
         documento.add(new Paragraph(" "));
         documento.add(new Paragraph(" "));
 
@@ -205,7 +182,10 @@ public class GeneradorPdfReporteParcial {
     private void crearCarpetaSiNoExiste() {
         File carpeta = new File(CARPETA_REPORTES);
         if (!carpeta.exists()) {
-            carpeta.mkdirs();
+            boolean creada = carpeta.mkdirs();
+            if (!creada) {
+                LOGGER.warning("No se pudo crear la carpeta de reportes: " + CARPETA_REPORTES);
+            }
         }
     }
 }

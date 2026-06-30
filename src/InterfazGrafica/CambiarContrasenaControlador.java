@@ -14,6 +14,8 @@ import logica.dominio.CifracionContrasena;
 import logica.dominio.SesionUsuario;
 import logica.dominio.UsuarioSesion;
 import logica.dominio.enums.Rol;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class CambiarContrasenaControlador {
 
@@ -26,6 +28,7 @@ public class CambiarContrasenaControlador {
     @FXML private Label etiquetaTituloExito;
     @FXML private Label etiquetaMensajeExito;
 
+    private static final Logger LOGGER = Logger.getLogger(CambiarContrasenaControlador.class.getName());
     private static final int LONGITUD_MINIMA_CONTRASENA = 8;
     private static final int FILAS_AFECTADAS_ESPERADAS = 1;
 
@@ -41,23 +44,18 @@ public class CambiarContrasenaControlador {
     private boolean camposValidos() {
         String nuevaContrasena = campoTextoNuevaContrasena.getText().trim();
         String confirmarContrasena = campoTextoConfirmarContrasena.getText().trim();
-
+        boolean valido = true;
         if (nuevaContrasena.isEmpty() || confirmarContrasena.isEmpty()) {
-            mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
-                    "Campos vacios", "POR FAVOR LLENE TODOS LOS CAMPOS");
-            return false;
+            mostrarError("Campos vacios", "POR FAVOR LLENE TODOS LOS CAMPOS");
+            valido = false;
+        } else if (nuevaContrasena.length() < LONGITUD_MINIMA_CONTRASENA) {
+            mostrarError("Contrasena muy corta", "LA CONTRASENA DEBE TENER AL MENOS " + LONGITUD_MINIMA_CONTRASENA + " CARACTERES");
+            valido = false;
+        } else if (!nuevaContrasena.equals(confirmarContrasena)) {
+            mostrarError("Contrasenas no coinciden", "LAS CONTRASENAS INGRESADAS NO SON IGUALES");
+            valido = false;
         }
-        if (nuevaContrasena.length() < LONGITUD_MINIMA_CONTRASENA) {
-            mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
-                    "Contrasena muy corta", "LA CONTRASENA DEBE TENER AL MENOS " + LONGITUD_MINIMA_CONTRASENA + " CARACTERES");
-            return false;
-        }
-        if (!nuevaContrasena.equals(confirmarContrasena)) {
-            mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
-                    "Contrasenas no coinciden", "LAS CONTRASENAS INGRESADAS NO SON IGUALES");
-            return false;
-        }
-        return true;
+        return valido;
     }
 
     private void guardarNuevaContrasena() {
@@ -69,45 +67,62 @@ public class CambiarContrasenaControlador {
             int filasAfectadas = usuarioDao.actualizarContrasena(usuarioSesion.getIdUsuario(), contrasenaCifrada);
             if (filasAfectadas >= FILAS_AFECTADAS_ESPERADAS) {
                 usuarioSesion.setDebeCambiarContrasena(false);
-                mostrarPanel(etiquetaTituloExito, etiquetaMensajeExito, panelExito,
-                        "Contrasena actualizada", "Tu contrasena ha sido cambiada exitosamente");
+                mostrarExito("Contrasena actualizada", "Tu contrasena ha sido cambiada exitosamente");
                 redirigirAlMenu(usuarioSesion.getRol());
             } else {
-                mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
-                        "Error al actualizar", "NO SE PUDO ACTUALIZAR LA CONTRASENA. INTENTE DE NUEVO.");
+                mostrarError("Error al actualizar", "NO SE PUDO ACTUALIZAR LA CONTRASENA. INTENTE DE NUEVO.");
             }
         } catch (UsuariosExcepcion excepcion) {
-            mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
-                    "Error inesperado", excepcion.getMessage().toUpperCase());
+            LOGGER.log(Level.SEVERE, "Error al actualizar contrasena", excepcion);
+            mostrarError("Error inesperado", excepcion.getMessage().toUpperCase());
         }
     }
 
     private void redirigirAlMenu(Rol rol) {
-        String rutaFxml = obtenerRutaFxml(rol);
-        if (rutaFxml == null) {
-            mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
-                    "Error", "TIPO DE USUARIO NO RECONOCIDO.");
-            return;
-        }
-        try {
-            Parent ruta = FXMLLoader.load(getClass().getResource(rutaFxml));
-            Stage escenario = (Stage) campoTextoNuevaContrasena.getScene().getWindow();
-            escenario.setScene(new Scene(ruta));
-            escenario.show();
-        } catch (Exception excepcion) {
-            mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
-                    "Error al cargar pantalla", excepcion.getMessage().toUpperCase());
+        String rutaVista = obtenerRutaVista(rol);
+        if (rutaVista == null) {
+            mostrarError("Error", "TIPO DE USUARIO NO RECONOCIDO.");
+        } else {
+            try {
+                Parent ruta = FXMLLoader.load(getClass().getResource(rutaVista));
+                Stage escenario = (Stage) campoTextoNuevaContrasena.getScene().getWindow();
+                escenario.setScene(new Scene(ruta));
+                escenario.show();
+            } catch (Exception excepcion) {
+                LOGGER.log(Level.SEVERE, "Error al cargar pantalla de menu", excepcion);
+                mostrarError("Error al cargar pantalla", excepcion.getMessage().toUpperCase());
+            }
         }
     }
 
-    private String obtenerRutaFxml(Rol rol) {
+    private String obtenerRutaVista(Rol rol) {
+        String rutaVista;
         switch (rol) {
-            case Coordinador:   return "/InterfazGrafica/vistas/MenuCoordinadorVista.fxml";
-            case Profesor:      return "/InterfazGrafica/vistas/MenuProfesorVista.fxml";
-            case Practicante:   return "/InterfazGrafica/vistas/MenuPracticanteVista.fxml";
-            case Administrador: return "/InterfazGrafica/vistas/MenuAdministradorVista.fxml";
-            default:            return null;
+            case Coordinador:
+                rutaVista = "/InterfazGrafica/vistas/MenuCoordinadorVista.fxml";
+                break;
+            case Profesor:
+                rutaVista = "/InterfazGrafica/vistas/MenuProfesorVista.fxml";
+                break;
+            case Practicante:
+                rutaVista = "/InterfazGrafica/vistas/MenuPracticanteVista.fxml";
+                break;
+            case Administrador:
+                rutaVista = "/InterfazGrafica/vistas/MenuAdministradorVista.fxml";
+                break;
+            default:
+                rutaVista = null;
+                break;
         }
+        return rutaVista;
+    }
+
+    private void mostrarError(String titulo, String mensaje) {
+        mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError, titulo, mensaje);
+    }
+
+    private void mostrarExito(String titulo, String mensaje) {
+        mostrarPanel(etiquetaTituloExito, etiquetaMensajeExito, panelExito, titulo, mensaje);
     }
 
     private void mostrarPanel(Label etiquetaTitulo, Label etiquetaMensaje, VBox panel, String titulo, String mensaje) {

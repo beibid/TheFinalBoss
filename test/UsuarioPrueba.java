@@ -9,12 +9,11 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-
 public class UsuarioPrueba {
 
     @Test
     public void pruebaInsertarUsuarioExitoso() throws UsuariosExcepcion {
-        Usuario usuario = new Usuario("Ameth", "Polanco Hernandez", "contrasena12345", "ameth.polanco@uv.mx", Estado.Activo);
+        Usuario usuario = new Usuario("Ameth", "Polanco Hernandez", "contrasena12345", "ameth.test1@uv.mx", Estado.Activo);
         UsuarioDao usuarioDao = new UsuarioDao();
         int resultado = usuarioDao.insertarUsuario(usuario);
         assertTrue(resultado > 0);
@@ -22,7 +21,7 @@ public class UsuarioPrueba {
 
     @Test
     public void pruebaInsertarUsuarioAlternoNombreCompuesto() throws UsuariosExcepcion {
-        Usuario usuario = new Usuario("Ana Karen", "Ramirez Solis", "anakaren98765", "anakaren.ramirez@uv.mx", Estado.Activo);
+        Usuario usuario = new Usuario("Ana Karen", "Ramirez Solis", "anakaren98765", "anakaren.test2@uv.mx", Estado.Activo);
         UsuarioDao usuarioDao = new UsuarioDao();
         int resultado = usuarioDao.insertarUsuario(usuario);
         assertTrue(resultado > 0);
@@ -30,7 +29,7 @@ public class UsuarioPrueba {
 
     @Test
     public void pruebaInsertarUsuarioAlternoApellidoConAcento() throws UsuariosExcepcion {
-        Usuario usuario = new Usuario("Luis", "Hernández Téllez", "luis123456", "luis.hernandez@uv.mx", Estado.Activo);
+        Usuario usuario = new Usuario("Luis", "Hernández Téllez", "luis123456", "luis.test3@uv.mx", Estado.Activo);
         UsuarioDao usuarioDao = new UsuarioDao();
         int resultado = usuarioDao.insertarUsuario(usuario);
         assertTrue(resultado > 0);
@@ -67,14 +66,14 @@ public class UsuarioPrueba {
     @Test
     public void pruebaBuscarUsuarioExitoso() throws UsuariosExcepcion {
         UsuarioDao usuarioDao = new UsuarioDao();
-        UsuarioSesion sesion = usuarioDao.buscarUsuario("daviLa@uv.mx", "davidS240132");
+        UsuarioSesion sesion = usuarioDao.buscarUsuario("juaperez@uv.mx", "0b1addbbcbec6abe358b606779e9a1552a7abdf323b134dff04ee8c5937eb75f");
         assertNotNull(sesion);
     }
 
     @Test
     public void pruebaBuscarUsuarioAlternoCredencialesIncorrectas() throws UsuariosExcepcion {
         UsuarioDao usuarioDao = new UsuarioDao();
-        UsuarioSesion sesion = usuarioDao.buscarUsuario("daviLa@uv.mx", "contrasenaIncorrecta");
+        UsuarioSesion sesion = usuarioDao.buscarUsuario("juaperez@uv.mx", "contrasenaIncorrecta");
         assertNull(sesion);
     }
 

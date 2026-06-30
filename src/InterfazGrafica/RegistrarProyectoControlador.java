@@ -1,6 +1,5 @@
 package InterfazGrafica;
 
-
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -25,11 +24,24 @@ import logica.dominio.enums.EstadoProyecto;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.List;
-
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class RegistrarProyectoControlador {
 
+    private static final Logger LOGGER = Logger.getLogger(RegistrarProyectoControlador.class.getName());
     private static final int FILAS_AFECTADAS_ESPERADAS = 1;
+    private static final int LIMITE_NOMBRE_PROYECTO = 100;
+    private static final int LIMITE_DESCRIPCION = 255;
+    private static final int LIMITE_RESPONSABLE = 100;
+    private static final int LIMITE_NOMBRE_EMPRESA = 100;
+    private static final int LIMITE_SECTOR_EMPRESA = 50;
+    private static final int LIMITE_DIRECCION_EMPRESA = 150;
+
+    private final ProyectoDao proyectoDao = new ProyectoDao();
+    private final ProfesorDao profesorDao = new ProfesorDao();
+    private final CoordinadorDao coordinadorDao = new CoordinadorDao();
+    private final OrganizacionVinculadaDao organizacionDao = new OrganizacionVinculadaDao();
 
     @FXML private TextField campoTextoNombreProyecto;
     @FXML private TextField campoTextoDescripcion;
@@ -48,28 +60,24 @@ public class RegistrarProyectoControlador {
     @FXML private Label etiquetaTituloExito;
     @FXML private Label etiquetaMensajeExito;
 
-    private ProyectoDao proyectoDao = new ProyectoDao();
-    private ProfesorDao profesorDao = new ProfesorDao();
-    private CoordinadorDao coordinadorDao = new CoordinadorDao();
-    private OrganizacionVinculadaDao organizacionDao = new OrganizacionVinculadaDao();
-
     @FXML
     public void initialize() {
         cargarCombos();
     }
 
     private void cargarCombos() {
-        cargarPracticantes();
+        cargarProfesores();
         cargarCoordinadores();
         cargarOrganizaciones();
     }
 
-    private void cargarPracticantes() {
+    private void cargarProfesores() {
         try {
             List<Profesor> profesores = profesorDao.obtenerProfesoresActivos();
             comboBoxProfesor.setItems(FXCollections.observableArrayList(profesores));
         } catch (UsuariosExcepcion excepcion) {
-            mostrarError("Error al cargar", "NO SE PUDIERON CARGAR LOS PRACTICANTES.");
+            LOGGER.log(Level.SEVERE, "Error al cargar profesores", excepcion);
+            mostrarError("Error al cargar", "NO SE PUDIERON CARGAR LOS PROFESORES.");
         }
     }
 
@@ -78,6 +86,7 @@ public class RegistrarProyectoControlador {
             List<Coordinador> coordinadores = coordinadorDao.obtenerCoordinadoresActivos();
             comboBoxCoordinador.setItems(FXCollections.observableArrayList(coordinadores));
         } catch (UsuariosExcepcion excepcion) {
+            LOGGER.log(Level.SEVERE, "Error al cargar coordinadores", excepcion);
             mostrarError("Error al cargar", "NO SE PUDIERON CARGAR LOS COORDINADORES.");
         }
     }
@@ -87,39 +96,71 @@ public class RegistrarProyectoControlador {
             List<OrganizacionVinculada> organizaciones = organizacionDao.obtenerOrganizacionesActivas();
             comboBoxOrganizacion.setItems(FXCollections.observableArrayList(organizaciones));
         } catch (UsuariosExcepcion excepcion) {
+            LOGGER.log(Level.SEVERE, "Error al cargar organizaciones", excepcion);
             mostrarError("Error al cargar", "NO SE PUDIERON CARGAR LAS ORGANIZACIONES.");
         }
     }
 
     @FXML
     private void botonRegistrar() {
-        ocultarError();
-        ocultarExito();
+        ocultarPanel(panelError);
+        ocultarPanel(panelExito);
+        boolean camposCorrectos = verificarCampos();
+        if (camposCorrectos) {
+            Proyecto proyecto = armarProyecto();
+            ejecutarRegistro(proyecto);
+        }
+    }
 
+    private boolean verificarCampos() {
         String nombreProyecto = campoTextoNombreProyecto.getText().trim();
         String descripcion = campoTextoDescripcion.getText().trim();
         String responsable = campoTextoResponsable.getText().trim();
         String nombreEmpresa = campoTextoNombreEmpresa.getText().trim();
         String sectorEmpresa = campoTextoSectorEmpresa.getText().trim();
         String direccionEmpresa = campoTextoDireccionEmpresa.getText().trim();
-
-        List<String> campos = List.of(nombreProyecto, descripcion, responsable, nombreEmpresa, sectorEmpresa,
-                direccionEmpresa);
-        if (camposVacios(campos)) {
-            mostrarError("Campos obligatorios vacíos", "POR FAVOR LLENA TODOS LOS CAMPOS.");
-            return;
+        List<String> campos = List.of(nombreProyecto, descripcion, responsable, nombreEmpresa, sectorEmpresa, direccionEmpresa);
+        boolean camposFormularioValido = !camposVacios(campos);
+        boolean profesorSeleccionado = comboBoxProfesor.getValue() != null;
+        boolean coordinadorSeleccionado = comboBoxCoordinador.getValue() != null;
+        boolean organizacionSeleccionada = comboBoxOrganizacion.getValue() != null;
+        boolean combosValidos = profesorSeleccionado && coordinadorSeleccionado && organizacionSeleccionada;
+        boolean longitudNombreValida = nombreProyecto.length() <= LIMITE_NOMBRE_PROYECTO;
+        boolean longitudDescripcionValida = descripcion.length() <= LIMITE_DESCRIPCION;
+        boolean longitudResponsableValida = responsable.length() <= LIMITE_RESPONSABLE;
+        boolean longitudNombreEmpresaValida = nombreEmpresa.length() <= LIMITE_NOMBRE_EMPRESA;
+        boolean longitudSectorValida = sectorEmpresa.length() <= LIMITE_SECTOR_EMPRESA;
+        boolean longitudDireccionValida = direccionEmpresa.length() <= LIMITE_DIRECCION_EMPRESA;
+        boolean valido = true;
+        if (!camposFormularioValido) {
+            mostrarError("Campos obligatorios vacios", "POR FAVOR LLENA TODOS LOS CAMPOS.");
+            valido = false;
+        } else if (!combosValidos) {
+            mostrarError("Seleccion incompleta", "POR FAVOR SELECCIONA PROFESOR, COORDINADOR Y ORGANIZACION.");
+            valido = false;
+        } else if (!longitudNombreValida) {
+            mostrarError("Nombre demasiado largo", "EL NOMBRE DEL PROYECTO NO PUEDE EXCEDER " + LIMITE_NOMBRE_PROYECTO + " CARACTERES.");
+            valido = false;
+        } else if (!longitudDescripcionValida) {
+            mostrarError("Descripcion demasiado larga", "LA DESCRIPCION NO PUEDE EXCEDER " + LIMITE_DESCRIPCION + " CARACTERES.");
+            valido = false;
+        } else if (!longitudResponsableValida) {
+            mostrarError("Responsable demasiado largo", "EL RESPONSABLE NO PUEDE EXCEDER " + LIMITE_RESPONSABLE + " CARACTERES.");
+            valido = false;
+        } else if (!longitudNombreEmpresaValida) {
+            mostrarError("Nombre de empresa demasiado largo", "EL NOMBRE DE EMPRESA NO PUEDE EXCEDER " + LIMITE_NOMBRE_EMPRESA + " CARACTERES.");
+            valido = false;
+        } else if (!longitudSectorValida) {
+            mostrarError("Sector demasiado largo", "EL SECTOR NO PUEDE EXCEDER " + LIMITE_SECTOR_EMPRESA + " CARACTERES.");
+            valido = false;
+        } else if (!longitudDireccionValida) {
+            mostrarError("Direccion demasiado larga", "LA DIRECCION NO PUEDE EXCEDER " + LIMITE_DIRECCION_EMPRESA + " CARACTERES.");
+            valido = false;
         }
-
-        if (comboBoxProfesor.getValue() == null || comboBoxCoordinador.getValue() == null || comboBoxOrganizacion.getValue() == null) {
-            mostrarError("Selección incompleta", "POR FAVOR SELECCIONA PRACTICANTE, COORDINADOR Y ORGANIZACIÓN.");
-            return;
-        }
-
-        Proyecto proyecto = armarProyecto(nombreProyecto, descripcion, responsable, nombreEmpresa, sectorEmpresa, direccionEmpresa);
-        ejecutarRegistro(proyecto);
+        return valido;
     }
 
-    private boolean camposVacios(List<String>campos) {
+    private boolean camposVacios(List<String> campos) {
         boolean hayCamposVacios = false;
         for (String campo : campos) {
             if (campo.isEmpty()) {
@@ -129,8 +170,13 @@ public class RegistrarProyectoControlador {
         return hayCamposVacios;
     }
 
-    private Proyecto armarProyecto( String nombreProyecto, String descripcion, String responsable,
-                                    String nombreEmpresa, String sectorEmpresa, String direccionEmpresa) {
+    private Proyecto armarProyecto() {
+        String nombreProyecto = campoTextoNombreProyecto.getText().trim();
+        String descripcion = campoTextoDescripcion.getText().trim();
+        String responsable = campoTextoResponsable.getText().trim();
+        String nombreEmpresa = campoTextoNombreEmpresa.getText().trim();
+        String sectorEmpresa = campoTextoSectorEmpresa.getText().trim();
+        String direccionEmpresa = campoTextoDireccionEmpresa.getText().trim();
         Proyecto proyecto = new Proyecto();
         proyecto.setNombreProyecto(nombreProyecto);
         proyecto.setDescripcion(descripcion);
@@ -157,6 +203,7 @@ public class RegistrarProyectoControlador {
                 mostrarError("Error al registrar", "NO SE PUDO REGISTRAR EL PROYECTO.");
             }
         } catch (MensajeriaExcepcion excepcion) {
+            LOGGER.log(Level.SEVERE, "Error al registrar proyecto", excepcion);
             mostrarError("Error inesperado", excepcion.getMessage().toUpperCase());
         }
     }
@@ -167,8 +214,8 @@ public class RegistrarProyectoControlador {
     }
 
     @FXML
-    private void botonRegresar(ActionEvent event) {
-        Stage escenario = (Stage) ((Node) event.getSource()).getScene().getWindow();
+    private void botonRegresar(ActionEvent evento) {
+        Stage escenario = (Stage) ((Node) evento.getSource()).getScene().getWindow();
         escenario.close();
     }
 
@@ -182,31 +229,30 @@ public class RegistrarProyectoControlador {
         comboBoxProfesor.getSelectionModel().clearSelection();
         comboBoxCoordinador.getSelectionModel().clearSelection();
         comboBoxOrganizacion.getSelectionModel().clearSelection();
-        ocultarError();
-        ocultarExito();
+        ocultarPanel(panelError);
+        ocultarPanel(panelExito);
+    }
+
+    private void mostrarPanel(VBox panelMostrar, VBox panelOcultar) {
+        panelMostrar.setVisible(true);
+        panelMostrar.setManaged(true);
+        ocultarPanel(panelOcultar);
+    }
+
+    private void ocultarPanel(VBox panel) {
+        panel.setVisible(false);
+        panel.setManaged(false);
     }
 
     private void mostrarError(String titulo, String mensaje) {
         etiquetaTituloError.setText(titulo);
         etiquetaMensajeError.setText(mensaje);
-        panelError.setVisible(true);
-        panelError.setManaged(true);
-    }
-
-    private void ocultarError() {
-        panelError.setVisible(false);
-        panelError.setManaged(false);
+        mostrarPanel(panelError, panelExito);
     }
 
     private void mostrarExito(String titulo, String mensaje) {
         etiquetaTituloExito.setText(titulo);
         etiquetaMensajeExito.setText(mensaje);
-        panelExito.setVisible(true);
-        panelExito.setManaged(true);
-    }
-
-    private void ocultarExito() {
-        panelExito.setVisible(false);
-        panelExito.setManaged(false);
+        mostrarPanel(panelExito, panelError);
     }
 }

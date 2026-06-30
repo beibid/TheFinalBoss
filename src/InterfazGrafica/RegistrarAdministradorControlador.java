@@ -16,8 +16,16 @@ import logica.dao.objetos.AdministradorDao;
 import logica.dominio.Administrador;
 import logica.dominio.enums.Estado;
 import java.util.List;
+import java.util.Optional;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class RegistrarAdministradorControlador {
+
+    private static final Logger LOGGER = Logger.getLogger(RegistrarAdministradorControlador.class.getName());
+    private static final int FILAS_AFECTADAS_ESPERADAS = 1;
+
+    private final AdministradorDao administradorDao = new AdministradorDao();
 
     @FXML private TextField campoTextoNombres;
     @FXML private TextField campoTextoApellidos;
@@ -30,21 +38,20 @@ public class RegistrarAdministradorControlador {
     @FXML private Label etiquetaTituloExito;
     @FXML private Label etiquetaMensajeExito;
 
-    private static final int FILAS_AFECTADAS_ESPERADAS = 1;
     private String contrasenaGenerada;
 
     @FXML
     private void botonRegistrar() {
         ocultarPanel(panelError);
         ocultarPanel(panelExito);
-        if (confirmarAccion("¿Seguro que desea registrar al administrador?")) {
+        if (confirmarAccion("Seguro que desea registrar al administrador?")) {
             procesarRegistro();
         }
     }
 
     @FXML
     private void botonCancelar() {
-        if (confirmarAccion("¿Seguro que desea cancelar?")) {
+        if (confirmarAccion("Seguro que desea cancelar?")) {
             limpiarCampos();
         }
     }
@@ -57,17 +64,23 @@ public class RegistrarAdministradorControlador {
 
     private boolean confirmarAccion(String mensaje) {
         Alert alerta = new Alert(Alert.AlertType.CONFIRMATION);
-        alerta.setTitle("Confirmación");
+        boolean confirmado = false;
+        alerta.setTitle("Confirmacion");
         alerta.setHeaderText(mensaje);
         alerta.setContentText("");
-        ButtonType botonSi = new ButtonType("Sí");
+        ButtonType botonSi = new ButtonType("Si");
         ButtonType botonNo = new ButtonType("No");
         alerta.getButtonTypes().setAll(botonSi, botonNo);
-        return alerta.showAndWait().filter(botonPresionado -> botonPresionado == botonSi).isPresent();
+        Optional<ButtonType> resultado = alerta.showAndWait();
+        if (resultado.isPresent() && resultado.get() == botonSi) {
+            confirmado = true;
+        }
+        return confirmado;
     }
 
     private void procesarRegistro() {
-        if (camposValidos()) {
+        boolean camposCorrectos = verificarCampos();
+        if (camposCorrectos) {
             guardarAdministrador(construirAdministrador());
         }
     }
@@ -82,43 +95,35 @@ public class RegistrarAdministradorControlador {
         return hayCamposVacios;
     }
 
-    private boolean camposValidos() {
+    private boolean verificarCampos() {
         String nombre = campoTextoNombres.getText().trim();
         String apellidos = campoTextoApellidos.getText().trim();
         String correo = campoTextoCorreo.getText().trim();
         String numeroPersonal = campoTextoNumeroPersonal.getText().trim();
-
         List<String> campos = List.of(nombre, apellidos, correo, numeroPersonal);
         boolean camposFormularioValido = !camposVacios(campos);
         boolean nombreValido = nombre.matches("[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+");
         boolean apellidosValido = apellidos.matches("[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+");
         boolean correoValido = correo.matches("^[\\w.-]+@[\\w.-]+\\.[a-zA-Z]{2,}$");
         boolean numeroPersonalValido = numeroPersonal.matches("[a-zA-Z0-9]+");
-
-        verificarCaracteresPermitidos(camposFormularioValido, nombreValido, apellidosValido, correoValido, numeroPersonalValido);
-
-        boolean formularioValido = camposFormularioValido && nombreValido && apellidosValido && correoValido && numeroPersonalValido;
-        return formularioValido;
-    }
-
-    private void verificarCaracteresPermitidos(boolean camposFormularioValido, boolean nombreValido,
-                                               boolean apellidosValido, boolean correoValido, boolean numeroPersonalValido) {
+        boolean valido = true;
         if (!camposFormularioValido) {
-            mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
-                    "campos obligatorios vacios", "POR FAVOR LLENE TODOS LOS CAMPOS");
+            mostrarError("Campos obligatorios vacios", "POR FAVOR LLENE TODOS LOS CAMPOS.");
+            valido = false;
         } else if (!nombreValido) {
-            mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
-                    "nombre invalido", "EL NOMBRE SOLO PUEDE TENER LETRAS");
+            mostrarError("Nombre invalido", "EL NOMBRE SOLO PUEDE TENER LETRAS.");
+            valido = false;
         } else if (!apellidosValido) {
-            mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
-                    "apellidos invalidos", "LOS APELLIDOS SOLO PUEDEN TENER LETRAS");
+            mostrarError("Apellidos invalidos", "LOS APELLIDOS SOLO PUEDEN TENER LETRAS.");
+            valido = false;
         } else if (!correoValido) {
-            mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
-                    "correo invalido", "POR FAVOR INGRESE UN CORREO VALIDO");
+            mostrarError("Correo invalido", "POR FAVOR INGRESE UN CORREO VALIDO.");
+            valido = false;
         } else if (!numeroPersonalValido) {
-            mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
-                    "numero de personal invalido", "EL NUMERO DE PERSONAL SOLO PUEDE TENER LETRAS Y NUMEROS");
+            mostrarError("Numero de personal invalido", "EL NUMERO DE PERSONAL SOLO PUEDE TENER LETRAS Y NUMEROS.");
+            valido = false;
         }
+        return valido;
     }
 
     private Administrador construirAdministrador() {
@@ -127,7 +132,6 @@ public class RegistrarAdministradorControlador {
         String numeroPersonal = campoTextoNumeroPersonal.getText().trim();
         contrasenaGenerada = generarContrasena(nombre, numeroPersonal);
         String contrasenaCifrada = CifracionContrasena.cifrarContrasena(contrasenaGenerada);
-
         Administrador administrador = new Administrador();
         administrador.setNombre(limitarTexto(nombre, 55));
         administrador.setApellidos(limitarTexto(apellidos, 55));
@@ -138,25 +142,22 @@ public class RegistrarAdministradorControlador {
     }
 
     private void guardarAdministrador(Administrador administrador) {
-        AdministradorDao administradorDao = new AdministradorDao();
         try {
             int filasAfectadas = administradorDao.insertarAdministrador(administrador);
             if (filasAfectadas >= FILAS_AFECTADAS_ESPERADAS) {
                 limpiarCampos();
-                mostrarPanel(etiquetaTituloExito, etiquetaMensajeExito, panelExito,
-                        "Administrador registrado exitosamente",
-                        "Contraseña temporal: " + contrasenaGenerada);
+                mostrarExito("Administrador registrado exitosamente",
+                        "CONTRASENA TEMPORAL: " + contrasenaGenerada);
             } else {
-                mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
-                        "Error al registrar", "NO SE PUDO REGISTRAR EL ADMINISTRADOR. INTENTE DE NUEVO.");
+                mostrarError("Error al registrar", "NO SE PUDO REGISTRAR EL ADMINISTRADOR. INTENTE DE NUEVO.");
             }
         } catch (RegistroDuplicadoExcepcion excepcion) {
-            mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
-                    "Numero de personal repetido",
+            LOGGER.log(Level.WARNING, "Numero de personal duplicado", excepcion);
+            mostrarError("Numero de personal repetido",
                     "EL NUMERO DE PERSONAL YA EXISTE EN EL SISTEMA. VERIFIQUE LA INFORMACION.");
         } catch (UsuariosExcepcion excepcion) {
-            mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
-                    "Error inesperado", excepcion.getMessage().toUpperCase());
+            LOGGER.log(Level.SEVERE, "Error al registrar administrador", excepcion);
+            mostrarError("Error inesperado", excepcion.getMessage().toUpperCase());
         }
     }
 
@@ -175,17 +176,29 @@ public class RegistrarAdministradorControlador {
         campoTextoNombres.clear();
         campoTextoApellidos.clear();
         campoTextoNumeroPersonal.clear();
+        campoTextoCorreo.clear();
     }
 
-    private void mostrarPanel(Label etiquetaTitulo, Label etiquetaMensaje, VBox panel, String titulo, String mensaje) {
-        etiquetaTitulo.setText(titulo);
-        etiquetaMensaje.setText(mensaje);
-        panel.setVisible(true);
-        panel.setManaged(true);
+    private void mostrarPanel(VBox panelMostrar, VBox panelOcultar) {
+        panelMostrar.setVisible(true);
+        panelMostrar.setManaged(true);
+        ocultarPanel(panelOcultar);
     }
 
     private void ocultarPanel(VBox panel) {
         panel.setVisible(false);
         panel.setManaged(false);
+    }
+
+    private void mostrarError(String titulo, String mensaje) {
+        etiquetaTituloError.setText(titulo);
+        etiquetaMensajeError.setText(mensaje);
+        mostrarPanel(panelError, panelExito);
+    }
+
+    private void mostrarExito(String titulo, String mensaje) {
+        etiquetaTituloExito.setText(titulo);
+        etiquetaMensajeExito.setText(mensaje);
+        mostrarPanel(panelExito, panelError);
     }
 }

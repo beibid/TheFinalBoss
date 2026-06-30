@@ -56,8 +56,7 @@ public class AsignarProyectoControlador {
             comboBoxPracticantes.setItems(FXCollections.observableArrayList(practicantes));
         } catch (UsuariosExcepcion excepcion) {
             LOGGER.log(Level.SEVERE, "Error al cargar practicantes", excepcion);
-            mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
-                    "Error al cargar", "NO SE PUDIERON CARGAR LOS PRACTICANTES.");
+            mostrarError("Error al cargar", "NO SE PUDIERON CARGAR LOS PRACTICANTES.");
         }
     }
 
@@ -67,8 +66,7 @@ public class AsignarProyectoControlador {
             comboBoxProyectos.setItems(FXCollections.observableArrayList(proyectos));
         } catch (MensajeriaExcepcion excepcion) {
             LOGGER.log(Level.SEVERE, "Error al cargar proyectos", excepcion);
-            mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
-                    "Error al cargar", "NO SE PUDIERON CARGAR LOS PROYECTOS DISPONIBLES.");
+            mostrarError("Error al cargar", "NO SE PUDIERON CARGAR LOS PROYECTOS DISPONIBLES.");
         }
     }
 
@@ -99,8 +97,7 @@ public class AsignarProyectoControlador {
             panelPreferencias.setManaged(true);
         } catch (UsuariosExcepcion excepcion) {
             LOGGER.log(Level.SEVERE, "Error al cargar preferencias del practicante", excepcion);
-            mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
-                    "Error al cargar preferencias", excepcion.getMessage().toUpperCase());
+            mostrarError("Error al cargar preferencias", excepcion.getMessage().toUpperCase());
         }
     }
 
@@ -108,33 +105,30 @@ public class AsignarProyectoControlador {
     private void botonAsignar() {
         ocultarPanel(panelError);
         ocultarPanel(panelExito);
-        if (seleccionValida()) {
-            if (practicanteDisponible() && proyectoConCapacidad()) {
-                if (confirmarAccion("¿Seguro que desea asignar a "
-                        + comboBoxPracticantes.getSelectionModel().getSelectedItem().getNombre()
-                        + " el proyecto "
-                        + comboBoxProyectos.getSelectionModel().getSelectedItem().getNombreProyecto() + "?")) {
-                    ejecutarAsignacion();
-                }
-            }
+        boolean asignacionConfirmada = seleccionValida()
+                && practicanteDisponible()
+                && proyectoConCapacidad()
+                && confirmarAccion("¿Seguro que desea asignar a "
+                + comboBoxPracticantes.getSelectionModel().getSelectedItem().getNombre()
+                + " el proyecto "
+                + comboBoxProyectos.getSelectionModel().getSelectedItem().getNombreProyecto() + "?");
+        if (asignacionConfirmada) {
+            ejecutarAsignacion();
         }
     }
 
     private boolean seleccionValida() {
         Practicante practicante = comboBoxPracticantes.getSelectionModel().getSelectedItem();
         Proyecto proyecto = comboBoxProyectos.getSelectionModel().getSelectedItem();
-        boolean seleccionCorrecta = practicante != null && proyecto != null;
         verificarSeleccion(practicante, proyecto);
-        return seleccionCorrecta;
+        return practicante != null && proyecto != null;
     }
 
     private void verificarSeleccion(Practicante practicante, Proyecto proyecto) {
         if (practicante == null) {
-            mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
-                    "Sin selección", "POR FAVOR SELECCIONA UN PRACTICANTE.");
+            mostrarError("Sin seleccion", "POR FAVOR SELECCIONA UN PRACTICANTE.");
         } else if (proyecto == null) {
-            mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
-                    "Sin selección", "POR FAVOR SELECCIONA UN PROYECTO.");
+            mostrarError("Sin seleccion", "POR FAVOR SELECCIONA UN PROYECTO.");
         }
     }
 
@@ -144,15 +138,14 @@ public class AsignarProyectoControlador {
         try {
             Proyecto proyectoActual = proyectoDao.obtenerProyectoPorPracticante(practicante.getMatricula());
             if (proyectoActual != null) {
-                mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
-                        "Practicante no disponible",
-                        "EL PRACTICANTE YA TIENE UN PROYECTO ASIGNADO: " + proyectoActual.getNombreProyecto().toUpperCase() + ".");
+                mostrarError("Practicante no disponible",
+                        "EL PRACTICANTE YA TIENE UN PROYECTO ASIGNADO: "
+                                + proyectoActual.getNombreProyecto().toUpperCase() + ".");
                 disponible = false;
             }
         } catch (MensajeriaExcepcion excepcion) {
             LOGGER.log(Level.SEVERE, "Error al verificar proyecto del practicante", excepcion);
-            mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
-                    "Error", "NO SE PUDO VERIFICAR EL ESTADO DEL PRACTICANTE.");
+            mostrarError("Error", "NO SE PUDO VERIFICAR EL ESTADO DEL PRACTICANTE.");
             disponible = false;
         }
         return disponible;
@@ -162,8 +155,7 @@ public class AsignarProyectoControlador {
         Proyecto proyecto = comboBoxProyectos.getSelectionModel().getSelectedItem();
         boolean conCapacidad = proyecto.getCapacidad() >= CAPACIDAD_MINIMA;
         if (!conCapacidad) {
-            mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
-                    "Sin capacidad", "EL PROYECTO SELECCIONADO YA NO CUENTA CON LUGARES DISPONIBLES.");
+            mostrarError("Sin capacidad", "EL PROYECTO SELECCIONADO YA NO CUENTA CON LUGARES DISPONIBLES.");
         }
         return conCapacidad;
     }
@@ -175,16 +167,13 @@ public class AsignarProyectoControlador {
             int filasAfectadas = practicanteDao.asignarProyecto(practicante.getMatricula(), proyecto.getIdProyecto());
             if (filasAfectadas >= FILAS_AFECTADAS_ESPERADAS) {
                 limpiarSeleccion();
-                mostrarPanel(etiquetaTituloExito, etiquetaMensajeExito, panelExito,
-                        "Asignación exitosa", "EL PRACTICANTE FUE ASIGNADO AL PROYECTO EXITOSAMENTE.");
+                mostrarExito("Asignacion exitosa", "EL PRACTICANTE FUE ASIGNADO AL PROYECTO EXITOSAMENTE.");
             } else {
-                mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
-                        "Error", "NO SE PUDO REALIZAR LA ASIGNACIÓN.");
+                mostrarError("Error", "NO SE PUDO REALIZAR LA ASIGNACION.");
             }
         } catch (UsuariosExcepcion excepcion) {
             LOGGER.log(Level.SEVERE, "Error al asignar proyecto al practicante", excepcion);
-            mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
-                    "Error inesperado", excepcion.getMessage().toUpperCase());
+            mostrarError("Error inesperado", excepcion.getMessage().toUpperCase());
         }
     }
 
@@ -203,10 +192,10 @@ public class AsignarProyectoControlador {
 
     private boolean confirmarAccion(String mensaje) {
         Alert alerta = new Alert(Alert.AlertType.CONFIRMATION);
-        alerta.setTitle("Confirmación");
+        alerta.setTitle("Confirmacion");
         alerta.setHeaderText(mensaje);
         alerta.setContentText("");
-        ButtonType botonSi = new ButtonType("Sí");
+        ButtonType botonSi = new ButtonType("Si");
         ButtonType botonNo = new ButtonType("No");
         alerta.getButtonTypes().setAll(botonSi, botonNo);
         return alerta.showAndWait().filter(botonPresionado -> botonPresionado == botonSi).isPresent();
@@ -217,6 +206,14 @@ public class AsignarProyectoControlador {
         comboBoxProyectos.getSelectionModel().clearSelection();
         ocultarPanel(panelError);
         ocultarPanel(panelExito);
+    }
+
+    private void mostrarError(String titulo, String mensaje) {
+        mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError, titulo, mensaje);
+    }
+
+    private void mostrarExito(String titulo, String mensaje) {
+        mostrarPanel(etiquetaTituloExito, etiquetaMensajeExito, panelExito, titulo, mensaje);
     }
 
     private void mostrarPanel(Label etiquetaTitulo, Label etiquetaMensaje, VBox panel, String titulo, String mensaje) {

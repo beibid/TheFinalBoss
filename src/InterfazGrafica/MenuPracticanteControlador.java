@@ -12,12 +12,12 @@ import javafx.scene.control.Label;
 import javafx.stage.Stage;
 import logica.dao.excepciones.MensajeriaExcepcion;
 import logica.dao.objetos.ActividadDao;
+import logica.dao.objetos.AutoevaluacionPracticanteDao;
 import logica.dao.objetos.ProyectoDao;
 import logica.dao.objetos.ReporteDao;
 import logica.dominio.Proyecto;
 import logica.dominio.SesionUsuario;
 import logica.dominio.enums.Rol;
-
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -29,9 +29,9 @@ public class MenuPracticanteControlador {
     private static final int HORAS_MINIMAS_FINAL = 420;
     private static final int PARCIALES_PARA_COMPLETAR = 2;
 
-    @FXML private Label lblBienvenida;
-    @FXML private Label lblNombre;
-    @FXML private Label lblRol;
+    @FXML private Label etiquetaBienvenida;
+    @FXML private Label etiquetaNombre;
+    @FXML private Label etiquetaRol;
     @FXML private Button botonGenerarReporteMensual;
     @FXML private Button botonReporteParcial;
     @FXML private Button botonReporteFinal;
@@ -49,9 +49,9 @@ public class MenuPracticanteControlador {
         } else {
             String nombre = SesionUsuario.getInstance().getNombre();
             String rol = SesionUsuario.getInstance().getUsuarioActivo().getRol().toString();
-            lblBienvenida.setText("Bienvenido, " + nombre);
-            lblNombre.setText(nombre);
-            lblRol.setText("ROL: " + rol.toUpperCase());
+            etiquetaBienvenida.setText("Bienvenido, " + nombre);
+            etiquetaNombre.setText(nombre);
+            etiquetaRol.setText("ROL: " + rol.toUpperCase());
             verificarAccesoSegunEstado();
         }
     }
@@ -61,10 +61,12 @@ public class MenuPracticanteControlador {
         ProyectoDao proyectoDao = new ProyectoDao();
         ActividadDao actividadDao = new ActividadDao();
         ReporteDao reporteDao = new ReporteDao();
+        AutoevaluacionPracticanteDao autoevaluacionDao = new AutoevaluacionPracticanteDao();
 
         boolean tieneProyecto = false;
         int horasTotales = 0;
         boolean yaTermino = false;
+        boolean yaRealizoAutoevaluacion = false;
 
         try {
             Proyecto proyecto = proyectoDao.obtenerProyectoPorPracticante(matricula);
@@ -86,15 +88,21 @@ public class MenuPracticanteControlador {
             LOGGER.log(Level.SEVERE, "Error al verificar reportes", excepcion);
         }
 
+        try {
+            yaRealizoAutoevaluacion = autoevaluacionDao.obtenerAutoevaluacion(matricula) != null;
+        } catch (MensajeriaExcepcion excepcion) {
+            LOGGER.log(Level.SEVERE, "Error al verificar autoevaluacion", excepcion);
+        }
+
         if (botonAutoevaluacion != null) {
             botonAutoevaluacion.setDisable(true);
         }
 
-        if (yaTermino) {
+        if (yaTermino || yaRealizoAutoevaluacion) {
+            bloquearTodo();
             if (botonAutoevaluacion != null) {
                 botonAutoevaluacion.setDisable(false);
             }
-            bloquearTodo();
             if (etiquetaEstado != null) {
                 etiquetaEstado.setText("✔ Prácticas completadas — solo lectura");
                 etiquetaEstado.setStyle("-fx-text-fill: #2d6a2d; -fx-font-weight: bold;");
@@ -113,21 +121,42 @@ public class MenuPracticanteControlador {
     }
 
     private void bloquearTodo() {
-        if (botonGenerarReporteMensual != null) botonGenerarReporteMensual.setDisable(true);
-        if (botonReporteParcial != null) botonReporteParcial.setDisable(true);
-        if (botonReporteFinal != null) botonReporteFinal.setDisable(true);
-        if (botonRegistrarActividad != null) botonRegistrarActividad.setDisable(true);
-        if (botonSubirReporte != null) botonSubirReporte.setDisable(true);
-        if (botonSubirDocumentacion != null) botonSubirDocumentacion.setDisable(true);
-        if (botonSeleccionarProyectos != null) botonSeleccionarProyectos.setDisable(true);
-        if (botonAutoevaluacion != null) botonAutoevaluacion.setDisable(true);
+        if (botonGenerarReporteMensual != null) {
+            botonGenerarReporteMensual.setDisable(true);
+        }
+        if (botonReporteParcial != null) {
+            botonReporteParcial.setDisable(true);
+        }
+        if (botonReporteFinal != null) {
+            botonReporteFinal.setDisable(true);
+        }
+        if (botonRegistrarActividad != null) {
+            botonRegistrarActividad.setDisable(true);
+        }
+        if (botonSubirReporte != null) {
+            botonSubirReporte.setDisable(true);
+        }
+        if (botonSubirDocumentacion != null) {
+            botonSubirDocumentacion.setDisable(true);
+        }
+        if (botonSeleccionarProyectos != null) {
+            botonSeleccionarProyectos.setDisable(true);
+        }
     }
 
     private void deshabilitarReportesYActividad() {
-        if (botonGenerarReporteMensual != null) botonGenerarReporteMensual.setDisable(true);
-        if (botonReporteParcial != null) botonReporteParcial.setDisable(true);
-        if (botonReporteFinal != null) botonReporteFinal.setDisable(true);
-        if (botonRegistrarActividad != null) botonRegistrarActividad.setDisable(true);
+        if (botonGenerarReporteMensual != null) {
+            botonGenerarReporteMensual.setDisable(true);
+        }
+        if (botonReporteParcial != null) {
+            botonReporteParcial.setDisable(true);
+        }
+        if (botonReporteFinal != null) {
+            botonReporteFinal.setDisable(true);
+        }
+        if (botonRegistrarActividad != null) {
+            botonRegistrarActividad.setDisable(true);
+        }
     }
 
     private void cerrarVentanaNoAutorizada() {
@@ -138,7 +167,7 @@ public class MenuPracticanteControlador {
         alerta.showAndWait();
         try {
             Parent ruta = FXMLLoader.load(getClass().getResource("/InterfazGrafica/vistas/IniciarSesionVista.fxml"));
-            Stage escenario = (Stage) lblBienvenida.getScene().getWindow();
+            Stage escenario = (Stage) etiquetaBienvenida.getScene().getWindow();
             escenario.setScene(new Scene(ruta));
             escenario.show();
         } catch (IOException excepcion) {
@@ -146,51 +175,76 @@ public class MenuPracticanteControlador {
         }
     }
 
-    @FXML private void abrirGenerarReporteMensual(ActionEvent event) throws IOException {
+    @FXML
+    private void abrirGenerarReporteMensual(ActionEvent event) throws IOException {
         abrirVentana("/InterfazGrafica/vistas/GenerarReporteMensualVista.fxml", "Generar Reporte Mensual");
     }
-    @FXML private void abrirGenerarReporteParcial(ActionEvent event) throws IOException {
+
+    @FXML
+    private void abrirGenerarReporteParcial(ActionEvent event) throws IOException {
         abrirVentana("/InterfazGrafica/vistas/GenerarReporteParcialVista.fxml", "Generar Reporte Parcial");
     }
-    @FXML private void abrirGenerarReporteFinal(ActionEvent event) throws IOException {
+
+    @FXML
+    private void abrirGenerarReporteFinal(ActionEvent event) throws IOException {
         abrirVentana("/InterfazGrafica/vistas/GenerarReporteFinalVista.fxml", "Generar Reporte Final");
     }
-    @FXML private void abrirSubirReporte(ActionEvent event) throws IOException {
+
+    @FXML
+    private void abrirSubirReporte(ActionEvent event) throws IOException {
         abrirVentana("/InterfazGrafica/vistas/SubirReporteVista.fxml", "Subir Reporte");
     }
-    @FXML private void abrirMisReportes(ActionEvent event) throws IOException {
+
+    @FXML
+    private void abrirMisReportes(ActionEvent event) throws IOException {
         abrirVentana("/InterfazGrafica/vistas/HistorialReportesVista.fxml", "Mis Reportes");
     }
-    @FXML private void abrirSubirDocumentacion(ActionEvent event) throws IOException {
+
+    @FXML
+    private void abrirSubirDocumentacion(ActionEvent event) throws IOException {
         abrirVentana("/InterfazGrafica/vistas/SubirDocumentacionVista.fxml", "Subir Documentación");
     }
-    @FXML private void abrirDescargarDocumentacion(ActionEvent event) throws IOException {
+
+    @FXML
+    private void abrirDescargarDocumentacion(ActionEvent event) throws IOException {
         abrirVentana("/InterfazGrafica/vistas/DescargarDocumentacionVista.fxml", "Descargar Documentación");
     }
-    @FXML private void abrirSeleccionProyectos(ActionEvent event) throws IOException {
+
+    @FXML
+    private void abrirSeleccionProyectos(ActionEvent event) throws IOException {
         Parent ruta = FXMLLoader.load(getClass().getResource("/InterfazGrafica/vistas/SeleccionPreferenciasProyectoVista.fxml"));
         Stage escenario = new Stage();
         escenario.setTitle("Seleccionar proyectos");
         escenario.setScene(new Scene(ruta));
         escenario.show();
     }
-    @FXML private void abrirMensajeria(ActionEvent event) throws IOException {
+
+    @FXML
+    private void abrirMensajeria(ActionEvent event) throws IOException {
         abrirVentana("/InterfazGrafica/vistas/EnviarMensajeVista.fxml", "Enviar Mensaje");
     }
-    @FXML private void abrirBuzon(ActionEvent event) throws IOException {
+
+    @FXML
+    private void abrirBuzon(ActionEvent event) throws IOException {
         abrirVentana("/InterfazGrafica/vistas/ConsultarBuzonVista.fxml", "Buzón");
     }
-    @FXML private void cerrarSesion(ActionEvent event) throws IOException {
+
+    @FXML
+    private void cerrarSesion(ActionEvent event) throws IOException {
         SesionUsuario.getInstance().cerrarSesion();
         Parent ruta = FXMLLoader.load(getClass().getResource("/InterfazGrafica/vistas/IniciarSesionVista.fxml"));
         Stage escenario = (Stage) ((Node) event.getSource()).getScene().getWindow();
         escenario.setScene(new Scene(ruta));
         escenario.show();
     }
-    @FXML private void abrirRegistrarActividad(ActionEvent event) throws IOException {
+
+    @FXML
+    private void abrirRegistrarActividad(ActionEvent event) throws IOException {
         abrirVentana("/InterfazGrafica/vistas/RegistrarActividadVista.fxml", "Registrar Actividad");
     }
-    @FXML private void abrirAutoevaluacionPracticante(ActionEvent event) throws IOException {
+
+    @FXML
+    private void abrirAutoevaluacionPracticante(ActionEvent event) throws IOException {
         abrirVentana("/InterfazGrafica/vistas/GenerarAutoevaluacionPracticanteVista.fxml", "Realizar Autoevaluacion");
     }
 

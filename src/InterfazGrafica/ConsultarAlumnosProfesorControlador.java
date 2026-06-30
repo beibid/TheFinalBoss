@@ -2,7 +2,6 @@ package InterfazGrafica;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
@@ -16,14 +15,15 @@ import javafx.stage.Stage;
 import logica.dao.excepciones.MensajeriaExcepcion;
 import logica.dao.excepciones.UsuariosExcepcion;
 import logica.dao.objetos.ActividadDao;
+import logica.dao.objetos.AutoevaluacionPracticanteDao;
 import logica.dao.objetos.PracticanteDao;
 import logica.dao.objetos.ProyectoDao;
 import logica.dao.objetos.ReporteDao;
 import logica.dominio.Actividad;
+import logica.dominio.AutoevaluacionPracticante;
 import logica.dominio.Practicante;
 import logica.dominio.Proyecto;
 import logica.dominio.SesionUsuario;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -37,6 +37,7 @@ public class ConsultarAlumnosProfesorControlador {
     private static final String FILTRO_SIN_REPORTES = "Sin reportes";
     private static final String FILTRO_CON_ARCHIVOS = "Con archivos";
     private static final String FILTRO_SIN_ARCHIVOS = "Sin archivos";
+    private static final int HORAS_PARA_TERMINAR = 420;
 
     @FXML private TableView<Practicante> tablaAlumnos;
     @FXML private TableColumn<Practicante, String> columnaMatricula;
@@ -47,6 +48,8 @@ public class ConsultarAlumnosProfesorControlador {
     @FXML private Label etiquetaProyecto;
     @FXML private Label etiquetaHoras;
     @FXML private Label etiquetaReportes;
+    @FXML private Label etiquetaEstado;
+    @FXML private Label etiquetaAutoevaluacion;
     @FXML private TableView<Actividad> tablaActividades;
     @FXML private TableColumn<Actividad, String> columnaTituloActividad;
     @FXML private TableColumn<Actividad, String> columnaFechaInicio;
@@ -57,12 +60,17 @@ public class ConsultarAlumnosProfesorControlador {
     @FXML private Label etiquetaTituloError;
     @FXML private Label etiquetaMensajeError;
 
+    private final PracticanteDao practicanteDao = new PracticanteDao();
+    private final ProyectoDao proyectoDao = new ProyectoDao();
+    private final ActividadDao actividadDao = new ActividadDao();
+    private final ReporteDao reporteDao = new ReporteDao();
+
     private List<Practicante> todosLosAlumnos = new ArrayList<>();
     private int idProfesor;
 
     @FXML
     public void initialize() {
-        idProfesor = SesionUsuario.getInstance().getIdUsuario();
+        idProfesor = SesionUsuario.getInstance().getUsuarioActivo().getIdUsuario();
         configurarTablaAlumnos();
         configurarTablaActividades();
         configurarFiltros();
@@ -90,13 +98,27 @@ public class ConsultarAlumnosProfesorControlador {
     private void configurarTablaActividades() {
         columnaTituloActividad.setCellValueFactory(new PropertyValueFactory<>("titulo"));
         columnaFechaInicio.setCellValueFactory(cellData ->
-                new SimpleStringProperty(cellData.getValue().getFechaInicio() != null
-                        ? cellData.getValue().getFechaInicio().toString() : ""));
+                new SimpleStringProperty(obtenerFechaInicio(cellData.getValue())));
         columnaFechaFin.setCellValueFactory(cellData ->
-                new SimpleStringProperty(cellData.getValue().getFechaFin() != null
-                        ? cellData.getValue().getFechaFin().toString() : ""));
+                new SimpleStringProperty(obtenerFechaFin(cellData.getValue())));
         columnaHoras.setCellValueFactory(cellData ->
                 new SimpleStringProperty(String.valueOf(cellData.getValue().getHorasActividad())));
+    }
+
+    private String obtenerFechaInicio(Actividad actividad) {
+        String fecha = "";
+        if (actividad.getFechaInicio() != null) {
+            fecha = actividad.getFechaInicio().toString();
+        }
+        return fecha;
+    }
+
+    private String obtenerFechaFin(Actividad actividad) {
+        String fecha = "";
+        if (actividad.getFechaFin() != null) {
+            fecha = actividad.getFechaFin().toString();
+        }
+        return fecha;
     }
 
     private void configurarFiltros() {
@@ -115,12 +137,11 @@ public class ConsultarAlumnosProfesorControlador {
     }
 
     private void cargarAlumnos() {
-        PracticanteDao practicanteDao = new PracticanteDao();
         try {
-            todosLosAlumnos = practicanteDao.obtenerPracticantesPorSeccionProfesor(idProfesor);
+            todosLosAlumnos = practicanteDao.obtenerPracticantesPorProfesor(idProfesor);
             tablaAlumnos.setItems(FXCollections.observableArrayList(todosLosAlumnos));
             if (todosLosAlumnos.isEmpty()) {
-                mostrarError("Sin alumnos", "No tienes alumnos asignados en ninguna sección.");
+                mostrarError("Sin alumnos", "NO TIENES ALUMNOS ASIGNADOS.");
             }
         } catch (UsuariosExcepcion excepcion) {
             LOGGER.log(Level.SEVERE, "Error al cargar alumnos del profesor", excepcion);
@@ -129,26 +150,10 @@ public class ConsultarAlumnosProfesorControlador {
     }
 
     private void aplicarFiltro(String filtro) {
-        ReporteDao reporteDao = new ReporteDao();
         List<Practicante> filtrados = new ArrayList<>();
         try {
             for (Practicante practicante : todosLosAlumnos) {
-                String matricula = practicante.getMatricula();
-                boolean incluir = false;
-                if (filtro.equals(FILTRO_TODOS)) {
-                    incluir = true;
-                } else if (filtro.equals(FILTRO_CON_REPORTES)) {
-                    incluir = reporteDao.contarReportesEvaluados(matricula, "Mensual") > 0
-                            || reporteDao.contarReportesEvaluados(matricula, "Parcial") > 0;
-                } else if (filtro.equals(FILTRO_SIN_REPORTES)) {
-                    incluir = reporteDao.contarReportesEvaluados(matricula, "Mensual") == 0
-                            && reporteDao.contarReportesEvaluados(matricula, "Parcial") == 0;
-                } else if (filtro.equals(FILTRO_CON_ARCHIVOS)) {
-                    incluir = reporteDao.contarReportesEvaluados(matricula, "Mensual") > 0;
-                } else if (filtro.equals(FILTRO_SIN_ARCHIVOS)) {
-                    incluir = reporteDao.contarReportesEvaluados(matricula, "Mensual") == 0;
-                }
-                if (incluir) {
+                if (debeIncluir(practicante, filtro)) {
                     filtrados.add(practicante);
                 }
             }
@@ -157,6 +162,25 @@ public class ConsultarAlumnosProfesorControlador {
             LOGGER.log(Level.SEVERE, "Error al filtrar alumnos", excepcion);
             mostrarError("Error al filtrar", excepcion.getMessage().toUpperCase());
         }
+    }
+
+    private boolean debeIncluir(Practicante practicante, String filtro) throws MensajeriaExcepcion {
+        String matricula = practicante.getMatricula();
+        boolean incluir = false;
+        if (filtro.equals(FILTRO_TODOS)) {
+            incluir = true;
+        } else if (filtro.equals(FILTRO_CON_REPORTES)) {
+            incluir = reporteDao.contarReportesEvaluados(matricula, "Mensual") > 0
+                    || reporteDao.contarReportesEvaluados(matricula, "Parcial") > 0;
+        } else if (filtro.equals(FILTRO_SIN_REPORTES)) {
+            incluir = reporteDao.contarReportesEvaluados(matricula, "Mensual") == 0
+                    && reporteDao.contarReportesEvaluados(matricula, "Parcial") == 0;
+        } else if (filtro.equals(FILTRO_CON_ARCHIVOS)) {
+            incluir = reporteDao.contarReportesEvaluados(matricula, "Mensual") > 0;
+        } else if (filtro.equals(FILTRO_SIN_ARCHIVOS)) {
+            incluir = reporteDao.contarReportesEvaluados(matricula, "Mensual") == 0;
+        }
+        return incluir;
     }
 
     private void configurarSeleccionAlumno() {
@@ -171,41 +195,81 @@ public class ConsultarAlumnosProfesorControlador {
 
     private void cargarDetalleAlumno(Practicante practicante) {
         String matricula = practicante.getMatricula();
-        ProyectoDao proyectoDao = new ProyectoDao();
-        ActividadDao actividadDao = new ActividadDao();
-        ReporteDao reporteDao = new ReporteDao();
         try {
             Proyecto proyecto = proyectoDao.obtenerProyectoPorPracticante(matricula);
-            if (proyecto != null) {
-                etiquetaProyecto.setText(proyecto.getNombreProyecto() + " — " + proyecto.getNombreOrganizacion());
-            } else {
-                etiquetaProyecto.setText("Sin proyecto asignado");
-            }
-            int horas = actividadDao.obtenerHorasTotalesPorPracticante(matricula);
-            etiquetaHoras.setText(horas + " horas acumuladas");
-            int mensuales = reporteDao.contarReportesEvaluados(matricula, "Mensual");
-            int parciales = reporteDao.contarReportesEvaluados(matricula, "Parcial");
-            etiquetaReportes.setText("Mensuales evaluados: " + mensuales + "  |  Parciales evaluados: " + parciales);
             List<Actividad> actividades = actividadDao.obtenerActividadesPorPracticante(matricula);
+            int horas = actividadDao.obtenerHorasTotalesPorPracticante(matricula);
+            mostrarInfoProyecto(proyecto);
+            etiquetaHoras.setText(horas + " horas acumuladas");
+            mostrarInfoReportes(matricula);
+            mostrarEstado(horas);
+            mostrarEstadoAutoevaluacion(matricula, horas);
             tablaActividades.setItems(FXCollections.observableArrayList(actividades));
             panelDetalle.setVisible(true);
             panelDetalle.setManaged(true);
-            ocultarError();
+            ocultarPanel(panelError);
         } catch (MensajeriaExcepcion excepcion) {
             LOGGER.log(Level.SEVERE, "Error al cargar detalle del alumno", excepcion);
             mostrarError("Error al cargar detalle", excepcion.getMessage().toUpperCase());
         }
     }
 
-    private void mostrarError(String titulo, String mensaje) {
-        etiquetaTituloError.setText(titulo);
-        etiquetaMensajeError.setText(mensaje);
-        panelError.setVisible(true);
-        panelError.setManaged(true);
+    private void mostrarInfoProyecto(Proyecto proyecto) {
+        if (proyecto != null) {
+            etiquetaProyecto.setText(proyecto.getNombreProyecto() + " - " + proyecto.getNombreOrganizacion());
+        } else {
+            etiquetaProyecto.setText("Sin proyecto asignado");
+        }
     }
 
-    private void ocultarError() {
-        panelError.setVisible(false);
-        panelError.setManaged(false);
+    private void mostrarInfoReportes(String matricula) throws MensajeriaExcepcion {
+        int mensuales = reporteDao.contarReportesEvaluados(matricula, "Mensual");
+        int parciales = reporteDao.contarReportesEvaluados(matricula, "Parcial");
+        etiquetaReportes.setText("Mensuales evaluados: " + mensuales + "  |  Parciales evaluados: " + parciales);
+    }
+
+    private void mostrarEstado(int horas) {
+        if (horas >= HORAS_PARA_TERMINAR) {
+            etiquetaEstado.setText("✔ Terminado");
+            etiquetaEstado.setStyle("-fx-text-fill: #2d6a2d; -fx-font-weight: bold;");
+        } else {
+            etiquetaEstado.setText("⏳ En proceso");
+            etiquetaEstado.setStyle("-fx-text-fill: #b07d00; -fx-font-weight: bold;");
+        }
+    }
+
+    private void mostrarEstadoAutoevaluacion(String matricula, int horas) throws MensajeriaExcepcion {
+        if (horas >= HORAS_PARA_TERMINAR) {
+            AutoevaluacionPracticanteDao autoevaluacionDao = new AutoevaluacionPracticanteDao();
+            AutoevaluacionPracticante autoevaluacion = autoevaluacionDao.obtenerAutoevaluacion(matricula);
+            if (autoevaluacion != null) {
+                etiquetaAutoevaluacion.setText("✔ Autoevaluación entregada");
+                etiquetaAutoevaluacion.setStyle("-fx-text-fill: #2d6a2d; -fx-font-weight: bold;");
+            } else {
+                etiquetaAutoevaluacion.setText("✖ Autoevaluación pendiente");
+                etiquetaAutoevaluacion.setStyle("-fx-text-fill: #8B0000; -fx-font-weight: bold;");
+            }
+            etiquetaAutoevaluacion.setVisible(true);
+            etiquetaAutoevaluacion.setManaged(true);
+        } else {
+            etiquetaAutoevaluacion.setVisible(false);
+            etiquetaAutoevaluacion.setManaged(false);
+        }
+    }
+
+    private void mostrarError(String titulo, String mensaje) {
+        mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError, titulo, mensaje);
+    }
+
+    private void mostrarPanel(Label etiquetaTitulo, Label etiquetaMensaje, VBox panel, String titulo, String mensaje) {
+        etiquetaTitulo.setText(titulo);
+        etiquetaMensaje.setText(mensaje);
+        panel.setVisible(true);
+        panel.setManaged(true);
+    }
+
+    private void ocultarPanel(VBox panel) {
+        panel.setVisible(false);
+        panel.setManaged(false);
     }
 }

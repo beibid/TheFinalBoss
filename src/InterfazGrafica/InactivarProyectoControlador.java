@@ -16,6 +16,7 @@ import logica.dao.excepciones.MensajeriaExcepcion;
 import logica.dao.objetos.ProyectoDao;
 import logica.dominio.Proyecto;
 import java.util.List;
+import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -23,6 +24,8 @@ public class InactivarProyectoControlador {
 
     private static final Logger LOGGER = Logger.getLogger(InactivarProyectoControlador.class.getName());
     private static final int FILAS_AFECTADAS_ESPERADAS = 1;
+
+    private final ProyectoDao proyectoDao = new ProyectoDao();
 
     @FXML private ComboBox<Proyecto> comboBoxProyectos;
     @FXML private VBox panelDatos;
@@ -45,7 +48,6 @@ public class InactivarProyectoControlador {
     }
 
     private void cargarProyectosDisponibles() {
-        ProyectoDao proyectoDao = new ProyectoDao();
         try {
             List<Proyecto> proyectos = proyectoDao.obtenerProyectosDisponibles();
             if (proyectos.isEmpty()) {
@@ -69,7 +71,8 @@ public class InactivarProyectoControlador {
             @Override
             protected void updateItem(Proyecto proyecto, boolean vacio) {
                 super.updateItem(proyecto, vacio);
-                if (vacio || proyecto == null) {
+                boolean esVacioONulo = vacio || proyecto == null;
+                if (esVacioONulo) {
                     setText("-- Selecciona un proyecto --");
                 } else {
                     setText(proyecto.getNombreProyecto());
@@ -100,14 +103,13 @@ public class InactivarProyectoControlador {
     @FXML
     private void botonInactivar() {
         if (proyectoSeleccionado == null) {
-            mostrarError("Sin selección", "SELECCIONA UN PROYECTO DE LA LISTA.");
-        } else if (confirmarAccion("¿Seguro que desea inactivar este proyecto?")) {
+            mostrarError("Sin seleccion", "SELECCIONA UN PROYECTO DE LA LISTA.");
+        } else if (confirmarAccion("Seguro que desea inactivar este proyecto?")) {
             procesarInactivacion();
         }
     }
 
     private void procesarInactivacion() {
-        ProyectoDao proyectoDao = new ProyectoDao();
         try {
             int filasAfectadas = proyectoDao.inactivarProyecto(proyectoSeleccionado.getIdProyecto());
             if (filasAfectadas >= FILAS_AFECTADAS_ESPERADAS) {
@@ -127,7 +129,7 @@ public class InactivarProyectoControlador {
 
     @FXML
     private void botonCancelar() {
-        if (confirmarAccion("¿Seguro que desea cancelar?")) {
+        if (confirmarAccion("Seguro que desea cancelar?")) {
             ocultarTodo();
             comboBoxProyectos.setValue(null);
         }
@@ -141,13 +143,18 @@ public class InactivarProyectoControlador {
 
     private boolean confirmarAccion(String mensaje) {
         Alert alerta = new Alert(Alert.AlertType.CONFIRMATION);
-        alerta.setTitle("Confirmación");
+        boolean confirmado = false;
+        alerta.setTitle("Confirmacion");
         alerta.setHeaderText(mensaje);
         alerta.setContentText("");
-        ButtonType botonSi = new ButtonType("Sí");
+        ButtonType botonSi = new ButtonType("Si");
         ButtonType botonNo = new ButtonType("No");
         alerta.getButtonTypes().setAll(botonSi, botonNo);
-        return alerta.showAndWait().filter(botonPresionado -> botonPresionado == botonSi).isPresent();
+        Optional<ButtonType> resultado = alerta.showAndWait();
+        if (resultado.isPresent() && resultado.get() == botonSi) {
+            confirmado = true;
+        }
+        return confirmado;
     }
 
     private void ocultarTodo() {
@@ -156,12 +163,10 @@ public class InactivarProyectoControlador {
         ocultarPanel(panelDatos);
     }
 
-    private void mostrarPanel(VBox panel, Label etiquetaTitulo, Label etiquetaMensaje,
-                              String titulo, String mensaje) {
-        etiquetaTitulo.setText(titulo);
-        etiquetaMensaje.setText(mensaje);
-        panel.setVisible(true);
-        panel.setManaged(true);
+    private void mostrarPanel(VBox panelMostrar, VBox panelOcultar) {
+        panelMostrar.setVisible(true);
+        panelMostrar.setManaged(true);
+        ocultarPanel(panelOcultar);
     }
 
     private void ocultarPanel(VBox panel) {
@@ -170,12 +175,14 @@ public class InactivarProyectoControlador {
     }
 
     private void mostrarError(String titulo, String mensaje) {
-        ocultarPanel(panelExito);
-        mostrarPanel(panelError, etiquetaTituloError, etiquetaMensajeError, titulo, mensaje);
+        etiquetaTituloError.setText(titulo);
+        etiquetaMensajeError.setText(mensaje);
+        mostrarPanel(panelError, panelExito);
     }
 
     private void mostrarExito(String titulo, String mensaje) {
-        ocultarPanel(panelError);
-        mostrarPanel(panelExito, etiquetaTituloExito, etiquetaMensajeExito, titulo, mensaje);
+        etiquetaTituloExito.setText(titulo);
+        etiquetaMensajeExito.setText(mensaje);
+        mostrarPanel(panelExito, panelError);
     }
 }

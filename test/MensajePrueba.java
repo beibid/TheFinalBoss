@@ -66,8 +66,15 @@ public class MensajePrueba {
     @Test
     public void pruebaObtenerMensajesRecibidosAlternoOtroUsuario() throws MensajeriaExcepcion {
         MensajeDao mensajeDao = new MensajeDao();
-        List<MensajeVista> mensajes = mensajeDao.obtenerMensajesRecibidos(2);
+        List<MensajeVista> mensajes = mensajeDao.obtenerMensajesRecibidos(3);
         assertNotNull(mensajes);
+    }
+
+    @Test
+    public void pruebaObtenerMensajesRecibidosAlternoListaNoVacia() throws MensajeriaExcepcion {
+        MensajeDao mensajeDao = new MensajeDao();
+        List<MensajeVista> mensajes = mensajeDao.obtenerMensajesRecibidos(1);
+        assertEquals(1, mensajes.size());
     }
 
     @Test
@@ -80,15 +87,22 @@ public class MensajePrueba {
     @Test
     public void pruebaObtenerMensajesEnviadosExitoso() throws MensajeriaExcepcion {
         MensajeDao mensajeDao = new MensajeDao();
-        List<MensajeVista> mensajes = mensajeDao.obtenerMensajesEnviados(1);
+        List<MensajeVista> mensajes = mensajeDao.obtenerMensajesEnviados(2);
         assertNotNull(mensajes);
     }
 
     @Test
     public void pruebaObtenerMensajesEnviadosAlternoOtroUsuario() throws MensajeriaExcepcion {
         MensajeDao mensajeDao = new MensajeDao();
-        List<MensajeVista> mensajes = mensajeDao.obtenerMensajesEnviados(3);
+        List<MensajeVista> mensajes = mensajeDao.obtenerMensajesEnviados(4);
         assertNotNull(mensajes);
+    }
+
+    @Test
+    public void pruebaObtenerMensajesEnviadosAlternoListaNoVacia() throws MensajeriaExcepcion {
+        MensajeDao mensajeDao = new MensajeDao();
+        List<MensajeVista> mensajes = mensajeDao.obtenerMensajesEnviados(2);
+        assertEquals(1, mensajes.size());
     }
 
     @Test

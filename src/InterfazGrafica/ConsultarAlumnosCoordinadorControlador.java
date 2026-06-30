@@ -15,13 +15,14 @@ import javafx.stage.Stage;
 import logica.dao.excepciones.MensajeriaExcepcion;
 import logica.dao.excepciones.UsuariosExcepcion;
 import logica.dao.objetos.ActividadDao;
+import logica.dao.objetos.AutoevaluacionPracticanteDao;
 import logica.dao.objetos.PracticanteDao;
 import logica.dao.objetos.ProyectoDao;
 import logica.dao.objetos.ReporteDao;
 import logica.dominio.Actividad;
+import logica.dominio.AutoevaluacionPracticante;
 import logica.dominio.Practicante;
 import logica.dominio.Proyecto;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -47,6 +48,7 @@ public class ConsultarAlumnosCoordinadorControlador {
     @FXML private Label etiquetaHoras;
     @FXML private Label etiquetaReportes;
     @FXML private Label etiquetaEstado;
+    @FXML private Label etiquetaAutoevaluacion;
     @FXML private TableView<Actividad> tablaActividades;
     @FXML private TableColumn<Actividad, String> columnaTituloActividad;
     @FXML private TableColumn<Actividad, String> columnaFechaInicio;
@@ -171,26 +173,15 @@ public class ConsultarAlumnosCoordinadorControlador {
         ReporteDao reporteDao = new ReporteDao();
         try {
             Proyecto proyecto = proyectoDao.obtenerProyectoPorPracticante(matricula);
-            if (proyecto != null) {
-                etiquetaProyecto.setText(proyecto.getNombreProyecto());
-                etiquetaOrganizacion.setText(proyecto.getNombreOrganizacion());
-            } else {
-                etiquetaProyecto.setText("Sin proyecto asignado");
-                etiquetaOrganizacion.setText("—");
-            }
             int horas = actividadDao.obtenerHorasTotalesPorPracticante(matricula);
-            etiquetaHoras.setText(horas + " horas acumuladas");
             int mensuales = reporteDao.contarReportesEvaluados(matricula, "Mensual");
             int parciales = reporteDao.contarReportesEvaluados(matricula, "Parcial");
-            etiquetaReportes.setText("Mensuales: " + mensuales + "  |  Parciales: " + parciales);
-            if (horas >= HORAS_PARA_TERMINAR) {
-                etiquetaEstado.setText("✔ Terminado");
-                etiquetaEstado.setStyle("-fx-text-fill: #2d6a2d; -fx-font-weight: bold;");
-            } else {
-                etiquetaEstado.setText("⏳ En proceso");
-                etiquetaEstado.setStyle("-fx-text-fill: #b07d00; -fx-font-weight: bold;");
-            }
             List<Actividad> actividades = actividadDao.obtenerActividadesPorPracticante(matricula);
+            mostrarInfoProyecto(proyecto);
+            etiquetaHoras.setText(horas + " horas acumuladas");
+            etiquetaReportes.setText("Mensuales: " + mensuales + "  |  Parciales: " + parciales);
+            mostrarEstado(horas);
+            mostrarEstadoAutoevaluacion(matricula, horas);
             tablaActividades.setItems(FXCollections.observableArrayList(actividades));
             panelDetalle.setVisible(true);
             panelDetalle.setManaged(true);
@@ -198,6 +189,45 @@ public class ConsultarAlumnosCoordinadorControlador {
         } catch (MensajeriaExcepcion excepcion) {
             LOGGER.log(Level.SEVERE, "Error al cargar detalle del alumno", excepcion);
             mostrarError("Error al cargar detalle", excepcion.getMessage().toUpperCase());
+        }
+    }
+
+    private void mostrarInfoProyecto(Proyecto proyecto) {
+        if (proyecto != null) {
+            etiquetaProyecto.setText(proyecto.getNombreProyecto());
+            etiquetaOrganizacion.setText(proyecto.getNombreOrganizacion());
+        } else {
+            etiquetaProyecto.setText("Sin proyecto asignado");
+            etiquetaOrganizacion.setText("—");
+        }
+    }
+
+    private void mostrarEstado(int horas) {
+        if (horas >= HORAS_PARA_TERMINAR) {
+            etiquetaEstado.setText("✔ Terminado");
+            etiquetaEstado.setStyle("-fx-text-fill: #2d6a2d; -fx-font-weight: bold;");
+        } else {
+            etiquetaEstado.setText("⏳ En proceso");
+            etiquetaEstado.setStyle("-fx-text-fill: #b07d00; -fx-font-weight: bold;");
+        }
+    }
+
+    private void mostrarEstadoAutoevaluacion(String matricula, int horas) throws MensajeriaExcepcion {
+        if (horas >= HORAS_PARA_TERMINAR) {
+            AutoevaluacionPracticanteDao autoevaluacionDao = new AutoevaluacionPracticanteDao();
+            AutoevaluacionPracticante autoevaluacion = autoevaluacionDao.obtenerAutoevaluacion(matricula);
+            if (autoevaluacion != null) {
+                etiquetaAutoevaluacion.setText("✔ Autoevaluación entregada");
+                etiquetaAutoevaluacion.setStyle("-fx-text-fill: #2d6a2d; -fx-font-weight: bold;");
+            } else {
+                etiquetaAutoevaluacion.setText("✖ Autoevaluación pendiente");
+                etiquetaAutoevaluacion.setStyle("-fx-text-fill: #8B0000; -fx-font-weight: bold;");
+            }
+            etiquetaAutoevaluacion.setVisible(true);
+            etiquetaAutoevaluacion.setManaged(true);
+        } else {
+            etiquetaAutoevaluacion.setVisible(false);
+            etiquetaAutoevaluacion.setManaged(false);
         }
     }
 

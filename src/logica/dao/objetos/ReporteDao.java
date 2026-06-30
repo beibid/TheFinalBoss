@@ -42,8 +42,8 @@ public class ReporteDao implements ReporteDaoInterfaz {
         if (reporte.getTipoReporte() == null) {
             throw new MensajeriaExcepcion("El tipo de reporte no puede ser nulo");
         }
-        String consultaReporte = "INSERT INTO reporte (tipoReporte, descripcion, matricula, archivoAdjunto, nombreArchivo) " +
-                "VALUES (?, ?, ?, ?, ?)";
+        String consultaReporte = "INSERT INTO reporte (tipoReporte, descripcion, matricula, archivoAdjunto, nombreArchivo, estado) " +
+                "VALUES (?, ?, ?, ?, ?, 'Pendiente')";
         Connection conexionBaseDeDatos = null;
         PreparedStatement insertarEnBaseDeDatos = null;
         int filasAfectadas = 0;
@@ -99,7 +99,7 @@ public class ReporteDao implements ReporteDaoInterfaz {
                 Reporte reporte = new Reporte(
                         TipoReporte.valueOf(resultado.getString("tipoReporte")),
                         resultado.getString("descripcion"),
-                        resultado.getString("actividades"),
+                        null,
                         matricula, null, null
                 );
                 reporte.setIdReporte(resultado.getInt("idReporte"));
@@ -308,6 +308,15 @@ public class ReporteDao implements ReporteDaoInterfaz {
         }
         return existeReporte;
     }
+
+    /**
+     * Verifica si ya existe un reporte mensual registrado en un mes y año especifico para un practicante.
+     * @param matricula la matricula del practicante
+     * @param mes el mes a verificar
+     * @param anio el año a verificar
+     * @return true si ya existe un reporte mensual en ese mes y año, false en caso contrario
+     * @throws MensajeriaExcepcion si ocurre un error al consultar o de conexion
+     */
     public boolean existeReporteMensualEnMes(String matricula, int mes, int anio) throws MensajeriaExcepcion {
         String consulta = "SELECT COUNT(*) FROM reporte " +
                 "WHERE matricula = ? AND tipoReporte = 'Mensual' " +
@@ -334,8 +343,12 @@ public class ReporteDao implements ReporteDaoInterfaz {
             throw new MensajeriaExcepcion("Error al verificar reporte mensual", excepcionSql);
         } finally {
             try {
-                if (sentencia != null) sentencia.close();
-                if (conexionBaseDeDatos != null) conexionBaseDeDatos.close();
+                if (sentencia != null) {
+                    sentencia.close();
+                }
+                if (conexionBaseDeDatos != null) {
+                    conexionBaseDeDatos.close();
+                }
             } catch (SQLException excepcionSql) {
                 LOGGER.log(Level.SEVERE, "Error al cerrar la conexion", excepcionSql);
             }

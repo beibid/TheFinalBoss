@@ -15,7 +15,7 @@ public class ProfesorPrueba {
 
     @Test
     public void pruebaInsertarProfesorExitoso() throws UsuariosExcepcion {
-        Profesor profesor = new Profesor("22114455", Turno.Matutino, "Ricardo", "Fuentes Morales", "ricardo22114455", "ricardo.fuentes@uv.mx", Estado.Activo);
+        Profesor profesor = new Profesor("PRF-T001", Turno.Matutino, "Ricardo", "Fuentes Morales", "ricardoT001", "prof.test1@uv.mx", Estado.Activo);
         ProfesorDao profesorDao = new ProfesorDao();
         int filasAfectadas = profesorDao.insertarProfesor(profesor);
         assertEquals(1, filasAfectadas);
@@ -23,7 +23,7 @@ public class ProfesorPrueba {
 
     @Test
     public void pruebaInsertarProfesorAlternoTurnoVespertino() throws UsuariosExcepcion {
-        Profesor profesor = new Profesor("33224411", Turno.Vespertino, "Patricia", "Campos Ochoa", "patricia33224411", "patricia.campos@uv.mx", Estado.Activo);
+        Profesor profesor = new Profesor("PRF-T002", Turno.Vespertino, "Patricia", "Campos Ochoa", "patriciaT002", "prof.test2@uv.mx", Estado.Activo);
         ProfesorDao profesorDao = new ProfesorDao();
         int filasAfectadas = profesorDao.insertarProfesor(profesor);
         assertEquals(1, filasAfectadas);
@@ -31,7 +31,7 @@ public class ProfesorPrueba {
 
     @Test
     public void pruebaInsertarProfesorAlternoNombreCompuesto() throws UsuariosExcepcion {
-        Profesor profesor = new Profesor("44112233", Turno.Matutino, "Jose Luis", "Mendez Castillo", "joseluis44112233", "joseluis.mendez@uv.mx", Estado.Activo);
+        Profesor profesor = new Profesor("PRF-T003", Turno.Matutino, "Jose Luis", "Mendez Castillo", "joseluisT003", "prof.test3@uv.mx", Estado.Activo);
         ProfesorDao profesorDao = new ProfesorDao();
         int filasAfectadas = profesorDao.insertarProfesor(profesor);
         assertEquals(1, filasAfectadas);
@@ -39,7 +39,7 @@ public class ProfesorPrueba {
 
     @Test
     public void pruebaInsertarProfesorAlternoApellidoConDe() throws UsuariosExcepcion {
-        Profesor profesor = new Profesor("55001122", Turno.Vespertino, "Alicia", "de la Rosa Vargas", "alicia55001122", "alicia.delarosa@uv.mx", Estado.Activo);
+        Profesor profesor = new Profesor("PRF-T004", Turno.Vespertino, "Alicia", "de la Rosa Vargas", "aliciaT004", "prof.test4@uv.mx", Estado.Activo);
         ProfesorDao profesorDao = new ProfesorDao();
         int filasAfectadas = profesorDao.insertarProfesor(profesor);
         assertEquals(1, filasAfectadas);
@@ -47,42 +47,42 @@ public class ProfesorPrueba {
 
     @Test
     public void pruebaInsertarProfesorDuplicadoLanzaExcepcion() {
-        Profesor profesor = new Profesor("22114455", Turno.Matutino, "Ricardo", "Fuentes Morales", "ricardo22114455", "ricardo.fuentes2@uv.mx", Estado.Activo);
+        Profesor profesor = new Profesor("29345", Turno.Matutino, "Grecia", "Ramirez Polanco", "greciadup", "grecia.dup@uv.mx", Estado.Activo);
         ProfesorDao profesorDao = new ProfesorDao();
         assertThrows(UsuariosExcepcion.class, () -> profesorDao.insertarProfesor(profesor));
     }
 
     @Test
     public void pruebaInsertarProfesorExcepcionNombreNulo() {
-        Profesor profesor = new Profesor("66778899", Turno.Matutino, null, "Fuentes Morales", "pass66778899", "nombre.nulo@uv.mx", Estado.Activo);
+        Profesor profesor = new Profesor("PRF-T005", Turno.Matutino, null, "Fuentes Morales", "passT005", "prof.test5@uv.mx", Estado.Activo);
         ProfesorDao profesorDao = new ProfesorDao();
         assertThrows(UsuariosExcepcion.class, () -> profesorDao.insertarProfesor(profesor));
     }
 
     @Test
     public void pruebaInsertarProfesorExcepcionNumPersonalNulo() {
-        Profesor profesor = new Profesor(null, Turno.Matutino, "Beatriz", "Hernandez Puga", "beatriz99001122", "beatriz.hernandez@uv.mx", Estado.Activo);
+        Profesor profesor = new Profesor(null, Turno.Matutino, "Beatriz", "Hernandez Puga", "beatrizT006", "prof.test6@uv.mx", Estado.Activo);
         ProfesorDao profesorDao = new ProfesorDao();
         assertThrows(UsuariosExcepcion.class, () -> profesorDao.insertarProfesor(profesor));
     }
 
     @Test
     public void pruebaInsertarProfesorExcepcionContraseniaNula() {
-        Profesor profesor = new Profesor("11009988", Turno.Vespertino, "Ignacio", "Solis Bravo", null, "ignacio.solis@uv.mx", Estado.Activo);
+        Profesor profesor = new Profesor("PRF-T007", Turno.Vespertino, "Ignacio", "Solis Bravo", null, "prof.test7@uv.mx", Estado.Activo);
         ProfesorDao profesorDao = new ProfesorDao();
         assertThrows(UsuariosExcepcion.class, () -> profesorDao.insertarProfesor(profesor));
     }
 
     @Test
     public void pruebaInsertarProfesorExcepcionCorreoNulo() {
-        Profesor profesor = new Profesor("22001199", Turno.Matutino, "Norma", "Aguilar Perez", "norma22001199", null, Estado.Activo);
+        Profesor profesor = new Profesor("PRF-T008", Turno.Matutino, "Norma", "Aguilar Perez", "normaT008", null, Estado.Activo);
         ProfesorDao profesorDao = new ProfesorDao();
         assertThrows(UsuariosExcepcion.class, () -> profesorDao.insertarProfesor(profesor));
     }
 
     @Test
     public void pruebaModificarProfesorExitoso() throws UsuariosExcepcion {
-        Profesor profesor = new Profesor("22114455", Turno.Vespertino, "Ricardo", "Fuentes Morales", "ricardoNuevo22114455", "ricardo.nuevo@uv.mx", Estado.Activo);
+        Profesor profesor = new Profesor("22114455", Turno.Vespertino, "Ricardo", "Fuentes Morales", "ricardoNuevo22114455", "ricardo.fuentes2@uv.mx", Estado.Activo);
         ProfesorDao profesorDao = new ProfesorDao();
         int filasAfectadas = profesorDao.modificarProfesor("22114455", profesor);
         assertEquals(1, filasAfectadas);
@@ -98,7 +98,7 @@ public class ProfesorPrueba {
 
     @Test
     public void pruebaModificarProfesorAlternoCambioApellidos() throws UsuariosExcepcion {
-        Profesor profesor = new Profesor("22114455", Turno.Matutino, "Ricardo", "Fuentes Gutierrez", "ricardoNuevo22114455", "ricardo.nuevo@uv.mx", Estado.Activo);
+        Profesor profesor = new Profesor("22114455", Turno.Matutino, "Ricardo", "Fuentes Gutierrez", "ricardoNuevo22114455", "ricardo.fuentes2@uv.mx", Estado.Activo);
         ProfesorDao profesorDao = new ProfesorDao();
         int filasAfectadas = profesorDao.modificarProfesor("22114455", profesor);
         assertEquals(1, filasAfectadas);
@@ -114,14 +114,14 @@ public class ProfesorPrueba {
 
     @Test
     public void pruebaModificarProfesorExcepcionNumPersonalNulo() {
-        Profesor profesor = new Profesor("22114455", Turno.Matutino, "Ricardo", "Fuentes Morales", "ricardo22114455", "ricardo.fuentes@uv.mx", Estado.Activo);
+        Profesor profesor = new Profesor("22114455", Turno.Matutino, "Ricardo", "Fuentes Morales", "ricardo22114455", "ricardo.fuentes2@uv.mx", Estado.Activo);
         ProfesorDao profesorDao = new ProfesorDao();
         assertThrows(UsuariosExcepcion.class, () -> profesorDao.modificarProfesor(null, profesor));
     }
 
     @Test
     public void pruebaModificarProfesorExcepcionNombreNulo() {
-        Profesor profesor = new Profesor("22114455", Turno.Matutino, null, "Fuentes Morales", "ricardo22114455", "ricardo.fuentes@uv.mx", Estado.Activo);
+        Profesor profesor = new Profesor("22114455", Turno.Matutino, null, "Fuentes Morales", "ricardo22114455", "ricardo.fuentes2@uv.mx", Estado.Activo);
         ProfesorDao profesorDao = new ProfesorDao();
         assertThrows(UsuariosExcepcion.class, () -> profesorDao.modificarProfesor("22114455", profesor));
     }
@@ -204,14 +204,14 @@ public class ProfesorPrueba {
     @Test
     public void pruebaObtenerPracticantesPorProfesorExitoso() throws UsuariosExcepcion {
         ProfesorDao profesorDao = new ProfesorDao();
-        List<Practicante> practicantes = profesorDao.obtenerPracticantesPorProfesor("22114455");
+        List<Practicante> practicantes = profesorDao.obtenerPracticantesPorProfesor("29345");
         assertNotNull(practicantes);
     }
 
     @Test
     public void pruebaObtenerPracticantesPorProfesorAlternoOtroProfesor() throws UsuariosExcepcion {
         ProfesorDao profesorDao = new ProfesorDao();
-        List<Practicante> practicantes = profesorDao.obtenerPracticantesPorProfesor("33224411");
+        List<Practicante> practicantes = profesorDao.obtenerPracticantesPorProfesor("45678");
         assertNotNull(practicantes);
     }
 

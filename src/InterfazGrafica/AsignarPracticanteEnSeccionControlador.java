@@ -94,9 +94,8 @@ public class AsignarPracticanteEnSeccionControlador {
     private boolean seleccionValida() {
         Practicante practicante = comboBoxPracticantes.getSelectionModel().getSelectedItem();
         Seccion seccion = comboBoxSecciones.getSelectionModel().getSelectedItem();
-        boolean seleccionCorrecta = practicante != null && seccion != null;
         verificarSeleccion(practicante, seccion);
-        return seleccionCorrecta;
+        return practicante != null && seccion != null;
     }
 
     private void verificarSeleccion(Practicante practicante, Seccion seccion) {
@@ -130,11 +129,11 @@ public class AsignarPracticanteEnSeccionControlador {
             LOGGER.log(Level.SEVERE, "Error al asignar practicante a seccion", excepcion);
             mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
                     "Error inesperado", excepcion.getMessage().toUpperCase());
-        } catch(RegistroDuplicadoExcepcion excepcion) {
-        LOGGER.log(Level.WARNING, "Practicante ya asignado", excepcion);
-        mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
-                "Practicante ya asignado", "ESE PRACTICANTE YA ESTA ASIGNADO A UNA SECCION EN EL PERIODO ACTUAL.");
-    }
+        } catch (RegistroDuplicadoExcepcion excepcion) {
+            LOGGER.log(Level.WARNING, "Practicante ya asignado", excepcion);
+            mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
+                    "Practicante ya asignado", "ESE PRACTICANTE YA ESTA ASIGNADO A UNA SECCION EN EL PERIODO ACTUAL.");
+        }
     }
 
     @FXML

@@ -14,8 +14,8 @@ import com.itextpdf.layout.element.Table;
 import com.itextpdf.layout.properties.TextAlignment;
 import com.itextpdf.layout.properties.UnitValue;
 import logica.dominio.Reporte;
-
 import java.io.File;
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.logging.Level;
@@ -31,30 +31,30 @@ public class GeneradorPdfReporteFinal {
         crearCarpetaSiNoExiste();
         String nombreArchivo = generarNombreArchivo(reporte);
         String rutaCompleta = CARPETA_REPORTES + nombreArchivo;
+        Document documento = null;
         try {
             PdfFont fontNormal = PdfFontFactory.createFont(StandardFonts.HELVETICA);
             PdfFont fontBold = PdfFontFactory.createFont(StandardFonts.HELVETICA_BOLD);
-            PdfWriter writer = new PdfWriter(rutaCompleta);
-            PdfDocument documentoPdf = new PdfDocument(writer);
-            Document documento = new Document(documentoPdf);
-
+            documento = new Document(new PdfDocument(new PdfWriter(rutaCompleta)));
             agregarEncabezado(documento, fontNormal, fontBold);
             agregarDatosPracticante(documento, reporte, nombrePracticante, nombreProyecto,
                     nombreOrganizacion, horasCubiertas, fontNormal, fontBold);
             agregarTablaActividades(documento, reporte, fontNormal, fontBold);
             agregarObservaciones(documento, reporte, fontNormal, fontBold);
             agregarPie(documento, fontNormal);
-            documento.close();
-
             LOGGER.info("PDF reporte final generado: " + rutaCompleta);
-        } catch (Exception excepcion) {
+        } catch (IOException excepcion) {
             LOGGER.log(Level.SEVERE, "Error al generar el PDF final", excepcion);
             return null;
+        } finally {
+            if (documento != null) {
+                documento.close();
+            }
         }
         return rutaCompleta;
     }
 
-    private void agregarEncabezado(Document documento, PdfFont fontNormal, PdfFont fontBold) throws Exception {
+    private void agregarEncabezado(Document documento, PdfFont fontNormal, PdfFont fontBold) {
         documento.add(new Paragraph("FACULTAD DE ESTADÍSTICA E INFORMÁTICA")
                 .setFont(fontBold).setFontSize(14).setTextAlignment(TextAlignment.CENTER));
         documento.add(new Paragraph("Licenciatura en Ingeniería de Software")
@@ -69,7 +69,7 @@ public class GeneradorPdfReporteFinal {
     private void agregarDatosPracticante(Document documento, Reporte reporte,
                                          String nombrePracticante, String nombreProyecto,
                                          String nombreOrganizacion, String horasCubiertas,
-                                         PdfFont fontNormal, PdfFont fontBold) throws Exception {
+                                         PdfFont fontNormal, PdfFont fontBold) {
         documento.add(new Paragraph("INFORMACIÓN DEL REPORTE")
                 .setFont(fontBold).setFontSize(12));
         documento.add(new Paragraph(" "));
@@ -101,7 +101,7 @@ public class GeneradorPdfReporteFinal {
     }
 
     private void agregarTablaActividades(Document documento, Reporte reporte,
-                                         PdfFont fontNormal, PdfFont fontBold) throws Exception {
+                                         PdfFont fontNormal, PdfFont fontBold) {
         documento.add(new Paragraph("ACTIVIDADES Y ENTREGABLES")
                 .setFont(fontBold).setFontSize(12));
         documento.add(new Paragraph(" "));
@@ -141,7 +141,7 @@ public class GeneradorPdfReporteFinal {
     }
 
     private void agregarObservaciones(Document documento, Reporte reporte,
-                                      PdfFont fontNormal, PdfFont fontBold) throws Exception {
+                                      PdfFont fontNormal, PdfFont fontBold) {
         documento.add(new Paragraph("OBSERVACIONES GENERALES")
                 .setFont(fontBold).setFontSize(12));
         documento.add(new Paragraph(reporte.getDescripcion() != null ? reporte.getDescripcion() : "")
@@ -149,7 +149,7 @@ public class GeneradorPdfReporteFinal {
         documento.add(new Paragraph(" "));
     }
 
-    private void agregarPie(Document documento, PdfFont fontNormal) throws Exception {
+    private void agregarPie(Document documento, PdfFont fontNormal) {
         documento.add(new Paragraph(" "));
         documento.add(new Paragraph(" "));
 
@@ -176,7 +176,10 @@ public class GeneradorPdfReporteFinal {
     private void crearCarpetaSiNoExiste() {
         File carpeta = new File(CARPETA_REPORTES);
         if (!carpeta.exists()) {
-            carpeta.mkdirs();
+            boolean creada = carpeta.mkdirs();
+            if (!creada) {
+                LOGGER.warning("No se pudo crear la carpeta de reportes: " + CARPETA_REPORTES);
+            }
         }
     }
 }

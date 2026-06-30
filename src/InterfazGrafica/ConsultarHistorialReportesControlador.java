@@ -37,10 +37,15 @@ public class ConsultarHistorialReportesControlador {
     @FXML private Label etiquetaTituloError;
     @FXML private Label etiquetaMensajeError;
 
+    private final PracticanteDao practicanteDao = new PracticanteDao();
+    private final ReporteDao reporteDao = new ReporteDao();
+
     @FXML
     public void initialize() {
         tablaReportes.setTableMenuButtonVisible(false);
         tablaReportes.getColumns().forEach(columna -> columna.setReorderable(false));
+        configurarColumnas();
+        cargarPracticantes();
     }
 
     private void configurarColumnas() {
@@ -52,14 +57,13 @@ public class ConsultarHistorialReportesControlador {
     }
 
     private void cargarPracticantes() {
-        PracticanteDao practicanteDao = new PracticanteDao();
-        int idProfesor = SesionUsuario.getInstance().getIdUsuario();
+        int idProfesor = SesionUsuario.getInstance().getUsuarioActivo().getIdUsuario();
         try {
             List<Practicante> practicantes = practicanteDao.obtenerPracticantesPorProfesor(idProfesor);
             comboBoxPracticante.setItems(FXCollections.observableArrayList(practicantes));
         } catch (UsuariosExcepcion excepcion) {
             LOGGER.log(Level.SEVERE, "Error al cargar practicantes", excepcion);
-            mostrarError("Error al cargar", "NO SE PUDIERON CARGAR LOS PRACTICANTES");
+            mostrarError("Error al cargar", "NO SE PUDIERON CARGAR LOS PRACTICANTES.");
         }
     }
 
@@ -67,22 +71,21 @@ public class ConsultarHistorialReportesControlador {
     private void seleccionarPracticante() {
         Practicante practicanteSeleccionado = comboBoxPracticante.getValue();
         if (practicanteSeleccionado != null) {
-            ocultarError();
+            ocultarPanel(panelError);
             cargarReportes(practicanteSeleccionado.getMatricula());
         }
     }
 
     private void cargarReportes(String matricula) {
-        ReporteDao reporteDao = new ReporteDao();
         try {
             List<Reporte> reportes = reporteDao.obtenerReportesPorMatricula(matricula);
             tablaReportes.setItems(FXCollections.observableArrayList(reportes));
             if (reportes.isEmpty()) {
-                mostrarError("Sin reportes", "EL PRACTICANTE AUN NO HA SUBIDO REPORTES");
+                mostrarError("Sin reportes", "EL PRACTICANTE AUN NO HA SUBIDO REPORTES.");
             }
         } catch (MensajeriaExcepcion excepcion) {
             LOGGER.log(Level.SEVERE, "Error al cargar reportes", excepcion);
-            mostrarError("Error al cargar", "NO SE PUDIERON CARGAR LOS REPORTES");
+            mostrarError("Error al cargar", "NO SE PUDIERON CARGAR LOS REPORTES.");
         }
     }
 
@@ -93,14 +96,18 @@ public class ConsultarHistorialReportesControlador {
     }
 
     private void mostrarError(String titulo, String mensaje) {
-        etiquetaTituloError.setText(titulo);
-        etiquetaMensajeError.setText(mensaje);
-        panelError.setVisible(true);
-        panelError.setManaged(true);
+        mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError, titulo, mensaje);
     }
 
-    private void ocultarError() {
-        panelError.setVisible(false);
-        panelError.setManaged(false);
+    private void mostrarPanel(Label etiquetaTitulo, Label etiquetaMensaje, VBox panel, String titulo, String mensaje) {
+        etiquetaTitulo.setText(titulo);
+        etiquetaMensaje.setText(mensaje);
+        panel.setVisible(true);
+        panel.setManaged(true);
+    }
+
+    private void ocultarPanel(VBox panel) {
+        panel.setVisible(false);
+        panel.setManaged(false);
     }
 }

@@ -1,6 +1,5 @@
 package InterfazGrafica;
 
-
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -16,37 +15,36 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-
 public class MenuAdministradorControlador {
 
     private static final Logger LOGGER = Logger.getLogger(MenuAdministradorControlador.class.getName());
 
-    @FXML private Label lblBienvenida;
-    @FXML private Label lblNombre;
-    @FXML private Label lblRol;
+    @FXML private Label etiquetaBienvenida;
+    @FXML private Label etiquetaNombre;
+    @FXML private Label etiquetaRol;
 
     @FXML
     public void initialize() {
         if (!SesionUsuario.getInstance().tieneRol(Rol.Administrador)) {
             cerrarVentanaNoAutorizada();
         } else {
-            String nombre = SesionUsuario.getInstance().getNombre();
+            String nombre = SesionUsuario.getInstance().getUsuarioActivo().getNombre();
             String rol = SesionUsuario.getInstance().getUsuarioActivo().getRol().toString();
-            lblBienvenida.setText("Bienvenido, " + nombre);
-            lblNombre.setText(nombre);
-            lblRol.setText("ROL: " + rol.toUpperCase());
+            etiquetaBienvenida.setText("Bienvenido, " + nombre);
+            etiquetaNombre.setText(nombre);
+            etiquetaRol.setText("ROL: " + rol.toUpperCase());
         }
     }
 
     private void cerrarVentanaNoAutorizada() {
         Alert alerta = new Alert(Alert.AlertType.ERROR);
         alerta.setTitle("Acceso denegado");
-        alerta.setHeaderText("No tienes permiso para acceder a esta sección.");
-        alerta.setContentText("Serás redirigido al login.");
+        alerta.setHeaderText("NO TIENES PERMISO PARA ACCEDER A ESTA SECCION.");
+        alerta.setContentText("SERAS REDIRIGIDO AL LOGIN.");
         alerta.showAndWait();
         try {
             Parent ruta = FXMLLoader.load(getClass().getResource("/InterfazGrafica/vistas/IniciarSesionVista.fxml"));
-            Stage escenario = (Stage) lblBienvenida.getScene().getWindow();
+            Stage escenario = (Stage) etiquetaBienvenida.getScene().getWindow();
             escenario.setScene(new Scene(ruta));
             escenario.show();
         } catch (IOException excepcion) {
@@ -55,29 +53,30 @@ public class MenuAdministradorControlador {
     }
 
     @FXML
-    private void botonRegistrarCoordinador(ActionEvent event) throws IOException {
+    private void botonRegistrarCoordinador(ActionEvent evento) throws IOException {
         abrirVentana("/InterfazGrafica/vistas/RegistrarCoordinadorVista.fxml", "Registrar Coordinador");
     }
 
     @FXML
-    private void botonInactivarCoordinador(ActionEvent event) throws IOException {
+    private void botonInactivarCoordinador(ActionEvent evento) throws IOException {
         abrirVentana("/InterfazGrafica/vistas/InactivarCoordinadorVista.fxml", "Inactivar Coordinador");
     }
 
     @FXML
-    private void botonRegistrarAdministrador(ActionEvent event) throws IOException {
+    private void botonRegistrarAdministrador(ActionEvent evento) throws IOException {
         abrirVentana("/InterfazGrafica/vistas/RegistrarAdministradorVista.fxml", "Registrar Administrador");
     }
+
     @FXML
-    private void botonModificarCoordinador(ActionEvent event) throws IOException {
+    private void botonModificarCoordinador(ActionEvent evento) throws IOException {
         abrirVentana("/InterfazGrafica/vistas/ModificarCoordinadorVista.fxml", "Modificar Coordinador");
     }
 
     @FXML
-    private void botonRegresar(ActionEvent event) throws IOException {
+    private void botonRegresar(ActionEvent evento) throws IOException {
         SesionUsuario.getInstance().cerrarSesion();
         Parent ruta = FXMLLoader.load(getClass().getResource("/InterfazGrafica/vistas/IniciarSesionVista.fxml"));
-        Stage escenario = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        Stage escenario = (Stage) ((Node) evento.getSource()).getScene().getWindow();
         escenario.setScene(new Scene(ruta));
         escenario.show();
     }

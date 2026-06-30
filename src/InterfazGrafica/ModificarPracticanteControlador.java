@@ -18,6 +18,7 @@ import logica.dao.objetos.PracticanteDao;
 import logica.dominio.Practicante;
 import logica.dominio.enums.Genero;
 import java.util.List;
+import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -25,6 +26,12 @@ public class ModificarPracticanteControlador {
 
     private static final Logger LOGGER = Logger.getLogger(ModificarPracticanteControlador.class.getName());
     private static final int FILAS_AFECTADAS_ESPERADAS = 1;
+    private static final int LONGITUD_MAXIMA_NOMBRE = 55;
+    private static final int LONGITUD_MAXIMA_APELLIDOS = 55;
+    private static final int LONGITUD_MAXIMA_CORREO = 100;
+    private static final int LONGITUD_MAXIMA_LENGUA_INDIGENA = 30;
+
+    private final PracticanteDao practicanteDao = new PracticanteDao();
 
     @FXML private ComboBox<Practicante> comboBoxPracticantes;
     @FXML private ComboBox<Genero> comboBoxGenero;
@@ -49,7 +56,6 @@ public class ModificarPracticanteControlador {
     }
 
     private void cargarPracticantes() {
-        PracticanteDao practicanteDao = new PracticanteDao();
         try {
             List<Practicante> lista = practicanteDao.obtenerPracticantesActivos();
             if (lista.isEmpty()) {
@@ -73,7 +79,8 @@ public class ModificarPracticanteControlador {
             @Override
             protected void updateItem(Practicante practicante, boolean vacio) {
                 super.updateItem(practicante, vacio);
-                if (vacio || practicante == null) {
+                boolean esVacioONulo = vacio || practicante == null;
+                if (esVacioONulo) {
                     setText("-- Selecciona un practicante --");
                 } else {
                     setText(practicante.getNombre() + " " + practicante.getApellidos() + " - " + practicante.getMatricula());
@@ -96,7 +103,12 @@ public class ModificarPracticanteControlador {
         campoNombre.setText(practicante.getNombre());
         campoApellidos.setText(practicante.getApellidos());
         campoCorreo.setText(practicante.getCorreo());
-        campoLenguaIndigena.setText(practicante.getLenguaIndigena() != null ? practicante.getLenguaIndigena() : "");
+        boolean tieneLengua = practicante.getLenguaIndigena() != null;
+        if (tieneLengua) {
+            campoLenguaIndigena.setText(practicante.getLenguaIndigena());
+        } else {
+            campoLenguaIndigena.setText("");
+        }
         comboBoxGenero.setValue(practicante.getGenero());
         panelFormulario.setVisible(true);
         panelFormulario.setManaged(true);
@@ -104,14 +116,14 @@ public class ModificarPracticanteControlador {
 
     @FXML
     private void botonGuardar() {
-        if (confirmarAccion("¿Desea guardar los cambios?")) {
+        if (confirmarAccion("Desea guardar los cambios?")) {
             procesarModificacion();
         }
     }
 
     private void procesarModificacion() {
-        if (camposValidos()) {
-            PracticanteDao practicanteDao = new PracticanteDao();
+        boolean camposCorrectos = verificarCampos();
+        if (camposCorrectos) {
             try {
                 Practicante practicanteModificado = construirPracticante();
                 int filasAfectadas = practicanteDao.modificarPracticante(
@@ -142,36 +154,59 @@ public class ModificarPracticanteControlador {
         return hayCamposVacios;
     }
 
-    private boolean camposValidos() {
+    private boolean verificarCampos() {
         String nombre = campoNombre.getText().trim();
         String apellidos = campoApellidos.getText().trim();
         String correo = campoCorreo.getText().trim();
-
-        List<String> campos = List.of(nombre, apellidos, correo);
-        boolean camposFormularioValidos = !camposVacios(campos);
-        boolean nombreValido = nombre.matches("[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+");
-        boolean apellidosValidos = apellidos.matches("[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+");
-        boolean correoValido = correo.matches("^[\\w.-]+@[\\w.-]+\\.[a-zA-Z]{2,}$");
-        boolean generoValido = comboBoxGenero.getValue() != null;
-
-        verificarCampos(camposFormularioValidos, nombreValido, apellidosValidos, correoValido, generoValido);
-
-        return camposFormularioValidos && nombreValido && apellidosValidos && correoValido && generoValido;
+        String lenguaIndigena = campoLenguaIndigena.getText().trim();
+        boolean camposFormularioValidos = !camposVacios(List.of(nombre, apellidos, correo));
+        boolean valido = true;
+        if (!camposFormularioValidos) {
+            mostrarError("Campos obligatorios vacios", "POR FAVOR LLENE TODOS LOS CAMPOS.");
+            valido = false;
+        } else if (!verificarLongitudes(nombre, apellidos, correo, lenguaIndigena)) {
+            valido = false;
+        } else if (!verificarFormatos(nombre, apellidos, correo)) {
+            valido = false;
+        } else if (comboBoxGenero.getValue() == null) {
+            mostrarError("Genero no seleccionado", "SELECCIONA UN GENERO PARA EL PRACTICANTE.");
+            valido = false;
+        }
+        return valido;
     }
 
-    private void verificarCampos(boolean camposFormularioValidos, boolean nombreValido,
-                                 boolean apellidosValidos, boolean correoValido, boolean generoValido) {
-        if (!camposFormularioValidos) {
-            mostrarError("Campos obligatorios vacíos", "POR FAVOR LLENE TODOS LOS CAMPOS.");
-        } else if (!nombreValido) {
-            mostrarError("Nombre inválido", "EL NOMBRE SOLO PUEDE CONTENER LETRAS.");
-        } else if (!apellidosValidos) {
-            mostrarError("Apellidos inválidos", "LOS APELLIDOS SOLO PUEDEN CONTENER LETRAS.");
-        } else if (!correoValido) {
-            mostrarError("Correo inválido", "INGRESE UN CORREO ELECTRÓNICO VÁLIDO.");
-        } else if (!generoValido) {
-            mostrarError("Género no seleccionado", "SELECCIONA UN GÉNERO PARA EL PRACTICANTE.");
+    private boolean verificarLongitudes(String nombre, String apellidos, String correo,
+                                        String lenguaIndigena) {
+        boolean valido = true;
+        if (nombre.length() > LONGITUD_MAXIMA_NOMBRE) {
+            mostrarError("Nombre demasiado largo", "EL NOMBRE NO PUEDE EXCEDER " + LONGITUD_MAXIMA_NOMBRE + " CARACTERES.");
+            valido = false;
+        } else if (apellidos.length() > LONGITUD_MAXIMA_APELLIDOS) {
+            mostrarError("Apellidos demasiado largos", "LOS APELLIDOS NO PUEDEN EXCEDER " + LONGITUD_MAXIMA_APELLIDOS + " CARACTERES.");
+            valido = false;
+        } else if (correo.length() > LONGITUD_MAXIMA_CORREO) {
+            mostrarError("Correo demasiado largo", "EL CORREO NO PUEDE EXCEDER " + LONGITUD_MAXIMA_CORREO + " CARACTERES.");
+            valido = false;
+        } else if (lenguaIndigena.length() > LONGITUD_MAXIMA_LENGUA_INDIGENA) {
+            mostrarError("Lengua indigena demasiado larga", "LA LENGUA INDIGENA NO PUEDE EXCEDER " + LONGITUD_MAXIMA_LENGUA_INDIGENA + " CARACTERES.");
+            valido = false;
         }
+        return valido;
+    }
+
+    private boolean verificarFormatos(String nombre, String apellidos, String correo) {
+        boolean valido = true;
+        if (!nombre.matches("[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+")) {
+            mostrarError("Nombre invalido", "EL NOMBRE SOLO PUEDE CONTENER LETRAS.");
+            valido = false;
+        } else if (!apellidos.matches("[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+")) {
+            mostrarError("Apellidos invalidos", "LOS APELLIDOS SOLO PUEDEN CONTENER LETRAS.");
+            valido = false;
+        } else if (!correo.matches("^[\\w.-]+@[\\w.-]+\\.[a-zA-Z]{2,}$")) {
+            mostrarError("Correo invalido", "INGRESE UN CORREO ELECTRONICO VALIDO.");
+            valido = false;
+        }
+        return valido;
     }
 
     private Practicante construirPracticante() {
@@ -188,7 +223,7 @@ public class ModificarPracticanteControlador {
 
     @FXML
     private void botonCancelar() {
-        if (confirmarAccion("¿Seguro que desea cancelar?")) {
+        if (confirmarAccion("Seguro que desea cancelar?")) {
             ocultarTodo();
             comboBoxPracticantes.setValue(null);
         }
@@ -202,13 +237,18 @@ public class ModificarPracticanteControlador {
 
     private boolean confirmarAccion(String mensaje) {
         Alert alerta = new Alert(Alert.AlertType.CONFIRMATION);
-        alerta.setTitle("Confirmación");
+        boolean confirmado = false;
+        alerta.setTitle("Confirmacion");
         alerta.setHeaderText(mensaje);
         alerta.setContentText("");
-        ButtonType botonSi = new ButtonType("Sí");
+        ButtonType botonSi = new ButtonType("Si");
         ButtonType botonNo = new ButtonType("No");
         alerta.getButtonTypes().setAll(botonSi, botonNo);
-        return alerta.showAndWait().filter(botonPresionado -> botonPresionado == botonSi).isPresent();
+        Optional<ButtonType> resultado = alerta.showAndWait();
+        if (resultado.isPresent() && resultado.get() == botonSi) {
+            confirmado = true;
+        }
+        return confirmado;
     }
 
     private void ocultarTodo() {
@@ -217,12 +257,10 @@ public class ModificarPracticanteControlador {
         ocultarPanel(panelFormulario);
     }
 
-    private void mostrarPanel(VBox panel, Label etiquetaTitulo, Label etiquetaMensaje,
-                              String titulo, String mensaje) {
-        etiquetaTitulo.setText(titulo);
-        etiquetaMensaje.setText(mensaje);
-        panel.setVisible(true);
-        panel.setManaged(true);
+    private void mostrarPanel(VBox panelMostrar, VBox panelOcultar) {
+        panelMostrar.setVisible(true);
+        panelMostrar.setManaged(true);
+        ocultarPanel(panelOcultar);
     }
 
     private void ocultarPanel(VBox panel) {
@@ -231,12 +269,14 @@ public class ModificarPracticanteControlador {
     }
 
     private void mostrarError(String titulo, String mensaje) {
-        ocultarPanel(panelExito);
-        mostrarPanel(panelError, etiquetaTituloError, etiquetaMensajeError, titulo, mensaje);
+        etiquetaTituloError.setText(titulo);
+        etiquetaMensajeError.setText(mensaje);
+        mostrarPanel(panelError, panelExito);
     }
 
     private void mostrarExito(String titulo, String mensaje) {
-        ocultarPanel(panelError);
-        mostrarPanel(panelExito, etiquetaTituloExito, etiquetaMensajeExito, titulo, mensaje);
+        etiquetaTituloExito.setText(titulo);
+        etiquetaMensajeExito.setText(mensaje);
+        mostrarPanel(panelExito, panelError);
     }
 }

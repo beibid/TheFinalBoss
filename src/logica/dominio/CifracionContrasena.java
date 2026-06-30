@@ -18,8 +18,8 @@ public class CifracionContrasena {
             MessageDigest messageDigest = MessageDigest.getInstance("SHA-256");
             byte[] hash = messageDigest.digest(contrasena.getBytes(StandardCharsets.UTF_8));
             StringBuilder constructorHex = new StringBuilder(2 * hash.length);
-            for (byte b : hash) {
-                constructorHex.append(String.format("%02x", b));
+            for (byte byteCifrado : hash) {
+                constructorHex.append(String.format("%02x", byteCifrado));
             }
             hashResultante = constructorHex.toString();
         } catch (NoSuchAlgorithmException excepcion) {

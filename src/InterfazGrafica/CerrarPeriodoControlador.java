@@ -54,15 +54,16 @@ public class CerrarPeriodoControlador {
 
     @FXML
     private void botonCerrarPeriodo() {
-        ocultarError();
-        ocultarExito();
+        ocultarPanel(panelError);
+        ocultarPanel(panelExito);
         PeriodoUniversitario periodoSeleccionado = comboBoxPeriodo.getValue();
         if (periodoSeleccionado == null) {
             mostrarError("Periodo no seleccionado", "POR FAVOR SELECCIONA UN PERIODO PARA CERRAR.");
-            return;
-        }
-        if (confirmarAccion("¿Seguro que desea cerrar el periodo " + periodoSeleccionado.getNombre() + "?")) {
-            if (hayPeriodoAbierto()) {
+        } else {
+            boolean cierreConfirmado = confirmarAccion("¿Seguro que desea cerrar el periodo "
+                    + periodoSeleccionado.getNombre() + "?")
+                    && hayPeriodoAbierto();
+            if (cierreConfirmado) {
                 ejecutarCierre(periodoSeleccionado.getIdPeriodo());
             }
         }
@@ -109,36 +110,32 @@ public class CerrarPeriodoControlador {
 
     private boolean confirmarAccion(String mensaje) {
         Alert alerta = new Alert(Alert.AlertType.CONFIRMATION);
-        alerta.setTitle("Confirmación");
+        alerta.setTitle("Confirmacion");
         alerta.setHeaderText(mensaje);
         alerta.setContentText("");
-        ButtonType botonSi = new ButtonType("Sí");
+        ButtonType botonSi = new ButtonType("Si");
         ButtonType botonNo = new ButtonType("No");
         alerta.getButtonTypes().setAll(botonSi, botonNo);
         return alerta.showAndWait().filter(botonPresionado -> botonPresionado == botonSi).isPresent();
     }
 
     private void mostrarError(String titulo, String mensaje) {
-        etiquetaTituloError.setText(titulo);
-        etiquetaMensajeError.setText(mensaje);
-        panelError.setVisible(true);
-        panelError.setManaged(true);
-    }
-
-    private void ocultarError() {
-        panelError.setVisible(false);
-        panelError.setManaged(false);
+        mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError, titulo, mensaje);
     }
 
     private void mostrarExito(String titulo, String mensaje) {
-        etiquetaTituloExito.setText(titulo);
-        etiquetaMensajeExito.setText(mensaje);
-        panelExito.setVisible(true);
-        panelExito.setManaged(true);
+        mostrarPanel(etiquetaTituloExito, etiquetaMensajeExito, panelExito, titulo, mensaje);
     }
 
-    private void ocultarExito() {
-        panelExito.setVisible(false);
-        panelExito.setManaged(false);
+    private void mostrarPanel(Label etiquetaTitulo, Label etiquetaMensaje, VBox panel, String titulo, String mensaje) {
+        etiquetaTitulo.setText(titulo);
+        etiquetaMensaje.setText(mensaje);
+        panel.setVisible(true);
+        panel.setManaged(true);
+    }
+
+    private void ocultarPanel(VBox panel) {
+        panel.setVisible(false);
+        panel.setManaged(false);
     }
 }

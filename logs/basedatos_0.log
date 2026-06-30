@@ -1,342 +1,456 @@
-jun 29, 2026 10:39:14 A.M. logica.dao.objetos.UsuarioDao buscarUsuario
-SEVERE: Error al buscar usuario
-java.sql.SQLException: No se pudo conectar a la base de datos
-	at acceso.bd.ConexionBaseDeDatos.conectar(ConexionBaseDeDatos.java:88)
-	at logica.dao.objetos.UsuarioDao.buscarUsuario(UsuarioDao.java:105)
-	at InterfazGrafica.IniciarSesionControlador.botonIniciarSesion(IniciarSesionControlador.java:44)
-	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:104)
-	at java.base/java.lang.reflect.Method.invoke(Method.java:565)
-	at com.sun.javafx.reflect.Trampoline.invoke(MethodUtil.java:65)
-	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:104)
-	at java.base/java.lang.reflect.Method.invoke(Method.java:565)
-	at javafx.base@26.0.1/com.sun.javafx.reflect.MethodUtil.invoke(MethodUtil.java:112)
-	at javafx.fxml@26.0.1/com.sun.javafx.fxml.MethodHelper.invoke(MethodHelper.java:78)
-	at javafx.fxml@26.0.1/javafx.fxml.FXMLLoader$MethodHandler.invoke(FXMLLoader.java:1847)
-	at javafx.fxml@26.0.1/javafx.fxml.FXMLLoader$ControllerMethodEventHandler.handle(FXMLLoader.java:1718)
-	at javafx.base@26.0.1/com.sun.javafx.event.CompositeEventHandler.dispatchBubblingEvent(CompositeEventHandler.java:86)
-	at javafx.base@26.0.1/com.sun.javafx.event.EventHandlerManager.dispatchBubblingEvent(EventHandlerManager.java:232)
-	at javafx.base@26.0.1/com.sun.javafx.event.EventHandlerManager.dispatchBubblingEvent(EventHandlerManager.java:189)
-	at javafx.base@26.0.1/com.sun.javafx.event.CompositeEventDispatcher.dispatchBubblingEvent(CompositeEventDispatcher.java:59)
-	at javafx.base@26.0.1/com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:58)
-	at javafx.base@26.0.1/com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
-	at javafx.base@26.0.1/com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
-	at javafx.base@26.0.1/com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
-	at javafx.base@26.0.1/com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
-	at javafx.base@26.0.1/com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
-	at javafx.base@26.0.1/com.sun.javafx.event.EventUtil.fireEventImpl(EventUtil.java:74)
-	at javafx.base@26.0.1/com.sun.javafx.event.EventUtil.fireEvent(EventUtil.java:49)
-	at javafx.base@26.0.1/javafx.event.Event.fireEvent(Event.java:199)
-	at javafx.graphics@26.0.1/javafx.scene.Node.fireEvent(Node.java:9092)
-	at javafx.controls@26.0.1/javafx.scene.control.Button.fire(Button.java:203)
-	at javafx.controls@26.0.1/com.sun.javafx.scene.control.behavior.ButtonBehavior.mouseReleased(ButtonBehavior.java:207)
-	at javafx.controls@26.0.1/com.sun.javafx.scene.control.inputmap.InputMap.handle(InputMap.java:274)
-	at javafx.base@26.0.1/com.sun.javafx.event.CompositeEventHandler$NormalEventHandlerRecord.handleBubblingEvent(CompositeEventHandler.java:247)
-	at javafx.base@26.0.1/com.sun.javafx.event.CompositeEventHandler.dispatchBubblingEvent(CompositeEventHandler.java:80)
-	at javafx.base@26.0.1/com.sun.javafx.event.EventHandlerManager.dispatchBubblingEvent(EventHandlerManager.java:232)
-	at javafx.base@26.0.1/com.sun.javafx.event.EventHandlerManager.dispatchBubblingEvent(EventHandlerManager.java:189)
-	at javafx.base@26.0.1/com.sun.javafx.event.CompositeEventDispatcher.dispatchBubblingEvent(CompositeEventDispatcher.java:59)
-	at javafx.base@26.0.1/com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:58)
-	at javafx.base@26.0.1/com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
-	at javafx.base@26.0.1/com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
-	at javafx.base@26.0.1/com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
-	at javafx.base@26.0.1/com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
-	at javafx.base@26.0.1/com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
-	at javafx.base@26.0.1/com.sun.javafx.event.EventUtil.fireEventImpl(EventUtil.java:74)
-	at javafx.base@26.0.1/com.sun.javafx.event.EventUtil.fireEvent(EventUtil.java:54)
-	at javafx.base@26.0.1/javafx.event.Event.fireEvent(Event.java:199)
-	at javafx.graphics@26.0.1/javafx.scene.Scene$MouseHandler.process(Scene.java:4134)
-	at javafx.graphics@26.0.1/javafx.scene.Scene.processMouseEvent(Scene.java:1953)
-	at javafx.graphics@26.0.1/javafx.scene.Scene$ScenePeerListener.mouseEvent(Scene.java:2802)
-	at javafx.graphics@26.0.1/com.sun.javafx.tk.quantum.GlassViewEventHandler$MouseEventNotification.get(GlassViewEventHandler.java:353)
-	at javafx.graphics@26.0.1/com.sun.javafx.tk.quantum.GlassViewEventHandler$MouseEventNotification.get(GlassViewEventHandler.java:255)
-	at javafx.graphics@26.0.1/com.sun.javafx.tk.quantum.QuantumToolkit.runWithoutRenderLock(QuantumToolkit.java:429)
-	at javafx.graphics@26.0.1/com.sun.javafx.tk.quantum.GlassViewEventHandler.handleMouseEvent(GlassViewEventHandler.java:387)
-	at javafx.graphics@26.0.1/com.sun.glass.ui.View.handleMouseEvent(View.java:573)
-	at javafx.graphics@26.0.1/com.sun.glass.ui.View.notifyMouse(View.java:970)
-	at javafx.graphics@26.0.1/com.sun.glass.ui.mac.MacView.notifyMouse(MacView.java:131)
-Caused by: com.mysql.cj.jdbc.exceptions.CommunicationsException: Communications link failure
-
-The last packet sent successfully to the server was 0 milliseconds ago. The driver has not received any packets from the server.
-	at com.mysql.cj.jdbc.exceptions.SQLError.createCommunicationsException(SQLError.java:165)
-	at com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:55)
-	at com.mysql.cj.jdbc.ConnectionImpl.createNewIO(ConnectionImpl.java:840)
-	at com.mysql.cj.jdbc.ConnectionImpl.<init>(ConnectionImpl.java:416)
-	at com.mysql.cj.jdbc.ConnectionImpl.getInstance(ConnectionImpl.java:237)
-	at com.mysql.cj.jdbc.NonRegisteringDriver.connect(NonRegisteringDriver.java:180)
-	at java.sql/java.sql.DriverManager.getConnection(DriverManager.java:613)
-	at java.sql/java.sql.DriverManager.getConnection(DriverManager.java:199)
-	at acceso.bd.ConexionBaseDeDatos.conectar(ConexionBaseDeDatos.java:74)
-	... 52 more
-Caused by: com.mysql.cj.exceptions.CJCommunicationsException: Communications link failure
-
-The last packet sent successfully to the server was 0 milliseconds ago. The driver has not received any packets from the server.
-	at java.base/jdk.internal.reflect.DirectConstructorHandleAccessor.newInstance(DirectConstructorHandleAccessor.java:62)
-	at java.base/java.lang.reflect.Constructor.newInstanceWithCaller(Constructor.java:499)
-	at java.base/java.lang.reflect.Constructor.newInstance(Constructor.java:483)
-	at com.mysql.cj.exceptions.ExceptionFactory.createException(ExceptionFactory.java:52)
-	at com.mysql.cj.exceptions.ExceptionFactory.createException(ExceptionFactory.java:95)
-	at com.mysql.cj.exceptions.ExceptionFactory.createException(ExceptionFactory.java:140)
-	at com.mysql.cj.exceptions.ExceptionFactory.createCommunicationsException(ExceptionFactory.java:156)
-	at com.mysql.cj.protocol.a.NativeSocketConnection.connect(NativeSocketConnection.java:79)
-	at com.mysql.cj.NativeSession.connect(NativeSession.java:142)
-	at com.mysql.cj.jdbc.ConnectionImpl.connectOneTryOnly(ConnectionImpl.java:964)
-	at com.mysql.cj.jdbc.ConnectionImpl.createNewIO(ConnectionImpl.java:828)
-	... 58 more
-Caused by: java.net.ConnectException: Connection refused
-	at java.base/sun.nio.ch.Net.connect0(Native Method)
-	at java.base/sun.nio.ch.Net.connect(Net.java:546)
-	at java.base/sun.nio.ch.Net.connect(Net.java:535)
-	at java.base/sun.nio.ch.NioSocketImpl.connect(NioSocketImpl.java:585)
-	at java.base/java.net.SocksSocketImpl.connect(SocksSocketImpl.java:284)
-	at java.base/java.net.Socket.connect(Socket.java:659)
-	at com.mysql.cj.protocol.StandardSocketFactory.connect(StandardSocketFactory.java:144)
-	at com.mysql.cj.protocol.a.NativeSocketConnection.connect(NativeSocketConnection.java:53)
-	... 61 more
-
-jun 29, 2026 10:40:48 A.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
+jun 30, 2026 12:21:04 A.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexion a la base de datos...
+jun 30, 2026 12:21:04 A.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexion a base de datos realizada exitosamente en 10 ms
+jun 30, 2026 12:21:06 A.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexion a la base de datos...
+jun 30, 2026 12:21:06 A.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexion a base de datos realizada exitosamente en 11 ms
+jun 30, 2026 12:39:26 A.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
 INFO: Configuracion de base de datos cargada correctamente
-jun 29, 2026 10:40:48 A.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
+jun 30, 2026 12:39:26 A.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
 CONFIG: URL de conexion: jdbc:mysql://localhost:3306/practicas_profesionales
-jun 29, 2026 10:40:48 A.M. acceso.bd.ConexionBaseDeDatos conectar
+jun 30, 2026 12:39:26 A.M. acceso.bd.ConexionBaseDeDatos conectar
 FINE: Intentando establecer conexion a la base de datos...
-jun 29, 2026 10:40:48 A.M. acceso.bd.ConexionBaseDeDatos conectar
-INFO: Conexion a base de datos realizada exitosamente en 143 ms
-jun 29, 2026 10:43:51 A.M. acceso.bd.ConexionBaseDeDatos conectar
+jun 30, 2026 12:39:26 A.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexion a base de datos realizada exitosamente en 160 ms
+jun 30, 2026 12:39:28 A.M. acceso.bd.ConexionBaseDeDatos conectar
 FINE: Intentando establecer conexion a la base de datos...
-jun 29, 2026 10:43:51 A.M. acceso.bd.ConexionBaseDeDatos conectar
-INFO: Conexion a base de datos realizada exitosamente en 15 ms
-jun 29, 2026 10:44:30 A.M. acceso.bd.ConexionBaseDeDatos conectar
-FINE: Intentando establecer conexion a la base de datos...
-jun 29, 2026 10:44:30 A.M. acceso.bd.ConexionBaseDeDatos conectar
-SEVERE: Conexion fallida despues de 8 ms - URL: jdbc:mysql://localhost:3306/practicas_profesionales
-com.mysql.cj.jdbc.exceptions.CommunicationsException: Communications link failure
-
-The last packet sent successfully to the server was 0 milliseconds ago. The driver has not received any packets from the server.
-	at com.mysql.cj.jdbc.exceptions.SQLError.createCommunicationsException(SQLError.java:165)
-	at com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:55)
-	at com.mysql.cj.jdbc.ConnectionImpl.createNewIO(ConnectionImpl.java:840)
-	at com.mysql.cj.jdbc.ConnectionImpl.<init>(ConnectionImpl.java:416)
-	at com.mysql.cj.jdbc.ConnectionImpl.getInstance(ConnectionImpl.java:237)
-	at com.mysql.cj.jdbc.NonRegisteringDriver.connect(NonRegisteringDriver.java:180)
-	at java.sql/java.sql.DriverManager.getConnection(DriverManager.java:613)
-	at java.sql/java.sql.DriverManager.getConnection(DriverManager.java:199)
-	at acceso.bd.ConexionBaseDeDatos.conectar(ConexionBaseDeDatos.java:74)
-	at logica.dao.objetos.CoordinadorDao.existeCoordinadorActivo(CoordinadorDao.java:248)
-	at InterfazGrafica.RegistrarCoordinadorControlador.verificarCoordinadorActivo(RegistrarCoordinadorControlador.java:94)
-	at InterfazGrafica.RegistrarCoordinadorControlador.procesarRegistro(RegistrarCoordinadorControlador.java:74)
-	at InterfazGrafica.RegistrarCoordinadorControlador.botonRegistrar(RegistrarCoordinadorControlador.java:44)
-	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:104)
-	at java.base/java.lang.reflect.Method.invoke(Method.java:565)
-	at com.sun.javafx.reflect.Trampoline.invoke(MethodUtil.java:65)
-	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:104)
-	at java.base/java.lang.reflect.Method.invoke(Method.java:565)
-	at javafx.base@26.0.1/com.sun.javafx.reflect.MethodUtil.invoke(MethodUtil.java:112)
-	at javafx.fxml@26.0.1/com.sun.javafx.fxml.MethodHelper.invoke(MethodHelper.java:78)
-	at javafx.fxml@26.0.1/javafx.fxml.FXMLLoader$MethodHandler.invoke(FXMLLoader.java:1847)
-	at javafx.fxml@26.0.1/javafx.fxml.FXMLLoader$ControllerMethodEventHandler.handle(FXMLLoader.java:1718)
-	at javafx.base@26.0.1/com.sun.javafx.event.CompositeEventHandler.dispatchBubblingEvent(CompositeEventHandler.java:86)
-	at javafx.base@26.0.1/com.sun.javafx.event.EventHandlerManager.dispatchBubblingEvent(EventHandlerManager.java:232)
-	at javafx.base@26.0.1/com.sun.javafx.event.EventHandlerManager.dispatchBubblingEvent(EventHandlerManager.java:189)
-	at javafx.base@26.0.1/com.sun.javafx.event.CompositeEventDispatcher.dispatchBubblingEvent(CompositeEventDispatcher.java:59)
-	at javafx.base@26.0.1/com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:58)
-	at javafx.base@26.0.1/com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
-	at javafx.base@26.0.1/com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
-	at javafx.base@26.0.1/com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
-	at javafx.base@26.0.1/com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
-	at javafx.base@26.0.1/com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
-	at javafx.base@26.0.1/com.sun.javafx.event.EventUtil.fireEventImpl(EventUtil.java:74)
-	at javafx.base@26.0.1/com.sun.javafx.event.EventUtil.fireEvent(EventUtil.java:49)
-	at javafx.base@26.0.1/javafx.event.Event.fireEvent(Event.java:199)
-	at javafx.graphics@26.0.1/javafx.scene.Node.fireEvent(Node.java:9092)
-	at javafx.controls@26.0.1/javafx.scene.control.Button.fire(Button.java:203)
-	at javafx.controls@26.0.1/com.sun.javafx.scene.control.behavior.ButtonBehavior.mouseReleased(ButtonBehavior.java:207)
-	at javafx.controls@26.0.1/com.sun.javafx.scene.control.inputmap.InputMap.handle(InputMap.java:274)
-	at javafx.base@26.0.1/com.sun.javafx.event.CompositeEventHandler$NormalEventHandlerRecord.handleBubblingEvent(CompositeEventHandler.java:247)
-	at javafx.base@26.0.1/com.sun.javafx.event.CompositeEventHandler.dispatchBubblingEvent(CompositeEventHandler.java:80)
-	at javafx.base@26.0.1/com.sun.javafx.event.EventHandlerManager.dispatchBubblingEvent(EventHandlerManager.java:232)
-	at javafx.base@26.0.1/com.sun.javafx.event.EventHandlerManager.dispatchBubblingEvent(EventHandlerManager.java:189)
-	at javafx.base@26.0.1/com.sun.javafx.event.CompositeEventDispatcher.dispatchBubblingEvent(CompositeEventDispatcher.java:59)
-	at javafx.base@26.0.1/com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:58)
-	at javafx.base@26.0.1/com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
-	at javafx.base@26.0.1/com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
-	at javafx.base@26.0.1/com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
-	at javafx.base@26.0.1/com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
-	at javafx.base@26.0.1/com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
-	at javafx.base@26.0.1/com.sun.javafx.event.EventUtil.fireEventImpl(EventUtil.java:74)
-	at javafx.base@26.0.1/com.sun.javafx.event.EventUtil.fireEvent(EventUtil.java:54)
-	at javafx.base@26.0.1/javafx.event.Event.fireEvent(Event.java:199)
-	at javafx.graphics@26.0.1/javafx.scene.Scene$MouseHandler.process(Scene.java:4134)
-	at javafx.graphics@26.0.1/javafx.scene.Scene.processMouseEvent(Scene.java:1953)
-	at javafx.graphics@26.0.1/javafx.scene.Scene$ScenePeerListener.mouseEvent(Scene.java:2802)
-	at javafx.graphics@26.0.1/com.sun.javafx.tk.quantum.GlassViewEventHandler$MouseEventNotification.get(GlassViewEventHandler.java:353)
-	at javafx.graphics@26.0.1/com.sun.javafx.tk.quantum.GlassViewEventHandler$MouseEventNotification.get(GlassViewEventHandler.java:255)
-	at javafx.graphics@26.0.1/com.sun.javafx.tk.quantum.QuantumToolkit.runWithoutRenderLock(QuantumToolkit.java:429)
-	at javafx.graphics@26.0.1/com.sun.javafx.tk.quantum.GlassViewEventHandler.handleMouseEvent(GlassViewEventHandler.java:387)
-	at javafx.graphics@26.0.1/com.sun.glass.ui.View.handleMouseEvent(View.java:573)
-	at javafx.graphics@26.0.1/com.sun.glass.ui.View.notifyMouse(View.java:970)
-	at javafx.graphics@26.0.1/com.sun.glass.ui.mac.MacView.notifyMouse(MacView.java:131)
-Caused by: com.mysql.cj.exceptions.CJCommunicationsException: Communications link failure
-
-The last packet sent successfully to the server was 0 milliseconds ago. The driver has not received any packets from the server.
-	at java.base/jdk.internal.reflect.DirectConstructorHandleAccessor.newInstance(DirectConstructorHandleAccessor.java:62)
-	at java.base/java.lang.reflect.Constructor.newInstanceWithCaller(Constructor.java:499)
-	at java.base/java.lang.reflect.Constructor.newInstance(Constructor.java:483)
-	at com.mysql.cj.exceptions.ExceptionFactory.createException(ExceptionFactory.java:52)
-	at com.mysql.cj.exceptions.ExceptionFactory.createException(ExceptionFactory.java:95)
-	at com.mysql.cj.exceptions.ExceptionFactory.createException(ExceptionFactory.java:140)
-	at com.mysql.cj.exceptions.ExceptionFactory.createCommunicationsException(ExceptionFactory.java:156)
-	at com.mysql.cj.protocol.a.NativeSocketConnection.connect(NativeSocketConnection.java:79)
-	at com.mysql.cj.NativeSession.connect(NativeSession.java:142)
-	at com.mysql.cj.jdbc.ConnectionImpl.connectOneTryOnly(ConnectionImpl.java:964)
-	at com.mysql.cj.jdbc.ConnectionImpl.createNewIO(ConnectionImpl.java:828)
-	... 60 more
-Caused by: java.net.ConnectException: Connection refused
-	at java.base/sun.nio.ch.Net.connect0(Native Method)
-	at java.base/sun.nio.ch.Net.connect(Net.java:546)
-	at java.base/sun.nio.ch.Net.connect(Net.java:535)
-	at java.base/sun.nio.ch.NioSocketImpl.connect(NioSocketImpl.java:585)
-	at java.base/java.net.SocksSocketImpl.connect(SocksSocketImpl.java:284)
-	at java.base/java.net.Socket.connect(Socket.java:659)
-	at com.mysql.cj.protocol.StandardSocketFactory.connect(StandardSocketFactory.java:144)
-	at com.mysql.cj.protocol.a.NativeSocketConnection.connect(NativeSocketConnection.java:53)
-	... 63 more
-
-jun 29, 2026 10:44:30 A.M. logica.dao.objetos.CoordinadorDao existeCoordinadorActivo
-SEVERE: Error al verificar coordinadores activos
-java.sql.SQLException: No se pudo conectar a la base de datos
-	at acceso.bd.ConexionBaseDeDatos.conectar(ConexionBaseDeDatos.java:88)
-	at logica.dao.objetos.CoordinadorDao.existeCoordinadorActivo(CoordinadorDao.java:248)
-	at InterfazGrafica.RegistrarCoordinadorControlador.verificarCoordinadorActivo(RegistrarCoordinadorControlador.java:94)
-	at InterfazGrafica.RegistrarCoordinadorControlador.procesarRegistro(RegistrarCoordinadorControlador.java:74)
-	at InterfazGrafica.RegistrarCoordinadorControlador.botonRegistrar(RegistrarCoordinadorControlador.java:44)
-	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:104)
-	at java.base/java.lang.reflect.Method.invoke(Method.java:565)
-	at com.sun.javafx.reflect.Trampoline.invoke(MethodUtil.java:65)
-	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:104)
-	at java.base/java.lang.reflect.Method.invoke(Method.java:565)
-	at javafx.base@26.0.1/com.sun.javafx.reflect.MethodUtil.invoke(MethodUtil.java:112)
-	at javafx.fxml@26.0.1/com.sun.javafx.fxml.MethodHelper.invoke(MethodHelper.java:78)
-	at javafx.fxml@26.0.1/javafx.fxml.FXMLLoader$MethodHandler.invoke(FXMLLoader.java:1847)
-	at javafx.fxml@26.0.1/javafx.fxml.FXMLLoader$ControllerMethodEventHandler.handle(FXMLLoader.java:1718)
-	at javafx.base@26.0.1/com.sun.javafx.event.CompositeEventHandler.dispatchBubblingEvent(CompositeEventHandler.java:86)
-	at javafx.base@26.0.1/com.sun.javafx.event.EventHandlerManager.dispatchBubblingEvent(EventHandlerManager.java:232)
-	at javafx.base@26.0.1/com.sun.javafx.event.EventHandlerManager.dispatchBubblingEvent(EventHandlerManager.java:189)
-	at javafx.base@26.0.1/com.sun.javafx.event.CompositeEventDispatcher.dispatchBubblingEvent(CompositeEventDispatcher.java:59)
-	at javafx.base@26.0.1/com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:58)
-	at javafx.base@26.0.1/com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
-	at javafx.base@26.0.1/com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
-	at javafx.base@26.0.1/com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
-	at javafx.base@26.0.1/com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
-	at javafx.base@26.0.1/com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
-	at javafx.base@26.0.1/com.sun.javafx.event.EventUtil.fireEventImpl(EventUtil.java:74)
-	at javafx.base@26.0.1/com.sun.javafx.event.EventUtil.fireEvent(EventUtil.java:49)
-	at javafx.base@26.0.1/javafx.event.Event.fireEvent(Event.java:199)
-	at javafx.graphics@26.0.1/javafx.scene.Node.fireEvent(Node.java:9092)
-	at javafx.controls@26.0.1/javafx.scene.control.Button.fire(Button.java:203)
-	at javafx.controls@26.0.1/com.sun.javafx.scene.control.behavior.ButtonBehavior.mouseReleased(ButtonBehavior.java:207)
-	at javafx.controls@26.0.1/com.sun.javafx.scene.control.inputmap.InputMap.handle(InputMap.java:274)
-	at javafx.base@26.0.1/com.sun.javafx.event.CompositeEventHandler$NormalEventHandlerRecord.handleBubblingEvent(CompositeEventHandler.java:247)
-	at javafx.base@26.0.1/com.sun.javafx.event.CompositeEventHandler.dispatchBubblingEvent(CompositeEventHandler.java:80)
-	at javafx.base@26.0.1/com.sun.javafx.event.EventHandlerManager.dispatchBubblingEvent(EventHandlerManager.java:232)
-	at javafx.base@26.0.1/com.sun.javafx.event.EventHandlerManager.dispatchBubblingEvent(EventHandlerManager.java:189)
-	at javafx.base@26.0.1/com.sun.javafx.event.CompositeEventDispatcher.dispatchBubblingEvent(CompositeEventDispatcher.java:59)
-	at javafx.base@26.0.1/com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:58)
-	at javafx.base@26.0.1/com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
-	at javafx.base@26.0.1/com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
-	at javafx.base@26.0.1/com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
-	at javafx.base@26.0.1/com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
-	at javafx.base@26.0.1/com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
-	at javafx.base@26.0.1/com.sun.javafx.event.EventUtil.fireEventImpl(EventUtil.java:74)
-	at javafx.base@26.0.1/com.sun.javafx.event.EventUtil.fireEvent(EventUtil.java:54)
-	at javafx.base@26.0.1/javafx.event.Event.fireEvent(Event.java:199)
-	at javafx.graphics@26.0.1/javafx.scene.Scene$MouseHandler.process(Scene.java:4134)
-	at javafx.graphics@26.0.1/javafx.scene.Scene.processMouseEvent(Scene.java:1953)
-	at javafx.graphics@26.0.1/javafx.scene.Scene$ScenePeerListener.mouseEvent(Scene.java:2802)
-	at javafx.graphics@26.0.1/com.sun.javafx.tk.quantum.GlassViewEventHandler$MouseEventNotification.get(GlassViewEventHandler.java:353)
-	at javafx.graphics@26.0.1/com.sun.javafx.tk.quantum.GlassViewEventHandler$MouseEventNotification.get(GlassViewEventHandler.java:255)
-	at javafx.graphics@26.0.1/com.sun.javafx.tk.quantum.QuantumToolkit.runWithoutRenderLock(QuantumToolkit.java:429)
-	at javafx.graphics@26.0.1/com.sun.javafx.tk.quantum.GlassViewEventHandler.handleMouseEvent(GlassViewEventHandler.java:387)
-	at javafx.graphics@26.0.1/com.sun.glass.ui.View.handleMouseEvent(View.java:573)
-	at javafx.graphics@26.0.1/com.sun.glass.ui.View.notifyMouse(View.java:970)
-	at javafx.graphics@26.0.1/com.sun.glass.ui.mac.MacView.notifyMouse(MacView.java:131)
-Caused by: com.mysql.cj.jdbc.exceptions.CommunicationsException: Communications link failure
-
-The last packet sent successfully to the server was 0 milliseconds ago. The driver has not received any packets from the server.
-	at com.mysql.cj.jdbc.exceptions.SQLError.createCommunicationsException(SQLError.java:165)
-	at com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:55)
-	at com.mysql.cj.jdbc.ConnectionImpl.createNewIO(ConnectionImpl.java:840)
-	at com.mysql.cj.jdbc.ConnectionImpl.<init>(ConnectionImpl.java:416)
-	at com.mysql.cj.jdbc.ConnectionImpl.getInstance(ConnectionImpl.java:237)
-	at com.mysql.cj.jdbc.NonRegisteringDriver.connect(NonRegisteringDriver.java:180)
-	at java.sql/java.sql.DriverManager.getConnection(DriverManager.java:613)
-	at java.sql/java.sql.DriverManager.getConnection(DriverManager.java:199)
-	at acceso.bd.ConexionBaseDeDatos.conectar(ConexionBaseDeDatos.java:74)
-	... 54 more
-Caused by: com.mysql.cj.exceptions.CJCommunicationsException: Communications link failure
-
-The last packet sent successfully to the server was 0 milliseconds ago. The driver has not received any packets from the server.
-	at java.base/jdk.internal.reflect.DirectConstructorHandleAccessor.newInstance(DirectConstructorHandleAccessor.java:62)
-	at java.base/java.lang.reflect.Constructor.newInstanceWithCaller(Constructor.java:499)
-	at java.base/java.lang.reflect.Constructor.newInstance(Constructor.java:483)
-	at com.mysql.cj.exceptions.ExceptionFactory.createException(ExceptionFactory.java:52)
-	at com.mysql.cj.exceptions.ExceptionFactory.createException(ExceptionFactory.java:95)
-	at com.mysql.cj.exceptions.ExceptionFactory.createException(ExceptionFactory.java:140)
-	at com.mysql.cj.exceptions.ExceptionFactory.createCommunicationsException(ExceptionFactory.java:156)
-	at com.mysql.cj.protocol.a.NativeSocketConnection.connect(NativeSocketConnection.java:79)
-	at com.mysql.cj.NativeSession.connect(NativeSession.java:142)
-	at com.mysql.cj.jdbc.ConnectionImpl.connectOneTryOnly(ConnectionImpl.java:964)
-	at com.mysql.cj.jdbc.ConnectionImpl.createNewIO(ConnectionImpl.java:828)
-	... 60 more
-Caused by: java.net.ConnectException: Connection refused
-	at java.base/sun.nio.ch.Net.connect0(Native Method)
-	at java.base/sun.nio.ch.Net.connect(Net.java:546)
-	at java.base/sun.nio.ch.Net.connect(Net.java:535)
-	at java.base/sun.nio.ch.NioSocketImpl.connect(NioSocketImpl.java:585)
-	at java.base/java.net.SocksSocketImpl.connect(SocksSocketImpl.java:284)
-	at java.base/java.net.Socket.connect(Socket.java:659)
-	at com.mysql.cj.protocol.StandardSocketFactory.connect(StandardSocketFactory.java:144)
-	at com.mysql.cj.protocol.a.NativeSocketConnection.connect(NativeSocketConnection.java:53)
-	... 63 more
-
-jun 29, 2026 10:46:42 A.M. acceso.bd.ConexionBaseDeDatos conectar
-FINE: Intentando establecer conexion a la base de datos...
-jun 29, 2026 10:46:42 A.M. acceso.bd.ConexionBaseDeDatos conectar
-INFO: Conexion a base de datos realizada exitosamente en 23 ms
-jun 29, 2026 10:48:01 A.M. acceso.bd.ConexionBaseDeDatos conectar
-FINE: Intentando establecer conexion a la base de datos...
-jun 29, 2026 10:48:01 A.M. acceso.bd.ConexionBaseDeDatos conectar
-INFO: Conexion a base de datos realizada exitosamente en 17 ms
-jun 29, 2026 10:49:11 A.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
-INFO: Configuracion de base de datos cargada correctamente
-jun 29, 2026 10:49:11 A.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
-CONFIG: URL de conexion: jdbc:mysql://localhost:3306/practicas_profesionales
-jun 29, 2026 10:49:11 A.M. acceso.bd.ConexionBaseDeDatos conectar
-FINE: Intentando establecer conexion a la base de datos...
-jun 29, 2026 10:49:11 A.M. acceso.bd.ConexionBaseDeDatos conectar
-INFO: Conexion a base de datos realizada exitosamente en 134 ms
-jun 29, 2026 10:49:26 A.M. acceso.bd.ConexionBaseDeDatos conectar
-FINE: Intentando establecer conexion a la base de datos...
-jun 29, 2026 10:49:26 A.M. acceso.bd.ConexionBaseDeDatos conectar
-INFO: Conexion a base de datos realizada exitosamente en 17 ms
-jun 29, 2026 10:49:26 A.M. logica.dao.objetos.UsuarioDao actualizarContrasena
-INFO: Contrasena actualizada para usuario: 2
-jun 29, 2026 10:51:08 A.M. acceso.bd.ConexionBaseDeDatos conectar
-FINE: Intentando establecer conexion a la base de datos...
-jun 29, 2026 10:51:08 A.M. acceso.bd.ConexionBaseDeDatos conectar
-INFO: Conexion a base de datos realizada exitosamente en 15 ms
-jun 29, 2026 10:51:08 A.M. acceso.bd.ConexionBaseDeDatos conectar
-FINE: Intentando establecer conexion a la base de datos...
-jun 29, 2026 10:51:08 A.M. acceso.bd.ConexionBaseDeDatos conectar
+jun 30, 2026 12:39:28 A.M. acceso.bd.ConexionBaseDeDatos conectar
 INFO: Conexion a base de datos realizada exitosamente en 12 ms
-jun 29, 2026 10:51:08 A.M. logica.dao.objetos.ProfesorDao insertarProfesor
-INFO: Profesor insertado correctamente con ID de usuario: 3
-jun 29, 2026 10:51:12 A.M. logica.dominio.ServicioCorreo enviarContrasenaInicial
-INFO: Correo enviado correctamente a: correo@correo.com
-jun 29, 2026 10:57:11 A.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
-INFO: Configuracion de base de datos cargada correctamente
-jun 29, 2026 10:57:11 A.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
-CONFIG: URL de conexion: jdbc:mysql://localhost:3306/practicas_profesionales
-jun 29, 2026 10:57:11 A.M. acceso.bd.ConexionBaseDeDatos conectar
+jun 30, 2026 12:39:30 A.M. acceso.bd.ConexionBaseDeDatos conectar
 FINE: Intentando establecer conexion a la base de datos...
-jun 29, 2026 10:57:11 A.M. acceso.bd.ConexionBaseDeDatos conectar
+jun 30, 2026 12:39:30 A.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexion a base de datos realizada exitosamente en 15 ms
+jun 30, 2026 12:40:03 A.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexion a la base de datos...
+jun 30, 2026 12:40:03 A.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexion a base de datos realizada exitosamente en 17 ms
+jun 30, 2026 12:40:15 A.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexion a la base de datos...
+jun 30, 2026 12:40:15 A.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexion a base de datos realizada exitosamente en 9 ms
+jun 30, 2026 12:40:15 A.M. logica.dao.objetos.ReporteDao evaluarReporte
+INFO: Reporte evaluado correctamente: 20
+jun 30, 2026 12:40:17 A.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexion a la base de datos...
+jun 30, 2026 12:40:17 A.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexion a base de datos realizada exitosamente en 15 ms
+jun 30, 2026 12:40:32 A.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexion a la base de datos...
+jun 30, 2026 12:40:32 A.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexion a base de datos realizada exitosamente en 14 ms
+jun 30, 2026 12:40:32 A.M. logica.dao.objetos.ReporteDao evaluarReporte
+INFO: Reporte evaluado correctamente: 21
+jun 30, 2026 12:40:34 A.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexion a la base de datos...
+jun 30, 2026 12:40:34 A.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexion a base de datos realizada exitosamente en 17 ms
+jun 30, 2026 12:40:45 A.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexion a la base de datos...
+jun 30, 2026 12:40:45 A.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexion a base de datos realizada exitosamente en 17 ms
+jun 30, 2026 12:40:45 A.M. logica.dao.objetos.ReporteDao evaluarReporte
+INFO: Reporte evaluado correctamente: 22
+jun 30, 2026 12:49:38 A.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexion a la base de datos...
+jun 30, 2026 12:49:38 A.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexion a base de datos realizada exitosamente en 11 ms
+jun 30, 2026 12:49:41 A.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexion a la base de datos...
+jun 30, 2026 12:49:41 A.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexion a base de datos realizada exitosamente en 13 ms
+jun 30, 2026 12:49:41 A.M. logica.dao.objetos.ProyectoDao obtenerProyectoPorPracticante
+INFO: Proyecto cargado para practicante: S24013287
+jun 30, 2026 12:49:41 A.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexion a la base de datos...
+jun 30, 2026 12:49:41 A.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexion a base de datos realizada exitosamente en 13 ms
+jun 30, 2026 12:49:41 A.M. logica.dao.objetos.ActividadDao obtenerActividadesPorPracticante
+INFO: Actividades obtenidas correctamente para la matricula: S24013287
+jun 30, 2026 12:49:41 A.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexion a la base de datos...
+jun 30, 2026 12:49:41 A.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexion a base de datos realizada exitosamente en 10 ms
+jun 30, 2026 12:49:41 A.M. logica.dao.objetos.ActividadDao obtenerHorasTotalesPorPracticante
+INFO: Horas totales obtenidas correctamente para la matricula: S24013287
+jun 30, 2026 12:49:41 A.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexion a la base de datos...
+jun 30, 2026 12:49:41 A.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexion a base de datos realizada exitosamente en 7 ms
+jun 30, 2026 12:49:41 A.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexion a la base de datos...
+jun 30, 2026 12:49:41 A.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexion a base de datos realizada exitosamente en 6 ms
+jun 30, 2026 12:49:41 A.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexion a la base de datos...
+jun 30, 2026 12:49:41 A.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexion a base de datos realizada exitosamente en 9 ms
+jun 30, 2026 12:49:41 A.M. logica.dao.objetos.AutoevaluacionPracticanteDao obtenerAutoevaluacion
+INFO: Autoevaluación obtenida para: S24013287
+jun 30, 2026 1:01:26 A.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
+INFO: Configuracion de base de datos cargada correctamente
+jun 30, 2026 1:01:26 A.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
+CONFIG: URL de conexion: jdbc:mysql://localhost:3306/practicas_profesionales
+jun 30, 2026 1:01:26 A.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexion a la base de datos...
+jun 30, 2026 1:01:26 A.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexion a base de datos realizada exitosamente en 134 ms
+jun 30, 2026 1:01:26 A.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexion a la base de datos...
+jun 30, 2026 1:01:26 A.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexion a base de datos realizada exitosamente en 11 ms
+jun 30, 2026 1:01:26 A.M. logica.dao.objetos.ProyectoDao obtenerProyectoPorPracticante
+INFO: Proyecto cargado para practicante: S24013287
+jun 30, 2026 1:01:26 A.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexion a la base de datos...
+jun 30, 2026 1:01:26 A.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexion a base de datos realizada exitosamente en 9 ms
+jun 30, 2026 1:01:26 A.M. logica.dao.objetos.ActividadDao obtenerHorasTotalesPorPracticante
+INFO: Horas totales obtenidas correctamente para la matricula: S24013287
+jun 30, 2026 1:01:26 A.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexion a la base de datos...
+jun 30, 2026 1:01:26 A.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexion a base de datos realizada exitosamente en 9 ms
+jun 30, 2026 1:01:26 A.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexion a la base de datos...
+jun 30, 2026 1:01:26 A.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexion a base de datos realizada exitosamente en 8 ms
+jun 30, 2026 1:01:26 A.M. logica.dao.objetos.AutoevaluacionPracticanteDao obtenerAutoevaluacion
+INFO: Autoevaluación obtenida para: S24013287
+jun 30, 2026 8:17:07 A.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
+INFO: Configuracion de base de datos cargada correctamente
+jun 30, 2026 8:17:07 A.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
+CONFIG: URL de conexion: jdbc:mysql://localhost:3306/practicas_profesionales
+jun 30, 2026 8:17:07 A.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexion a la base de datos...
+jun 30, 2026 8:17:07 A.M. acceso.bd.ConexionBaseDeDatos conectar
 INFO: Conexion a base de datos realizada exitosamente en 136 ms
+jun 30, 2026 8:17:07 A.M. InterfazGrafica.IniciarSesionControlador cargarVista
+SEVERE: Error al cargar vista
+javafx.fxml.LoadException: 
+/Users/davidespinozamorales/IdeaProjects/TheFinalBoss/out/production/TheFinalBoss/InterfazGrafica/vistas/MenuProfesorVista.fxml
+
+	at javafx.fxml@26.0.1/javafx.fxml.FXMLLoader.constructLoadException(FXMLLoader.java:2692)
+	at javafx.fxml@26.0.1/javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:2662)
+	at javafx.fxml@26.0.1/javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:2533)
+	at javafx.fxml@26.0.1/javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:3304)
+	at javafx.fxml@26.0.1/javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:3264)
+	at javafx.fxml@26.0.1/javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:3235)
+	at javafx.fxml@26.0.1/javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:3211)
+	at javafx.fxml@26.0.1/javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:3191)
+	at javafx.fxml@26.0.1/javafx.fxml.FXMLLoader.load(FXMLLoader.java:3186)
+	at InterfazGrafica.IniciarSesionControlador.cargarVista(IniciarSesionControlador.java:113)
+	at InterfazGrafica.IniciarSesionControlador.redirigir(IniciarSesionControlador.java:86)
+	at InterfazGrafica.IniciarSesionControlador.procesarResultadoLogin(IniciarSesionControlador.java:71)
+	at InterfazGrafica.IniciarSesionControlador.botonIniciarSesion(IniciarSesionControlador.java:49)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:104)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:565)
+	at com.sun.javafx.reflect.Trampoline.invoke(MethodUtil.java:65)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:104)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:565)
+	at javafx.base@26.0.1/com.sun.javafx.reflect.MethodUtil.invoke(MethodUtil.java:112)
+	at javafx.fxml@26.0.1/com.sun.javafx.fxml.MethodHelper.invoke(MethodHelper.java:78)
+	at javafx.fxml@26.0.1/javafx.fxml.FXMLLoader$MethodHandler.invoke(FXMLLoader.java:1847)
+	at javafx.fxml@26.0.1/javafx.fxml.FXMLLoader$ControllerMethodEventHandler.handle(FXMLLoader.java:1718)
+	at javafx.base@26.0.1/com.sun.javafx.event.CompositeEventHandler.dispatchBubblingEvent(CompositeEventHandler.java:86)
+	at javafx.base@26.0.1/com.sun.javafx.event.EventHandlerManager.dispatchBubblingEvent(EventHandlerManager.java:232)
+	at javafx.base@26.0.1/com.sun.javafx.event.EventHandlerManager.dispatchBubblingEvent(EventHandlerManager.java:189)
+	at javafx.base@26.0.1/com.sun.javafx.event.CompositeEventDispatcher.dispatchBubblingEvent(CompositeEventDispatcher.java:59)
+	at javafx.base@26.0.1/com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:58)
+	at javafx.base@26.0.1/com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at javafx.base@26.0.1/com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at javafx.base@26.0.1/com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at javafx.base@26.0.1/com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at javafx.base@26.0.1/com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at javafx.base@26.0.1/com.sun.javafx.event.EventUtil.fireEventImpl(EventUtil.java:74)
+	at javafx.base@26.0.1/com.sun.javafx.event.EventUtil.fireEvent(EventUtil.java:49)
+	at javafx.base@26.0.1/javafx.event.Event.fireEvent(Event.java:199)
+	at javafx.graphics@26.0.1/javafx.scene.Node.fireEvent(Node.java:9092)
+	at javafx.controls@26.0.1/javafx.scene.control.Button.fire(Button.java:203)
+	at javafx.controls@26.0.1/com.sun.javafx.scene.control.behavior.ButtonBehavior.mouseReleased(ButtonBehavior.java:207)
+	at javafx.controls@26.0.1/com.sun.javafx.scene.control.inputmap.InputMap.handle(InputMap.java:274)
+	at javafx.base@26.0.1/com.sun.javafx.event.CompositeEventHandler$NormalEventHandlerRecord.handleBubblingEvent(CompositeEventHandler.java:247)
+	at javafx.base@26.0.1/com.sun.javafx.event.CompositeEventHandler.dispatchBubblingEvent(CompositeEventHandler.java:80)
+	at javafx.base@26.0.1/com.sun.javafx.event.EventHandlerManager.dispatchBubblingEvent(EventHandlerManager.java:232)
+	at javafx.base@26.0.1/com.sun.javafx.event.EventHandlerManager.dispatchBubblingEvent(EventHandlerManager.java:189)
+	at javafx.base@26.0.1/com.sun.javafx.event.CompositeEventDispatcher.dispatchBubblingEvent(CompositeEventDispatcher.java:59)
+	at javafx.base@26.0.1/com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:58)
+	at javafx.base@26.0.1/com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at javafx.base@26.0.1/com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at javafx.base@26.0.1/com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at javafx.base@26.0.1/com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at javafx.base@26.0.1/com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at javafx.base@26.0.1/com.sun.javafx.event.EventUtil.fireEventImpl(EventUtil.java:74)
+	at javafx.base@26.0.1/com.sun.javafx.event.EventUtil.fireEvent(EventUtil.java:54)
+	at javafx.base@26.0.1/javafx.event.Event.fireEvent(Event.java:199)
+	at javafx.graphics@26.0.1/javafx.scene.Scene$MouseHandler.process(Scene.java:4134)
+	at javafx.graphics@26.0.1/javafx.scene.Scene.processMouseEvent(Scene.java:1953)
+	at javafx.graphics@26.0.1/javafx.scene.Scene$ScenePeerListener.mouseEvent(Scene.java:2802)
+	at javafx.graphics@26.0.1/com.sun.javafx.tk.quantum.GlassViewEventHandler$MouseEventNotification.get(GlassViewEventHandler.java:353)
+	at javafx.graphics@26.0.1/com.sun.javafx.tk.quantum.GlassViewEventHandler$MouseEventNotification.get(GlassViewEventHandler.java:255)
+	at javafx.graphics@26.0.1/com.sun.javafx.tk.quantum.QuantumToolkit.runWithoutRenderLock(QuantumToolkit.java:429)
+	at javafx.graphics@26.0.1/com.sun.javafx.tk.quantum.GlassViewEventHandler.handleMouseEvent(GlassViewEventHandler.java:387)
+	at javafx.graphics@26.0.1/com.sun.glass.ui.View.handleMouseEvent(View.java:573)
+	at javafx.graphics@26.0.1/com.sun.glass.ui.View.notifyMouse(View.java:970)
+	at javafx.graphics@26.0.1/com.sun.glass.ui.mac.MacView.notifyMouse(MacView.java:131)
+Caused by: java.lang.reflect.InvocationTargetException
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:116)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:565)
+	at com.sun.javafx.reflect.Trampoline.invoke(MethodUtil.java:65)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:104)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:565)
+	at javafx.base@26.0.1/com.sun.javafx.reflect.MethodUtil.invoke(MethodUtil.java:112)
+	at javafx.fxml@26.0.1/com.sun.javafx.fxml.MethodHelper.invoke(MethodHelper.java:78)
+	at javafx.fxml@26.0.1/javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:2658)
+	... 61 more
+Caused by: java.lang.NullPointerException: Cannot invoke "javafx.scene.control.Label.setText(String)" because "this.etiquetaBienvenida" is null
+	at InterfazGrafica.MenuProfesorControlador.initialize(MenuProfesorControlador.java:33)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:104)
+	... 68 more
+
+jun 30, 2026 8:19:47 A.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
+INFO: Configuracion de base de datos cargada correctamente
+jun 30, 2026 8:19:47 A.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
+CONFIG: URL de conexion: jdbc:mysql://localhost:3306/practicas_profesionales
+jun 30, 2026 8:19:47 A.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexion a la base de datos...
+jun 30, 2026 8:19:47 A.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexion a base de datos realizada exitosamente en 135 ms
+jun 30, 2026 8:19:47 A.M. InterfazGrafica.IniciarSesionControlador cargarVista
+SEVERE: Error al cargar vista
+javafx.fxml.LoadException: 
+/Users/davidespinozamorales/IdeaProjects/TheFinalBoss/out/production/TheFinalBoss/InterfazGrafica/vistas/MenuProfesorVista.fxml
+
+	at javafx.fxml@26.0.1/javafx.fxml.FXMLLoader.constructLoadException(FXMLLoader.java:2692)
+	at javafx.fxml@26.0.1/javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:2662)
+	at javafx.fxml@26.0.1/javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:2533)
+	at javafx.fxml@26.0.1/javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:3304)
+	at javafx.fxml@26.0.1/javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:3264)
+	at javafx.fxml@26.0.1/javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:3235)
+	at javafx.fxml@26.0.1/javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:3211)
+	at javafx.fxml@26.0.1/javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:3191)
+	at javafx.fxml@26.0.1/javafx.fxml.FXMLLoader.load(FXMLLoader.java:3186)
+	at InterfazGrafica.IniciarSesionControlador.cargarVista(IniciarSesionControlador.java:113)
+	at InterfazGrafica.IniciarSesionControlador.redirigir(IniciarSesionControlador.java:86)
+	at InterfazGrafica.IniciarSesionControlador.procesarResultadoLogin(IniciarSesionControlador.java:71)
+	at InterfazGrafica.IniciarSesionControlador.botonIniciarSesion(IniciarSesionControlador.java:49)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:104)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:565)
+	at com.sun.javafx.reflect.Trampoline.invoke(MethodUtil.java:65)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:104)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:565)
+	at javafx.base@26.0.1/com.sun.javafx.reflect.MethodUtil.invoke(MethodUtil.java:112)
+	at javafx.fxml@26.0.1/com.sun.javafx.fxml.MethodHelper.invoke(MethodHelper.java:78)
+	at javafx.fxml@26.0.1/javafx.fxml.FXMLLoader$MethodHandler.invoke(FXMLLoader.java:1847)
+	at javafx.fxml@26.0.1/javafx.fxml.FXMLLoader$ControllerMethodEventHandler.handle(FXMLLoader.java:1718)
+	at javafx.base@26.0.1/com.sun.javafx.event.CompositeEventHandler.dispatchBubblingEvent(CompositeEventHandler.java:86)
+	at javafx.base@26.0.1/com.sun.javafx.event.EventHandlerManager.dispatchBubblingEvent(EventHandlerManager.java:232)
+	at javafx.base@26.0.1/com.sun.javafx.event.EventHandlerManager.dispatchBubblingEvent(EventHandlerManager.java:189)
+	at javafx.base@26.0.1/com.sun.javafx.event.CompositeEventDispatcher.dispatchBubblingEvent(CompositeEventDispatcher.java:59)
+	at javafx.base@26.0.1/com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:58)
+	at javafx.base@26.0.1/com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at javafx.base@26.0.1/com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at javafx.base@26.0.1/com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at javafx.base@26.0.1/com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at javafx.base@26.0.1/com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at javafx.base@26.0.1/com.sun.javafx.event.EventUtil.fireEventImpl(EventUtil.java:74)
+	at javafx.base@26.0.1/com.sun.javafx.event.EventUtil.fireEvent(EventUtil.java:49)
+	at javafx.base@26.0.1/javafx.event.Event.fireEvent(Event.java:199)
+	at javafx.graphics@26.0.1/javafx.scene.Node.fireEvent(Node.java:9092)
+	at javafx.controls@26.0.1/javafx.scene.control.Button.fire(Button.java:203)
+	at javafx.controls@26.0.1/com.sun.javafx.scene.control.behavior.ButtonBehavior.mouseReleased(ButtonBehavior.java:207)
+	at javafx.controls@26.0.1/com.sun.javafx.scene.control.inputmap.InputMap.handle(InputMap.java:274)
+	at javafx.base@26.0.1/com.sun.javafx.event.CompositeEventHandler$NormalEventHandlerRecord.handleBubblingEvent(CompositeEventHandler.java:247)
+	at javafx.base@26.0.1/com.sun.javafx.event.CompositeEventHandler.dispatchBubblingEvent(CompositeEventHandler.java:80)
+	at javafx.base@26.0.1/com.sun.javafx.event.EventHandlerManager.dispatchBubblingEvent(EventHandlerManager.java:232)
+	at javafx.base@26.0.1/com.sun.javafx.event.EventHandlerManager.dispatchBubblingEvent(EventHandlerManager.java:189)
+	at javafx.base@26.0.1/com.sun.javafx.event.CompositeEventDispatcher.dispatchBubblingEvent(CompositeEventDispatcher.java:59)
+	at javafx.base@26.0.1/com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:58)
+	at javafx.base@26.0.1/com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at javafx.base@26.0.1/com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at javafx.base@26.0.1/com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at javafx.base@26.0.1/com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at javafx.base@26.0.1/com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at javafx.base@26.0.1/com.sun.javafx.event.EventUtil.fireEventImpl(EventUtil.java:74)
+	at javafx.base@26.0.1/com.sun.javafx.event.EventUtil.fireEvent(EventUtil.java:54)
+	at javafx.base@26.0.1/javafx.event.Event.fireEvent(Event.java:199)
+	at javafx.graphics@26.0.1/javafx.scene.Scene$MouseHandler.process(Scene.java:4134)
+	at javafx.graphics@26.0.1/javafx.scene.Scene.processMouseEvent(Scene.java:1953)
+	at javafx.graphics@26.0.1/javafx.scene.Scene$ScenePeerListener.mouseEvent(Scene.java:2802)
+	at javafx.graphics@26.0.1/com.sun.javafx.tk.quantum.GlassViewEventHandler$MouseEventNotification.get(GlassViewEventHandler.java:353)
+	at javafx.graphics@26.0.1/com.sun.javafx.tk.quantum.GlassViewEventHandler$MouseEventNotification.get(GlassViewEventHandler.java:255)
+	at javafx.graphics@26.0.1/com.sun.javafx.tk.quantum.QuantumToolkit.runWithoutRenderLock(QuantumToolkit.java:429)
+	at javafx.graphics@26.0.1/com.sun.javafx.tk.quantum.GlassViewEventHandler.handleMouseEvent(GlassViewEventHandler.java:387)
+	at javafx.graphics@26.0.1/com.sun.glass.ui.View.handleMouseEvent(View.java:573)
+	at javafx.graphics@26.0.1/com.sun.glass.ui.View.notifyMouse(View.java:970)
+	at javafx.graphics@26.0.1/com.sun.glass.ui.mac.MacView.notifyMouse(MacView.java:131)
+Caused by: java.lang.reflect.InvocationTargetException
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:116)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:565)
+	at com.sun.javafx.reflect.Trampoline.invoke(MethodUtil.java:65)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:104)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:565)
+	at javafx.base@26.0.1/com.sun.javafx.reflect.MethodUtil.invoke(MethodUtil.java:112)
+	at javafx.fxml@26.0.1/com.sun.javafx.fxml.MethodHelper.invoke(MethodHelper.java:78)
+	at javafx.fxml@26.0.1/javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:2658)
+	... 61 more
+Caused by: java.lang.NullPointerException: Cannot invoke "javafx.scene.control.Label.setText(String)" because "this.etiquetaRol" is null
+	at InterfazGrafica.MenuProfesorControlador.initialize(MenuProfesorControlador.java:35)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:104)
+	... 68 more
+
+jun 30, 2026 8:21:11 A.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
+INFO: Configuracion de base de datos cargada correctamente
+jun 30, 2026 8:21:11 A.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
+CONFIG: URL de conexion: jdbc:mysql://localhost:3306/practicas_profesionales
+jun 30, 2026 8:21:11 A.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexion a la base de datos...
+jun 30, 2026 8:21:11 A.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexion a base de datos realizada exitosamente en 134 ms
+jun 30, 2026 8:21:14 A.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexion a la base de datos...
+jun 30, 2026 8:21:14 A.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexion a base de datos realizada exitosamente en 10 ms
+jun 30, 2026 8:21:16 A.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexion a la base de datos...
+jun 30, 2026 8:21:16 A.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexion a base de datos realizada exitosamente en 15 ms
+jun 30, 2026 8:21:16 A.M. logica.dao.objetos.ProyectoDao obtenerProyectoPorPracticante
+INFO: Proyecto cargado para practicante: S24013287
+jun 30, 2026 8:21:16 A.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexion a la base de datos...
+jun 30, 2026 8:21:16 A.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexion a base de datos realizada exitosamente en 9 ms
+jun 30, 2026 8:21:16 A.M. logica.dao.objetos.ActividadDao obtenerActividadesPorPracticante
+INFO: Actividades obtenidas correctamente para la matricula: S24013287
+jun 30, 2026 8:21:16 A.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexion a la base de datos...
+jun 30, 2026 8:21:16 A.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexion a base de datos realizada exitosamente en 9 ms
+jun 30, 2026 8:21:16 A.M. logica.dao.objetos.ActividadDao obtenerHorasTotalesPorPracticante
+INFO: Horas totales obtenidas correctamente para la matricula: S24013287
+jun 30, 2026 8:21:16 A.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexion a la base de datos...
+jun 30, 2026 8:21:16 A.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexion a base de datos realizada exitosamente en 9 ms
+jun 30, 2026 8:21:16 A.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexion a la base de datos...
+jun 30, 2026 8:21:16 A.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexion a base de datos realizada exitosamente en 8 ms
+jun 30, 2026 8:21:16 A.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexion a la base de datos...
+jun 30, 2026 8:21:16 A.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexion a base de datos realizada exitosamente en 9 ms
+jun 30, 2026 8:21:16 A.M. logica.dao.objetos.AutoevaluacionPracticanteDao obtenerAutoevaluacion
+INFO: Autoevaluación obtenida para: S24013287
+jun 30, 2026 8:21:21 A.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexion a la base de datos...
+jun 30, 2026 8:21:21 A.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexion a base de datos realizada exitosamente en 13 ms
+jun 30, 2026 8:21:21 A.M. logica.dao.objetos.ProyectoDao obtenerProyectoPorPracticante
+INFO: Proyecto cargado para practicante: S24026789
+jun 30, 2026 8:21:21 A.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexion a la base de datos...
+jun 30, 2026 8:21:21 A.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexion a base de datos realizada exitosamente en 10 ms
+jun 30, 2026 8:21:21 A.M. logica.dao.objetos.ActividadDao obtenerActividadesPorPracticante
+INFO: Actividades obtenidas correctamente para la matricula: S24026789
+jun 30, 2026 8:21:21 A.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexion a la base de datos...
+jun 30, 2026 8:21:21 A.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexion a base de datos realizada exitosamente en 8 ms
+jun 30, 2026 8:21:21 A.M. logica.dao.objetos.ActividadDao obtenerHorasTotalesPorPracticante
+INFO: Horas totales obtenidas correctamente para la matricula: S24026789
+jun 30, 2026 8:21:21 A.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexion a la base de datos...
+jun 30, 2026 8:21:21 A.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexion a base de datos realizada exitosamente en 6 ms
+jun 30, 2026 8:21:21 A.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexion a la base de datos...
+jun 30, 2026 8:21:21 A.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexion a base de datos realizada exitosamente en 9 ms
+jun 30, 2026 8:21:21 A.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexion a la base de datos...
+jun 30, 2026 8:21:21 A.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexion a base de datos realizada exitosamente en 9 ms
+jun 30, 2026 8:21:21 A.M. logica.dao.objetos.AutoevaluacionPracticanteDao obtenerAutoevaluacion
+INFO: Autoevaluación obtenida para: S24026789
+jun 30, 2026 8:57:20 A.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
+INFO: Configuracion de base de datos cargada correctamente
+jun 30, 2026 8:57:20 A.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
+CONFIG: URL de conexion: jdbc:mysql://localhost:3306/practicas_profesionales
+jun 30, 2026 8:57:20 A.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexion a la base de datos...
+jun 30, 2026 8:57:20 A.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexion a base de datos realizada exitosamente en 130 ms
+jun 30, 2026 8:57:20 A.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexion a la base de datos...
+jun 30, 2026 8:57:20 A.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexion a base de datos realizada exitosamente en 10 ms
+jun 30, 2026 8:57:20 A.M. logica.dao.objetos.ProyectoDao obtenerProyectoPorPracticante
+INFO: Proyecto cargado para practicante: S24026789
+jun 30, 2026 8:57:20 A.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexion a la base de datos...
+jun 30, 2026 8:57:20 A.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexion a base de datos realizada exitosamente en 8 ms
+jun 30, 2026 8:57:20 A.M. logica.dao.objetos.ActividadDao obtenerHorasTotalesPorPracticante
+INFO: Horas totales obtenidas correctamente para la matricula: S24026789
+jun 30, 2026 8:57:20 A.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexion a la base de datos...
+jun 30, 2026 8:57:20 A.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexion a base de datos realizada exitosamente en 7 ms
+jun 30, 2026 8:57:20 A.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexion a la base de datos...
+jun 30, 2026 8:57:20 A.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexion a base de datos realizada exitosamente en 7 ms
+jun 30, 2026 8:57:20 A.M. logica.dao.objetos.AutoevaluacionPracticanteDao obtenerAutoevaluacion
+INFO: Autoevaluación obtenida para: S24026789
+jun 30, 2026 9:55:46 A.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
+INFO: Configuracion de base de datos cargada correctamente
+jun 30, 2026 9:55:46 A.M. acceso.bd.ConexionBaseDeDatos cargarConfiguracion
+CONFIG: URL de conexion: jdbc:mysql://localhost:3306/practicas_profesionales
+jun 30, 2026 9:55:46 A.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexion a la base de datos...
+jun 30, 2026 9:55:46 A.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexion a base de datos realizada exitosamente en 133 ms
+jun 30, 2026 9:55:47 A.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexion a la base de datos...
+jun 30, 2026 9:55:47 A.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexion a base de datos realizada exitosamente en 13 ms
+jun 30, 2026 9:55:49 A.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexion a la base de datos...
+jun 30, 2026 9:55:49 A.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexion a base de datos realizada exitosamente en 13 ms
+jun 30, 2026 9:55:51 A.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexion a la base de datos...
+jun 30, 2026 9:55:51 A.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexion a base de datos realizada exitosamente en 15 ms
+jun 30, 2026 9:55:51 A.M. logica.dao.objetos.ProyectoDao obtenerProyectoPorPracticante
+INFO: Proyecto cargado para practicante: S24013287
+jun 30, 2026 9:55:51 A.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexion a la base de datos...
+jun 30, 2026 9:55:51 A.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexion a base de datos realizada exitosamente en 12 ms
+jun 30, 2026 9:55:51 A.M. logica.dao.objetos.ActividadDao obtenerActividadesPorPracticante
+INFO: Actividades obtenidas correctamente para la matricula: S24013287
+jun 30, 2026 9:55:51 A.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexion a la base de datos...
+jun 30, 2026 9:55:51 A.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexion a base de datos realizada exitosamente en 11 ms
+jun 30, 2026 9:55:51 A.M. logica.dao.objetos.ActividadDao obtenerHorasTotalesPorPracticante
+INFO: Horas totales obtenidas correctamente para la matricula: S24013287
+jun 30, 2026 9:55:51 A.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexion a la base de datos...
+jun 30, 2026 9:55:51 A.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexion a base de datos realizada exitosamente en 8 ms
+jun 30, 2026 9:55:51 A.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexion a la base de datos...
+jun 30, 2026 9:55:51 A.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexion a base de datos realizada exitosamente en 7 ms
+jun 30, 2026 9:55:51 A.M. acceso.bd.ConexionBaseDeDatos conectar
+FINE: Intentando establecer conexion a la base de datos...
+jun 30, 2026 9:55:51 A.M. acceso.bd.ConexionBaseDeDatos conectar
+INFO: Conexion a base de datos realizada exitosamente en 8 ms
+jun 30, 2026 9:55:51 A.M. logica.dao.objetos.AutoevaluacionPracticanteDao obtenerAutoevaluacion
+INFO: Autoevaluación obtenida para: S24013287

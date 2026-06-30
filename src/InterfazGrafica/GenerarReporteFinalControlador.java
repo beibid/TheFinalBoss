@@ -23,8 +23,8 @@ import logica.dominio.Proyecto;
 import logica.dominio.Reporte;
 import logica.dominio.SesionUsuario;
 import logica.dominio.enums.TipoReporte;
-
 import java.util.List;
+import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -32,7 +32,10 @@ public class GenerarReporteFinalControlador {
 
     private static final Logger LOGGER = Logger.getLogger(GenerarReporteFinalControlador.class.getName());
     private static final int HORAS_MINIMAS_FINAL = 420;
-    private static final String HORAS_FINAL_TEXTO = "420";
+
+    private final ProyectoDao proyectoDao = new ProyectoDao();
+    private final ActividadDao actividadDao = new ActividadDao();
+    private final ReporteDao reporteDao = new ReporteDao();
 
     @FXML private Label etiquetaMatricula;
     @FXML private Label etiquetaProyecto;
@@ -75,28 +78,27 @@ public class GenerarReporteFinalControlador {
 
     @FXML
     private void botonGenerar() {
-        ocultarError();
-        ocultarExito();
-        if (confirmarAccion("¿Desea generar el reporte final?")) {
+        ocultarPanel(panelError);
+        ocultarPanel(panelExito);
+        if (confirmarAccion("Desea generar el reporte final?")) {
             procesarGeneracion();
         }
     }
 
     @FXML
     private void botonCancelar() {
-        if (confirmarAccion("¿Seguro que desea cancelar?")) {
+        if (confirmarAccion("Seguro que desea cancelar?")) {
             limpiarFormulario();
         }
     }
 
     @FXML
-    private void botonRegresar(ActionEvent event) {
-        Stage escenario = (Stage) ((Node) event.getSource()).getScene().getWindow();
+    private void botonRegresar(ActionEvent evento) {
+        Stage escenario = (Stage) ((Node) evento.getSource()).getScene().getWindow();
         escenario.close();
     }
 
     private void cargarInformacionProyecto() {
-        ProyectoDao proyectoDao = new ProyectoDao();
         try {
             Proyecto proyecto = proyectoDao.obtenerProyectoPorPracticante(matricula);
             if (proyecto != null) {
@@ -105,7 +107,8 @@ public class GenerarReporteFinalControlador {
                 etiquetaProyecto.setText(nombreProyecto);
                 etiquetaOrganizacion.setText(nombreOrganizacion);
             } else {
-                mostrarError("Sin proyecto asignado", "No se encontró proyecto para la matrícula: " + matricula);
+                mostrarError("Sin proyecto asignado",
+                        "NO SE ENCONTRO PROYECTO PARA LA MATRICULA: " + matricula);
             }
         } catch (MensajeriaExcepcion excepcion) {
             LOGGER.log(Level.SEVERE, "Error al cargar proyecto", excepcion);
@@ -114,7 +117,6 @@ public class GenerarReporteFinalControlador {
     }
 
     private void cargarHorasAcumuladas() {
-        ActividadDao actividadDao = new ActividadDao();
         try {
             int horasTotales = actividadDao.obtenerHorasTotalesPorPracticante(matricula);
             etiquetaHorasAcumuladas.setText(horasTotales + " horas acumuladas");
@@ -124,7 +126,6 @@ public class GenerarReporteFinalControlador {
     }
 
     private void cargarActividades() {
-        ActividadDao actividadDao = new ActividadDao();
         try {
             List<Actividad> actividades = actividadDao.obtenerActividadesPorPracticante(matricula);
             ObservableList<String> nombres = FXCollections.observableArrayList();
@@ -147,15 +148,14 @@ public class GenerarReporteFinalControlador {
 
     private boolean verificarHorasSuficientes() {
         boolean horasSuficientes = false;
-        ActividadDao actividadDao = new ActividadDao();
         try {
             int horasTotales = actividadDao.obtenerHorasTotalesPorPracticante(matricula);
             if (horasTotales >= HORAS_MINIMAS_FINAL) {
                 horasSuficientes = true;
             } else {
                 mostrarError("Horas insuficientes",
-                        "NECESITAS AL MENOS " + HORAS_MINIMAS_FINAL + " HORAS ACUMULADAS PARA GENERAR EL REPORTE FINAL. " +
-                                "ACTUALMENTE TIENES: " + horasTotales + " HORAS.");
+                        "NECESITAS AL MENOS " + HORAS_MINIMAS_FINAL + " HORAS ACUMULADAS PARA GENERAR EL REPORTE FINAL. "
+                                + "ACTUALMENTE TIENES: " + horasTotales + " HORAS.");
             }
         } catch (MensajeriaExcepcion excepcion) {
             LOGGER.log(Level.SEVERE, "Error al verificar horas para reporte final", excepcion);
@@ -164,20 +164,19 @@ public class GenerarReporteFinalControlador {
         return horasSuficientes;
     }
 
-    private boolean esNumeroEntreRango(String texto, int min, int max) {
+    private boolean esNumeroEntreRango(String texto, int minimo, int maximo) {
         boolean esValido = false;
         try {
             int valor = Integer.parseInt(texto);
-            esValido = valor >= min && valor <= max;
+            esValido = valor >= minimo && valor <= maximo;
         } catch (NumberFormatException excepcion) {
-            esValido = false;
+            LOGGER.log(Level.WARNING, "Valor no numerico en campo de avance", excepcion);
         }
         return esValido;
     }
 
-    private boolean camposValidos() {
+    private boolean verificarCampos() {
         boolean validos = true;
-
         if (comboActividadUno.getValue() == null || comboActividadUno.getValue().isEmpty()) {
             mostrarError("Campo requerido", "SELECCIONA LA ACTIVIDAD 1.");
             validos = false;
@@ -228,10 +227,13 @@ public class GenerarReporteFinalControlador {
     }
 
     private void procesarGeneracion() {
-        if (camposValidos()) {
-            if (verificarHorasSuficientes()) {
-                generarPdf();
-            }
+        boolean camposCorrectos = verificarCampos();
+        boolean horasSuficientes = false;
+        if (camposCorrectos) {
+            horasSuficientes = verificarHorasSuficientes();
+        }
+        if (camposCorrectos && horasSuficientes) {
+            generarPdf();
         }
     }
 
@@ -239,44 +241,49 @@ public class GenerarReporteFinalControlador {
         String actividades = construirActividades();
         Reporte reporte = new Reporte(TipoReporte.Final, textoAreaObservacionesGenerales.getText().trim(),
                 actividades, matricula, null, null);
-
         GeneradorPdfReporteFinal generador = new GeneradorPdfReporteFinal();
         String rutaPdf = generador.generarPdf(reporte, nombrePracticante, nombreProyecto,
-                nombreOrganizacion, HORAS_FINAL_TEXTO);
-
+                nombreOrganizacion, String.valueOf(HORAS_MINIMAS_FINAL));
         if (rutaPdf != null) {
-            guardarEnBaseDeDatos(reporte, rutaPdf);
-            limpiarFormulario();
-            mostrarExito("PDF generado correctamente", "El reporte se guardó en: " + rutaPdf);
+            procesarResultadoPdf(reporte, rutaPdf);
         } else {
-            mostrarError("Error al generar", "No se pudo generar el PDF. Intente de nuevo.");
+            mostrarError("Error al generar", "NO SE PUDO GENERAR EL PDF. INTENTE DE NUEVO.");
         }
     }
 
+    private void procesarResultadoPdf(Reporte reporte, String rutaPdf) {
+        guardarEnBaseDeDatos(reporte, rutaPdf);
+        limpiarFormulario();
+        mostrarExito("PDF generado correctamente",
+                "EL REPORTE SE GUARDO EN: " + rutaPdf);
+    }
+
     private void guardarEnBaseDeDatos(Reporte reporte, String rutaPdf) {
-        ReporteDao reporteDao = new ReporteDao();
         try {
             reporte.setArchivoAdjunto(rutaPdf);
             reporteDao.agregarReporte(reporte);
             LOGGER.info("Reporte final guardado en BD correctamente");
         } catch (MensajeriaExcepcion excepcion) {
             LOGGER.log(Level.SEVERE, "Error al guardar reporte final en BD", excepcion);
+            mostrarError("Error al guardar", "NO SE PUDO GUARDAR EL REPORTE EN LA BASE DE DATOS.");
         }
     }
 
     private String construirActividades() {
-        return comboActividadUno.getValue() + "|" +
-                campoAvanceUno.getText().trim() + "|" +
-                campoObservacionUno.getText().trim() + "\n" +
-                comboActividadDos.getValue() + "|" +
-                campoAvanceDos.getText().trim() + "|" +
-                campoObservacionDos.getText().trim() + "\n" +
-                "ENTREGABLE:" + campoEntregableUno.getText().trim() + "|" +
-                campoAvanceEntregableUno.getText().trim() + "|" +
-                campoObservacionEntregableUno.getText().trim() + "\n" +
-                "ENTREGABLE:" + campoEntregableDos.getText().trim() + "|" +
-                campoAvanceEntregableDos.getText().trim() + "|" +
-                campoObservacionEntregableDos.getText().trim();
+        StringBuilder actividades = new StringBuilder();
+        actividades.append(comboActividadUno.getValue()).append("|");
+        actividades.append(campoAvanceUno.getText().trim()).append("|");
+        actividades.append(campoObservacionUno.getText().trim()).append("\n");
+        actividades.append(comboActividadDos.getValue()).append("|");
+        actividades.append(campoAvanceDos.getText().trim()).append("|");
+        actividades.append(campoObservacionDos.getText().trim()).append("\n");
+        actividades.append("ENTREGABLE:").append(campoEntregableUno.getText().trim()).append("|");
+        actividades.append(campoAvanceEntregableUno.getText().trim()).append("|");
+        actividades.append(campoObservacionEntregableUno.getText().trim()).append("\n");
+        actividades.append("ENTREGABLE:").append(campoEntregableDos.getText().trim()).append("|");
+        actividades.append(campoAvanceEntregableDos.getText().trim()).append("|");
+        actividades.append(campoObservacionEntregableDos.getText().trim());
+        return actividades.toString();
     }
 
     private void limpiarFormulario() {
@@ -293,42 +300,46 @@ public class GenerarReporteFinalControlador {
         campoAvanceEntregableDos.clear();
         campoObservacionEntregableDos.clear();
         textoAreaObservacionesGenerales.clear();
-        ocultarError();
-        ocultarExito();
+        ocultarPanel(panelError);
+        ocultarPanel(panelExito);
     }
 
     private boolean confirmarAccion(String mensaje) {
         Alert alerta = new Alert(Alert.AlertType.CONFIRMATION);
-        alerta.setTitle("Confirmación");
+        boolean confirmado = false;
+        alerta.setTitle("Confirmacion");
         alerta.setHeaderText(mensaje);
         alerta.setContentText("");
-        ButtonType botonSi = new ButtonType("Sí");
+        ButtonType botonSi = new ButtonType("Si");
         ButtonType botonNo = new ButtonType("No");
         alerta.getButtonTypes().setAll(botonSi, botonNo);
-        return alerta.showAndWait().filter(botonPresionado -> botonPresionado == botonSi).isPresent();
+        Optional<ButtonType> resultado = alerta.showAndWait();
+        if (resultado.isPresent() && resultado.get() == botonSi) {
+            confirmado = true;
+        }
+        return confirmado;
+    }
+
+    private void mostrarPanel(VBox panelMostrar, VBox panelOcultar) {
+        panelMostrar.setVisible(true);
+        panelMostrar.setManaged(true);
+        ocultarPanel(panelOcultar);
+    }
+
+    private void ocultarPanel(VBox panel) {
+        panel.setVisible(false);
+        panel.setManaged(false);
     }
 
     private void mostrarError(String titulo, String mensaje) {
         etiquetaTituloError.setText(titulo);
         etiquetaMensajeError.setText(mensaje);
-        panelError.setVisible(true);
-        panelError.setManaged(true);
-    }
-
-    private void ocultarError() {
-        panelError.setVisible(false);
-        panelError.setManaged(false);
+        mostrarPanel(panelError, panelExito);
     }
 
     private void mostrarExito(String titulo, String mensaje) {
         etiquetaTituloExito.setText(titulo);
         etiquetaMensajeExito.setText(mensaje);
-        panelExito.setVisible(true);
-        panelExito.setManaged(true);
-    }
-
-    private void ocultarExito() {
-        panelExito.setVisible(false);
-        panelExito.setManaged(false);
+        mostrarPanel(panelExito, panelError);
     }
 }

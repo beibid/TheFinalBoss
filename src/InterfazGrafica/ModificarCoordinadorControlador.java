@@ -17,6 +17,7 @@ import logica.dao.excepciones.UsuariosExcepcion;
 import logica.dao.objetos.CoordinadorDao;
 import logica.dominio.Coordinador;
 import java.util.List;
+import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -24,6 +25,11 @@ public class ModificarCoordinadorControlador {
 
     private static final Logger LOGGER = Logger.getLogger(ModificarCoordinadorControlador.class.getName());
     private static final int FILAS_AFECTADAS_ESPERADAS = 1;
+    private static final int LONGITUD_MAXIMA_NOMBRE = 55;
+    private static final int LONGITUD_MAXIMA_APELLIDOS = 55;
+    private static final int LONGITUD_MAXIMA_CORREO = 100;
+
+    private final CoordinadorDao coordinadorDao = new CoordinadorDao();
 
     @FXML private ComboBox<Coordinador> comboBoxCoordinadores;
     @FXML private VBox panelFormulario;
@@ -45,7 +51,6 @@ public class ModificarCoordinadorControlador {
     }
 
     private void cargarCoordinadores() {
-        CoordinadorDao coordinadorDao = new CoordinadorDao();
         try {
             List<Coordinador> lista = coordinadorDao.obtenerCoordinadoresActivos();
             if (lista.isEmpty()) {
@@ -69,7 +74,8 @@ public class ModificarCoordinadorControlador {
             @Override
             protected void updateItem(Coordinador coordinador, boolean vacio) {
                 super.updateItem(coordinador, vacio);
-                if (vacio || coordinador == null) {
+                boolean esVacioONulo = vacio || coordinador == null;
+                if (esVacioONulo) {
                     setText("-- Selecciona un coordinador --");
                 } else {
                     setText(coordinador.getNombre() + " " + coordinador.getApellidos());
@@ -91,21 +97,26 @@ public class ModificarCoordinadorControlador {
     private void rellenarFormulario(Coordinador coordinador) {
         campoNombre.setText(coordinador.getNombre());
         campoApellidos.setText(coordinador.getApellidos());
-        campoCorreo.setText(coordinador.getCorreo() != null ? coordinador.getCorreo() : "");
+        boolean tieneCorreo = coordinador.getCorreo() != null;
+        if (tieneCorreo) {
+            campoCorreo.setText(coordinador.getCorreo());
+        } else {
+            campoCorreo.setText("");
+        }
         panelFormulario.setVisible(true);
         panelFormulario.setManaged(true);
     }
 
     @FXML
     private void botonGuardar() {
-        if (confirmarAccion("¿Desea guardar los cambios?")) {
+        if (confirmarAccion("Desea guardar los cambios?")) {
             procesarModificacion();
         }
     }
 
     private void procesarModificacion() {
-        if (camposValidos()) {
-            CoordinadorDao coordinadorDao = new CoordinadorDao();
+        boolean camposCorrectos = verificarCampos();
+        if (camposCorrectos) {
             try {
                 Coordinador coordinadorModificado = construirCoordinador();
                 int filasAfectadas = coordinadorDao.modificarCoordinador(
@@ -136,33 +147,42 @@ public class ModificarCoordinadorControlador {
         return hayCamposVacios;
     }
 
-    private boolean camposValidos() {
+    private boolean verificarCampos() {
         String nombre = campoNombre.getText().trim();
         String apellidos = campoApellidos.getText().trim();
         String correo = campoCorreo.getText().trim();
-
         List<String> campos = List.of(nombre, apellidos, correo);
         boolean camposFormularioValidos = !camposVacios(campos);
         boolean nombreValido = nombre.matches("[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+");
         boolean apellidosValidos = apellidos.matches("[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+");
         boolean correoValido = correo.matches("^[\\w.-]+@[\\w.-]+\\.[a-zA-Z]{2,}$");
-
-        verificarCampos(camposFormularioValidos, nombreValido, apellidosValidos, correoValido);
-
-        return camposFormularioValidos && nombreValido && apellidosValidos && correoValido;
-    }
-
-    private void verificarCampos(boolean camposFormularioValidos, boolean nombreValido,
-                                 boolean apellidosValidos, boolean correoValido) {
+        boolean longitudNombreValida = nombre.length() <= LONGITUD_MAXIMA_NOMBRE;
+        boolean longitudApellidosValida = apellidos.length() <= LONGITUD_MAXIMA_APELLIDOS;
+        boolean longitudCorreoValida = correo.length() <= LONGITUD_MAXIMA_CORREO;
+        boolean valido = true;
         if (!camposFormularioValidos) {
-            mostrarError("Campos obligatorios vacíos", "POR FAVOR LLENE TODOS LOS CAMPOS.");
+            mostrarError("Campos obligatorios vacios", "POR FAVOR LLENE TODOS LOS CAMPOS.");
+            valido = false;
+        } else if (!longitudNombreValida) {
+            mostrarError("Nombre demasiado largo", "EL NOMBRE NO PUEDE EXCEDER " + LONGITUD_MAXIMA_NOMBRE + " CARACTERES.");
+            valido = false;
+        } else if (!longitudApellidosValida) {
+            mostrarError("Apellidos demasiado largos", "LOS APELLIDOS NO PUEDEN EXCEDER " + LONGITUD_MAXIMA_APELLIDOS + " CARACTERES.");
+            valido = false;
+        } else if (!longitudCorreoValida) {
+            mostrarError("Correo demasiado largo", "EL CORREO NO PUEDE EXCEDER " + LONGITUD_MAXIMA_CORREO + " CARACTERES.");
+            valido = false;
         } else if (!nombreValido) {
-            mostrarError("Nombre inválido", "EL NOMBRE SOLO PUEDE CONTENER LETRAS.");
+            mostrarError("Nombre invalido", "EL NOMBRE SOLO PUEDE CONTENER LETRAS.");
+            valido = false;
         } else if (!apellidosValidos) {
-            mostrarError("Apellidos inválidos", "LOS APELLIDOS SOLO PUEDEN CONTENER LETRAS.");
+            mostrarError("Apellidos invalidos", "LOS APELLIDOS SOLO PUEDEN CONTENER LETRAS.");
+            valido = false;
         } else if (!correoValido) {
-            mostrarError("Correo inválido", "INGRESE UN CORREO ELECTRÓNICO VÁLIDO.");
+            mostrarError("Correo invalido", "INGRESE UN CORREO ELECTRONICO VALIDO.");
+            valido = false;
         }
+        return valido;
     }
 
     private Coordinador construirCoordinador() {
@@ -177,7 +197,7 @@ public class ModificarCoordinadorControlador {
 
     @FXML
     private void botonCancelar() {
-        if (confirmarAccion("¿Seguro que desea cancelar?")) {
+        if (confirmarAccion("Seguro que desea cancelar?")) {
             ocultarTodo();
             comboBoxCoordinadores.setValue(null);
         }
@@ -191,13 +211,18 @@ public class ModificarCoordinadorControlador {
 
     private boolean confirmarAccion(String mensaje) {
         Alert alerta = new Alert(Alert.AlertType.CONFIRMATION);
-        alerta.setTitle("Confirmación");
+        boolean confirmado = false;
+        alerta.setTitle("Confirmacion");
         alerta.setHeaderText(mensaje);
         alerta.setContentText("");
-        ButtonType botonSi = new ButtonType("Sí");
+        ButtonType botonSi = new ButtonType("Si");
         ButtonType botonNo = new ButtonType("No");
         alerta.getButtonTypes().setAll(botonSi, botonNo);
-        return alerta.showAndWait().filter(botonPresionado -> botonPresionado == botonSi).isPresent();
+        Optional<ButtonType> resultado = alerta.showAndWait();
+        if (resultado.isPresent() && resultado.get() == botonSi) {
+            confirmado = true;
+        }
+        return confirmado;
     }
 
     private void ocultarTodo() {
@@ -206,12 +231,10 @@ public class ModificarCoordinadorControlador {
         ocultarPanel(panelFormulario);
     }
 
-    private void mostrarPanel(VBox panel, Label etiquetaTitulo, Label etiquetaMensaje,
-                              String titulo, String mensaje) {
-        etiquetaTitulo.setText(titulo);
-        etiquetaMensaje.setText(mensaje);
-        panel.setVisible(true);
-        panel.setManaged(true);
+    private void mostrarPanel(VBox panelMostrar, VBox panelOcultar) {
+        panelMostrar.setVisible(true);
+        panelMostrar.setManaged(true);
+        ocultarPanel(panelOcultar);
     }
 
     private void ocultarPanel(VBox panel) {
@@ -220,12 +243,14 @@ public class ModificarCoordinadorControlador {
     }
 
     private void mostrarError(String titulo, String mensaje) {
-        ocultarPanel(panelExito);
-        mostrarPanel(panelError, etiquetaTituloError, etiquetaMensajeError, titulo, mensaje);
+        etiquetaTituloError.setText(titulo);
+        etiquetaMensajeError.setText(mensaje);
+        mostrarPanel(panelError, panelExito);
     }
 
     private void mostrarExito(String titulo, String mensaje) {
-        ocultarPanel(panelError);
-        mostrarPanel(panelExito, etiquetaTituloExito, etiquetaMensajeExito, titulo, mensaje);
+        etiquetaTituloExito.setText(titulo);
+        etiquetaMensajeExito.setText(mensaje);
+        mostrarPanel(panelExito, panelError);
     }
 }

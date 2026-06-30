@@ -30,6 +30,9 @@ public class SubirDocumentacionPracticanteControlador {
     private static final String CARPETA_UPLOADS = "uploads/documentacion/";
     private static final int FILAS_AFECTADAS_ESPERADAS = 1;
 
+    private final DocumentacionPracticanteDao documentacionDao = new DocumentacionPracticanteDao();
+    private final EntregaDocumentacionDao entregaDao = new EntregaDocumentacionDao();
+
     @FXML private Label etiquetaArchivo;
     @FXML private VBox panelError;
     @FXML private VBox panelExito;
@@ -39,19 +42,18 @@ public class SubirDocumentacionPracticanteControlador {
     @FXML private Label etiquetaMensajeExito;
 
     private File archivoSeleccionado = null;
-    private DocumentacionPracticanteDao documentacionDao = new DocumentacionPracticanteDao();
-    private EntregaDocumentacionDao entregaDao = new EntregaDocumentacionDao();
 
     @FXML
-    private void botonSeleccionarPDF(ActionEvent event) {
+    private void botonSeleccionarPDF(ActionEvent evento) {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Seleccionar PDF");
         fileChooser.getExtensionFilters().add(
                 new FileChooser.ExtensionFilter("Archivos PDF", "*.pdf")
         );
-        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        File archivo = fileChooser.showOpenDialog(stage);
-        if (archivo != null) {
+        Stage escenario = (Stage) ((Node) evento.getSource()).getScene().getWindow();
+        File archivo = fileChooser.showOpenDialog(escenario);
+        boolean archivoElegido = archivo != null;
+        if (archivoElegido) {
             archivoSeleccionado = archivo;
             etiquetaArchivo.setText(archivo.getName());
             ocultarPanel(panelError);
@@ -62,44 +64,38 @@ public class SubirDocumentacionPracticanteControlador {
     private void botonSubir() {
         ocultarPanel(panelError);
         ocultarPanel(panelExito);
-        if (!archivoSeleccionado()) {
-            return;
-        }
-        procesarSubida();
-    }
-
-    private boolean archivoSeleccionado() {
         boolean hayArchivo = archivoSeleccionado != null;
         if (!hayArchivo) {
-            mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
-                    "Archivo requerido", "DEBES SELECCIONAR UN ARCHIVO PDF.");
+            mostrarError("Archivo requerido", "DEBES SELECCIONAR UN ARCHIVO PDF.");
+        } else {
+            procesarSubida();
         }
-        return hayArchivo;
     }
 
     private void procesarSubida() {
         String rutaRelativa = copiarArchivo();
-        if (rutaRelativa == null) {
-            return;
+        boolean copiaExitosa = rutaRelativa != null;
+        if (copiaExitosa) {
+            guardarDocumentacion(rutaRelativa);
         }
-        guardarDocumentacion(rutaRelativa);
     }
 
     private String copiarArchivo() {
+        String ruta = null;
         try {
             File carpeta = new File(CARPETA_UPLOADS);
-            if (!carpeta.exists()) {
+            boolean carpetaExiste = carpeta.exists();
+            if (!carpetaExiste) {
                 carpeta.mkdirs();
             }
             Path destino = Path.of(CARPETA_UPLOADS + archivoSeleccionado.getName());
             Files.copy(archivoSeleccionado.toPath(), destino, StandardCopyOption.REPLACE_EXISTING);
-            return CARPETA_UPLOADS + archivoSeleccionado.getName();
+            ruta = CARPETA_UPLOADS + archivoSeleccionado.getName();
         } catch (IOException excepcion) {
             LOGGER.log(Level.SEVERE, "Error al copiar el archivo", excepcion);
-            mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
-                    "Error de archivo", "NO SE PUDO COPIAR EL PDF.");
-            return null;
+            mostrarError("Error de archivo", "NO SE PUDO COPIAR EL PDF.");
         }
+        return ruta;
     }
 
     private void guardarDocumentacion(String rutaRelativa) {
@@ -111,12 +107,11 @@ public class SubirDocumentacionPracticanteControlador {
             if (idDocumentacion >= FILAS_AFECTADAS_ESPERADAS) {
                 guardarEntrega(idDocumentacion);
             } else {
-                mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
-                        "Error al subir", "NO SE PUDO GUARDAR LA DOCUMENTACION.");
+                mostrarError("Error al subir", "NO SE PUDO GUARDAR LA DOCUMENTACION.");
             }
         } catch (UsuariosExcepcion excepcion) {
-            mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
-                    "Error inesperado", excepcion.getMessage().toUpperCase());
+            LOGGER.log(Level.SEVERE, "Error al guardar documentacion", excepcion);
+            mostrarError("Error inesperado", excepcion.getMessage().toUpperCase());
         }
     }
 
@@ -129,15 +124,13 @@ public class SubirDocumentacionPracticanteControlador {
             int filasAfectadas = entregaDao.agregarEntrega(entrega);
             if (filasAfectadas >= FILAS_AFECTADAS_ESPERADAS) {
                 limpiarFormulario();
-                mostrarPanel(etiquetaTituloExito, etiquetaMensajeExito, panelExito,
-                        "Documentación subida", "TU DOCUMENTACION FUE ENVIADA CORRECTAMENTE.");
+                mostrarExito("Documentacion subida", "TU DOCUMENTACION FUE ENVIADA CORRECTAMENTE.");
             } else {
-                mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
-                        "Error al subir", "NO SE PUDO REGISTRAR LA ENTREGA.");
+                mostrarError("Error al subir", "NO SE PUDO REGISTRAR LA ENTREGA.");
             }
         } catch (UsuariosExcepcion excepcion) {
-            mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
-                    "Error inesperado", excepcion.getMessage().toUpperCase());
+            LOGGER.log(Level.SEVERE, "Error al guardar entrega", excepcion);
+            mostrarError("Error inesperado", excepcion.getMessage().toUpperCase());
         }
     }
 
@@ -149,25 +142,36 @@ public class SubirDocumentacionPracticanteControlador {
     }
 
     @FXML
-    private void botonRegresar(ActionEvent event) {
-        Stage escenario = (Stage) ((Node) event.getSource()).getScene().getWindow();
+    private void botonRegresar(ActionEvent evento) {
+        Stage escenario = (Stage) ((Node) evento.getSource()).getScene().getWindow();
         escenario.close();
     }
 
     private void limpiarFormulario() {
-        etiquetaArchivo.setText("Ningún archivo seleccionado");
+        etiquetaArchivo.setText("Ningun archivo seleccionado");
         archivoSeleccionado = null;
     }
 
-    private void mostrarPanel(Label etiquetaTitulo, Label etiquetaMensaje, VBox panel, String titulo, String mensaje) {
-        etiquetaTitulo.setText(titulo);
-        etiquetaMensaje.setText(mensaje);
-        panel.setVisible(true);
-        panel.setManaged(true);
+    private void mostrarPanel(VBox panelMostrar, VBox panelOcultar) {
+        panelMostrar.setVisible(true);
+        panelMostrar.setManaged(true);
+        ocultarPanel(panelOcultar);
     }
 
     private void ocultarPanel(VBox panel) {
         panel.setVisible(false);
         panel.setManaged(false);
+    }
+
+    private void mostrarError(String titulo, String mensaje) {
+        etiquetaTituloError.setText(titulo);
+        etiquetaMensajeError.setText(mensaje);
+        mostrarPanel(panelError, panelExito);
+    }
+
+    private void mostrarExito(String titulo, String mensaje) {
+        etiquetaTituloExito.setText(titulo);
+        etiquetaMensajeExito.setText(mensaje);
+        mostrarPanel(panelExito, panelError);
     }
 }

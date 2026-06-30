@@ -50,7 +50,7 @@ public class PreferenciaProyectoPrueba {
 
     @Test
     public void pruebaGuardarPreferenciasAlternoProyectosDistintos() {
-        List<Integer> idProyectos = Arrays.asList(4, 5, 6);
+        List<Integer> idProyectos = Arrays.asList(2, 5);
         PreferenciaProyectoDao preferenciaProyectoDao = new PreferenciaProyectoDao();
         assertDoesNotThrow(() -> preferenciaProyectoDao.guardarPreferencias("S24013282", idProyectos));
     }
@@ -59,40 +59,49 @@ public class PreferenciaProyectoPrueba {
     public void pruebaGuardarPreferenciasExcepcionMatriculaNula() {
         List<Integer> idProyectos = Arrays.asList(1, 2, 3);
         PreferenciaProyectoDao preferenciaProyectoDao = new PreferenciaProyectoDao();
-        assertThrows(UsuariosExcepcion.class, () -> preferenciaProyectoDao.guardarPreferencias(null, idProyectos));
+        assertThrows(UsuariosExcepcion.class,
+                () -> preferenciaProyectoDao.guardarPreferencias(null, idProyectos));
     }
 
     @Test
     public void pruebaGuardarPreferenciasExcepcionListaNula() {
         PreferenciaProyectoDao preferenciaProyectoDao = new PreferenciaProyectoDao();
-        assertThrows(UsuariosExcepcion.class, () -> preferenciaProyectoDao.guardarPreferencias("S24013282", null));
+        assertThrows(UsuariosExcepcion.class,
+                () -> preferenciaProyectoDao.guardarPreferencias("S24013282", null));
     }
 
     @Test
     public void pruebaObtenerPreferenciasExitoso() throws UsuariosExcepcion {
-        PreferenciaProyectoDao preferenciaProyectoDao = new PreferenciaProyectoDao();
-        List<PreferenciaProyecto> preferencias = preferenciaProyectoDao.obtenerPreferencias("S24013282");
-        assertNotNull(preferencias);
-    }
-
-    @Test
-    public void pruebaObtenerPreferenciasAlternoOtraPracticante() throws UsuariosExcepcion {
         PreferenciaProyectoDao preferenciaProyectoDao = new PreferenciaProyectoDao();
         List<PreferenciaProyecto> preferencias = preferenciaProyectoDao.obtenerPreferencias("S22019874");
         assertNotNull(preferencias);
     }
 
     @Test
+    public void pruebaObtenerPreferenciasAlternoOtraPracticante() throws UsuariosExcepcion {
+        PreferenciaProyectoDao preferenciaProyectoDao = new PreferenciaProyectoDao();
+        List<PreferenciaProyecto> preferencias = preferenciaProyectoDao.obtenerPreferencias("S21007654");
+        assertNotNull(preferencias);
+    }
+
+    @Test
     public void pruebaObtenerPreferenciasAlternoListaNoVacia() throws UsuariosExcepcion {
         PreferenciaProyectoDao preferenciaProyectoDao = new PreferenciaProyectoDao();
-        List<PreferenciaProyecto> preferencias = preferenciaProyectoDao.obtenerPreferencias("S24013282");
+        List<PreferenciaProyecto> preferencias = preferenciaProyectoDao.obtenerPreferencias("S22019874");
         assertTrue(preferencias.size() > 0);
+    }
+
+    @Test
+    public void pruebaObtenerPreferenciasCantidadCorrecta() throws UsuariosExcepcion {
+        PreferenciaProyectoDao preferenciaProyectoDao = new PreferenciaProyectoDao();
+        List<PreferenciaProyecto> preferencias = preferenciaProyectoDao.obtenerPreferencias("S22019874");
+        assertEquals(3, preferencias.size());
     }
 
     @Test
     public void pruebaObtenerPreferenciasTienenMatricula() throws UsuariosExcepcion {
         PreferenciaProyectoDao preferenciaProyectoDao = new PreferenciaProyectoDao();
-        List<PreferenciaProyecto> preferencias = preferenciaProyectoDao.obtenerPreferencias("S24013282");
+        List<PreferenciaProyecto> preferencias = preferenciaProyectoDao.obtenerPreferencias("S22019874");
         for (PreferenciaProyecto preferencia : preferencias) {
             assertNotNull(preferencia.getMatricula());
         }
@@ -101,14 +110,37 @@ public class PreferenciaProyectoPrueba {
     @Test
     public void pruebaObtenerPreferenciasTienenPrioridad() throws UsuariosExcepcion {
         PreferenciaProyectoDao preferenciaProyectoDao = new PreferenciaProyectoDao();
-        List<PreferenciaProyecto> preferencias = preferenciaProyectoDao.obtenerPreferencias("S24013282");
+        List<PreferenciaProyecto> preferencias = preferenciaProyectoDao.obtenerPreferencias("S22019874");
         for (PreferenciaProyecto preferencia : preferencias) {
             assertTrue(preferencia.getPrioridad() > 0);
         }
     }
 
     @Test
-    public void pruebaObtenerPreferenciasAlternoMatriculaSinPreferencias() throws UsuariosExcepcion {
+    public void pruebaObtenerPreferenciasMatriculaCorrecta() throws UsuariosExcepcion {
+        PreferenciaProyectoDao preferenciaProyectoDao = new PreferenciaProyectoDao();
+        List<PreferenciaProyecto> preferencias = preferenciaProyectoDao.obtenerPreferencias("S21007654");
+        for (PreferenciaProyecto preferencia : preferencias) {
+            assertEquals("S21007654", preferencia.getMatricula());
+        }
+    }
+
+    @Test
+    public void pruebaObtenerPreferenciasAlternoUnaPreferencia() throws UsuariosExcepcion {
+        PreferenciaProyectoDao preferenciaProyectoDao = new PreferenciaProyectoDao();
+        List<PreferenciaProyecto> preferencias = preferenciaProyectoDao.obtenerPreferencias("S23010045");
+        assertEquals(1, preferencias.size());
+    }
+
+    @Test
+    public void pruebaObtenerPreferenciasAlternoSinPreferencias() throws UsuariosExcepcion {
+        PreferenciaProyectoDao preferenciaProyectoDao = new PreferenciaProyectoDao();
+        List<PreferenciaProyecto> preferencias = preferenciaProyectoDao.obtenerPreferencias("S24013290");
+        assertEquals(0, preferencias.size());
+    }
+
+    @Test
+    public void pruebaObtenerPreferenciasAlternoMatriculaInexistente() throws UsuariosExcepcion {
         PreferenciaProyectoDao preferenciaProyectoDao = new PreferenciaProyectoDao();
         List<PreferenciaProyecto> preferencias = preferenciaProyectoDao.obtenerPreferencias("S99999999");
         assertEquals(0, preferencias.size());
@@ -117,6 +149,7 @@ public class PreferenciaProyectoPrueba {
     @Test
     public void pruebaObtenerPreferenciasExcepcionMatriculaNula() {
         PreferenciaProyectoDao preferenciaProyectoDao = new PreferenciaProyectoDao();
-        assertThrows(UsuariosExcepcion.class, () -> preferenciaProyectoDao.obtenerPreferencias(null));
+        assertThrows(UsuariosExcepcion.class,
+                () -> preferenciaProyectoDao.obtenerPreferencias(null));
     }
 }

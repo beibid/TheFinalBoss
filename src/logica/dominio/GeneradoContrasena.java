@@ -9,9 +9,9 @@ public class GeneradoContrasena {
 
     public static String generarContrasenaTemportal() {
         StringBuilder contrasena = new StringBuilder();
-        SecureRandom random = new SecureRandom();
+        SecureRandom aleatorio = new SecureRandom();
         for (int i = 0; i < LONGITUD_CONTRASENA; i++) {
-            contrasena.append(CARACTERES.charAt(random.nextInt(CARACTERES.length())));
+            contrasena.append(CARACTERES.charAt(aleatorio.nextInt(CARACTERES.length())));
         }
         return contrasena.toString();
     }

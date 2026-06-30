@@ -15,11 +15,11 @@ public class OrganizacionVinculadaPrueba {
     @Test
     public void pruebaInsertarOrganizacionExitoso() throws UsuariosExcepcion {
         OrganizacionVinculada organizacion = new OrganizacionVinculada();
-        organizacion.setNombre("Grupo Bimbo Xalapa");
-        organizacion.setDireccion("Av. Lazaro Cardenas 456, Xalapa");
-        organizacion.setTelefono("2281904321");
-        organizacion.setCorreo("contacto@bimboxalapa.com");
-        organizacion.setSector("Alimenticio");
+        organizacion.setNombre("Innovatech Xalapa");
+        organizacion.setDireccion("Av. Americas 500, Xalapa");
+        organizacion.setTelefono("2281112233");
+        organizacion.setCorreo("contacto@innovatech.com");
+        organizacion.setSector("Tecnologia");
         organizacion.setEstadoOrganizacion(EstadoOrganizacion.Activa);
         OrganizacionVinculadaDao organizacionVinculadaDao = new OrganizacionVinculadaDao();
         int filasAfectadas = organizacionVinculadaDao.insertarOrganizacionVinculada(organizacion);
@@ -29,10 +29,10 @@ public class OrganizacionVinculadaPrueba {
     @Test
     public void pruebaInsertarOrganizacionAlternoSectorTecnologia() throws UsuariosExcepcion {
         OrganizacionVinculada organizacion = new OrganizacionVinculada();
-        organizacion.setNombre("Softtek Veracruz");
-        organizacion.setDireccion("Av. Tecnologico 200, Xalapa");
-        organizacion.setTelefono("2281567890");
-        organizacion.setCorreo("contacto@softtek.com");
+        organizacion.setNombre("DataSoft Veracruz");
+        organizacion.setDireccion("Blvd. Cristobal Colon 200, Xalapa");
+        organizacion.setTelefono("2284445566");
+        organizacion.setCorreo("info@datasoft.com");
         organizacion.setSector("Tecnologia");
         organizacion.setEstadoOrganizacion(EstadoOrganizacion.Activa);
         OrganizacionVinculadaDao organizacionVinculadaDao = new OrganizacionVinculadaDao();
@@ -43,10 +43,10 @@ public class OrganizacionVinculadaPrueba {
     @Test
     public void pruebaInsertarOrganizacionAlternoSectorConstruccion() throws UsuariosExcepcion {
         OrganizacionVinculada organizacion = new OrganizacionVinculada();
-        organizacion.setNombre("Cemex Veracruz");
-        organizacion.setDireccion("Blvd. Adolfo Ruiz Cortines 789");
-        organizacion.setTelefono("2291873456");
-        organizacion.setCorreo("ventas@cemexver.com");
+        organizacion.setNombre("Constructora del Golfo");
+        organizacion.setDireccion("Carr. Xalapa-Veracruz Km 5");
+        organizacion.setTelefono("2287778899");
+        organizacion.setCorreo("obras@delgolfo.com");
         organizacion.setSector("Construccion");
         organizacion.setEstadoOrganizacion(EstadoOrganizacion.Activa);
         OrganizacionVinculadaDao organizacionVinculadaDao = new OrganizacionVinculadaDao();
@@ -57,10 +57,10 @@ public class OrganizacionVinculadaPrueba {
     @Test
     public void pruebaInsertarOrganizacionAlternoSectorGobierno() throws UsuariosExcepcion {
         OrganizacionVinculada organizacion = new OrganizacionVinculada();
-        organizacion.setNombre("Municipio de Xalapa");
-        organizacion.setDireccion("Enriquez 20, Centro, Xalapa");
-        organizacion.setTelefono("2288412300");
-        organizacion.setCorreo("contacto@xalapa.gob.mx");
+        organizacion.setNombre("Secretaria de Educacion Veracruz");
+        organizacion.setDireccion("Av. Xalapa 100, Centro");
+        organizacion.setTelefono("2280001122");
+        organizacion.setCorreo("contacto@sev.gob.mx");
         organizacion.setSector("Gobierno");
         organizacion.setEstadoOrganizacion(EstadoOrganizacion.Activa);
         OrganizacionVinculadaDao organizacionVinculadaDao = new OrganizacionVinculadaDao();
@@ -71,10 +71,10 @@ public class OrganizacionVinculadaPrueba {
     @Test
     public void pruebaInsertarOrganizacionAlternoEstadoInactiva() throws UsuariosExcepcion {
         OrganizacionVinculada organizacion = new OrganizacionVinculada();
-        organizacion.setNombre("Empresa Temporal SA");
-        organizacion.setDireccion("Calle Zaragoza 10, Xalapa");
-        organizacion.setTelefono("2289001234");
-        organizacion.setCorreo("info@temporal.com");
+        organizacion.setNombre("Logistica Express SA");
+        organizacion.setDireccion("Calle Hidalgo 45, Xalapa");
+        organizacion.setTelefono("2283334455");
+        organizacion.setCorreo("logistica@express.com");
         organizacion.setSector("Servicios");
         organizacion.setEstadoOrganizacion(EstadoOrganizacion.Inactiva);
         OrganizacionVinculadaDao organizacionVinculadaDao = new OrganizacionVinculadaDao();
@@ -121,39 +121,39 @@ public class OrganizacionVinculadaPrueba {
     @Test
     public void pruebaModificarOrganizacionExitoso() throws UsuariosExcepcion {
         OrganizacionVinculada organizacion = new OrganizacionVinculada();
-        organizacion.setNombre("Softtek Veracruz Actualizado");
-        organizacion.setDireccion("Av. Tecnologico 300, Xalapa");
-        organizacion.setTelefono("2281567891");
-        organizacion.setCorreo("nuevo@softtek.com");
-        organizacion.setSector("Tecnologia");
+        organizacion.setNombre("Sams Club Actualizado");
+        organizacion.setDireccion("Av. Lazaro Cardenas 500");
+        organizacion.setTelefono("2282546725");
+        organizacion.setCorreo("samsclub.nuevo@gmail.com");
+        organizacion.setSector("Ventas");
         OrganizacionVinculadaDao organizacionVinculadaDao = new OrganizacionVinculadaDao();
-        int filasAfectadas = organizacionVinculadaDao.modificarOrganizacionVinculada(1, organizacion);
+        int filasAfectadas = organizacionVinculadaDao.modificarOrganizacionVinculada(4, organizacion);
         assertEquals(1, filasAfectadas);
     }
 
     @Test
     public void pruebaModificarOrganizacionAlternoCambioSector() throws UsuariosExcepcion {
         OrganizacionVinculada organizacion = new OrganizacionVinculada();
-        organizacion.setNombre("Cemex Veracruz");
-        organizacion.setDireccion("Blvd. Adolfo Ruiz Cortines 789");
-        organizacion.setTelefono("2291873456");
-        organizacion.setCorreo("ventas@cemexver.com");
-        organizacion.setSector("Materiales");
+        organizacion.setNombre("Oracle Xalapa");
+        organizacion.setDireccion("5 de febrero");
+        organizacion.setTelefono("2281239243");
+        organizacion.setCorreo("oracle.nuevo@gmail.com");
+        organizacion.setSector("Software");
         OrganizacionVinculadaDao organizacionVinculadaDao = new OrganizacionVinculadaDao();
-        int filasAfectadas = organizacionVinculadaDao.modificarOrganizacionVinculada(2, organizacion);
+        int filasAfectadas = organizacionVinculadaDao.modificarOrganizacionVinculada(5, organizacion);
         assertEquals(1, filasAfectadas);
     }
 
     @Test
     public void pruebaModificarOrganizacionAlternoCambioDireccion() throws UsuariosExcepcion {
         OrganizacionVinculada organizacion = new OrganizacionVinculada();
-        organizacion.setNombre("Grupo Bimbo Xalapa");
-        organizacion.setDireccion("Calle Nueva 999, Xalapa");
-        organizacion.setTelefono("2281904321");
-        organizacion.setCorreo("contacto@bimboxalapa.com");
-        organizacion.setSector("Alimenticio");
+        organizacion.setNombre("Municipio de Xalapa");
+        organizacion.setDireccion("Enriquez 25, Centro, Xalapa");
+        organizacion.setTelefono("2288412300");
+        organizacion.setCorreo("contacto.nuevo@xalapa.gob.mx");
+        organizacion.setSector("Gobierno");
         OrganizacionVinculadaDao organizacionVinculadaDao = new OrganizacionVinculadaDao();
-        int filasAfectadas = organizacionVinculadaDao.modificarOrganizacionVinculada(3, organizacion);
+        int filasAfectadas = organizacionVinculadaDao.modificarOrganizacionVinculada(6, organizacion);
         assertEquals(1, filasAfectadas);
     }
 
@@ -179,7 +179,7 @@ public class OrganizacionVinculadaPrueba {
         organizacion.setCorreo("contacto@softtek.com");
         organizacion.setSector("Tecnologia");
         OrganizacionVinculadaDao organizacionVinculadaDao = new OrganizacionVinculadaDao();
-        assertThrows(UsuariosExcepcion.class, () -> organizacionVinculadaDao.modificarOrganizacionVinculada(1, organizacion));
+        assertThrows(UsuariosExcepcion.class, () -> organizacionVinculadaDao.modificarOrganizacionVinculada(4, organizacion));
     }
 
     @Test
@@ -191,7 +191,7 @@ public class OrganizacionVinculadaPrueba {
         organizacion.setCorreo(null);
         organizacion.setSector("Servicios");
         OrganizacionVinculadaDao organizacionVinculadaDao = new OrganizacionVinculadaDao();
-        assertThrows(UsuariosExcepcion.class, () -> organizacionVinculadaDao.modificarOrganizacionVinculada(1, organizacion));
+        assertThrows(UsuariosExcepcion.class, () -> organizacionVinculadaDao.modificarOrganizacionVinculada(4, organizacion));
     }
 
     @Test
@@ -238,22 +238,29 @@ public class OrganizacionVinculadaPrueba {
     @Test
     public void pruebaInactivarOrganizacionExitoso() throws MensajeriaExcepcion {
         OrganizacionVinculadaDao organizacionVinculadaDao = new OrganizacionVinculadaDao();
-        int filasAfectadas = organizacionVinculadaDao.inactivarOrganizacionVinculada(1);
+        int filasAfectadas = organizacionVinculadaDao.inactivarOrganizacionVinculada(4);
         assertEquals(1, filasAfectadas);
     }
 
     @Test
     public void pruebaInactivarOrganizacionAlternoSegundoRegistro() throws MensajeriaExcepcion {
         OrganizacionVinculadaDao organizacionVinculadaDao = new OrganizacionVinculadaDao();
-        int filasAfectadas = organizacionVinculadaDao.inactivarOrganizacionVinculada(2);
+        int filasAfectadas = organizacionVinculadaDao.inactivarOrganizacionVinculada(5);
         assertEquals(1, filasAfectadas);
     }
 
     @Test
     public void pruebaInactivarOrganizacionAlternoTercerRegistro() throws MensajeriaExcepcion {
         OrganizacionVinculadaDao organizacionVinculadaDao = new OrganizacionVinculadaDao();
-        int filasAfectadas = organizacionVinculadaDao.inactivarOrganizacionVinculada(3);
+        int filasAfectadas = organizacionVinculadaDao.inactivarOrganizacionVinculada(6);
         assertEquals(1, filasAfectadas);
+    }
+
+    @Test
+    public void pruebaInactivarOrganizacionAlternoYaInactiva() throws MensajeriaExcepcion {
+        OrganizacionVinculadaDao organizacionVinculadaDao = new OrganizacionVinculadaDao();
+        int filasAfectadas = organizacionVinculadaDao.inactivarOrganizacionVinculada(1);
+        assertEquals(0, filasAfectadas);
     }
 
     @Test

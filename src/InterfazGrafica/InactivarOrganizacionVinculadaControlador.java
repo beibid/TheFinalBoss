@@ -17,6 +17,7 @@ import logica.dao.excepciones.UsuariosExcepcion;
 import logica.dao.objetos.OrganizacionVinculadaDao;
 import logica.dominio.OrganizacionVinculada;
 import java.util.List;
+import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -24,6 +25,8 @@ public class InactivarOrganizacionVinculadaControlador {
 
     private static final Logger LOGGER = Logger.getLogger(InactivarOrganizacionVinculadaControlador.class.getName());
     private static final int FILAS_AFECTADAS_ESPERADAS = 1;
+
+    private final OrganizacionVinculadaDao organizacionDao = new OrganizacionVinculadaDao();
 
     @FXML private ComboBox<OrganizacionVinculada> comboBoxOrganizacion;
     @FXML private VBox panelDatos;
@@ -36,7 +39,6 @@ public class InactivarOrganizacionVinculadaControlador {
     @FXML private Label etiquetaNombre;
     @FXML private Label etiquetaIdentificadorOrganizacion;
 
-    private final OrganizacionVinculadaDao organizacionDao = new OrganizacionVinculadaDao();
     private OrganizacionVinculada organizacionSeleccionada;
 
     @FXML
@@ -68,8 +70,9 @@ public class InactivarOrganizacionVinculadaControlador {
             @Override
             protected void updateItem(OrganizacionVinculada organizacion, boolean vacio) {
                 super.updateItem(organizacion, vacio);
-                if (vacio || organizacion == null) {
-                    setText("-- Selecciona una organización --");
+                boolean esVacioONulo = vacio || organizacion == null;
+                if (esVacioONulo) {
+                    setText("-- Selecciona una organizacion --");
                 } else {
                     setText(organizacion.getNombre());
                 }
@@ -97,8 +100,8 @@ public class InactivarOrganizacionVinculadaControlador {
     @FXML
     private void botonInactivar() {
         if (organizacionSeleccionada == null) {
-            mostrarError("Sin selección", "POR FAVOR SELECCIONA UNA ORGANIZACIÓN.");
-        } else if (confirmarAccion("¿Seguro que desea inactivar esta organización?")) {
+            mostrarError("Sin seleccion", "POR FAVOR SELECCIONA UNA ORGANIZACION.");
+        } else if (confirmarAccion("Seguro que desea inactivar esta organizacion?")) {
             ejecutarInactivacion(organizacionSeleccionada);
         }
     }
@@ -110,19 +113,19 @@ public class InactivarOrganizacionVinculadaControlador {
                 limpiar();
                 comboBoxOrganizacion.setDisable(false);
                 cargarOrganizacionesActivas();
-                mostrarExito("Organización inactivada", "LA ORGANIZACIÓN FUE INACTIVADA EXITOSAMENTE.");
+                mostrarExito("Organizacion inactivada", "LA ORGANIZACION FUE INACTIVADA EXITOSAMENTE.");
             } else {
-                mostrarError("Error", "NO SE PUDO INACTIVAR LA ORGANIZACIÓN.");
+                mostrarError("Error", "NO SE PUDO INACTIVAR LA ORGANIZACION.");
             }
         } catch (MensajeriaExcepcion excepcion) {
-            LOGGER.log(Level.SEVERE, "Error al inactivar organización", excepcion);
+            LOGGER.log(Level.SEVERE, "Error al inactivar organizacion", excepcion);
             mostrarError("Error inesperado", excepcion.getMessage().toUpperCase());
         }
     }
 
     @FXML
     private void botonCancelar() {
-        if (confirmarAccion("¿Seguro que desea cancelar?")) {
+        if (confirmarAccion("Seguro que desea cancelar?")) {
             limpiar();
         }
     }
@@ -135,13 +138,18 @@ public class InactivarOrganizacionVinculadaControlador {
 
     private boolean confirmarAccion(String mensaje) {
         Alert alerta = new Alert(Alert.AlertType.CONFIRMATION);
-        alerta.setTitle("Confirmación");
+        boolean confirmado = false;
+        alerta.setTitle("Confirmacion");
         alerta.setHeaderText(mensaje);
         alerta.setContentText("");
-        ButtonType botonSi = new ButtonType("Sí");
+        ButtonType botonSi = new ButtonType("Si");
         ButtonType botonNo = new ButtonType("No");
         alerta.getButtonTypes().setAll(botonSi, botonNo);
-        return alerta.showAndWait().filter(botonPresionado -> botonPresionado == botonSi).isPresent();
+        Optional<ButtonType> resultado = alerta.showAndWait();
+        if (resultado.isPresent() && resultado.get() == botonSi) {
+            confirmado = true;
+        }
+        return confirmado;
     }
 
     private void limpiar() {
@@ -153,12 +161,10 @@ public class InactivarOrganizacionVinculadaControlador {
         ocultarPanel(panelExito);
     }
 
-    private void mostrarPanel(VBox panel, Label etiquetaTitulo, Label etiquetaMensaje,
-                              String titulo, String mensaje) {
-        etiquetaTitulo.setText(titulo);
-        etiquetaMensaje.setText(mensaje);
-        panel.setVisible(true);
-        panel.setManaged(true);
+    private void mostrarPanel(VBox panelMostrar, VBox panelOcultar) {
+        panelMostrar.setVisible(true);
+        panelMostrar.setManaged(true);
+        ocultarPanel(panelOcultar);
     }
 
     private void ocultarPanel(VBox panel) {
@@ -167,12 +173,14 @@ public class InactivarOrganizacionVinculadaControlador {
     }
 
     private void mostrarError(String titulo, String mensaje) {
-        ocultarPanel(panelExito);
-        mostrarPanel(panelError, etiquetaTituloError, etiquetaMensajeError, titulo, mensaje);
+        etiquetaTituloError.setText(titulo);
+        etiquetaMensajeError.setText(mensaje);
+        mostrarPanel(panelError, panelExito);
     }
 
     private void mostrarExito(String titulo, String mensaje) {
-        ocultarPanel(panelError);
-        mostrarPanel(panelExito, etiquetaTituloExito, etiquetaMensajeExito, titulo, mensaje);
+        etiquetaTituloExito.setText(titulo);
+        etiquetaMensajeExito.setText(mensaje);
+        mostrarPanel(panelExito, panelError);
     }
 }

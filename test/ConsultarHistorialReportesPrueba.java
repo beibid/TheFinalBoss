@@ -10,7 +10,8 @@ import org.testfx.framework.junit5.ApplicationTest;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class ConsultarHistorialReportesPrueba extends ApplicationTest {
+public class
+ConsultarHistorialReportesPrueba extends ApplicationTest {
 
     private static final int PAUSA_CORTA = 800;
     private static final int PAUSA_LARGA = 1500;

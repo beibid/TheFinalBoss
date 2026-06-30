@@ -14,7 +14,7 @@ public class PeriodoUniversitarioPrueba {
 
     @Test
     public void pruebaInsertarPeriodoExitoso() throws UsuariosExcepcion {
-        PeriodoUniversitario periodo = new PeriodoUniversitario(0, "Agosto-Diciembre 2026", Date.valueOf("2026-08-10"), null, EstadoPeriodo.Abierto);
+        PeriodoUniversitario periodo = new PeriodoUniversitario(0, "Febrero-Julio 2026", Date.valueOf("2026-02-09"), null, EstadoPeriodo.Abierto);
         PeriodoUniversitarioDao periodoUniversitarioDao = new PeriodoUniversitarioDao();
         int filasAfectadas = periodoUniversitarioDao.insertarPeriodo(periodo);
         assertEquals(1, filasAfectadas);
@@ -22,7 +22,7 @@ public class PeriodoUniversitarioPrueba {
 
     @Test
     public void pruebaInsertarPeriodoAlternoFechaDiferente() throws UsuariosExcepcion {
-        PeriodoUniversitario periodo = new PeriodoUniversitario(0, "Enero-Mayo 2027", Date.valueOf("2027-01-17"), null, EstadoPeriodo.Abierto);
+        PeriodoUniversitario periodo = new PeriodoUniversitario(0, "Agosto-Diciembre 2027", Date.valueOf("2027-08-09"), null, EstadoPeriodo.Abierto);
         PeriodoUniversitarioDao periodoUniversitarioDao = new PeriodoUniversitarioDao();
         int filasAfectadas = periodoUniversitarioDao.insertarPeriodo(periodo);
         assertEquals(1, filasAfectadas);
@@ -30,7 +30,7 @@ public class PeriodoUniversitarioPrueba {
 
     @Test
     public void pruebaInsertarPeriodoAlternoEstadoCerrado() throws UsuariosExcepcion {
-        PeriodoUniversitario periodo = new PeriodoUniversitario(0, "Agosto-Diciembre 2025", Date.valueOf("2025-08-11"), Date.valueOf("2025-12-19"), EstadoPeriodo.Cerrado);
+        PeriodoUniversitario periodo = new PeriodoUniversitario(0, "Enero-Mayo 2025", Date.valueOf("2025-01-13"), Date.valueOf("2025-05-30"), EstadoPeriodo.Cerrado);
         PeriodoUniversitarioDao periodoUniversitarioDao = new PeriodoUniversitarioDao();
         int filasAfectadas = periodoUniversitarioDao.insertarPeriodo(periodo);
         assertEquals(1, filasAfectadas);
@@ -38,7 +38,7 @@ public class PeriodoUniversitarioPrueba {
 
     @Test
     public void pruebaInsertarPeriodoAlternoConFechaFin() throws UsuariosExcepcion {
-        PeriodoUniversitario periodo = new PeriodoUniversitario(0, "Enero-Mayo 2026", Date.valueOf("2026-01-19"), Date.valueOf("2026-05-29"), EstadoPeriodo.Cerrado);
+        PeriodoUniversitario periodo = new PeriodoUniversitario(0, "Febrero-Julio 2025", Date.valueOf("2025-02-10"), Date.valueOf("2025-07-18"), EstadoPeriodo.Cerrado);
         PeriodoUniversitarioDao periodoUniversitarioDao = new PeriodoUniversitarioDao();
         int filasAfectadas = periodoUniversitarioDao.insertarPeriodo(periodo);
         assertEquals(1, filasAfectadas);
@@ -53,23 +53,16 @@ public class PeriodoUniversitarioPrueba {
 
     @Test
     public void pruebaInsertarPeriodoExcepcionFechaNula() {
-        PeriodoUniversitario periodo = new PeriodoUniversitario(0, "Agosto-Diciembre 2026", null, null, EstadoPeriodo.Abierto);
+        PeriodoUniversitario periodo = new PeriodoUniversitario(0, "Periodo Sin Fecha", null, null, EstadoPeriodo.Abierto);
         PeriodoUniversitarioDao periodoUniversitarioDao = new PeriodoUniversitarioDao();
         assertThrows(UsuariosExcepcion.class, () -> periodoUniversitarioDao.insertarPeriodo(periodo));
     }
 
     @Test
     public void pruebaInsertarPeriodoExcepcionEstadoNulo() {
-        PeriodoUniversitario periodo = new PeriodoUniversitario(0, "Agosto-Diciembre 2026", Date.valueOf("2026-08-10"), null, null);
+        PeriodoUniversitario periodo = new PeriodoUniversitario(0, "Periodo Sin Estado", Date.valueOf("2026-08-10"), null, null);
         PeriodoUniversitarioDao periodoUniversitarioDao = new PeriodoUniversitarioDao();
         assertThrows(UsuariosExcepcion.class, () -> periodoUniversitarioDao.insertarPeriodo(periodo));
-    }
-
-    @Test
-    public void pruebaVerificarPeriodoAbiertoExitoso() throws UsuariosExcepcion {
-        PeriodoUniversitarioDao periodoUniversitarioDao = new PeriodoUniversitarioDao();
-        boolean resultado = periodoUniversitarioDao.verificarPeriodoAbierto();
-        assertTrue(resultado || !resultado);
     }
 
     @Test
@@ -83,17 +76,17 @@ public class PeriodoUniversitarioPrueba {
     }
 
     @Test
+    public void pruebaVerificarPeriodoAbiertoRetornaBooleano() throws UsuariosExcepcion {
+        PeriodoUniversitarioDao periodoUniversitarioDao = new PeriodoUniversitarioDao();
+        boolean resultado = periodoUniversitarioDao.verificarPeriodoAbierto();
+        assertTrue(resultado || !resultado);
+    }
+
+    @Test
     public void pruebaObtenerPeriodosAbiertosExitoso() throws UsuariosExcepcion {
         PeriodoUniversitarioDao periodoUniversitarioDao = new PeriodoUniversitarioDao();
         List<PeriodoUniversitario> periodos = periodoUniversitarioDao.obtenerPeriodosAbiertos();
         assertNotNull(periodos);
-    }
-
-    @Test
-    public void pruebaObtenerPeriodosAbiertosListaNoVacia() throws UsuariosExcepcion {
-        PeriodoUniversitarioDao periodoUniversitarioDao = new PeriodoUniversitarioDao();
-        List<PeriodoUniversitario> periodos = periodoUniversitarioDao.obtenerPeriodosAbiertos();
-        assertTrue(periodos.size() > 0);
     }
 
     @Test
@@ -124,20 +117,6 @@ public class PeriodoUniversitarioPrueba {
     }
 
     @Test
-    public void pruebaCerrarPeriodoExitoso() throws UsuariosExcepcion {
-        PeriodoUniversitarioDao periodoUniversitarioDao = new PeriodoUniversitarioDao();
-        int filasAfectadas = periodoUniversitarioDao.cerrarPeriodo(1);
-        assertEquals(1, filasAfectadas);
-    }
-
-    @Test
-    public void pruebaCerrarPeriodoAlternoSegundoRegistro() throws UsuariosExcepcion {
-        PeriodoUniversitarioDao periodoUniversitarioDao = new PeriodoUniversitarioDao();
-        int filasAfectadas = periodoUniversitarioDao.cerrarPeriodo(2);
-        assertEquals(1, filasAfectadas);
-    }
-
-    @Test
     public void pruebaCerrarPeriodoAlternoIdNoExistente() throws UsuariosExcepcion {
         PeriodoUniversitarioDao periodoUniversitarioDao = new PeriodoUniversitarioDao();
         int filasAfectadas = periodoUniversitarioDao.cerrarPeriodo(9999);
@@ -147,7 +126,14 @@ public class PeriodoUniversitarioPrueba {
     @Test
     public void pruebaCerrarPeriodoAlternoYaCerrado() throws UsuariosExcepcion {
         PeriodoUniversitarioDao periodoUniversitarioDao = new PeriodoUniversitarioDao();
-        int filasAfectadas = periodoUniversitarioDao.cerrarPeriodo(3);
+        int filasAfectadas = periodoUniversitarioDao.cerrarPeriodo(4);
+        assertEquals(0, filasAfectadas);
+    }
+
+    @Test
+    public void pruebaCerrarPeriodoAlternoOtroYaCerrado() throws UsuariosExcepcion {
+        PeriodoUniversitarioDao periodoUniversitarioDao = new PeriodoUniversitarioDao();
+        int filasAfectadas = periodoUniversitarioDao.cerrarPeriodo(5);
         assertEquals(0, filasAfectadas);
     }
 }

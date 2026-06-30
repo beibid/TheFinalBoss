@@ -1,6 +1,5 @@
 package logica.archivos;
 
-
 import com.itextpdf.io.font.constants.StandardFonts;
 import com.itextpdf.kernel.colors.ColorConstants;
 import com.itextpdf.kernel.font.PdfFont;
@@ -16,11 +15,11 @@ import com.itextpdf.layout.properties.TextAlignment;
 import com.itextpdf.layout.properties.UnitValue;
 import logica.dominio.AutoevaluacionPracticante;
 import java.io.File;
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
 
 public class GeneradorPdfAutoevaluacion {
 
@@ -46,29 +45,29 @@ public class GeneradorPdfAutoevaluacion {
         crearCarpetaSiNoExiste();
         String nombreArchivo = generarNombreArchivo(autoevaluacion);
         String rutaCompleta = CARPETA_AUTOEVALUACIONES + nombreArchivo;
+        Document documento = null;
         try {
             PdfFont fontNormal = PdfFontFactory.createFont(StandardFonts.HELVETICA);
             PdfFont fontBold = PdfFontFactory.createFont(StandardFonts.HELVETICA_BOLD);
-            PdfWriter writer = new PdfWriter(rutaCompleta);
-            PdfDocument pdfDoc = new PdfDocument(writer);
-            Document documento = new Document(pdfDoc);
-
+            documento = new Document(new PdfDocument(new PdfWriter(rutaCompleta)));
             agregarEncabezado(documento, fontNormal, fontBold);
             agregarDatosPracticante(documento, autoevaluacion, nombrePracticante,
                     nombreProyecto, nombreOrganizacion, responsable, fontNormal, fontBold);
             agregarTablaAfirmaciones(documento, autoevaluacion, fontNormal, fontBold);
             agregarPie(documento, fontNormal);
-
-            documento.close();
             LOGGER.info("PDF de autoevaluación generado: " + rutaCompleta);
-        } catch (Exception excepcion) {
+        } catch (IOException excepcion) {
             LOGGER.log(Level.SEVERE, "Error al generar PDF de autoevaluación", excepcion);
             return null;
+        } finally {
+            if (documento != null) {
+                documento.close();
+            }
         }
         return rutaCompleta;
     }
 
-    private void agregarEncabezado(Document documento, PdfFont fontNormal, PdfFont fontBold) throws Exception {
+    private void agregarEncabezado(Document documento, PdfFont fontNormal, PdfFont fontBold) {
         documento.add(new Paragraph("FACULTAD DE ESTADÍSTICA E INFORMÁTICA")
                 .setFont(fontBold).setFontSize(13).setTextAlignment(TextAlignment.CENTER));
         documento.add(new Paragraph("Licenciatura en Ingeniería de Software")
@@ -81,16 +80,14 @@ public class GeneradorPdfAutoevaluacion {
     private void agregarDatosPracticante(Document documento, AutoevaluacionPracticante autoevaluacion,
                                          String nombrePracticante, String nombreProyecto,
                                          String nombreOrganizacion, String responsable,
-                                         PdfFont fontNormal, PdfFont fontBold) throws Exception {
+                                         PdfFont fontNormal, PdfFont fontBold) {
         Table tabla = new Table(UnitValue.createPercentArray(new float[]{40, 60}));
         tabla.setWidth(UnitValue.createPercentValue(100));
-
         agregarFilaTabla(tabla, "Nombre del alumno", nombrePracticante, fontNormal, fontBold);
         agregarFilaTabla(tabla, "Matrícula", autoevaluacion.getMatriculaPracticante(), fontNormal, fontBold);
         agregarFilaTabla(tabla, "Organización vinculada", nombreOrganizacion, fontNormal, fontBold);
         agregarFilaTabla(tabla, "Responsable del proyecto", responsable, fontNormal, fontBold);
         agregarFilaTabla(tabla, "Nombre del proyecto", nombreProyecto, fontNormal, fontBold);
-
         documento.add(tabla);
         documento.add(new Paragraph(" "));
     }
@@ -107,14 +104,15 @@ public class GeneradorPdfAutoevaluacion {
     }
 
     private void agregarTablaAfirmaciones(Document documento, AutoevaluacionPracticante autoevaluacion,
-                                          PdfFont fontNormal, PdfFont fontBold) throws Exception {
+                                          PdfFont fontNormal, PdfFont fontBold) {
         documento.add(new Paragraph("CRITERIOS")
                 .setFont(fontBold).setFontSize(11).setTextAlignment(TextAlignment.CENTER));
 
         Table tablaCriterios = new Table(UnitValue.createPercentArray(new float[]{70, 10, 10, 10, 10, 10}));
         tablaCriterios.setWidth(UnitValue.createPercentValue(100));
 
-        tablaCriterios.addCell(new Cell().add(new Paragraph("AFIRMACIONES").setFont(fontBold))
+        tablaCriterios.addCell(new Cell()
+                .add(new Paragraph("AFIRMACIONES").setFont(fontBold))
                 .setBackgroundColor(ColorConstants.LIGHT_GRAY));
         for (int i = 1; i <= 5; i++) {
             tablaCriterios.addCell(new Cell()
@@ -151,12 +149,11 @@ public class GeneradorPdfAutoevaluacion {
 
         documento.add(tablaCriterios);
         documento.add(new Paragraph(" "));
-
         documento.add(new Paragraph("LUGAR Y FECHA: _______________________________________________")
                 .setFont(fontNormal).setFontSize(10));
     }
 
-    private void agregarPie(Document documento, PdfFont fontNormal) throws Exception {
+    private void agregarPie(Document documento, PdfFont fontNormal) {
         documento.add(new Paragraph(" "));
         documento.add(new Paragraph(" "));
         documento.add(new Paragraph("___________________________________")
@@ -173,7 +170,10 @@ public class GeneradorPdfAutoevaluacion {
     private void crearCarpetaSiNoExiste() {
         File carpeta = new File(CARPETA_AUTOEVALUACIONES);
         if (!carpeta.exists()) {
-            carpeta.mkdirs();
+            boolean creada = carpeta.mkdirs();
+            if (!creada) {
+                LOGGER.warning("No se pudo crear la carpeta de autoevaluaciones: " + CARPETA_AUTOEVALUACIONES);
+            }
         }
     }
 }

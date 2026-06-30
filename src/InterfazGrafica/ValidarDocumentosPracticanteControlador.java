@@ -21,6 +21,7 @@ import logica.dominio.Practicante;
 import logica.dominio.SesionUsuario;
 import logica.dominio.enums.EstadoRevision;
 import java.util.List;
+import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -28,6 +29,9 @@ public class ValidarDocumentosPracticanteControlador {
 
     private static final Logger LOGGER = Logger.getLogger(ValidarDocumentosPracticanteControlador.class.getName());
     private static final int FILAS_AFECTADAS_ESPERADAS = 1;
+
+    private final ProfesorDao profesorDao = new ProfesorDao();
+    private final DocumentacionPracticanteDao documentacionDao = new DocumentacionPracticanteDao();
 
     @FXML private ComboBox<Practicante> comboBoxPracticantes;
     @FXML private ComboBox<DocumentacionPracticante> comboBoxDocumentos;
@@ -53,7 +57,6 @@ public class ValidarDocumentosPracticanteControlador {
     }
 
     private void cargarPracticantes() {
-        ProfesorDao profesorDao = new ProfesorDao();
         try {
             List<Practicante> practicantes = profesorDao.obtenerPracticantesPorProfesor(numPersonalProfesor);
             ObservableList<Practicante> lista = FXCollections.observableArrayList(practicantes);
@@ -62,59 +65,58 @@ public class ValidarDocumentosPracticanteControlador {
             comboBoxPracticantes.setButtonCell(crearCeldaPracticante(true));
         } catch (UsuariosExcepcion excepcion) {
             LOGGER.log(Level.SEVERE, "Error al cargar practicantes", excepcion);
-            mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError, "Error al cargar", excepcion.getMessage());
+            mostrarError("Error al cargar", excepcion.getMessage().toUpperCase());
         }
     }
 
     @FXML
     private void seleccionarPracticante() {
         Practicante practicante = comboBoxPracticantes.getValue();
-        if (practicante == null) {
-            return;
+        boolean practicanteSeleccionado = practicante != null;
+        if (practicanteSeleccionado) {
+            ocultarPaneles();
+            cargarDocumentosPendientes(practicante.getMatricula());
         }
-        ocultarPaneles();
-        cargarDocumentosPendientes(practicante.getMatricula());
     }
 
     private void cargarDocumentosPendientes(String matricula) {
-        DocumentacionPracticanteDao documentacionDao = new DocumentacionPracticanteDao();
         try {
             List<DocumentacionPracticante> documentos = documentacionDao.obtenerDocumentosPendientes(matricula);
             if (documentos.isEmpty()) {
-                mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError, "Sin documentos",
-                        "El practicante no tiene documentos pendientes de validación.");
-                return;
+                mostrarError("Sin documentos",
+                        "EL PRACTICANTE NO TIENE DOCUMENTOS PENDIENTES DE VALIDACION.");
+            } else {
+                ObservableList<DocumentacionPracticante> lista = FXCollections.observableArrayList(documentos);
+                comboBoxDocumentos.setItems(lista);
+                comboBoxDocumentos.setCellFactory(l -> crearCeldaDocumento(false));
+                comboBoxDocumentos.setButtonCell(crearCeldaDocumento(true));
+                panelDocumentos.setVisible(true);
+                panelDocumentos.setManaged(true);
             }
-            ObservableList<DocumentacionPracticante> lista = FXCollections.observableArrayList(documentos);
-            comboBoxDocumentos.setItems(lista);
-            comboBoxDocumentos.setCellFactory(l -> crearCeldaDocumento(false));
-            comboBoxDocumentos.setButtonCell(crearCeldaDocumento(true));
-            panelDocumentos.setVisible(true);
-            panelDocumentos.setManaged(true);
         } catch (UsuariosExcepcion excepcion) {
             LOGGER.log(Level.SEVERE, "Error al cargar documentos", excepcion);
-            mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError, "Error al cargar", excepcion.getMessage());
+            mostrarError("Error al cargar", excepcion.getMessage().toUpperCase());
         }
     }
 
     @FXML
     private void seleccionarDocumento() {
         documentoSeleccionado = comboBoxDocumentos.getValue();
-        if (documentoSeleccionado == null) {
-            return;
+        boolean documentoElegido = documentoSeleccionado != null;
+        if (documentoElegido) {
+            etiquetaRutaArchivo.setText(documentoSeleccionado.getRutaDeArchivo());
+            panelMotivoRechazo.setVisible(false);
+            panelMotivoRechazo.setManaged(false);
+            areaMotivoRechazo.clear();
+            panelAcciones.setVisible(true);
+            panelAcciones.setManaged(true);
         }
-        etiquetaRutaArchivo.setText(documentoSeleccionado.getRutaDeArchivo());
-        panelMotivoRechazo.setVisible(false);
-        panelMotivoRechazo.setManaged(false);
-        areaMotivoRechazo.clear();
-        panelAcciones.setVisible(true);
-        panelAcciones.setManaged(true);
     }
 
     @FXML
     private void botonAprobar() {
         ocultarPanel(panelError);
-        if (confirmarAccion("¿Desea aprobar este documento?")) {
+        if (confirmarAccion("Desea aprobar este documento?")) {
             procesarValidacion(EstadoRevision.Aprobado, null);
         }
     }
@@ -124,51 +126,42 @@ public class ValidarDocumentosPracticanteControlador {
         ocultarPanel(panelError);
         panelMotivoRechazo.setVisible(true);
         panelMotivoRechazo.setManaged(true);
-        if (!motivoValido()) {
-            mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError, "Motivo requerido",
-                    "Debes ingresar el motivo del rechazo.");
-            return;
-        }
-        if (confirmarAccion("¿Desea rechazar este documento?")) {
+        boolean motivoIngresado = !areaMotivoRechazo.getText().trim().isEmpty();
+        if (!motivoIngresado) {
+            mostrarError("Motivo requerido", "DEBES INGRESAR EL MOTIVO DEL RECHAZO.");
+        } else if (confirmarAccion("Desea rechazar este documento?")) {
             procesarValidacion(EstadoRevision.Rechazado, areaMotivoRechazo.getText().trim());
         }
     }
 
-    private boolean motivoValido() {
-        return !areaMotivoRechazo.getText().trim().isEmpty();
-    }
-
     private void procesarValidacion(EstadoRevision estado, String motivo) {
-        DocumentacionPracticanteDao documentacionDao = new DocumentacionPracticanteDao();
         try {
             int filasAfectadas = documentacionDao.validarDocumento(
                     documentoSeleccionado.getIdDocumentacionPracticante(), estado, motivo);
             if (filasAfectadas >= FILAS_AFECTADAS_ESPERADAS) {
                 limpiarTodo();
-                mostrarPanel(etiquetaTituloExito, etiquetaMensajeExito, panelExito, "Documento validado",
-                        "El documento fue " + estado.name().toLowerCase() + " exitosamente.");
+                mostrarExito("Documento validado",
+                        "EL DOCUMENTO FUE " + estado.name().toUpperCase() + " EXITOSAMENTE.");
             } else {
-                mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError, "Error al validar",
-                        "No se pudo validar el documento. Intente de nuevo.");
+                mostrarError("Error al validar", "NO SE PUDO VALIDAR EL DOCUMENTO. INTENTE DE NUEVO.");
             }
         } catch (UsuariosExcepcion excepcion) {
             LOGGER.log(Level.SEVERE, "Error al validar documento", excepcion);
-            mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError, "Error inesperado",
-                    excepcion.getMessage().toUpperCase());
+            mostrarError("Error inesperado", excepcion.getMessage().toUpperCase());
         }
     }
 
     @FXML
     private void botonCancelar() {
-        if (confirmarAccion("¿Seguro que desea cancelar?")) {
+        if (confirmarAccion("Seguro que desea cancelar?")) {
             limpiarTodo();
         }
     }
 
     @FXML
-    private void botonRegresar(ActionEvent event) {
-        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        stage.close();
+    private void botonRegresar(ActionEvent evento) {
+        Stage escenario = (Stage) ((Node) evento.getSource()).getScene().getWindow();
+        escenario.close();
     }
 
     private void limpiarTodo() {
@@ -183,22 +176,24 @@ public class ValidarDocumentosPracticanteControlador {
 
     private boolean confirmarAccion(String mensaje) {
         Alert alerta = new Alert(Alert.AlertType.CONFIRMATION);
-        alerta.setTitle("Confirmación");
+        boolean confirmado = false;
+        alerta.setTitle("Confirmacion");
         alerta.setHeaderText(mensaje);
         alerta.setContentText("");
-        ButtonType btnSi = new ButtonType("Sí");
-        ButtonType btnNo = new ButtonType("No");
-        alerta.getButtonTypes().setAll(btnSi, btnNo);
-        return alerta.showAndWait().filter(r -> r == btnSi).isPresent();
+        ButtonType botonSi = new ButtonType("Si");
+        ButtonType botonNo = new ButtonType("No");
+        alerta.getButtonTypes().setAll(botonSi, botonNo);
+        Optional<ButtonType> resultado = alerta.showAndWait();
+        if (resultado.isPresent() && resultado.get() == botonSi) {
+            confirmado = true;
+        }
+        return confirmado;
     }
 
     private void ocultarPaneles() {
-        panelDocumentos.setVisible(false);
-        panelDocumentos.setManaged(false);
-        panelAcciones.setVisible(false);
-        panelAcciones.setManaged(false);
-        panelMotivoRechazo.setVisible(false);
-        panelMotivoRechazo.setManaged(false);
+        ocultarPanel(panelDocumentos);
+        ocultarPanel(panelAcciones);
+        ocultarPanel(panelMotivoRechazo);
     }
 
     private ListCell<Practicante> crearCeldaPracticante(boolean esBoton) {
@@ -206,8 +201,11 @@ public class ValidarDocumentosPracticanteControlador {
             @Override
             protected void updateItem(Practicante practicante, boolean vacio) {
                 super.updateItem(practicante, vacio);
-                if (vacio || practicante == null) {
-                    setText(esBoton ? "-- Selecciona un practicante --" : null);
+                boolean esVacioONulo = vacio || practicante == null;
+                if (esVacioONulo && esBoton) {
+                    setText("-- Selecciona un practicante --");
+                } else if (esVacioONulo) {
+                    setText(null);
                 } else if (esBoton) {
                     setText(practicante.getNombre() + " " + practicante.getApellidos());
                 } else {
@@ -222,8 +220,11 @@ public class ValidarDocumentosPracticanteControlador {
             @Override
             protected void updateItem(DocumentacionPracticante doc, boolean vacio) {
                 super.updateItem(doc, vacio);
-                if (vacio || doc == null) {
-                    setText(esBoton ? "-- Selecciona un documento --" : null);
+                boolean esVacioONulo = vacio || doc == null;
+                if (esVacioONulo && esBoton) {
+                    setText("-- Selecciona un documento --");
+                } else if (esVacioONulo) {
+                    setText(null);
                 } else {
                     setText("Documento #" + doc.getIdDocumentacionPracticante());
                 }
@@ -231,15 +232,26 @@ public class ValidarDocumentosPracticanteControlador {
         };
     }
 
-    private void mostrarPanel(Label etiquetaTitulo, Label etiquetaMensaje, VBox panel, String titulo, String mensaje) {
-        etiquetaTitulo.setText(titulo);
-        etiquetaMensaje.setText(mensaje);
-        panel.setVisible(true);
-        panel.setManaged(true);
+    private void mostrarPanel(VBox panelMostrar, VBox panelOcultar) {
+        panelMostrar.setVisible(true);
+        panelMostrar.setManaged(true);
+        ocultarPanel(panelOcultar);
     }
 
     private void ocultarPanel(VBox panel) {
         panel.setVisible(false);
         panel.setManaged(false);
+    }
+
+    private void mostrarError(String titulo, String mensaje) {
+        etiquetaTituloError.setText(titulo);
+        etiquetaMensajeError.setText(mensaje);
+        mostrarPanel(panelError, panelExito);
+    }
+
+    private void mostrarExito(String titulo, String mensaje) {
+        etiquetaTituloExito.setText(titulo);
+        etiquetaMensajeExito.setText(mensaje);
+        mostrarPanel(panelExito, panelError);
     }
 }

@@ -11,7 +11,6 @@ import javafx.scene.control.Label;
 import javafx.stage.Stage;
 import logica.dominio.SesionUsuario;
 import logica.dominio.enums.Rol;
-
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -20,32 +19,32 @@ public class MenuCoordinadorControlador {
 
     private static final Logger LOGGER = Logger.getLogger(MenuCoordinadorControlador.class.getName());
 
-    @FXML private Label lblBienvenida;
-    @FXML private Label lblNombre;
-    @FXML private Label lblRol;
+    @FXML private Label etiquetaBienvenida;
+    @FXML private Label etiquetaNombre;
+    @FXML private Label etiquetaRol;
 
     @FXML
     public void initialize() {
         if (!SesionUsuario.getInstance().tieneRol(Rol.Coordinador)) {
             cerrarVentanaNoAutorizada();
         } else {
-            String nombre = SesionUsuario.getInstance().getNombre();
+            String nombre = SesionUsuario.getInstance().getUsuarioActivo().getNombre();
             String rol = SesionUsuario.getInstance().getUsuarioActivo().getRol().toString();
-            lblBienvenida.setText("Bienvenido, " + nombre);
-            lblNombre.setText(nombre);
-            lblRol.setText("ROL: " + rol.toUpperCase());
+            etiquetaBienvenida.setText("Bienvenido, " + nombre);
+            etiquetaNombre.setText(nombre);
+            etiquetaRol.setText("ROL: " + rol.toUpperCase());
         }
     }
 
     private void cerrarVentanaNoAutorizada() {
         Alert alerta = new Alert(Alert.AlertType.ERROR);
         alerta.setTitle("Acceso denegado");
-        alerta.setHeaderText("No tienes permiso para acceder a esta sección.");
-        alerta.setContentText("Serás redirigido al login.");
+        alerta.setHeaderText("NO TIENES PERMISO PARA ACCEDER A ESTA SECCION.");
+        alerta.setContentText("SERAS REDIRIGIDO AL LOGIN.");
         alerta.showAndWait();
         try {
             Parent ruta = FXMLLoader.load(getClass().getResource("/InterfazGrafica/vistas/IniciarSesionVista.fxml"));
-            Stage escenario = (Stage) lblBienvenida.getScene().getWindow();
+            Stage escenario = (Stage) etiquetaBienvenida.getScene().getWindow();
             escenario.setScene(new Scene(ruta));
             escenario.show();
         } catch (IOException excepcion) {
@@ -54,100 +53,100 @@ public class MenuCoordinadorControlador {
     }
 
     @FXML
-    private void abrirConsultarAlumnos(ActionEvent event) throws IOException {
+    private void abrirConsultarAlumnos(ActionEvent evento) throws IOException {
         abrirVentana("/InterfazGrafica/vistas/ConsultarAlumnosCoordinadorVista.fxml", "Consultar Alumnos");
     }
 
     @FXML
-    private void abrirRegistrarPracticante(ActionEvent event) throws IOException {
+    private void abrirRegistrarPracticante(ActionEvent evento) throws IOException {
         abrirVentana("/InterfazGrafica/vistas/RegistrarPracticanteVista.fxml", "Registrar Practicante");
     }
 
     @FXML
-    private void abrirInactivarPracticante(ActionEvent event) throws IOException {
+    private void abrirInactivarPracticante(ActionEvent evento) throws IOException {
         abrirVentana("/InterfazGrafica/vistas/InactivarPracticanteVista.fxml", "Inactivar Practicante");
     }
 
     @FXML
-    private void abrirRegistrarProfesor(ActionEvent event) throws IOException {
+    private void abrirRegistrarProfesor(ActionEvent evento) throws IOException {
         abrirVentana("/InterfazGrafica/vistas/RegistrarProfesorVista.fxml", "Registrar Profesor");
     }
 
     @FXML
-    private void abrirInactivarProfesor(ActionEvent event) throws IOException {
+    private void abrirInactivarProfesor(ActionEvent evento) throws IOException {
         abrirVentana("/InterfazGrafica/vistas/InactivarProfesorVista.fxml", "Inactivar Profesor");
     }
 
     @FXML
-    private void abrirRegistrarProyecto(ActionEvent event) throws IOException {
+    private void abrirRegistrarProyecto(ActionEvent evento) throws IOException {
         abrirVentana("/InterfazGrafica/vistas/RegistrarProyectoVista.fxml", "Registrar Proyecto");
     }
 
     @FXML
-    private void abrirInactivarProyecto(ActionEvent event) throws IOException {
+    private void abrirInactivarProyecto(ActionEvent evento) throws IOException {
         abrirVentana("/InterfazGrafica/vistas/InactivarProyectoVista.fxml", "Inactivar Proyecto");
     }
 
     @FXML
-    private void abrirModificarProyecto(ActionEvent event) throws IOException {
+    private void abrirModificarProyecto(ActionEvent evento) throws IOException {
         abrirVentana("/InterfazGrafica/vistas/ModificarProyectoVista.fxml", "Modificar Proyecto");
     }
 
     @FXML
-    private void abrirRegistrarOrganizacion(ActionEvent event) throws IOException {
-        abrirVentana("/InterfazGrafica/vistas/RegistrarOrganizacionVinculadaVista.fxml", "Registrar Organización");
+    private void abrirRegistrarOrganizacion(ActionEvent evento) throws IOException {
+        abrirVentana("/InterfazGrafica/vistas/RegistrarOrganizacionVinculadaVista.fxml", "Registrar Organizacion");
     }
 
     @FXML
-    private void abrirModificarPracticante(ActionEvent event) throws IOException {
+    private void abrirModificarPracticante(ActionEvent evento) throws IOException {
         abrirVentana("/InterfazGrafica/vistas/ModificarPracticanteVista.fxml", "Modificar Practicante");
     }
 
     @FXML
-    private void abrirInactivarOrganizacion(ActionEvent event) throws IOException {
-        abrirVentana("/InterfazGrafica/vistas/InactivarOrganizacionVinculadaVista.fxml", "Inactivar Organización");
+    private void abrirInactivarOrganizacion(ActionEvent evento) throws IOException {
+        abrirVentana("/InterfazGrafica/vistas/InactivarOrganizacionVinculadaVista.fxml", "Inactivar Organizacion");
     }
 
     @FXML
-    private void abrirModificarOrganizacion(ActionEvent event) throws IOException {
-        abrirVentana("/InterfazGrafica/vistas/ModificarOrganizacionVinculadaVista.fxml", "Modificar Organización");
+    private void abrirModificarOrganizacion(ActionEvent evento) throws IOException {
+        abrirVentana("/InterfazGrafica/vistas/ModificarOrganizacionVinculadaVista.fxml", "Modificar Organizacion");
     }
 
     @FXML
-    private void abrirAsignarPracticanteEnSeccion(ActionEvent event) throws IOException {
+    private void abrirAsignarPracticanteEnSeccion(ActionEvent evento) throws IOException {
         abrirVentana("/InterfazGrafica/vistas/AsignarPracticanteEnSeccionVista.fxml", "Asignar Practicante a Seccion");
     }
 
     @FXML
-    private void abrirAsignarProyectoAlPracticante(ActionEvent event) throws IOException {
-        abrirVentana("/InterfazGrafica/vistas/AsignarProyectoVista.fxml", "Asignar proyecto a practicante");
+    private void abrirAsignarProyectoAlPracticante(ActionEvent evento) throws IOException {
+        abrirVentana("/InterfazGrafica/vistas/AsignarProyectoVista.fxml", "Asignar Proyecto a Practicante");
     }
 
     @FXML
-    private void abrirModificarProfesor(ActionEvent event) throws IOException {
+    private void abrirModificarProfesor(ActionEvent evento) throws IOException {
         abrirVentana("/InterfazGrafica/vistas/ModificarProfesorVista.fxml", "Modificar Profesor");
     }
 
     @FXML
-    private void abrirRegistrarPeriodo(ActionEvent event) throws IOException {
-        abrirVentana("/InterfazGrafica/vistas/RegistrarPeriodoVista.fxml", "Registrar Período");
+    private void abrirRegistrarPeriodo(ActionEvent evento) throws IOException {
+        abrirVentana("/InterfazGrafica/vistas/RegistrarPeriodoVista.fxml", "Registrar Periodo");
     }
 
     @FXML
-    private void abrirCerrarPeriodo(ActionEvent event) throws IOException {
-        abrirVentana("/InterfazGrafica/vistas/CerrarPeriodoVista.fxml", "Cerrar Período");
+    private void abrirCerrarPeriodo(ActionEvent evento) throws IOException {
+        abrirVentana("/InterfazGrafica/vistas/CerrarPeriodoVista.fxml", "Cerrar Periodo");
     }
 
     @FXML
-    private void abrirRegistrarSeccion(ActionEvent event) throws IOException {
+    private void abrirRegistrarSeccion(ActionEvent evento) throws IOException {
         abrirVentana("/InterfazGrafica/vistas/RegistrarSeccionVista.fxml", "Registrar Seccion");
     }
 
     @FXML
-    private void cerrarSesion(ActionEvent event) throws IOException {
+    private void cerrarSesion(ActionEvent evento) throws IOException {
         SesionUsuario.getInstance().cerrarSesion();
         Parent ruta = FXMLLoader.load(getClass().getResource("/InterfazGrafica/vistas/IniciarSesionVista.fxml"));
-        Stage escenario = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        Stage escenario = (Stage) ((Node) evento.getSource()).getScene().getWindow();
         escenario.setScene(new Scene(ruta));
         escenario.show();
     }

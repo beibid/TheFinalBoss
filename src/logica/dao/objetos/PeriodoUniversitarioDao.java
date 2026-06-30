@@ -190,4 +190,38 @@ public class PeriodoUniversitarioDao implements PeriodoUniversitarioDaoInterfaz 
         }
         return filasAfectadas;
     }
+
+    public boolean verificarPeriodoActivoPorPracticante(String matricula) throws UsuariosExcepcion {
+        String consulta = "SELECT COUNT(*) FROM practicante p " +
+                "INNER JOIN seccion s ON p.idSeccion = s.idSeccion " +
+                "INNER JOIN periodo_universitario pu ON s.idPeriodo = pu.idPeriodo " +
+                "WHERE p.matricula = ? AND pu.estado = 'Abierto'";
+        Connection conexionBaseDeDatos = null;
+        PreparedStatement sentencia = null;
+        boolean periodoActivo = false;
+        try {
+            conexionBaseDeDatos = ConexionBaseDeDatos.getInstance().conectar();
+            sentencia = conexionBaseDeDatos.prepareStatement(consulta);
+            sentencia.setString(1, matricula);
+            ResultSet resultado = sentencia.executeQuery();
+            if (resultado.next()) {
+                periodoActivo = resultado.getInt(1) > 0;
+            }
+        } catch (SQLException excepcionSql) {
+            LOGGER.log(Level.SEVERE, "Error al verificar periodo del practicante", excepcionSql);
+            throw new UsuariosExcepcion("Error al verificar periodo del practicante", excepcionSql);
+        } finally {
+            try {
+                if (sentencia != null) {
+                    sentencia.close();
+                }
+                if (conexionBaseDeDatos != null) {
+                    conexionBaseDeDatos.close();
+                }
+            } catch (SQLException excepcionSql) {
+                LOGGER.log(Level.SEVERE, "Error al cerrar conexión", excepcionSql);
+            }
+        }
+        return periodoActivo;
+    }
 }

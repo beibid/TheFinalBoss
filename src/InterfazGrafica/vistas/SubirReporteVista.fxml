@@ -21,7 +21,6 @@
 
                 <Label style="-fx-font-size: 22; -fx-font-weight: bold;" text="Subir Reporte" />
 
-                <!-- Panel error -->
                 <VBox fx:id="panelError" managed="false" prefWidth="500.0" spacing="4.0" style="-fx-border-color: #8B0000; -fx-border-width: 2; -fx-background-color: #f5f5dc; -fx-padding: 10;" visible="false">
                     <HBox alignment="CENTER_LEFT" spacing="8">
                         <Label style="-fx-text-fill: #8B0000; -fx-font-size: 14; -fx-font-weight: bold;" text="✖" />
@@ -30,7 +29,6 @@
                     <Label fx:id="etiquetaMensajeError" style="-fx-text-fill: #8B0000; -fx-font-size: 11;" text="" />
                 </VBox>
 
-                <!-- Panel éxito -->
                 <VBox fx:id="panelExito" managed="false" prefWidth="500.0" spacing="4.0" style="-fx-border-color: #2d6a2d; -fx-border-width: 2; -fx-background-color: #f0f7f0; -fx-padding: 10;" visible="false">
                     <HBox alignment="CENTER_LEFT" spacing="8">
                         <Label style="-fx-text-fill: #2d6a2d; -fx-font-size: 14; -fx-font-weight: bold;" text="✔" />
@@ -42,10 +40,12 @@
                 <Label style="-fx-font-size: 13;" text="Tipo de reporte" />
                 <ComboBox fx:id="comboBoxTipoReporte" prefWidth="500.0" promptText="-- Selecciona el tipo --" />
 
+                <Label style="-fx-font-size: 13;" text="Mes correspondiente" />
+                <ComboBox fx:id="comboBoxMes" prefWidth="500.0" promptText="-- Selecciona el mes --" />
+
                 <Label style="-fx-font-size: 13;" text="Descripción" />
                 <TextField fx:id="campoTextoDescripcion" prefHeight="30.0" prefWidth="500.0" promptText="Describe el reporte" />
 
-                <!-- Sección PDF -->
                 <Label style="-fx-font-size: 13;" text="Archivo PDF del reporte" />
                 <HBox alignment="CENTER_LEFT" spacing="10.0">
                     <Button onAction="#botonSeleccionarPDF" prefHeight="30.0" prefWidth="160.0"
@@ -55,7 +55,6 @@
                            text="Ningún archivo seleccionado" />
                 </HBox>
 
-                <!-- Botones -->
                 <HBox spacing="15.0">
                     <VBox.margin><Insets top="20.0" /></VBox.margin>
                     <Button onAction="#botonSubir" prefHeight="35.0" prefWidth="140.0"

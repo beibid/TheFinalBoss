@@ -16,10 +16,16 @@ import logica.dominio.enums.EstadoPeriodo;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class RegistrarPeriodoControlador {
 
+    private static final Logger LOGGER = Logger.getLogger(RegistrarPeriodoControlador.class.getName());
     private static final int FILAS_AFECTADAS_ESPERADAS = 1;
+
+    private final PeriodoUniversitarioDao periodoUniversitarioDao = new PeriodoUniversitarioDao();
 
     @FXML private TextField campoTextoNombre;
     @FXML private TextField selectorFechaInicio;
@@ -32,16 +38,16 @@ public class RegistrarPeriodoControlador {
 
     @FXML
     private void botonRegistrar() {
-        ocultarError();
-        ocultarExito();
-        if (confirmarAccion("¿Seguro que desea registrar el nuevo Periodo?")) {
+        ocultarPanel(panelError);
+        ocultarPanel(panelExito);
+        if (confirmarAccion("Seguro que desea registrar el nuevo Periodo?")) {
             procesarRegistro();
         }
     }
 
     @FXML
     private void botonCancelar() {
-        if (confirmarAccion("¿Seguro que desea cancelar?")) {
+        if (confirmarAccion("Seguro que desea cancelar?")) {
             limpiar();
         }
     }
@@ -53,36 +59,37 @@ public class RegistrarPeriodoControlador {
     }
 
     private void procesarRegistro() {
-        if (camposValidos()) {
+        boolean camposCorrectos = verificarCampos();
+        if (camposCorrectos) {
             PeriodoUniversitario periodoUniversitario = construirPeriodo();
             ejecutarRegistro(periodoUniversitario);
         }
     }
 
-    private boolean camposValidos() {
+    private boolean verificarCampos() {
         String nombre = campoTextoNombre.getText().trim();
         String fechaTexto = selectorFechaInicio.getText().trim();
-
         List<String> campos = List.of(nombre, fechaTexto);
         boolean camposFormularioValido = !camposVacios(campos);
         boolean nombreValido = nombre.matches("^[a-zA-Z0-9áéíóúÁÉÍÓÚñÑ\\s\\-]+$");
-        boolean fechaValida = fechaTexto.matches("\\d{4}-\\d{2}-\\d{2}") &&
-                !LocalDate.parse(fechaTexto).isBefore(LocalDate.now());
-
-        mostrarPrimerError(camposFormularioValido, nombreValido, fechaValida);
-
-        boolean formularioValido = camposFormularioValido && nombreValido && fechaValida;
-        return formularioValido;
-    }
-
-    private void mostrarPrimerError(boolean camposFormularioValido, boolean nombreValido, boolean fechaValida) {
-        if (!camposFormularioValido) {
-            mostrarError("Campos obligatorios vacios", "POR FAVOR LLENE TODOS LOS CAMPOS");
-        } else if (!nombreValido) {
-            mostrarError("Nombre invalido", "EL NOMBRE SOLO PUEDE CONTENER LETRAS, NUMEROS Y GUIONES");
-        } else if (!fechaValida) {
-            mostrarError("Fecha invalida", "INGRESE UNA FECHA VALIDA EN FORMATO AAAA-MM-DD Y NO ANTERIOR A HOY");
+        boolean formatoFechaValido = fechaTexto.matches("\\d{4}-\\d{2}-\\d{2}");
+        boolean fechaNoAnterior = false;
+        if (formatoFechaValido) {
+            fechaNoAnterior = !LocalDate.parse(fechaTexto).isBefore(LocalDate.now());
         }
+        boolean fechaValida = formatoFechaValido && fechaNoAnterior;
+        boolean valido = true;
+        if (!camposFormularioValido) {
+            mostrarError("Campos obligatorios vacios", "POR FAVOR LLENE TODOS LOS CAMPOS.");
+            valido = false;
+        } else if (!nombreValido) {
+            mostrarError("Nombre invalido", "EL NOMBRE SOLO PUEDE CONTENER LETRAS, NUMEROS Y GUIONES.");
+            valido = false;
+        } else if (!fechaValida) {
+            mostrarError("Fecha invalida", "INGRESE UNA FECHA VALIDA EN FORMATO AAAA-MM-DD Y NO ANTERIOR A HOY.");
+            valido = false;
+        }
+        return valido;
     }
 
     private boolean camposVacios(List<String> campos) {
@@ -98,7 +105,6 @@ public class RegistrarPeriodoControlador {
     private PeriodoUniversitario construirPeriodo() {
         String nombre = campoTextoNombre.getText().trim();
         Date fechaInicio = Date.valueOf(selectorFechaInicio.getText().trim());
-
         PeriodoUniversitario periodoUniversitario = new PeriodoUniversitario();
         periodoUniversitario.setNombre(nombre);
         periodoUniversitario.setFechaInicio(fechaInicio);
@@ -107,64 +113,68 @@ public class RegistrarPeriodoControlador {
     }
 
     private void ejecutarRegistro(PeriodoUniversitario periodoUniversitario) {
-        PeriodoUniversitarioDao periodoUniversitarioDao = new PeriodoUniversitarioDao();
         try {
             boolean hayPeriodoAbierto = periodoUniversitarioDao.verificarPeriodoAbierto();
             if (hayPeriodoAbierto) {
-                mostrarError("Periodo ya abierto", "YA EXISTE UN PERIODO ABIERTO. CIERRELO ANTES DE REGISTRAR UNO NUEVO");
-                return;
-            }
-            int filasAfectadas = periodoUniversitarioDao.insertarPeriodo(periodoUniversitario);
-            if (filasAfectadas >= FILAS_AFECTADAS_ESPERADAS) {
-                limpiar();
-                mostrarExito("Periodo registrado", "EL PERIODO FUE REGISTRADO EXITOSAMENTE");
+                mostrarError("Periodo ya abierto", "YA EXISTE UN PERIODO ABIERTO. CIERRELO ANTES DE REGISTRAR UNO NUEVO.");
             } else {
-                mostrarError("Error al registrar", "NO SE PUDO REGISTRAR EL PERIODO. INTENTE DE NUEVO");
+                int filasAfectadas = periodoUniversitarioDao.insertarPeriodo(periodoUniversitario);
+                if (filasAfectadas >= FILAS_AFECTADAS_ESPERADAS) {
+                    limpiar();
+                    mostrarExito("Periodo registrado", "EL PERIODO FUE REGISTRADO EXITOSAMENTE.");
+                } else {
+                    mostrarError("Error al registrar", "NO SE PUDO REGISTRAR EL PERIODO. INTENTE DE NUEVO.");
+                }
             }
         } catch (UsuariosExcepcion excepcion) {
+            LOGGER.log(Level.SEVERE, "Error al registrar periodo", excepcion);
             mostrarError("Error inesperado", excepcion.getMessage().toUpperCase());
         }
     }
 
     private boolean confirmarAccion(String mensaje) {
         Alert alerta = new Alert(Alert.AlertType.CONFIRMATION);
-        alerta.setTitle("Confirmación");
+        boolean confirmado = false;
+        alerta.setTitle("Confirmacion");
         alerta.setHeaderText(mensaje);
         alerta.setContentText("");
-        ButtonType botonSi = new ButtonType("Sí");
+        ButtonType botonSi = new ButtonType("Si");
         ButtonType botonNo = new ButtonType("No");
         alerta.getButtonTypes().setAll(botonSi, botonNo);
-        return alerta.showAndWait().filter(botonPresionado -> botonPresionado == botonSi).isPresent();
+        Optional<ButtonType> resultado = alerta.showAndWait();
+        if (resultado.isPresent() && resultado.get() == botonSi) {
+            confirmado = true;
+        }
+        return confirmado;
     }
 
     private void limpiar() {
         campoTextoNombre.clear();
         selectorFechaInicio.clear();
-        ocultarError();
-        ocultarExito();
+        ocultarPanel(panelError);
+        ocultarPanel(panelExito);
+    }
+
+    private void mostrarPanel(VBox panelMostrar, VBox panelOcultar) {
+        panelMostrar.setVisible(true);
+        panelMostrar.setManaged(true);
+        ocultarPanel(panelOcultar);
+    }
+
+    private void ocultarPanel(VBox panel) {
+        panel.setVisible(false);
+        panel.setManaged(false);
     }
 
     private void mostrarError(String titulo, String mensaje) {
         etiquetaTituloError.setText(titulo);
         etiquetaMensajeError.setText(mensaje);
-        panelError.setVisible(true);
-        panelError.setManaged(true);
-    }
-
-    private void ocultarError() {
-        panelError.setVisible(false);
-        panelError.setManaged(false);
+        mostrarPanel(panelError, panelExito);
     }
 
     private void mostrarExito(String titulo, String mensaje) {
         etiquetaTituloExito.setText(titulo);
         etiquetaMensajeExito.setText(mensaje);
-        panelExito.setVisible(true);
-        panelExito.setManaged(true);
-    }
-
-    private void ocultarExito() {
-        panelExito.setVisible(false);
-        panelExito.setManaged(false);
+        mostrarPanel(panelExito, panelError);
     }
 }

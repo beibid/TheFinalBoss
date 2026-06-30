@@ -21,14 +21,19 @@ import logica.dominio.PeriodoUniversitario;
 import logica.dominio.Profesor;
 import logica.dominio.Seccion;
 import java.util.List;
+import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class RegistrarSeccionControlador {
 
+    private static final Logger LOGGER = Logger.getLogger(RegistrarSeccionControlador.class.getName());
     private static final int FILAS_AFECTADAS_ESPERADAS = 1;
     private static final int LONGITUD_MAXIMA_NRC = 10;
-    private static final Logger LOGGER = Logger.getLogger(RegistrarSeccionControlador.class.getName());
+
+    private final PeriodoUniversitarioDao periodoDao = new PeriodoUniversitarioDao();
+    private final ProfesorDao profesorDao = new ProfesorDao();
+    private final SeccionDao seccionDao = new SeccionDao();
 
     @FXML private TextField campoTextoNumeroSeccion;
     @FXML private ComboBox<PeriodoUniversitario> comboBoxPeriodo;
@@ -47,39 +52,38 @@ public class RegistrarSeccionControlador {
     }
 
     private void cargarPeriodosAbiertos() {
-        PeriodoUniversitarioDao periodoDao = new PeriodoUniversitarioDao();
         try {
             List<PeriodoUniversitario> periodos = periodoDao.obtenerPeriodosAbiertos();
             comboBoxPeriodo.setItems(FXCollections.observableArrayList(periodos));
         } catch (UsuariosExcepcion excepcion) {
             LOGGER.log(Level.SEVERE, "Error al cargar periodos", excepcion);
-            mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
-                    "Error al cargar", "NO SE PUDIERON CARGAR LOS PERIODOS DISPONIBLES");
+            mostrarError("Error al cargar", "NO SE PUDIERON CARGAR LOS PERIODOS DISPONIBLES.");
         }
     }
 
     private void cargarProfesoresActivos() {
-        ProfesorDao profesorDao = new ProfesorDao();
         try {
             List<Profesor> profesores = profesorDao.obtenerProfesoresActivos();
             comboBoxProfesor.setItems(FXCollections.observableArrayList(profesores));
             comboBoxProfesor.setConverter(new StringConverter<Profesor>() {
                 @Override
                 public String toString(Profesor profesor) {
-                    if (profesor != null) {
-                        return profesor.getNombre() + " " + profesor.getApellidos();
+                    String nombreCompleto = null;
+                    boolean profesorNoNulo = profesor != null;
+                    if (profesorNoNulo) {
+                        nombreCompleto = profesor.getNombre() + " " + profesor.getApellidos();
                     }
-                    return null;
+                    return nombreCompleto;
                 }
                 @Override
                 public Profesor fromString(String texto) {
-                    return null;
+                    Profesor profesorVacio = null;
+                    return profesorVacio;
                 }
             });
         } catch (UsuariosExcepcion excepcion) {
             LOGGER.log(Level.SEVERE, "Error al cargar profesores", excepcion);
-            mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
-                    "Error al cargar", "NO SE PUDIERON CARGAR LOS PROFESORES ACTIVOS");
+            mostrarError("Error al cargar", "NO SE PUDIERON CARGAR LOS PROFESORES ACTIVOS.");
         }
     }
 
@@ -87,14 +91,14 @@ public class RegistrarSeccionControlador {
     private void registrarSeccion() {
         ocultarPanel(panelError);
         ocultarPanel(panelExito);
-        if (confirmarAccion("¿Seguro que desea registrar esta seccion?")) {
+        if (confirmarAccion("Seguro que desea registrar esta seccion?")) {
             procesarRegistro();
         }
     }
 
     @FXML
     private void cancelarRegistro() {
-        if (confirmarAccion("¿Seguro que desea cancelar?")) {
+        if (confirmarAccion("Seguro que desea cancelar?")) {
             limpiarCamposRegistros();
         }
     }
@@ -107,49 +111,54 @@ public class RegistrarSeccionControlador {
 
     private boolean confirmarAccion(String mensaje) {
         Alert alerta = new Alert(Alert.AlertType.CONFIRMATION);
-        alerta.setTitle("Confirmación");
+        boolean confirmado = false;
+        alerta.setTitle("Confirmacion");
         alerta.setHeaderText(mensaje);
         alerta.setContentText("");
-        ButtonType botonSi = new ButtonType("Sí");
+        ButtonType botonSi = new ButtonType("Si");
         ButtonType botonNo = new ButtonType("No");
         alerta.getButtonTypes().setAll(botonSi, botonNo);
-        return alerta.showAndWait().filter(botonPresionado -> botonPresionado == botonSi).isPresent();
+        Optional<ButtonType> resultado = alerta.showAndWait();
+        if (resultado.isPresent() && resultado.get() == botonSi) {
+            confirmado = true;
+        }
+        return confirmado;
     }
 
     private void procesarRegistro() {
-        if (camposValidos()) {
+        boolean camposCorrectos = verificarCampos();
+        if (camposCorrectos) {
             guardarSeccion(construirSeccion());
         }
     }
 
-    private boolean camposValidos() {
+    private boolean verificarCampos() {
         String numeroSeccion = campoTextoNumeroSeccion.getText().trim();
         PeriodoUniversitario periodoSeleccionado = comboBoxPeriodo.getValue();
         Profesor profesorSeleccionado = comboBoxProfesor.getValue();
-
-        boolean nrcValido = !numeroSeccion.isEmpty() && numeroSeccion.matches("[a-zA-Z0-9]+");
+        boolean nrcNoVacio = !numeroSeccion.isEmpty();
+        boolean nrcValido = nrcNoVacio && numeroSeccion.matches("[a-zA-Z0-9]+");
         boolean longitudValida = numeroSeccion.length() <= LONGITUD_MAXIMA_NRC;
         boolean periodoValido = periodoSeleccionado != null;
         boolean profesorValido = profesorSeleccionado != null;
-
-        if (numeroSeccion.isEmpty()) {
-            mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
-                    "Campo vacio", "INGRESE EL NRC DE LA SECCION");
+        boolean valido = true;
+        if (!nrcNoVacio) {
+            mostrarError("Campo vacio", "INGRESE EL NRC DE LA SECCION.");
+            valido = false;
         } else if (!nrcValido) {
-            mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
-                    "NRC invalido", "EL NRC SOLO PUEDE CONTENER LETRAS Y NUMEROS");
+            mostrarError("NRC invalido", "EL NRC SOLO PUEDE CONTENER LETRAS Y NUMEROS.");
+            valido = false;
         } else if (!longitudValida) {
-            mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
-                    "NRC invalido", "EL NRC NO PUEDE EXCEDER " + LONGITUD_MAXIMA_NRC + " CARACTERES");
+            mostrarError("NRC invalido", "EL NRC NO PUEDE EXCEDER " + LONGITUD_MAXIMA_NRC + " CARACTERES.");
+            valido = false;
         } else if (!periodoValido) {
-            mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
-                    "Periodo no seleccionado", "SELECCIONE UN PERIODO PARA LA SECCION");
+            mostrarError("Periodo no seleccionado", "SELECCIONE UN PERIODO PARA LA SECCION.");
+            valido = false;
         } else if (!profesorValido) {
-            mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
-                    "Profesor no seleccionado", "SELECCIONE UN PROFESOR PARA LA SECCION");
+            mostrarError("Profesor no seleccionado", "SELECCIONE UN PROFESOR PARA LA SECCION.");
+            valido = false;
         }
-
-        return nrcValido && longitudValida && periodoValido && profesorValido;
+        return valido;
     }
 
     private Seccion construirSeccion() {
@@ -164,25 +173,20 @@ public class RegistrarSeccionControlador {
     }
 
     private void guardarSeccion(Seccion seccion) {
-        SeccionDao seccionDao = new SeccionDao();
         try {
             int filasAfectadas = seccionDao.agregarSeccion(seccion);
             if (filasAfectadas >= FILAS_AFECTADAS_ESPERADAS) {
                 limpiarCamposRegistros();
-                mostrarPanel(etiquetaTituloExito, etiquetaMensajeExito, panelExito,
-                        "Seccion registrada", "SECCION REGISTRADA EXITOSAMENTE.");
+                mostrarExito("Seccion registrada", "SECCION REGISTRADA EXITOSAMENTE.");
             } else {
-                mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
-                        "Error al registrar", "NO SE PUDO REGISTRAR LA SECCION. INTENTE DE NUEVO.");
+                mostrarError("Error al registrar", "NO SE PUDO REGISTRAR LA SECCION. INTENTE DE NUEVO.");
             }
         } catch (RegistroDuplicadoExcepcion excepcion) {
             LOGGER.log(Level.WARNING, "NRC duplicado en el mismo periodo", excepcion);
-            mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
-                    "NRC duplicado", "ESE NRC YA EXISTE EN EL PERIODO SELECCIONADO");
+            mostrarError("NRC duplicado", "ESE NRC YA EXISTE EN EL PERIODO SELECCIONADO.");
         } catch (UsuariosExcepcion excepcion) {
             LOGGER.log(Level.SEVERE, "Error al registrar seccion", excepcion);
-            mostrarPanel(etiquetaTituloError, etiquetaMensajeError, panelError,
-                    "Error inesperado", excepcion.getMessage().toUpperCase());
+            mostrarError("Error inesperado", excepcion.getMessage().toUpperCase());
         }
     }
 
@@ -194,15 +198,26 @@ public class RegistrarSeccionControlador {
         comboBoxProfesor.setValue(null);
     }
 
-    private void mostrarPanel(Label etiquetaTitulo, Label etiquetaMensaje, VBox panel, String titulo, String mensaje) {
-        etiquetaTitulo.setText(titulo);
-        etiquetaMensaje.setText(mensaje);
-        panel.setVisible(true);
-        panel.setManaged(true);
+    private void mostrarPanel(VBox panelMostrar, VBox panelOcultar) {
+        panelMostrar.setVisible(true);
+        panelMostrar.setManaged(true);
+        ocultarPanel(panelOcultar);
     }
 
     private void ocultarPanel(VBox panel) {
         panel.setVisible(false);
         panel.setManaged(false);
+    }
+
+    private void mostrarError(String titulo, String mensaje) {
+        etiquetaTituloError.setText(titulo);
+        etiquetaMensajeError.setText(mensaje);
+        mostrarPanel(panelError, panelExito);
+    }
+
+    private void mostrarExito(String titulo, String mensaje) {
+        etiquetaTituloExito.setText(titulo);
+        etiquetaMensajeExito.setText(mensaje);
+        mostrarPanel(panelExito, panelError);
     }
 }

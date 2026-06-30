@@ -18,6 +18,7 @@ import logica.dao.objetos.ProfesorDao;
 import logica.dominio.Profesor;
 import logica.dominio.enums.Turno;
 import java.util.List;
+import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -25,6 +26,11 @@ public class ModificarProfesorControlador {
 
     private static final Logger LOGGER = Logger.getLogger(ModificarProfesorControlador.class.getName());
     private static final int FILAS_AFECTADAS_ESPERADAS = 1;
+    private static final int LONGITUD_MAXIMA_NOMBRE = 55;
+    private static final int LONGITUD_MAXIMA_APELLIDOS = 55;
+    private static final int LONGITUD_MAXIMA_CORREO = 100;
+
+    private final ProfesorDao profesorDao = new ProfesorDao();
 
     @FXML private ComboBox<Profesor> comboBoxProfesores;
     @FXML private ComboBox<Turno> comboBoxTurno;
@@ -48,7 +54,6 @@ public class ModificarProfesorControlador {
     }
 
     private void cargarProfesores() {
-        ProfesorDao profesorDao = new ProfesorDao();
         try {
             List<Profesor> lista = profesorDao.obtenerProfesoresActivos();
             if (lista.isEmpty()) {
@@ -72,7 +77,8 @@ public class ModificarProfesorControlador {
             @Override
             protected void updateItem(Profesor profesor, boolean vacio) {
                 super.updateItem(profesor, vacio);
-                if (vacio || profesor == null) {
+                boolean esVacioONulo = vacio || profesor == null;
+                if (esVacioONulo) {
                     setText("-- Selecciona un profesor --");
                 } else {
                     setText(profesor.getNombre() + " " + profesor.getApellidos());
@@ -102,14 +108,14 @@ public class ModificarProfesorControlador {
 
     @FXML
     private void botonGuardar() {
-        if (confirmarAccion("¿Desea guardar los cambios?")) {
+        if (confirmarAccion("Desea guardar los cambios?")) {
             procesarModificacion();
         }
     }
 
     private void procesarModificacion() {
-        if (camposValidos()) {
-            ProfesorDao profesorDao = new ProfesorDao();
+        boolean camposCorrectos = verificarCampos();
+        if (camposCorrectos) {
             try {
                 Profesor profesorModificado = construirProfesor();
                 int filasAfectadas = profesorDao.modificarProfesor(
@@ -140,36 +146,54 @@ public class ModificarProfesorControlador {
         return hayCamposVacios;
     }
 
-    private boolean camposValidos() {
+    private boolean verificarCampos() {
         String nombre = campoNombre.getText().trim();
         String apellidos = campoApellidos.getText().trim();
         String correo = campoCorreo.getText().trim();
-
-        List<String> campos = List.of(nombre, apellidos, correo);
-        boolean camposFormularioValidos = !camposVacios(campos);
-        boolean nombreValido = nombre.matches("[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+");
-        boolean apellidosValidos = apellidos.matches("[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+");
-        boolean correoValido = correo.matches("^[\\w.-]+@[\\w.-]+\\.[a-zA-Z]{2,}$");
-        boolean turnoValido = comboBoxTurno.getValue() != null;
-
-        verificarCampos(camposFormularioValidos, nombreValido, apellidosValidos, correoValido, turnoValido);
-
-        return camposFormularioValidos && nombreValido && apellidosValidos && correoValido && turnoValido;
+        boolean camposFormularioValidos = !camposVacios(List.of(nombre, apellidos, correo));
+        boolean valido = true;
+        if (!camposFormularioValidos) {
+            mostrarError("Campos obligatorios vacios", "POR FAVOR LLENE TODOS LOS CAMPOS.");
+            valido = false;
+        } else if (!verificarLongitudes(nombre, apellidos, correo)) {
+            valido = false;
+        } else if (!verificarFormatos(nombre, apellidos, correo)) {
+            valido = false;
+        } else if (comboBoxTurno.getValue() == null) {
+            mostrarError("Turno no seleccionado", "SELECCIONE UN TURNO PARA EL PROFESOR.");
+            valido = false;
+        }
+        return valido;
     }
 
-    private void verificarCampos(boolean camposFormularioValidos, boolean nombreValido,
-                                 boolean apellidosValidos, boolean correoValido, boolean turnoValido) {
-        if (!camposFormularioValidos) {
-            mostrarError("Campos obligatorios vacíos", "POR FAVOR LLENE TODOS LOS CAMPOS.");
-        } else if (!nombreValido) {
-            mostrarError("Nombre inválido", "EL NOMBRE SOLO PUEDE CONTENER LETRAS.");
-        } else if (!apellidosValidos) {
-            mostrarError("Apellidos inválidos", "LOS APELLIDOS SOLO PUEDEN CONTENER LETRAS.");
-        } else if (!correoValido) {
-            mostrarError("Correo inválido", "INGRESE UN CORREO ELECTRÓNICO VÁLIDO.");
-        } else if (!turnoValido) {
-            mostrarError("Turno no seleccionado", "SELECCIONE UN TURNO PARA EL PROFESOR.");
+    private boolean verificarLongitudes(String nombre, String apellidos, String correo) {
+        boolean valido = true;
+        if (nombre.length() > LONGITUD_MAXIMA_NOMBRE) {
+            mostrarError("Nombre demasiado largo", "EL NOMBRE NO PUEDE EXCEDER " + LONGITUD_MAXIMA_NOMBRE + " CARACTERES.");
+            valido = false;
+        } else if (apellidos.length() > LONGITUD_MAXIMA_APELLIDOS) {
+            mostrarError("Apellidos demasiado largos", "LOS APELLIDOS NO PUEDEN EXCEDER " + LONGITUD_MAXIMA_APELLIDOS + " CARACTERES.");
+            valido = false;
+        } else if (correo.length() > LONGITUD_MAXIMA_CORREO) {
+            mostrarError("Correo demasiado largo", "EL CORREO NO PUEDE EXCEDER " + LONGITUD_MAXIMA_CORREO + " CARACTERES.");
+            valido = false;
         }
+        return valido;
+    }
+
+    private boolean verificarFormatos(String nombre, String apellidos, String correo) {
+        boolean valido = true;
+        if (!nombre.matches("[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+")) {
+            mostrarError("Nombre invalido", "EL NOMBRE SOLO PUEDE CONTENER LETRAS.");
+            valido = false;
+        } else if (!apellidos.matches("[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+")) {
+            mostrarError("Apellidos invalidos", "LOS APELLIDOS SOLO PUEDEN CONTENER LETRAS.");
+            valido = false;
+        } else if (!correo.matches("^[\\w.-]+@[\\w.-]+\\.[a-zA-Z]{2,}$")) {
+            mostrarError("Correo invalido", "INGRESE UN CORREO ELECTRONICO VALIDO.");
+            valido = false;
+        }
+        return valido;
     }
 
     private Profesor construirProfesor() {
@@ -185,7 +209,7 @@ public class ModificarProfesorControlador {
 
     @FXML
     private void botonCancelar() {
-        if (confirmarAccion("¿Seguro que desea cancelar?")) {
+        if (confirmarAccion("Seguro que desea cancelar?")) {
             ocultarTodo();
             comboBoxProfesores.setValue(null);
         }
@@ -199,13 +223,18 @@ public class ModificarProfesorControlador {
 
     private boolean confirmarAccion(String mensaje) {
         Alert alerta = new Alert(Alert.AlertType.CONFIRMATION);
-        alerta.setTitle("Confirmación");
+        boolean confirmado = false;
+        alerta.setTitle("Confirmacion");
         alerta.setHeaderText(mensaje);
         alerta.setContentText("");
-        ButtonType botonSi = new ButtonType("Sí");
+        ButtonType botonSi = new ButtonType("Si");
         ButtonType botonNo = new ButtonType("No");
         alerta.getButtonTypes().setAll(botonSi, botonNo);
-        return alerta.showAndWait().filter(botonPresionado -> botonPresionado == botonSi).isPresent();
+        Optional<ButtonType> resultado = alerta.showAndWait();
+        if (resultado.isPresent() && resultado.get() == botonSi) {
+            confirmado = true;
+        }
+        return confirmado;
     }
 
     private void ocultarTodo() {
@@ -214,12 +243,10 @@ public class ModificarProfesorControlador {
         ocultarPanel(panelFormulario);
     }
 
-    private void mostrarPanel(VBox panel, Label etiquetaTitulo, Label etiquetaMensaje,
-                              String titulo, String mensaje) {
-        etiquetaTitulo.setText(titulo);
-        etiquetaMensaje.setText(mensaje);
-        panel.setVisible(true);
-        panel.setManaged(true);
+    private void mostrarPanel(VBox panelMostrar, VBox panelOcultar) {
+        panelMostrar.setVisible(true);
+        panelMostrar.setManaged(true);
+        ocultarPanel(panelOcultar);
     }
 
     private void ocultarPanel(VBox panel) {
@@ -228,12 +255,14 @@ public class ModificarProfesorControlador {
     }
 
     private void mostrarError(String titulo, String mensaje) {
-        ocultarPanel(panelExito);
-        mostrarPanel(panelError, etiquetaTituloError, etiquetaMensajeError, titulo, mensaje);
+        etiquetaTituloError.setText(titulo);
+        etiquetaMensajeError.setText(mensaje);
+        mostrarPanel(panelError, panelExito);
     }
 
     private void mostrarExito(String titulo, String mensaje) {
-        ocultarPanel(panelError);
-        mostrarPanel(panelExito, etiquetaTituloExito, etiquetaMensajeExito, titulo, mensaje);
+        etiquetaTituloExito.setText(titulo);
+        etiquetaMensajeExito.setText(mensaje);
+        mostrarPanel(panelExito, panelError);
     }
 }
